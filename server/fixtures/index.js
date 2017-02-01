@@ -1,11 +1,11 @@
-import SoundcloudUsers from '../../imports/collections/soundcloud-users';
+import Urls from '../../imports/collections/urls';
 
-if (SoundcloudUsers.find().count() === 0) {
-  const soundcloudFixtures = [
+if (Urls.find().count() === 0) {
+  const urlFixtures = [
     {
-      username: 'asap-rocky',
+      url: 'https://soundcloud.com/joshpan/perfect',
     },
   ];
 
-  soundcloudFixtures.map(soundcloudUser => SoundcloudUsers.insert(soundcloudUser));
+  urlFixtures.map(url => Urls.insert(url));
 }

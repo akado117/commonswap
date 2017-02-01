@@ -1,16 +1,16 @@
 export default [
   `
-  type SoundcloudUser {
-    username: String!
+  type Url {
+    url: String!
   }
 
   type RootMutation {
-    submitSoundcloudUser(username: String!): SoundcloudUser
+    insertUrl(url: String!): Url
   }
 
   type RootQuery {
     say: String
-    soundcloudUsers: [SoundcloudUser]
+    urls: [Url]
   }
 
   schema {

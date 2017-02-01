@@ -4,6 +4,10 @@ export default [
     username: String!
   }
 
+  type RootMutation {
+    submitSoundcloudUser(username: String!): SoundcloudUser
+  }
+
   type RootQuery {
     say: String
     soundcloudUsers: [SoundcloudUser]
@@ -11,5 +15,6 @@ export default [
 
   schema {
     query: RootQuery
+    mutation: RootMutation
   }`,
 ];

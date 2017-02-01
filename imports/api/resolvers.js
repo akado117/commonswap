@@ -9,4 +9,11 @@ export default {
       return SoundcloudUsers.find().fetch();
     },
   },
+  RootMutation: {
+    submitSoundcloudUser(root, { username }) {
+      const newUser = { username };
+      SoundcloudUsers.insert(newUser);
+      return newUser;
+    },
+  },
 };

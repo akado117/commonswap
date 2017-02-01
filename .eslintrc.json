@@ -4,5 +4,11 @@
     "react",
     "jsx-a11y",
     "import"
-  ]
+  ],
+  "settings": {
+    "import/core-modules": [
+      "meteor/meteor",
+      "meteor/apollo"
+    ]
+  }
 }

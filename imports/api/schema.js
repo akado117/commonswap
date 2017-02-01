@@ -1,9 +1,15 @@
 export default [
-  `type Query {
+  `
+  type SoundcloudUser {
+    username: String!
+  }
+
+  type RootQuery {
     say: String
+    soundcloudUsers: [SoundcloudUser]
   }
 
   schema {
-    query: Query
+    query: RootQuery
   }`,
 ];

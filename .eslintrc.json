@@ -8,7 +8,8 @@
   "settings": {
     "import/core-modules": [
       "meteor/meteor",
-      "meteor/apollo"
+      "meteor/apollo",
+      "meteor/mongo"
     ]
   }
 }

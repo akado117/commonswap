@@ -2,6 +2,7 @@
   "name": "meteor-apollo-react",
   "private": true,
   "scripts": {
+    "precommit": "npm run lint:errors",
     "start": "meteor run",
     "lint": "./node_modules/.bin/eslint client server imports",
     "lint:errors": "npm run lint -- --quiet",
@@ -15,6 +16,7 @@
     "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-react": "^6.9.0"
+    "eslint-plugin-react": "^6.9.0",
+    "husky": "^0.13.1"
   }
 }

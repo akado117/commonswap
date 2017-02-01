@@ -1,13 +1,13 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import SoundcloudUsers from './components/SoundcloudUser';
+import Urls from './components/Urls';
 
 // Or a stateless functional component:
 const App = ({data}) => (
     <div>
       {data.say}
-      <SoundcloudUsers />
+      <Urls />
     </div>
   );
 

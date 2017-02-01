@@ -1,19 +1,19 @@
-import SoundcloudUsers from '../collections/soundcloud-users';
+import Urls from '../collections/urls';
 
 export default {
   RootQuery: {
     say(/* root, args, context */) {
       return 'Hello World, from GraphQL/Apollo.';
     },
-    soundcloudUsers(/* root, args, context */) {
-      return SoundcloudUsers.find().fetch();
+    urls(/* root, args, context */) {
+      return Urls.find().fetch();
     },
   },
   RootMutation: {
-    submitSoundcloudUser(root, { username }) {
-      const newUser = { username };
-      SoundcloudUsers.insert(newUser);
-      return newUser;
+    insertUrl(root, { url }) {
+      const newUrl = { url };
+      Urls.insert(newUrl);
+      return newUrl;
     },
   },
 };

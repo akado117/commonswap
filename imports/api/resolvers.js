@@ -3,7 +3,10 @@ import Urls from '../collections/urls';
 export default {
   RootQuery: {
     say(/* root, args, context */) {
-      return 'Hello World, from GraphQL/Apollo.';
+      return { foo: 'sdadas', bar: 'asdasdasd' };
+    },
+    says() {
+      return [{ foo: 'sdadas', bar: 'asdasdasd' }, { foo: 'sdadas', bar: 'asdasdasd' }];
     },
     urls(/* root, args, context */) {
       return Urls.find().fetch();

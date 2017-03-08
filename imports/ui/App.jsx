@@ -1,13 +1,13 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Urls from './components/Urls';
+import FuseTestContainer from './components/FuseTestContainer.jsx'
 
 // Or a stateless functional component:
 const App = ({data}) => (
     <div>
       {data.say}
-      <Urls />
+        <FuseTestContainer />
     </div>
   );
 

@@ -42,19 +42,21 @@ class FuseTestContainer extends React.Component {
     determineCompletedRows = (string='') => {
         const arry = string.split(/\n/) || []
         let rowLength = 0;
+        let error = ''
 
         arry.forEach((str,idx)=>{
             if (idx === 0){
                 rowLength = str.length
             } else {
                 if(rowLength != str.length){
-                    return 'Please use rows with equal length'
+                    error = 'Please use rows with equal length'
                 }
             }
-        })
+        });
+        if(!error)
+            this.setState({rowLength});
 
-        this.setState({rowLength});
-        return ''
+        return error
     }
     checkForErrors = (string) => {
         const errors = [];
@@ -92,8 +94,8 @@ class FuseTestContainer extends React.Component {
 
         const splitGrid = this.splitStringByLength(this.state.grid,this.state.rowLength)
 
-        const errors = this.state.errors.map((str)=>{
-            return <h3 className='error'>{str}</h3>
+        const errors = this.state.errors.map((str, idx)=>{
+            return <h4 className='error' key={`error-${idx}`}>{str}</h4>
         });
         return (
             <div className="fuse-container">
@@ -112,6 +114,7 @@ class FuseTestContainer extends React.Component {
                               style={{minHeight:'100px', minWidth:'100px'}}/>
                     <button type="submit">Apply State</button>
                 </form>
+                {errors}
 
                 <h3>Click cell to toggle occupied/empty</h3>
                 <table className="table-container">

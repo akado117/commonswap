@@ -1,0 +1,15 @@
+.fuse-container {
+
+  table, th, td {
+    border: 1px solid black;
+  }
+  .table-container {
+    .grid-row {
+      height: 30px;
+      .grid-col {
+        width: 30px;
+        text-align: center;
+      }
+    }
+  }
+}

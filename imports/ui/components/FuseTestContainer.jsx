@@ -23,7 +23,7 @@ class FuseTestContainer extends React.Component {
         const errors = this.checkForErrors(grid)
 
         if(!errors.length){
-            this.setState({aliveChar,deadChar, grid: grid.replace(/\n/g,'')})
+            this.setState({aliveChar,deadChar, grid: grid.replace(/\n/g,''), errors: []})
         } else {
             this.setState({errors})
         }
@@ -33,7 +33,7 @@ class FuseTestContainer extends React.Component {
 
         const charList = _.uniqBy(string);
 
-        if(charList.length > 3){
+        if(charList.length > 3 || charList.length == 2 && !string.match(/\n/)){
             error = 'Please use just 2 different characters and enter'
         }
 

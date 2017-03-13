@@ -10,7 +10,11 @@ class FuseTestContainer extends React.Component {
             grid: "asassasasassaasaaassasasssaaassaaasasassssassasa",
             rowLength: 8,
             aliveChar: 's',
-            deadChar: 'a'
+            deadChar: 'a',
+            displayChars: {
+                alive: "😸",
+                dead: '💀'
+            }
         }
     }
 
@@ -89,6 +93,22 @@ class FuseTestContainer extends React.Component {
         this.setState({grid:newGrid})
 
     }
+    toggleCharDisplayPicker = (e) => {
+        const fieldWrapper = document.querySelector('#displayChar');
+        if(!e.currentTarget.checked){
+            fieldWrapper.className += " hidden"
+        } else {
+            fieldWrapper.className = fieldWrapper.className.replace('hidden', '')
+        }
+    }
+    applyNewDisplayChars = (e) => {
+        e.preventDefault()
+
+        const alive = this.refs.aliveCharDisplay.value || this.state.displayChars.alive;
+        const dead = this.refs.deadCharDisplay.value || this.state.displayChars.dead;
+
+        this.setState({displayChars:{alive,dead}})
+    }
     render() {
         const self = this;
 
@@ -103,12 +123,29 @@ class FuseTestContainer extends React.Component {
                     <h2>Please type or paste in an array of characters</h2>
                     <h3>only use two different CHAR types and separate rows with enter</h3>
 
-                    <label htmlFor="occupied">Alive Cell Char</label>
-                    <input id="occupied" ref="occupied" type="text" defaultValue={this.state.aliveChar}/>
+                    <div className="input-section">
+                        <label htmlFor="occupied">Alive Cell Char</label>
+                        <input className="text-field" id="occupied" ref="occupied" type="text" defaultValue={this.state.aliveChar}/>
 
-                    <label htmlFor="empty">Dead Cell Char</label>
-                    <input id="empty" ref="empty" type="text" defaultValue={this.state.deadChar}/>
-                    <br/>
+                        <label htmlFor="empty">Dead Cell Char</label>
+                        <input className="text-field" id="empty" ref="empty" type="text" defaultValue={this.state.deadChar}/>
+                        <br/>
+
+                        <div className="char-display">
+                            <label htmlFor="toggleDisplayInputs">Toggle Display Char Picker</label>
+                            <input onChange={this.toggleCharDisplayPicker} id="toggleDisplayInputs" ref="toggleDisplayInputs" type="checkbox"/>
+
+                            <div id='displayChar' className="hidden">
+                                <label htmlFor="aliveCharDisplay">Alive Cell Display</label>
+                                <input className="text-field" id="aliveCharDisplay" ref="aliveCharDisplay" type="text" defaultValue={this.state.displayChars.alive}/>
+
+                                <label htmlFor="deadCharDisplay">Dead Cell Display</label>
+                                <input className="text-field" id="deadCharDisplay" ref="deadCharDisplay" type="text" defaultValue={this.state.displayChars.dead}/>
+                                <br/>
+                                <button type="btn" onClick={this.applyNewDisplayChars} >Apply New Display</button>
+                            </div>
+                        </div>
+                    </div>
 
                     <textarea ref='gridInput' type="text" id="dataField" name="dataField"
                               style={{minHeight:'100px', minWidth:'100px'}}
@@ -117,19 +154,22 @@ sassaasa
 aassasas
 ssaaassa
 aasasass
-ssassasa"/>
+ssassasa"/><br/>
                     <button type="submit">Apply State</button>
                 </form>
                 {errors}
                 <h3>Click cell to toggle occupied/empty</h3>
-                <table className="table-container">
-                    <tbody>
-                        {splitGrid.map((str, idx)=>{
-                            return <TableRow rowString={str} aliveChar={this.state.aliveChar} rowNum={idx}
-                                             key={`row-${idx}`} toggleHandler={self.toggleGridSpace}/>
-                        })}
-                    </tbody>
-                </table>
+                <div className="table-content-container">
+                    <table className="table-container">
+                        <tbody>
+                            {splitGrid.map((str, idx)=>{
+                                return <TableRow rowString={str} aliveChar={this.state.aliveChar} rowNum={idx}
+                                                 key={`row-${idx}`} toggleHandler={self.toggleGridSpace} displayChar={self.state.displayChars}/>
+                            })}
+                        </tbody>
+                    </table>
+                    <div className="table-desc-container"><span className="table-description">Alive = {this.state.displayChars.alive}</span><span>Alive = {this.state.displayChars.dead}</span></div>
+                </div>
                 <button onClick={this.computeCycle}>Compute Cycle</button>
             </div>
         );
@@ -197,7 +237,7 @@ ssassasa"/>
     }
 }
 
-function TableRow ({rowString='',aliveChar, deadChar, rowNum, toggleHandler = ()=>{}}) {
+function TableRow ({rowString='',aliveChar, deadChar, rowNum, toggleHandler = ()=>{},displayChar = {}}) {
     let columnElement = [];
     let colIdx = 0
     for (let char of rowString) {
@@ -205,7 +245,7 @@ function TableRow ({rowString='',aliveChar, deadChar, rowNum, toggleHandler = ()
         columnElement.push(
             <td className={`grid-col ${char==aliveChar?'occupied': '' }`}
                 key={`col-${colIdx}-row-${rowNum}`} onClick={()=>{toggleHandler(rowNum,col)}}>
-                {char==aliveChar? 'O' : '*'}
+                {char==aliveChar? displayChar.alive : displayChar.dead}
             </td>)
         colIdx++
     }

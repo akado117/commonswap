@@ -186,17 +186,19 @@ ssassasa"/><br/>
         const gridLength = grid.length;
 
         for(let i = -1; i < 2; i++){
-            let tempNum = indexOfSpace - rowLength + i;
-            if(-1 < tempNum && tempNum < gridLength){
-                indices.push(tempNum);
-            }
-            tempNum = indexOfSpace + i;
-            if(-1 < tempNum && tempNum < gridLength && i != 0){
-                indices.push(tempNum);
-            }
-            tempNum = indexOfSpace + rowLength + i;
-            if(-1 < tempNum && tempNum < gridLength) {
-                indices.push(tempNum);
+            if(!(i === -1 && indexOfSpace % rowLength === 0 || i === 1 && (indexOfSpace+1)%rowLength===0)){  //catch end of row issues
+                let tempNum = indexOfSpace - rowLength + i;
+                if (-1 < tempNum && tempNum < gridLength) {
+                    indices.push(tempNum);
+                }
+                tempNum = indexOfSpace + i;
+                if (-1 < tempNum && tempNum < gridLength && i != 0) {
+                    indices.push(tempNum);
+                }
+                tempNum = indexOfSpace + rowLength + i;
+                if (-1 < tempNum && tempNum < gridLength) {
+                    indices.push(tempNum);
+                }
             }
         }
         return indices
@@ -206,7 +208,7 @@ ssassasa"/><br/>
             runningTotalObject[value] = runningTotalObject[value]? ++runningTotalObject[value] : 1
         })
     }
-    processNewGrid = (runningTotalObject={},occupiedSpacesArr=[],grid,aliveChar, deadChar) => {
+    processNewGrid = (runningTotalObject={},grid,aliveChar, deadChar) => {
         let newGrid = '';
         for(var i = 0; i < grid.length; i++){
             if(grid[i] === aliveChar && (!runningTotalObject[i] || runningTotalObject[i] < 2 || 3 < runningTotalObject[i])) { // less than 2 adjacent but more than 3 and alive
@@ -227,11 +229,11 @@ ssassasa"/><br/>
         const occupiedSpacesArr = this.retrieveOccupiedSpaces(grid,aliveChar);
 
         occupiedSpacesArr.forEach((spaceIndex)=>{
-            const adjacentIdxArr  = this.getIndexesOfSurroundingSpaces(spaceIndex,rowLength,grid)
+            const adjacentIdxArr  = this.getIndexesOfSurroundingSpaces(spaceIndex,rowLength,grid);
             this.tallyIndexTotals(runningTotalObject,adjacentIdxArr)
         });
 
-        const newGrid = this.processNewGrid(runningTotalObject,occupiedSpacesArr,grid,aliveChar,deadChar)
+        const newGrid = this.processNewGrid(runningTotalObject,grid,aliveChar,deadChar);
 
         this.setState({grid: newGrid})
     }

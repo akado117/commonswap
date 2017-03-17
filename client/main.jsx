@@ -11,6 +11,7 @@ import { meteorClientConfig } from 'meteor/apollo';
 
 const client = new ApolloClient(meteorClientConfig());
 
+
 Meteor.startup(() => {
   render(
     <ApolloProvider client={client}>

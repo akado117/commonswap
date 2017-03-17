@@ -1,19 +1,44 @@
 .fuse-container {
 
+  .input-section{
+    .text-field{
+      width: 40px;
+      margin: 10px;
+      font-size: 16px;
+    }
+  }
+
+  textarea {
+    margin-top: 10px;
+  }
+
   .error {
-    color: #b71d13;
-    margin: 5px;
+    color: #c90b0e;
+    margin: 5px 0;
   }
   table, th, td {
     border: 1px solid black;
   }
-  .table-container {
-    .grid-row {
-      height: 30px;
-      .grid-col {
-        width: 30px;
-        text-align: center;
+  .table-content-container {
+    margin-top: 10px;
+    .table-container {
+      .grid-row {
+        height: 45px;
+        .grid-col {
+          width: 45px;
+          text-align: center;
+          font-size: 30px;
+
+        }
       }
     }
+    .table-desc-container {
+      .table-description {
+        margin: 10px 25px 10px 0;
+      }
+    }
+  }
+  .hidden {
+    display: none;
   }
 }

@@ -157,7 +157,7 @@ class RoommateCalc extends React.Component {
                             </div>
                             <DayProrater/>
                             <div className="row footer-text">
-                                <p>Please feel free to reach out to <a href="https://www.twitter.com/takoda117" target="_blank">Takoda</a> with comments and concerns</p>
+                                <p>Please feel free to reach out to <a href="" target="_blank">Tak</a> with comments and concerns</p>
                             </div>
                         </div>
                     </div>

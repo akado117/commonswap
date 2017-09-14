@@ -1,5 +1,5 @@
 {
-  "name": "meteor-apollo-react",
+  "name": "ComSwap",
   "private": true,
   "scripts": {
     "start": "meteor run",

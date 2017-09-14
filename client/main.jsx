@@ -4,8 +4,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 
 import App from '../imports/ui/Layout.jsx';
-import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx'
-import Fuse from '../imports/ui/components/FuseTestContainer.jsx'
+import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx';
+import Fuse from '../imports/ui/components/FuseTestContainer.jsx';
+import Profile from '../imports/ui/pages/Profile.jsx';
+
 import store from '../imports/store/store'
 
 import ApolloClient from 'apollo-client';
@@ -18,12 +20,13 @@ const client = new ApolloClient(meteorClientConfig());
 
 Meteor.startup(() => {
   render(
-    <ApolloProvider client={client} store={store}>
-        <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={RoomieCalc}/>
-                <Route path="room/:roomId" component={RoomieCalc}/>
-                <Route path="fuse" component={Fuse}/>
+    <ApolloProvider client={client} store={store} >
+        <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory} >
+            <Route path="/" component={App} >
+                <IndexRoute component={RoomieCalc} />
+                <Route path="profile" component={Profile} />
+                <Route path="room/:roomId" component={RoomieCalc} />
+                <Route path="fuse" component={Fuse} />
             </Route>
         </Router>
     </ApolloProvider>,

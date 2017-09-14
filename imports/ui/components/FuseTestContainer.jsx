@@ -122,7 +122,6 @@ class FuseTestContainer extends React.Component {
                 <form onSubmit={this.handleChange}>
                     <h1 className="title">Please type or paste in an array of characters</h1>
                     <p className="helper-text">only use two different CHAR types and separate rows with enter</p>
-
                     <div className="input-section">
                         <label htmlFor="occupied">Alive Cell Char</label>
                         <input className="text-field" id="occupied" ref="occupied" type="text" defaultValue={this.state.aliveChar}/>

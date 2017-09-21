@@ -7,6 +7,7 @@ import App from '../imports/ui/Layout.jsx';
 import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx';
 import Fuse from '../imports/ui/components/FuseTestContainer.jsx';
 import Profile from '../imports/ui/pages/Profile.jsx';
+import Login from '../imports/ui/pages/Login.jsx'
 
 import store from '../imports/store/store'
 
@@ -25,6 +26,7 @@ Meteor.startup(() => {
             <Route path="/" component={App} >
                 <IndexRoute component={RoomieCalc} />
                 <Route path="profile" component={Profile} />
+                <Route path="login" component={Login} />
                 <Route path="room/:roomId" component={RoomieCalc} />
                 <Route path="fuse" component={Fuse} />
             </Route>

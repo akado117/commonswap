@@ -18,8 +18,6 @@ ServiceConfiguration.configurations.upsert(
         }
     }
 );
-console.log(Meteor.settings.twitter.consumerKey);
-console.log(Meteor.settings.twitter.secret);
 ServiceConfiguration.configurations.upsert(
     {service: 'twitter'},
     {

@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect }  from 'react-redux';
+import { bindActionCreators }  from 'redux';
+import { Router } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -11,14 +14,20 @@ import TextField from 'material-ui/TextField';
 import {Link} from 'react-router';
 import ThemeDefault from '../helpers/themes';
 
-export default class LoginPage extends React.Component {
+
+import UserActions from '../../actions/userActions';
+
+class LoginPage extends React.Component {
     constructor() {
         super();
 
         this.state = {}
     }
 
+    componentDidUpdate = () => {
+        if (this.props.user.user) Router.push('/login')
 
+    };
 
     render() {
         const styles = {
@@ -72,6 +81,9 @@ export default class LoginPage extends React.Component {
             btnFacebook: {
                 background: '#4f81e9'
             },
+            btnTwitter: {
+                background: '#4099FF'
+            },
             btnGoogle: {
                 background: '#e14441'
             },
@@ -80,6 +92,7 @@ export default class LoginPage extends React.Component {
             },
         };
 
+        const { UserActions } = this.props;
         return (
             <MuiThemeProvider muiTheme={ThemeDefault}>
                 <div>
@@ -134,20 +147,36 @@ export default class LoginPage extends React.Component {
                         </div>
 
                         <div style={styles.buttonsDiv}>
-                            <Link to="/" style={{...styles.btn, ...styles.btnFacebook}}>
+                            <button href="" onClick={UserActions.loginWithFacebook} style={{...styles.btn, ...styles.btnFacebook}}>
                                 <i className="fa fa-facebook fa-lg"/>
                                 <span style={styles.btnSpan}>Log in with Facebook</span>
-                            </Link>
-                            <Link to="/" style={{...styles.btn, ...styles.btnGoogle}}>
+                            </button>
+                            <button href=""  onClick={UserActions.loginWithGoogle} style={{...styles.btn, ...styles.btnGoogle}}>
                                 <i className="fa fa-google-plus fa-lg"/>
                                 <span style={styles.btnSpan}>Log in with Google</span>
-                            </Link>
+                            </button>
+                            <button href=""  onClick={UserActions.loginWithTwitter} style={{...styles.btn, ...styles.btnTwitter}}>
+                                <i className="fa fa-twitter fa-lg"/>
+                                <span style={styles.btnSpan}>Log in with Twitter</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </MuiThemeProvider>
         );
     }
-
-
 }
+
+function mapStateToProps(state) {
+    const {user} = state;
+    return {
+        user
+    };
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        UserActions: bindActionCreators(UserActions, dispatch),
+    };
+}
+//can also feed in dispatch mapper - this prevents the need to wrap every action function in dispatch
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

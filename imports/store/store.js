@@ -10,3 +10,22 @@ const enhancers = [
 ];
 const Store = createStore(rootReducer, {}, compose(...enhancers));
 export default Store;
+
+// import { createStore, applyMiddleware, compose } from 'redux';
+// import thunk from 'redux-thunk';
+// import rootReducer from '../reducers/rootReducer';
+//
+// const logger = () => next => (action) => {
+//     console.log(`Dispatching: ${action.type}`);
+//     return next(action);
+// };
+//
+// const composeEnhancers = compose;
+//
+// export default function configureStore(initialState) {
+//     return createStore(
+//         rootReducer,
+//         initialState,
+//         composeEnhancers(applyMiddleware(thunk, logger))
+//     );
+// }

@@ -11,7 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 
-import roomiesActions from '../../actions/RoomateActions'
+import roomiesActions from '../../actions/roomateActions'
 
 import DayProrater from './dayProrater.jsx';
 

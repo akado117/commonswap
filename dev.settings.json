@@ -1,0 +1,14 @@
+{
+  "facebook": {
+    "appid": "351678141936553",
+    "secret": "5b919cf304d77a49d1941456755ed777"
+  },
+  "google": {
+    "clientId": "939518787956-n89rpkn1193scfdc3ii2pdnv76dmpa46.apps.googleusercontent.com",
+    "secret": "W3W3L2g89cprmkVQyJRRTVj-"
+  },
+  "twitter": {
+    "consumerKey": "ZL771SKwXzv0vYonR4SzYZj2c",
+    "secret": "zX6sv0yena8SuzmMel8KV9GOnJZWOoSbtkqAaoJWQ4VG5tP4PR-"
+  }
+}

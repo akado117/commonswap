@@ -66,6 +66,7 @@ class Profile extends React.Component {
             descNeighborhood:'',
             picutrePath: '',
             photosPlace: ['',''],
+            pageState: "profile"
         };
     }
 
@@ -97,9 +98,22 @@ class Profile extends React.Component {
           }
     }
 
+    getProfileData = () => {
+        //get shit from profile stoff
+
+        return {}
+    }
+
     render() {
+        let content;
+        if (this.state.pageState === 'profile') {
+            content = <div>Some new content</div>;
+        } else if (this.state.pageState) {
+            content = <div>Some more content</div>
+        }
         return (
             <section className="profile" >
+                {content}
                 <Paper zDepth={1}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex} style={{ position: 'fixed',zIndex: '999' }}>
                         <BottomNavigationItem

@@ -28,6 +28,7 @@ export default {
             }
           }
         }`;
+       debugger;
         return graphql(query, <Helper callbackFunc={cb}/>)
     }
 }

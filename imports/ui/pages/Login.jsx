@@ -14,6 +14,7 @@ import TextField from 'material-ui/TextField';
 import {Link} from 'react-router';
 import ThemeDefault from '../helpers/themes';
 
+import Uploader from '../components/Uploader';
 
 import UserActions from '../../actions/userActions';
 
@@ -160,6 +161,7 @@ class LoginPage extends React.Component {
                                 <span style={styles.btnSpan}>Log in with Twitter</span>
                             </button>
                         </div>
+                        <Uploader/>
                     </div>
                 </div>
             </MuiThemeProvider>

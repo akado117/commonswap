@@ -1,8 +1,11 @@
 import FileUrls from '../imports/collections/FileUrls'
 
 const filePubfields = {
-    text: 1,
-    completed: 1
+    _id: 1,
+    userId: 1,
+    url: 1,
+    fileName: 1,
+    added: 1,
 };
 
 const getImagesPub = function (pageSkip = 0, filter) {

@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
+import ProfileComponent from '../components/profileComps/ProfileComponent.jsx'
 
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
@@ -17,6 +18,7 @@ const scrolling = {
 };
 
 class Profile extends React.Component {
+    valueMap = new Map();
     constructor() {
         super();
         this.state = {
@@ -76,6 +78,11 @@ class Profile extends React.Component {
           }
     }
 
+    addValueOnChange = (key, value) => {
+        this.valueMap.set(key, value);
+        console.log(this.valueMap)
+    }
+
     getFormData = () => {
 
     }
@@ -115,6 +122,7 @@ class Profile extends React.Component {
                                 <input type="file" value={this.state.picture}/>
                             </div>
                         </div>
+                        <ProfileComponent getValueFunc={this.addValueOnChange}/>
                         <div className="col s9 offset-s3">
                             <div className="row">
                                 <div className="card-panel teal">

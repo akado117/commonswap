@@ -1,5 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import SelectBuilder from '../forms/SelectBuilder.jsx'
 
+function onChangeHelper(event) {
+    return event.target.value
+}
 
 class ProfileComponet extends  Component {
     constructor() {
@@ -29,55 +34,64 @@ class ProfileComponet extends  Component {
             tours:false,
         }
     }
+
     render() {
+        const { getValueFunc } = this.props;
+        const genderFields = {
+            defaultField: <span><i className="fa fa-venus fa-1x" aria-hidden="true"></i> I am: </span>,
+            fields: {
+                displayNames: ['Male', 'Female'],
+                values: ['male', 'female'],
+            }
+        };
+
+        const langFields = {
+            defaultField: 'Preferred Language',
+            fields: {
+                displayNames: ['English', 'Spanish', 'Chinese', 'French'],
+                values: ['english', 'spansih', 'chinese', 'french'],
+            }
+        };
+
         return (
             <div className="row">
                 <div className="col s9 offset-s3">
                     <div className="row">
                         <div className="col s6 input-field inline">
-                            <input type="text" value={this.state.firstName} className="validate" />
+                            <input type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" />
                             <label htmlFor="firstName">First Name: </label>
                         </div>
                         <div className="col s6 input-field inline">
-                            <input type="text" value={this.state.lastName} className="validate" id="lastName" />
+                            <input type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" id="lastName" />
                             <label htmlFor="lastName">Last Name: </label>
                         </div>
                         <div className="col s6 input-field inline">
-
-                            <select type="text" value={this.state.gender} className="validate" placeholder="Gender *">
-                                <option disabled defaultValue>Gender</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
-                            <label htmlFor=""><i className="fa fa-venus fa-1x" aria-hidden="true"></i> I am: </label>
+                            <SelectBuilder onChange={(value) => getValueFunc('gender', value)}
+                                           selectArrObj={genderFields.fields}
+                                           defaultSelection={genderFields.defaultField}/>
                         </div>
                         <div className="col s6 input-field inline">
                             <label htmlFor=""><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</label>
-                            <input type="text" className="datepicker"  value={this.state.birthday}/>
+                            <input type="text" className="datepicker" onChange={e => getValueFunc('birthday', onChangeHelper(e))}/>
                         </div>
                         <div className="col s6 input-field inline">
                             <label><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
-                            <input type="email" className="" value={this.state.email} />
+                            <input type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} />
                             <p className="help-block text-danger"></p>
                         </div>
                         <div className="col s6 input-field inline">
                             <label><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
-                            <input type="tel" className="" id="phone" value={this.state.phone}/>
+                            <input type="tel" className="" id="phone" onChange={e => getValueFunc('phone', onChangeHelper(e))}/>
                             <p className="help-block text-danger"></p>
                         </div>
                         <div className="col s6 input-field">
-                            <select>
-                                <option value={this.state.language} disabled defaultValue>Choose your Language</option>
-                                <option>English</option>
-                                <option>Spanish</option>
-                                <option>Chinese</option>
-                                <option>French</option>
-                            </select>
-                            <label>Preferred Language</label>
+                            <SelectBuilder onChange={(value) => getValueFunc('lang', value)}
+                                           selectArrObj={langFields.fields}
+                                           defaultSelection={langFields.defaultField}/>
                         </div>
                         <div className="col s12 input-field inline">
                             <label><i className="fa fa-pencil" aria-hidden="true"></i> Describe Yourself:</label>
-                            <textarea className="materialize-textarea" id="notes" value={this.state.descPersonal} ></textarea>
+                            <textarea className="materialize-textarea" id="notes" onChange={e => getValueFunc('personalSummary', onChangeHelper(e))} ></textarea>
                             <p className="help-block text-danger"></p>
                         </div>
 
@@ -96,3 +110,9 @@ class ProfileComponet extends  Component {
         )
     }
 }
+
+ProfileComponet.propTypes = {
+    getValueFunc: PropTypes.func,
+};
+
+export default ProfileComponet;

@@ -6,6 +6,7 @@ import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNaviga
 import Paper from 'material-ui/Paper';
 import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
 import ProfileComponent from '../components/profileComps/ProfileComponent.jsx'
+import InterestsComponent from '../components/profileComps/InterestsComponent.jsx'
 
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
@@ -122,87 +123,9 @@ class Profile extends React.Component {
                                 <input type="file" value={this.state.picture}/>
                             </div>
                         </div>
-                        <ProfileComponent getValueFunc={this.addValueOnChange}/>
                         <div className="col s9 offset-s3">
-                            <div className="row">
-                                <div className="card-panel teal">
-                                    <span className="white-text">
-                                        For a compatible match, anser the questions below. We understand that though everyone might not be the same, we are all a lot more alike than we think. We hope the questions below provide our community enough information to find the ideal swap.
-                                        </span>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col s6 input-field inline">
-                                    <label><i className="fa fa-university fa-1x" aria-hidden="true"></i> School</label>
-                                    <input type="text" className="validate" id="school" value={this.state.school}/>
-                                </div>
-                                <div className="col s6 input-field inline">
-                                    <label>Class of: </label>
-                                    <input type="text" className="validate" value={this.state.classOf}/>
-                                </div>
-                            </div>
-                            <div className="col s12">
-                                <form action="#">
-                                    <p className="range-field">
-                                        <label htmlFor="amount">Somewhat clean</label>
-                                        <label htmlFor="amount" style={{ float: 'right' }}>Clean</label>
-                                        <input type="range" id="test5" min="0" max="100" value={this.state.cleanliness}/>
-                                    </p>
-                                </form>
-                            </div>
-                            <div className="col s12">
-                                <form action="#">
-                                    <p className="range-field">
-                                        <label htmlFor="amount">A Homebody</label>
-                                        <label htmlFor="amount" style={{ float: 'right' }} value={this.state.personality} >A Party Animal</label>
-                                        <input type="range" id="test5" min="0" max="100" />
-                                    </p>
-                                </form>
-                            </div>
-                            <div className="col s12">
-                                <div className="row" style={{ paddingTop: '15px' }}>
-                                    <div className="col s4">
-                                        <label>Beach bum</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.beachBum} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Wineries</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.wineries} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Photography</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.photography} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                                <div className="row" style={{ paddingTop: '15px' }}>
-                                    <div className="col s4" style={{ height: '150%' }}>
-                                        <label>Film</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.film} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Hiking</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.hiking} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Clubbing &amp; Nightlife</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.clubbing} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                                <div className="row" style={{ paddingTop: '15px' }}>
-                                    <div className="col s4">
-                                        <label>Live Music &amp; Concerts</label>
-                                        <button type="button" className="beach btn btn-sm " value={this.state.concerts} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Food &amp; Restaurants</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.food} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Organized Tours</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.tours} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                            </div>
+                            <ProfileComponent getValueFunc={this.addValueOnChange}/>
+                            <InterestsComponent getValueFunc={this.addValueOnChange}/>
                         </div>
                         <div>
                             <div className="place">

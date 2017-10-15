@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SelectBuilder from '../forms/SelectBuilder.jsx'
+import ButtonArray from '../forms/ButtonArrayComp.jsx'
 
 function onChangeHelper(event) {
     return event.target.value
 }
 
 class ProfileComponet extends  Component {
+
+    BUTTONS = [
+        {label: 'Beach Bum', name: 'beachBum'},
+        {label: 'Photography', name: 'photography'},
+        {label: 'Wineries', name: 'wineries'},
+        {label: 'Film Buff', name: 'film'},
+        {label: 'Hiker', name: 'hiking'},
+        {label: 'Clubbing & Nightlife', name: 'clubber'},
+        {label: 'Live Music & Concerts', name: 'liveMusic'},
+        {label: 'Food & Restaurants', name: 'foodie'},
+        {label: 'Organized Tours', name: 'orgTour'},
+    ];
+
     constructor() {
         super()
 
@@ -137,6 +151,7 @@ class ProfileComponet extends  Component {
                         </p>
                     </div>
                 </div>
+                <ButtonArray getValueFunc={getValueFunc} buttonData={this.BUTTONS}/>
             </div>
         )
     }

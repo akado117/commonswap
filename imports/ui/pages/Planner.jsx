@@ -11,7 +11,6 @@ const styles = {
     }
 };
 
-
 class Planner extends React.Component {
     constructor(props) {
         super(props);

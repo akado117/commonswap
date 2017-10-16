@@ -9,6 +9,7 @@ import Fuse from '../imports/ui/components/FuseTestContainer.jsx';
 import Profile from '../imports/ui/pages/Profile.jsx';
 import Login from '../imports/ui/pages/Login.jsx'
 import ImagePOC from '../imports/ui/pages/ImagePOC';
+import Planner from '../imports/ui/pages/Planner';
 
 import store from '../imports/store/store'
 
@@ -31,6 +32,7 @@ Meteor.startup(() => {
                 <Route path="imagePOC" component={ImagePOC} />
                 <Route path="room/:roomId" component={RoomieCalc} />
                 <Route path="fuse" component={Fuse} />
+                <Route path="planner" component={Planner} />
             </Route>
         </Router>
     </ApolloProvider>,

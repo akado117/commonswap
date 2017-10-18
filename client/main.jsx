@@ -10,7 +10,7 @@ import Profile from '../imports/ui/pages/Profile.jsx';
 import Login from '../imports/ui/pages/Login.jsx'
 import ImagePOC from '../imports/ui/pages/ImagePOC';
 import Planner from '../imports/ui/pages/Planner';
-
+import Home from '../imports/ui/pages/Home';
 import store from '../imports/store/store'
 
 import ApolloClient from 'apollo-client';
@@ -33,6 +33,7 @@ Meteor.startup(() => {
                 <Route path="room/:roomId" component={RoomieCalc} />
                 <Route path="fuse" component={Fuse} />
                 <Route path="planner" component={Planner} />
+                <Route path="home" component={Home} />
             </Route>
         </Router>
     </ApolloProvider>,

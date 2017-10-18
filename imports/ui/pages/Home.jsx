@@ -22,7 +22,7 @@ class Home extends React.Component {
                                         <strong>Travel More. Pay Less.</strong>
                                     </h1>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </header>

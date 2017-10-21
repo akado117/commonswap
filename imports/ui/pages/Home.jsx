@@ -1,5 +1,6 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
+import Navbar from '../components/Navbar';
 
 class Home extends React.Component {
     constructor(props) {
@@ -12,7 +13,7 @@ class Home extends React.Component {
                 <Navbar></Navbar>
                 <header>
                     <div className="container">
-                        <video src="" poster="" autoplay loop muted plasinline>
+                        <video src="" poster="http://stretchflex.net/photos/pexels-photo2.jpeg" autoPlay loop muted style={{height:'150px',width:'100%'}}>
                             <source src="" />
                         </video>
                         <div className="embed-responsive-item">

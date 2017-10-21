@@ -12,7 +12,7 @@ const styles = {
         margin: 12,
     }
 };
-
+var today = new Date();
 const MultipleDatesCalendar = withMultipleDates(Calendar);
 
 class Planner extends React.Component {
@@ -22,13 +22,13 @@ class Planner extends React.Component {
             controlledDate: null,
             imgsData: [
                 {
-                    url: 'http://ww3.sinaimg.cn/large/d8e32accgw1f6c55xxgp2j20zk0qodry.jpg'
+                    url: 'http://stretchflex.net/photos/apartment.jpeg'
                 },
                 {
-                    url: 'http://ww1.sinaimg.cn/large/d8e32accgw1f69b7ifm4gj20qo0qon3e.jpg'
+                    url: 'http://stretchflex.net/photos/apartment2.jpeg'
                 },
                 {
-                    url: 'http://ww1.sinaimg.cn/large/d8e32accgw1f62keeub2uj21kw2dc4pa.jpg'
+                    url: 'http://stretchflex.net/photos/apartment3.jpeg'
                 }
             ]
         };
@@ -37,19 +37,19 @@ class Planner extends React.Component {
     handleSlideshowOpen(index) {
         this.refs.SlideShow.handleModalOpen(index);
     };
-    // componentDidMount = () => {
-    //     this.handleSlideshowOpen(0);
-    // }
+    componentDidMount = () => {
+        //this.handleSlideshowOpen(0);
+    }
 
     render() {
         return (
             <div>
                 <Navbar></Navbar>
-                <div className="container" id="planner">
-                    <div className="row">
-                        <div className="col s12 z-depth-2">
+                <div className="container" id="planner" style={{marginTop:'20px'}}>
+                    <div className="row" >
+                        <div className="col s12 z-depth-2 calendar-parent">
                             <div className="row">
-                                <div className="col s12 calendar-container">
+                                <div className="col s12 calendar-container" style={{paddingLeft:'0px', paddingRight:'0px'}}>
                                     {/* <InfiniteCalendar
                                     Component={MultipleDatesCalendar}
                                     width={400}
@@ -68,8 +68,9 @@ class Planner extends React.Component {
                                          *
                                          * You could re-implement this if this isn't the behavior you want.
                                          */
+                                        height={250}
                                         interpolateSelection={defaultMultipleDateInterpolation}
-                                        selected={[new Date(2017, 1, 10), new Date(2017, 1, 18), new Date()]}
+                                        selected={[new Date()]}
                                     />
                                 </div>
                             </div>
@@ -98,7 +99,7 @@ class Planner extends React.Component {
                     <div className="row">
                         <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <div className="col s3">
-                                <img className="circle responsive-img" src="http://via.placeholder.com/140x100" alt="profDemo" />
+                                <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{height:'140px',width:'140px'}}/>
                             </div>
                             <div className="col s5" id="message" style={{ top: '5px' }}>
                                 <p><strong>Kevin accepted your request.</strong></p>
@@ -116,7 +117,7 @@ class Planner extends React.Component {
                     <div className="row">
                         <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <div className="col s3">
-                                <img className="circle responsive-img" src="http://via.placeholder.com/140x100" alt="profDemo" />
+                                <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{height:'140px',width:'140px'}}/>
                             </div>
                             <div className="col s5" id="message" style={{ top: '5px' }}>
                                 <p><strong>Your request to swap with Mike is pending</strong></p>
@@ -135,23 +136,23 @@ class Planner extends React.Component {
                         <div className="col s12 z-depth-2">
                             <div className="row">
                                 <div className="col s12" style={{ textAlign: 'center' }}>
-                                    <h5><strong>James wants to swap with you from July 14-16!</strong></h5>
+                                    <h5><strong>Katherine wants to swap with you from July 14-16!</strong></h5>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col s2">
                                     <div className="col s12">
-                                        <img className="circle responsive-img" src="http://via.placeholder.com/140x100" alt="profDemo" />
+                                        <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock2.jpeg" alt="profDemo" style={{height:'140px',width:'140px'}}/>
                                     </div>
                                     <div className="col s12">
-                                        <p>James</p>
+                                        <p>Katherine</p>
                                     </div>
                                     <div className="col s12">
                                         <p style={{ marginTop: '0px' }}>Chicago, IL</p>
                                     </div>
                                 </div>
                                 <div className="col s4" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                    <img src="http://via.placeholder.com/250x220" alt="" onClick={() => this.handleSlideshowOpen(0)} />
+                                    <img src="http://stretchflex.net/photos/apartment.jpeg" alt="" onClick={() => this.handleSlideshowOpen(0)} style={{height:'250px',width:'260px'}}/>
                                 </div>
                                 <div className="col s6">
                                     <div className="row">

@@ -8,7 +8,7 @@ import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
 import ProfileComponent from '../components/profileComps/ProfileComponent.jsx'
 import InterestsComponent from '../components/forms/ButtonArrayComp.jsx'
 import PlaceComponent from '../components/placeComponents/PlaceComponent.jsx'
-
+import Navbar from '../components/Navbar';
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
 const trust = <FontIcon className="material-icons">favorite</FontIcon>;
@@ -75,6 +75,7 @@ class Profile extends React.Component {
 
         return (
             <section className="profile-container" >
+                <Navbar></Navbar>
                 <Paper zDepth={1}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex} style={{ position: 'fixed',zIndex: '999' }}>
                         <BottomNavigationItem

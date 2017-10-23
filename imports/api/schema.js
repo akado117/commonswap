@@ -127,11 +127,12 @@ export default [
   }
 
   type RootQuery {
-    say: Test
-    says: [Test]
-    urls: [Url]
-    getSavedRoom(Id: String!): Room
-    getSavedRooms: [Room]
+      say: Test
+      says: [Test]
+      urls: [Url]
+      getSavedRoom(Id: String!): Room
+      getSavedRooms: [Room]
+      getProfileByUserId(userId: String!, profileId: String): Profile
   }
 
   schema {

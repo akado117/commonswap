@@ -1,7 +1,7 @@
 import Urls from '../collections/urls';
 import Roomies from '../collections/Roomies';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts } from '../collections/mainCollection';
-import { serviceErrorBuilder } from '../lib/Constants'
+import { serviceErrorBuilder, consoleLogHelper } from '../lib/Constants'
 
 
 export default {
@@ -21,7 +21,14 @@ export default {
         getSavedRoom(root, {Id}){
             console.log(Roomies.findOne({ _id:Id }));
             return Roomies.findOne({ _id:Id });
-        }
+        },
+        getProfileByUserId(root, { userId, profileId}, context) {
+
+            const profile = profileId ? Profiles.findOne({ _id: profileId }) : Profiles.findOne({ ownerUserId: userId });
+            console.log(context);
+            consoleLogHelper(`profile searched for by userId: ${userId}`, 1, context.userId || 'guest', JSON.stringify(profile));
+            return profile;
+        },
     },
     RootMutation: {
         insertUrl(root, { url }) {
@@ -39,6 +46,7 @@ export default {
     Profile: {
         places: (profile) => Places.find({ profileId: profile._id }).fetch(),
         interests: (profile) => Interests.findOne({ profileId:  profile._id }),
+        emergencyContacts: profile => EmergencyContacts.find({ profileId: profile._id }).fetch(),
     },
     Address: {
         profile: (address) => Profiles.findOne({ _id: address.profileId }),

@@ -27,6 +27,7 @@ const constants = {
     actionTypes: {
         SAVE_ROOMIES: 'SAVE_ROOMIES',
         LOGIN_: 'LOGIN_',
+        GET_PROFILE: 'GET_PROFILE',
     },
     SUCCESS: 'SUCCESS',
     FAILURE: 'FAILURE',

@@ -11,6 +11,7 @@ import Login from '../imports/ui/pages/Login.jsx'
 import ImagePOC from '../imports/ui/pages/ImagePOC';
 import Planner from '../imports/ui/pages/Planner';
 import Home from '../imports/ui/pages/Home';
+import ViewProfile from '../imports/ui/pages/ViewProfile';
 import store from '../imports/store/store'
 
 import ApolloClient from 'apollo-client';
@@ -34,6 +35,7 @@ Meteor.startup(() => {
                 <Route path="fuse" component={Fuse} />
                 <Route path="planner" component={Planner} />
                 <Route path="home" component={Home} />
+                <Route path="viewprofile" component={ViewProfile} />
             </Route>
         </Router>
     </ApolloProvider>,

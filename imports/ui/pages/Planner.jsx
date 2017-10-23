@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import SimpleModalSlideshow from 'react-simple-modal-slideshow';
@@ -6,14 +6,25 @@ import SlideShow from 'react-image-slideshow';
 import InfiniteCalendar, { Calendar, defaultMultipleDateInterpolation, withMultipleDates } from 'react-infinite-calendar';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import Navbar from '../components/Navbar';
+import Select from 'react-select';
+import '../../../node_modules/react-select/dist/react-select.css';
 
 const styles = {
     button: {
         margin: 12,
     }
 };
+
+// const STATES = require('../../../node_modules/react-select/examples/src/data/states');
+const CITIES = require('../../../node_modules/react-select/examples/src/data/cities');
+
+
 var today = new Date();
 const MultipleDatesCalendar = withMultipleDates(Calendar);
+
+function logChange(val) {
+    console.log("Selected: " + JSON.stringify(val));
+}
 
 class Planner extends React.Component {
     constructor(props) {
@@ -30,15 +41,19 @@ class Planner extends React.Component {
                 {
                     url: 'http://stretchflex.net/photos/apartment3.jpeg'
                 }
-            ]
+            ],
+            cities: []
         };
 
     }
+
     handleSlideshowOpen(index) {
         this.refs.SlideShow.handleModalOpen(index);
     };
     componentDidMount = () => {
         //this.handleSlideshowOpen(0);
+        console.log('CITIES');
+        console.log(CITIES);
     }
 
     render() {
@@ -50,29 +65,22 @@ class Planner extends React.Component {
                         <div className="col s12 z-depth-2 calendar-parent">
                             <div className="row">
                                 <div className="col s12 calendar-container" style={{paddingLeft:'0px', paddingRight:'0px'}}>
-                                    {/* <InfiniteCalendar
-                                    Component={MultipleDatesCalendar}
-                                    width={400}
-                                    height={600}
-                                    selected={today}
-                                    disabledDays={[0, 6]}
-                                    minDate={lastWeek}
-                                    interpolateSelection={defaultMultipleDateInterpolation}
-                                /> */}
                                     <InfiniteCalendar
                                         Component={MultipleDatesCalendar}
-                                        /*
-                                         * The `interpolateSelection` prop allows us to map the resulting state when a user selects a date.
-                                         * By default, it adds the date to the selected dates array if it isn't already selected.
-                                         * If the date is already selected, it removes it.
-                                         *
-                                         * You could re-implement this if this isn't the behavior you want.
-                                         */
                                         height={250}
                                         interpolateSelection={defaultMultipleDateInterpolation}
                                         selected={[new Date()]}
                                     />
                                 </div>
+                            </div>
+                            <div className="row">
+                                {/* <Select
+                                    name="form-field-name"
+                                    value=""
+                                    options={CITIES}
+                                    onChange={logChange}
+                                    multi={true}
+                                /> */}
                             </div>
                             <div className="row">
                                 <div className="col s6">

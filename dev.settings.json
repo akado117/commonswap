@@ -12,5 +12,7 @@
     "secret": "zX6sv0yena8SuzmMel8KV9GOnJZWOoSbtkqAaoJWQ4VG5tP4PR-"
   },
   "AWSAccessKeyId": "AKIAIMHGQUSVHR55INYQ",
-  "AWSSecretAccessKey": "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"
+  "AWSSecretAccessKey": "qrec6GhgWpS46S9U9k5vFPuELqlJ3PUGjENAKnnD",
+  "AWSRegion": "us-east-2",
+  "AWSProperty": "com-swap-images-dev"
 }

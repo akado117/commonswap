@@ -112,6 +112,7 @@ Meteor.methods({
     'files.delete': function filesStoreMethod(fileId) {
         check(fileId, String);
         const file = FileUrls.findOne(fileId);
+        consoleLogHelper('File Delete Attempting', 1, this.userId, JSON.stringify(file));
         if (file && file.userId === this.userId) {
             return S3.deleteFile(file, () => {
                 FileUrls.remove({ _id: fileId, userId: this.userId });

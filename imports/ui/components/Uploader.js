@@ -25,7 +25,7 @@ class Uploader extends React.Component {
   }
 
   handleUpload(event) {
-    this.upload = new Slingshot.Upload('uploadToAmazonS3');
+    this.upload = new Slingshot.Upload('uploadPlaceToAmazonS3');
     this.calculateProgress();
     const file = event.target.files[0];
     uploadToS3(this, file).then((url) => {

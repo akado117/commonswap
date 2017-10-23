@@ -5,6 +5,9 @@ import FontIcon from 'material-ui/FontIcon';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
+import ProfileComponent from '../components/profileComps/ProfileComponent.jsx'
+import InterestsComponent from '../components/forms/ButtonArrayComp.jsx'
+import PlaceComponent from '../components/placeComponents/PlaceComponent.jsx'
 
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
@@ -17,55 +20,15 @@ const scrolling = {
 };
 
 class Profile extends React.Component {
+    valueMap = {
+        profile: new Map(),
+        interests: new Map(),
+        emergencyContacts: new Map(),
+    }
     constructor() {
         super();
         this.state = {
             selectedIndex: 0,
-            firstName: '',
-            lastName: '',
-            gender:'',
-            birthday:'',
-            email:'',
-            phone:'',
-            language:'',
-            descPersonal:'',
-            school:'',
-            classOf:'',
-            cleanliness:45,
-            personality:65,
-            beachBum: true,
-            wineries: true,
-            photography:false,
-            film: true,
-            hiking:false,
-            clubbing:true,
-            concerts:true,
-            food:true,
-            tours:false,
-            address:'',
-            descPlace:'',
-            beds:1,
-            bedType:'',
-            monthlyRent:100,
-            bathrooms:0,
-            guests:2,
-            guestBeds:0,
-            smoking: false,
-            pets: false,
-            petType:'',
-            essentials: true,
-            wifi: true,
-            heat:false,
-            gym: true,
-            washer:false,
-            ktichen:true,
-            closet:true,
-            pool:true,
-            parking:false,
-            specInstruc:'',
-            descNeighborhood:'',
-            picutrePath: '',
-            photosPlace: ['',''],
         };
     }
 
@@ -97,9 +60,26 @@ class Profile extends React.Component {
           }
     }
 
+    addValueOnChange = (section, key, value) => {
+        const realSection = this.valueMap[section];
+        if(realSection) realSection.set(key, value);
+        console.log(this.valueMap)
+    }
+
+    getFormData = () => {
+
+    }
+
     render() {
+        let internalComponent;
+        if(this.state.selectedIndex === 0){
+            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange}/>
+        } else if (this.state.selectedIndex === 1) {
+            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange}/>
+        }
+
         return (
-            <section className="profile" >
+            <section className="profile-container" >
                 <Paper zDepth={1}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex} style={{ position: 'fixed',zIndex: '999' }}>
                         <BottomNavigationItem
@@ -119,7 +99,6 @@ class Profile extends React.Component {
                         />
                     </BottomNavigation>
                 </Paper>
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
                 <div className="container" style={{ paddingTop: '45px' }}>
                     <div className="row">
                         <div className="col s3" id="header-inner" style={{ position: 'fixed', display: 'block' }}>
@@ -132,325 +111,11 @@ class Profile extends React.Component {
                                 <input type="file" value={this.state.picture}/>
                             </div>
                         </div>
-                        <div className="col s9 offset-s3">
-                            <div className="row">
-                                <div className="col s6 input-field inline">
-                                    <input type="text" value={this.state.firstName} className="validate" />
-                                    <label htmlFor="firstName">First Name: </label>
-                                </div>
-                                <div className="col s6 input-field inline">
-                                    <input type="text" value={this.state.lastName} className="validate" id="lastName" />
-                                    <label htmlFor="lastName">Last Name: </label>
-                                </div>
-                                <div className="col s6 input-field inline">
-                                    
-                                    <select type="text" value={this.state.gender} className="validate" placeholder="Gender *">
-                                        <option disabled defaultValue>Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                    </select>
-                                    <label htmlFor=""><i className="fa fa-venus fa-1x" aria-hidden="true"></i> I am: </label>
-                                </div>
-                                <div className="col s6 input-field inline"> 
-                                    <label htmlFor=""><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</label>
-                                    <input type="text" className="datepicker"  value={this.state.birthday}/>
-                                </div>
-                                <div className="col s6 input-field inline">
-                                    <label><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
-                                    <input type="email" className="" value={this.state.daysRented} />
-                                    <p className="help-block text-danger"></p>
-                                </div>
-                                <div className="col s6 input-field inline">
-                                    <label><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
-                                    <input type="tel" className="" id="phone" value={this.state.phone}/>
-                                    <p className="help-block text-danger"></p>
-                                </div>
-                                <div className="col s6 input-field">
-                                    <select>
-                                        <option value={this.state.language} disabled defaultValue>Choose your Language</option>
-                                        <option>English</option>
-                                        <option>Spanish</option>
-                                        <option>Chinese</option>
-                                        <option>French</option>
-                                    </select>
-                                    <label>Preferred Language</label>
-                                </div>
-                                <div className="col s12 input-field inline">
-                                    <label><i className="fa fa-pencil" aria-hidden="true"></i> Describe Yourself:</label>
-                                    <textarea className="materialize-textarea" id="notes" value={this.state.descPersonal} ></textarea>
-                                    <p className="help-block text-danger"></p>
-                                </div>
-
-                                <div className="row">
-                                    <div className="col s12">
-                                        <div className="card-panel teal">
-                                            <span className="white-text">
-                                                CommonSwap relies on the trust and respect of our community! Tell us a little about yourself to get to know you. What's your favorite food? What's your ideal Friday night activity? Have a fun fact?
-                                        </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col s9 offset-s3">
-                            <div className="row">
-                                <div className="card-panel teal">
-                                    <span className="white-text">
-                                        For a compatible match, anser the questions below. We understand that though everyone might not be the same, we are all a lot more alike than we think. We hope the questions below provide our community enough information to find the ideal swap.
-                                        </span>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col s6 input-field inline">
-                                    <label><i className="fa fa-university fa-1x" aria-hidden="true"></i> School</label>
-                                    <input type="text" className="validate" id="school" value={this.state.school}/>
-                                </div>
-                                <div className="col s6 input-field inline">
-                                    <label>Class of: </label>
-                                    <input type="text" className="validate" value={this.state.classOf}/>
-                                </div>
-                            </div>
-                            <div className="col s12">
-                                <form action="#">
-                                    <p className="range-field">
-                                        <label htmlFor="amount">Somewhat clean</label>
-                                        <label htmlFor="amount" style={{ float: 'right' }}>Clean</label>
-                                        <input type="range" id="test5" min="0" max="100" value={this.state.cleanliness}/>
-                                    </p>
-                                </form>
-                            </div>
-                            <div className="col s12">
-                                <form action="#">
-                                    <p className="range-field">
-                                        <label htmlFor="amount">A Homebody</label>
-                                        <label htmlFor="amount" style={{ float: 'right' }} value={this.state.personality} >A Party Animal</label>
-                                        <input type="range" id="test5" min="0" max="100" />
-                                    </p>
-                                </form>
-                            </div>
-                            <div className="col s12">
-                                <div className="row" style={{ paddingTop: '15px' }}>
-                                    <div className="col s4">
-                                        <label>Beach bum</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.beachBum} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Wineries</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.wineries} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Photography</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.photography} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                                <div className="row" style={{ paddingTop: '15px' }}>
-                                    <div className="col s4" style={{ height: '150%' }}>
-                                        <label>Film</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.film} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Hiking</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.hiking} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Clubbing &amp; Nightlife</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.clubbing} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                                <div className="row" style={{ paddingTop: '15px' }}>
-                                    <div className="col s4">
-                                        <label>Live Music &amp; Concerts</label>
-                                        <button type="button" className="beach btn btn-sm " value={this.state.concerts} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Food &amp; Restaurants</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.food} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                    <div className="col s4">
-                                        <label>Organized Tours</label>
-                                        <button type="button" className="beach btn btn-sm" value={this.state.tours} style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="place">
-                                <div className="col s9 offset-s3">
-                                    <div className="row">
-                                        <div className="col s12 input-field inline">
-                                            <label htmlFor=""><i className="fa fa-location-arrow" aria-hidden="true"></i> Enter your address: </label>
-                                            <input type="text" className="html" id="" value={this.state.address}/>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s12 input-field inline">
-                                            <input type="text" className="" id="" value={this.state.descPlace}/>
-                                            <label htmlFor="exampleInputEmail1"><i className="fa fa-pencil" aria-hidden="true"></i> Write a short description about your place: (This is what users will see)</label>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s12 input-field inline" style={{ paddingTop: '20px' }}>
-                                            <div id="map" style={{height: '400px', width:'100%'}}></div>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s6 input-field inline">
-                                            <input type="text" className="" id="" value={this.state.address}/>
-                                            <label htmlFor=""><i className="fa fa-location-arrow" aria-hidden="true"></i> Enter your address: </label>
-                                        </div>
-                                        <div className="col s6 input-field inline">
-                                            <div className="col s6" style={{ paddingLeft: '0px' }}>
-                                                <select type="number" className="" value={this.state.beds}>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                </select>
-                                                <label><i className="fa fa-bed" aria-hidden="true"></i> How many beds can guests use?</label>
-                                            </div>
-                                            <div className="col s6 input-field inline" style={{ paddingRight: '0px', marginTop: '0px' }}>
-                                                <select type="text" className="" value={this.state.bedType}>
-                                                    <option>Full</option>
-                                                    <option>Half</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s6 input-field inline">
-                                            <label htmlFor=""><i className="fa fa-usd" aria-hidden="true"></i> What is your monthly rent?</label>
-                                            <input type="text" className="" id="" value={this.state.monthlyRent}/>
-                                        </div>
-                                        <div className="col s6 input-field inline">
-                                            <select type="number" className="" value={this.state.bathrooms}>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </select>
-                                            <label><i className="fa fa-bath" aria-hidden="true"></i> How many bathrooms can guest use?</label>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s6 input-field inline">
-                                            <input type="number" className="" id="" value={this.state.guests}/>
-                                            <label htmlFor=""><i className="fa fa-users" aria-hidden="true"></i> How many guests can your place accomodate?</label>
-                                        </div>
-                                        <div className="col s6 input-field inline">
-                                            <select type="number" className="" value={this.state.smoking}>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                            <label>Smoking Allowed?</label>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s6 input-field">
-                                            <label htmlFor=""><i className="fa fa-bed" aria-hidden="true"></i> How many bedrooms can guest use?</label>
-                                            <input type="number" className="" id="" value={this.state.guestBeds}/>
-                                        </div>
-                                        <div className="col s6">
-                                            <div className="col s6 input-field" style={{ paddingLeft: '0px' }}>
-                                                <select type="text" className="" value={this.state.pets}>
-                                                    <option>Yes</option>
-                                                    <option>No</option>
-                                                </select>
-                                                <label style={{ float: 'left' }}>Pets?</label>
-                                            </div>
-                                            <div className="col s6 input-field inline" style={{ paddingRight: '0px' }}>
-                                                <label htmlFor="">What kind?</label>
-                                                <input type="text" className="" id="" value={this.state.petType}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col s9 offset-s3">
-                                    <div className="col s12">
-                                        <div className="row" style={{ paddingTop: '15px' }}>
-                                            <div className="col s4 input-field inline">
-                                                <label>Essentials (towels, etc)</label>
-                                                <button type="button" value={this.state.essentials} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                            <div className="col s4 input-field inline">
-                                                <label>Wifi</label>
-                                                <button type="button" value={this.state.wifi} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                            <div className="col s4 input-field inline">
-                                                <label>Heat</label>
-                                                <button type="button" value={this.state.heat} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                        </div>
-                                        <div className="row" style={{ paddingTop: '15px' }}>
-                                            <div className="col s4 input-field inline" style={{ height: '150%' }}>
-                                                <label>Gym/ fitness center</label>
-                                                <button type="button" value={this.state.gym} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                            <div className="col s4 input-field inline">
-                                                <label>Washer/ dryer</label>
-                                                <button type="button" value={this.state.washer} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                            <div className="col s4 input-field inline">
-                                                <label>Kitchen Appliances</label>
-                                                <button type="button" value={this.state.kitchen} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                        </div>
-                                        <div className="row" style={{ paddingTop: '15px' }}>
-                                            <div className="col s4 input-field inline">
-                                                <label>Closet/ drawers</label>
-                                                <button type="button" value={this.state.closet} className="beach btn btn-sm " style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                            <div className="col s4 input-field inline">
-                                                <label>Pool</label>
-                                                <button type="button" value={this.state.pool} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                            <div className="col s4 input-field inline">
-                                                <label>Parking</label>
-                                                <button type="button" value={this.state.parking} className="beach btn btn-sm" style={{ borderRadius: '30px', float: 'right' }}><i className="fa fa-check" aria-hidden="true"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col s9 offset-s3">
-                                    <div className="col s12">
-                                        <label>Write a detailed description about your place:</label>
-                                        <textarea className="materialize-textarea" ></textarea>
-                                        <p className="help-block text-danger"></p>
-                                    </div>
-                                    <div className="col s12">
-                                        <label>Special instructions:</label>
-                                        <textarea className="materialize-textarea" value={this.state.specInstruc}></textarea>
-                                        <p className="help-block text-danger"></p>
-                                    </div>
-                                    <div className="col s12">
-                                        <label>About the area &amp; neighborhood (transportatin, what's near, etc.)</label>
-                                        <textarea className="materialize-textarea"value={this.state.descNeighborhood} ></textarea>
-                                        <p className="help-block text-danger"></p>
-                                    </div>
-                                </div>
-                                <div className="col s9 offset-s3">
-                                    <div className="panel panel-info">
-                                        <div className="panel-heading">Add photos &amp; videos</div>
-                                        <div className="panel-body">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col s12">
-                                    <div className="row">
-                                        <div className="col s3 offset-s6">
-                                            <a className="waves-effect waves-light btn-large" type="submit" style={{ width: '100%' }}><i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }}></i> Save</a>
-                                        </div>
-                                        <div className="col s3">
-                                            <a className="waves-effect waves-light btn-large" type="submit" style={{ width: '100%' }}><i className="fa fa-hand-o-right" aria-hidden="true" style={{ float: 'left' }}></i> Next</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="col s9 offset-s3 sub-container">
+                            {internalComponent}
                         </div>
                     </div>
                 </div>
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoLzYqxbgSUGz2DKfZj6vvsxRVjGP-sDw&callback=initMap" type="text/javascript"></script>
             </section>
         );
     }

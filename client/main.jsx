@@ -24,20 +24,21 @@ const client = new ApolloClient(meteorClientConfig());
 
 Meteor.startup(() => {
   render(
-    <ApolloProvider client={client} store={store} >
+     <ApolloProvider client={client} store={store} >
         <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory} >
             <Route path="/" component={App} >
-                <IndexRoute component={RoomieCalc} />
+                <IndexRoute component={Home} />
                 <Route path="profile" component={Profile} />
                 <Route path="login" component={Login} />
                 <Route path="imagePOC" component={ImagePOC} />
                 <Route path="room/:roomId" component={RoomieCalc} />
+                <Route path="room" component={RoomieCalc} />
                 <Route path="fuse" component={Fuse} />
                 <Route path="planner" component={Planner} />
                 <Route path="home" component={Home} />
                 <Route path="viewprofile" component={ViewProfile} />
             </Route>
         </Router>
-    </ApolloProvider>,
+     </ApolloProvider>,
     document.getElementById('render-target'));
 });

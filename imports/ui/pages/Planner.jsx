@@ -178,7 +178,7 @@ class Planner extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <p><u>Message From James:</u><a href="">  (View Profile)</a></p>
+                                        <p><u>Message From James:</u><a href="/viewprofile">  (View Profile)</a></p>
                                         <p>Hello! My name is James and I am interested in swapping with you. Looking to go to NY for the weekend just to getaway.</p>
                                     </div>
                                 </div>

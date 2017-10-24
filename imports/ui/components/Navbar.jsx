@@ -14,7 +14,7 @@ class Navbar extends React.Component {
         return (
             <nav >
                 <div className="nav-wrapper">
-                    <a href="#!" className="brand-logo">CS LOGO</a>
+                    <a href="#!" className="brand-logo"><img src="http://stretchflex.net/photos/csLogo.jpg" alt="" style={{maxHeight:'64px'}}/></a>
                     <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
                     <ul className="right hide-on-med-and-down">
                         <li><a href="home">How It Works</a></li>

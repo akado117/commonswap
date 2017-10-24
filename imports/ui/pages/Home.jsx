@@ -21,7 +21,7 @@ class Home extends React.Component {
                             <div className="d-flex align-items-center justify-content-center flex-wrap center-align">
                                 <div className="header-container overlay-desc">
                                     <h1 className="header-title"> CommonSwap <br />
-                                        <strong>Travel More. Pay Less.</strong>
+                                        <strong>Experience More</strong>
                                     </h1>
                                 </div>
                             </div>

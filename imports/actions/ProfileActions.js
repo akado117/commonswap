@@ -1,36 +1,31 @@
-import Constants from '../lib/Constants'
 import { graphql, gql } from 'react-apollo';
-
+import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 
 export default {
-    upsertProfile : () => ({profile, interests, emergencyContacts = []}, dispatch) => Meteor.call('upsertProfile', profile, interests, emergencyContacts,(error,result)=>{
-        if(error){
-            console.log(error);
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_FAIL',
-                ...error
-            })
-        } else {
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_PASS',
-                ...result
-            })
-        }
-    }),
-    saveRoom : (room, dispatch) => Meteor.call('saveRoomies',room,(error,result)=>{
-        if(error){
-            console.log(error);
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_FAIL',
-                ...error
-            })
-        } else {
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_PASS',
-                ...result
-            })
-        }
-    }),
+    upsertProfile: ({ profile, interests, emergencyContacts = [] }) => {
+        return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
+            if (error) {
+                console.log(error);
+                return dispatch({
+                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
+                    ...error,
+                });
+            } else {
+                if (result.data) {
+                    return dispatch({
+                        type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
+                        profile: result.data.profile,
+                        interests: result.data.interests,
+                        emergencyContacts: result.data.emergencyContacts,
+                    });
+                };
+                return dispatch({
+                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
+                    ...error,
+                });
+            }
+        });
+    },
     getRoomById: (id, cb) => {
         const query =  gql`{
           getSavedRoom(Id:"${id}") {

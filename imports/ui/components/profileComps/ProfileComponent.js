@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectBuilder from '../forms/SelectBuilder.jsx'
-import ButtonArray from '../forms/ButtonArrayComp.jsx'
+import SelectBuilder from '../forms/SelectBuilder.js'
+import ButtonArray from '../forms/ButtonArrayComp.js'
 
 function onChangeHelper(event) {
-    return event.target.value
+    return event.target.value;
 }
 
-class ProfileComponet extends  Component {
+class ProfileComponent extends Component {
 
     BUTTONS = [
         {label: 'Beach Bum', name: 'beachBum'},
@@ -157,14 +157,14 @@ class ProfileComponet extends  Component {
                         </p>
                     </div>
                 </div>
-                <ButtonArray getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS}/>
+                <ButtonArray getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} />
             </div>
-        )
+        );
     }
 }
 
-ProfileComponet.propTypes = {
-    getValueFunc: PropTypes.func,
+ProfileComponent.propTypes = {
+    getValueFunc: PropTypes.func.isRequired,
 };
 
-export default ProfileComponet;
+export default ProfileComponent;

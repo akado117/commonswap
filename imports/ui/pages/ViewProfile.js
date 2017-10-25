@@ -5,9 +5,9 @@ import FontIcon from 'material-ui/FontIcon';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import ProfileComponent from '../components/profileComps/ProfileComponent.jsx'
-import InterestsComponent from '../components/forms/ButtonArrayComp.jsx'
-import PlaceComponent from '../components/placeComponents/PlaceComponent.jsx'
+import ProfileComponent from '../components/profileComps/ProfileComponent.js'
+import InterestsComponent from '../components/forms/ButtonArrayComp.js'
+import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';

@@ -6,7 +6,7 @@ import { render } from 'react-dom';
 import App from '../imports/ui/Layout.jsx';
 import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx';
 import Fuse from '../imports/ui/components/FuseTestContainer.jsx';
-import Profile from '../imports/ui/pages/Profile.jsx';
+import Profile from '../imports/ui/pages/Profile.js';
 import Login from '../imports/ui/pages/Login.jsx'
 import ImagePOC from '../imports/ui/pages/ImagePOC';
 import Planner from '../imports/ui/pages/Planner';

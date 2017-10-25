@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from './Checkbox.jsx'
+import Checkbox from './Checkbox.js'
 
 class InterestsComponent extends Component {
     constructor(){

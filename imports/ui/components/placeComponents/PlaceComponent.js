@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 
-import ButtonArrayComp from '../forms/ButtonArrayComp.jsx';
-import SelectBuilder from '../forms/SelectBuilder.jsx'
+import ButtonArrayComp from '../forms/ButtonArrayComp.js';
+import SelectBuilder from '../forms/SelectBuilder.js'
 
 const BUTTONS = [
     {label: 'Essentials (towels, etc)', name: 'essentials'},

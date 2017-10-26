@@ -1,58 +1,38 @@
-import Constants from '../lib/Constants'
 import { graphql, gql } from 'react-apollo';
+import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
+import ProfileActions from './ProfileActions';
+import Store from '../store/store';
 
-
-export default {
-    loginWithFacebook: () => Meteor.loginWithFacebook({}, (error) => {
-        if(error) {
-            console.warn('something bad happened:', error);
-            return dispatch => dispatch({
-                type: Constants.LOGIN_ + Constants.FAILURE,
-            })
-        }
-        return dispatch => dispatch({
-                type: Constants.actionTypes.LOGIN_ + Constants.SUCCESS,
-                user: Meteor.user()
-        })
-    }),
-    loginWithGoogle: () => Meteor.loginWithGoogle({}, (error) => {
-        if(error){
-            console.warn('something bad happened:', error);
-            return {
-                type: Constants.LOGIN_ + Constants.FAILURE,
-            }
-        }
+const actions = {
+    loginWithOAuth: (loginType) => {
+        const callBack = (error, res, dispatch) => {
+            if (error) {
+                console.warn('something bad happened:', error);
+                return dispatch({
+                    type: `${actionTypes.LOGIN_}${FAILURE}`,
+                });
+            };
+            console.log(res);
+            return dispatch({
+                type: `${actionTypes.LOGIN_}${SUCCESS}`,
+                user: Meteor.user(),
+            });
+        };
+        const loginFunctions = {
+            facebook: dispatch => Meteor.loginWithFacebook((error,res) => callBack(error, res, dispatch)),
+            google: dispatch => Meteor.loginWithGoogle((error,res) => callBack(error, res, dispatch)),
+            twitter: dispatch => Meteor.loginWithTwitter((error,res) => callBack(error, res, dispatch)),
+        };
+        if (!loginType[loginType]) console.error('please use a defined loginType');
+        return loginFunctions[loginType];
+    },
+    userLoggedIn: (user) => {
+        Store.dispatch(ProfileActions.upsertProfile({},{},[]));
         return {
-            type: Constants.actionTypes.LOGIN_ + Constants.SUCCESS,
-            user: Meteor.user()
-        }
-    }),
-    loginWithTwitter: () => Meteor.loginWithTwitter({}, (error) => {
-        if(error){
-            console.warn('something bad happened:', error);
-            return {
-                type: Constants.LOGIN_ + Constants.FAILURE,
-            }
-        }
-        return {
-            type: Constants.actionTypes.LOGIN_ + Constants.SUCCESS,
-            user: Meteor.user()
-        }
-    }),
-    saveRoom: (room, dispatch) => Meteor.call('saveRoomies',room,(error,result)=>{
-        if(error){
-            console.log(error);
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_FAIL',
-                ...error
-            })
-        } else {
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_PASS',
-                ...result
-            })
-        }
-    }),
+            type: `${actionTypes.LOGIN_}${SUCCESS}`,
+            user,
+        };
+    },
     getRoomById: (id, cb) => {
         const query =  gql`{
           getSavedRoom(Id:"${id}") {
@@ -64,7 +44,12 @@ export default {
             }
           }
         }`;
-        debugger;
         return graphql(query, <Helper callbackFunc={cb}/>)
     }
 }
+
+Accounts.onLogin(() => { //this is a listener for logon;
+    Store.dispatch(actions.userLoggedIn(Meteor.user()));
+});
+
+export default actions;

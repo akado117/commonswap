@@ -2,7 +2,7 @@ import { graphql, gql } from 'react-apollo';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 
 export default {
-    upsertProfile: ({ profile, interests, emergencyContacts = [] }) => {
+    upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }) => {
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
             if (error) {
                 console.log(error);

@@ -52,21 +52,23 @@ Meteor.methods({
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
         if (profileParams && typeof profileParams === 'object') {
-            const profileClone = _.cloneDeep(profileParams);
-            const interestsClone = _.cloneDeep(interests);
-            const emergencyContactsClone = _.cloneDeep(emergencyContacts);
+            let profileClone = _.cloneDeep(profileParams);
+            let interestsClone = _.cloneDeep(interests);
+            let emergencyContactsClone = _.cloneDeep(emergencyContacts);
 
             try {
+                //profile section
                 let ownerProfileId = profileClone._id;
                 if (!ownerProfileId) { //check for existing profiles if no id passed in
-                    const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId });
+                    const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId }) || {};
                     ownerProfileId = ownerProfile._id;
+                    profileClone = _.merge(ownerProfile, profileClone);
                 }
                 if (!profileClone.ownerUserId) profileClone.ownerUserId = profileClone.ownerUserId || userId;
                 const profileGUID = Profiles.upsert({ _id: ownerProfileId }, profileClone);
                 profileClone._id = profileClone._id || profileGUID.insertedId || ownerProfileId;
                 delete profileClone.ownerUserId
-
+                //emergency contacts section
                 emergencyContactsClone.forEach((ec) => { //set owner and profile ids to emergency contacts
                     ec.ownerUserId = ec.ownerUserId || userId;
                     ec.profileId = profileClone._id || profileGUID.insertedId;
@@ -78,7 +80,11 @@ Meteor.methods({
                     delete ec.ownerUserId;
                     delete ec.profileId;
                 });
-
+                //interests section
+                if (!interestsClone._id) {
+                    const ownerInterests = Interests.findOne({ ownerUserId: interestsClone.ownerUserId || userId }) || {};
+                    interestsClone = _.merge(ownerInterests, interestsClone);
+                }
                 interestsClone.ownerUserId = interestsClone.ownerUserId || userId;
                 interestsClone.profileId = profileClone._id || profileGUID.insertedId;
                 const interestsGUID = Interests.upsert({ _id: interestsClone._id }, interestsClone);

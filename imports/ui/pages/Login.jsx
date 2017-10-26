@@ -1,21 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Router } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import Checkbox from 'material-ui/Checkbox';
 import { grey500, white } from 'material-ui/styles/colors';
-import PersonAdd from 'material-ui/svg-icons/social/person-add';
-import Help from 'material-ui/svg-icons/action/help';
-import TextField from 'material-ui/TextField';
-import { Link } from 'react-router';
 import ThemeDefault from '../helpers/themes';
 import Navbar from '../components/Navbar';
-
-import Uploader from '../components/Uploader';
 
 import UserActions from '../../actions/userActions';
 
@@ -23,13 +13,18 @@ class LoginPage extends React.Component {
     constructor() {
         super();
 
-        this.state = {}
+        this.state = {};
     }
 
-    componentDidUpdate = () => {
-        if (this.props.user.user) Router.push('/login')
-
+    componentDidUpdate = (prevProps) => {
+        if (this.props.user.user !== prevProps.user.user) browserHistory.push('/profile');
     };
+
+    componentDidMount = () => {
+        Meteor.autorun(() => {
+            if (Meteor.userId()) this.forceUpdate();
+        });
+    }
 
     render() {
         const styles = {
@@ -102,69 +97,24 @@ class LoginPage extends React.Component {
                     <div>
                         <div style={styles.loginContainer}>
 
-                            <Paper style={styles.paper}>
-
-                                <form>
-                                    <TextField
-                                        hintText="E-mail"
-                                        floatingLabelText="E-mail"
-                                        fullWidth={true}
-                                    />
-                                    <TextField
-                                        hintText="Password"
-                                        floatingLabelText="Password"
-                                        fullWidth={true}
-                                        type="password"
-                                    />
-
-                                    <div>
-                                        <Checkbox
-                                            label="Remember me"
-                                            style={styles.checkRemember.style}
-                                            labelStyle={styles.checkRemember.labelStyle}
-                                            iconStyle={styles.checkRemember.iconStyle}
-                                        />
-
-                                        <Link to="/">
-                                            <RaisedButton label="Login"
-                                                primary={true}
-                                                style={styles.loginBtn} />
-                                        </Link>
-                                    </div>
-                                </form>
-                            </Paper>
-
                             <div style={styles.buttonsDiv}>
-                                <FlatButton
-                                    label="Register"
-                                    href="/"
-                                    style={styles.flatButton}
-                                    icon={<PersonAdd />}
-                                />
-
-                                <FlatButton
-                                    label="Forgot Password?"
-                                    href="/"
-                                    style={styles.flatButton}
-                                    icon={<Help />}
-                                />
-                            </div>
-
-                            <div style={styles.buttonsDiv}>
-                                <button href="" onClick={UserActions.loginWithFacebook} style={{ ...styles.btn, ...styles.btnFacebook }}>
+                                <button href="" onClick={() => UserActions.loginWithOAuth('facebook')} style={{ ...styles.btn, ...styles.btnFacebook }}>
                                     <i className="fa fa-facebook fa-lg" />
                                     <span style={styles.btnSpan}>Log in with Facebook</span>
                                 </button>
-                                <button href="" onClick={UserActions.loginWithGoogle} style={{ ...styles.btn, ...styles.btnGoogle }}>
+                                <button href="" onClick={() => UserActions.loginWithOAuth('google')} style={{ ...styles.btn, ...styles.btnGoogle }}>
                                     <i className="fa fa-google-plus fa-lg" />
                                     <span style={styles.btnSpan}>Log in with Google</span>
                                 </button>
-                                <button href="" onClick={UserActions.loginWithTwitter} style={{ ...styles.btn, ...styles.btnTwitter }}>
+                                <button href="" onClick={() => UserActions.loginWithOAuth('twitter')} style={{ ...styles.btn, ...styles.btnTwitter }}>
                                     <i className="fa fa-twitter fa-lg" />
                                     <span style={styles.btnSpan}>Log in with Twitter</span>
                                 </button>
+                                <button href="" onClick={() => Meteor.logout(() => {this.forceUpdate()})} style={{ ...styles.btn, ...styles.btnTwitter }}>
+                                    <i className={`fa ${Meteor.userId() ? 'fa-lock' : 'fa-key'} fa-lg`} />
+                                    <span style={styles.btnSpan}>{Meteor.userId() ? 'Logout' : 'Please log in' }</span>
+                                </button>
                             </div>
-                            <Uploader />
                         </div>
                     </div>
                 </MuiThemeProvider>

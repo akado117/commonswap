@@ -63,10 +63,17 @@ class Profile extends React.Component {
         //   }
     }
 
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.profile.profile && !prevProps.profile.profile._id && this.props.profile.profile._id ) {
+            this.setState({ selectedIndex: 1 }, () => {
+                this.setState({ selectedIndex: 0 });
+            });
+        }
+    }
+
     addValueOnChange = (section, key, value) => {
         const realSection = this.valueMap[section];
         if (realSection) realSection.set(key, value);
-        console.log(realSection);
     }
 
     getFormData = (profileStore) => {
@@ -91,9 +98,9 @@ class Profile extends React.Component {
     render() {
         let internalComponent;
         if (this.state.selectedIndex === 0){
-            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange}/>
+            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange}/>
+            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />;
         }
 
         return (

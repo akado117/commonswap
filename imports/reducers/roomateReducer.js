@@ -1,4 +1,4 @@
-import Constants from '../lib/Constants'
+import { actionTypes, } from '../lib/Constants';
 import _ from 'lodash'
 
 var initialState = {
@@ -7,7 +7,7 @@ var initialState = {
 
 export default function roomateReducer(state = initialState, action = {}) {
     switch (action.type) {
-        case Constants.actionTypes.SAVE_ROOMIES+'_PASS':
+        case actionTypes.SAVE_ROOMIES+'_PASS':
             return _.assign({},state,{roomId: action.roomieId});
         default:
             return state;

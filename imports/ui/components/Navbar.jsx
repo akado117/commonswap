@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 
 class Navbar extends React.Component {
@@ -17,15 +18,16 @@ class Navbar extends React.Component {
                     <a href="#!" className="brand-logo"><img src="http://stretchflex.net/photos/csLogo.jpg" alt="" style={{maxHeight:'64px'}}/></a>
                     <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
                     <ul className="right hide-on-med-and-down">
-                        <li><a href="home">How It Works</a></li>
-                        <li><a href="planner">Planner</a></li>
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/login">Login</a></li>
+                        <li><Link to="/home">How It Works</Link></li>
+                        <li><Link to="/planner">Planner</Link></li>
+                        <li><Link to="/profile">Profile</Link></li>
+                        <li><Link to="/login">Login</Link></li>
                     </ul>
                     <ul className="side-nav" id="mobile-demo">
-                        <li><a href="">How It Works</a></li>
-                        <li><a href="">Planner</a></li>
-                        <li><a href="">Profile</a></li>
+                        <li><Link to="/home">How It Works</Link></li>
+                        <li><Link to="/planner">Planner</Link></li>
+                        <li><Link to="/profile">Profile</Link></li>
+                        <li><Link to="/login">Login</Link></li>
                     </ul>
                 </div>
             </nav>

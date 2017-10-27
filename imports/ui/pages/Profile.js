@@ -1,16 +1,19 @@
-import React from 'react'
-const _ = require('lodash')//required so it can be used easily in chrome dev tools.
-import DatePicker from 'material-ui/DatePicker';
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect }  from 'react-redux';
+import { withApollo } from 'react-apollo';
+import PropTypes from 'prop-types';
+const _ = require('lodash');//required so it can be used easily in chrome dev tools.
+
 import FontIcon from 'material-ui/FontIcon';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import ProfileComponent from '../components/profileComps/ProfileComponent.jsx'
-import InterestsComponent from '../components/forms/ButtonArrayComp.jsx'
-import PlaceComponent from '../components/placeComponents/PlaceComponent.jsx'
+import ProfileComponent from '../components/profileComps/ProfileComponent.js';
+import PlaceComponent from '../components/placeComponents/PlaceComponent.js';
 import Navbar from '../components/Navbar';
 
-const profile = <FontIcon className="material-icons">person</FontIcon>;
+import ProfileActions from '../../actions/ProfileActions';
+const profileIcon = <FontIcon className="material-icons">person</FontIcon>;
 const trust = <FontIcon className="material-icons">favorite</FontIcon>;
 const place = <FontIcon className="material-icons">weekend</FontIcon>;
 
@@ -60,32 +63,54 @@ class Profile extends React.Component {
         //   }
     }
 
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.profile.profile && !prevProps.profile.profile._id && this.props.profile.profile._id ) {
+            this.setState({ selectedIndex: 1 }, () => {
+                this.setState({ selectedIndex: 0 });
+            });
+        }
+    }
+
     addValueOnChange = (section, key, value) => {
         const realSection = this.valueMap[section];
-        if(realSection) realSection.set(key, value);
-        console.log(this.valueMap)
+        if (realSection) realSection.set(key, value);
     }
 
-    getFormData = () => {
+    getFormData = (profileStore) => {
+        const formData = {
+            profile: {},
+            interests: {},
+            emergencyContacts: [],
+        }
+        this.valueMap.profile.forEach((value, key) => {
+            formData.profile[key] = value;
+        });
+        this.valueMap.interests.forEach((value, key) => {
+            formData.interests[key] = value;
+        });
+        this.valueMap.emergencyContacts.forEach((value) => {
+            formData.emergencyContacts.push(value);
+        });
 
-    }
+        return _.merge({}, profileStore, formData);
+    };
 
     render() {
         let internalComponent;
-        if(this.state.selectedIndex === 0){
-            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange}/>
+        if (this.state.selectedIndex === 0){
+            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange}/>
+            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />;
         }
 
         return (
             <section className="profile-container" >
-                <Navbar></Navbar>
+                <Navbar />
                 <Paper zDepth={1}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex} style={{ position: 'fixed',zIndex: '999' }}>
                         <BottomNavigationItem
                             label="My Profile"
-                            icon={profile}
+                            icon={profileIcon}
                             onClick={() => this.select(0)}
                         />
                         <BottomNavigationItem
@@ -117,11 +142,30 @@ class Profile extends React.Component {
                         </div>
                     </div>
                 </div>
+                <button className="btn waves-effect waves-light" type="submit" onClick={() => this.props.profileActions.upsertProfile(this.getFormData(this.props.profile))}>Submit
+                    <i className="material-icons right">send</i>
+                </button>
             </section>
         );
     }
-    testState = () => {
-        roomiesActions.saveRoom(this.state,this.props.dispatch)
-    }
 }
-export default Profile
+
+function mapStateToProps(state) {
+    const { profile } = state;
+    return {
+        profile,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        profileActions: bindActionCreators(ProfileActions, dispatch),
+    };
+}
+
+Profile.propTypes = {
+    profileActions: PropTypes.object.isRequired, //eslint-disable-line
+    profile: PropTypes.object.isRequired,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withApollo(Profile));

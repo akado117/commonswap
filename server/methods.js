@@ -1,13 +1,13 @@
+import s3PublicUrl from 'node-s3-public-url';
+import { check } from 'meteor/check';
+import random from 'random-words'
 import Roomies from '../imports/collections/Roomies';
 import FileUrls from '../imports/collections/FileUrls';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode } from '../imports/lib/Constants'
-import urlHelpers from '../imports/helpers/urlHelpers';
-import s3PublicUrl from 'node-s3-public-url';
 import S3 from './s3';
-import { check } from 'meteor/check';
-import random from 'random-words'
+import _ from 'lodash'
 
 const fakeEC = () => ({
     name: random({ exactly: 2, join: ' ' }),
@@ -48,34 +48,63 @@ const fakeProfile = () => ({
 })
 
 Meteor.methods({
-    upsertProfile(profileParams = fakeProfile(), emergencyContacts = [fakeEC()], interests = fakeInter()){
-        if(!Meteor.userId()) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
-        if(profileParams && emergencyContacts && interests
-            && typeof profileParams === 'object' && typeof emergencyContacts === 'object' && typeof emergencyContacts === 'object'){
-
-            profileParams.ownerUserId = Meteor.userId();
+    upsertProfile(profileParams = fakeProfile(), interests = fakeInter(), emergencyContacts = [fakeEC()]) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
+        if (profileParams && typeof profileParams === 'object') {
+            let profileClone = _.cloneDeep(profileParams);
+            let interestsClone = _.cloneDeep(interests);
+            let emergencyContactsClone = _.cloneDeep(emergencyContacts);
 
             try {
-                const profileGUID = Profiles.upsert({ _id: profileParams._id }, profileParams);
-
-                emergencyContacts.forEach(ec => {
-                    ec.ownerUserId = Meteor.userId();
-                    ec.profileId = profileGUID.insertedId;
+                //profile section
+                let ownerProfileId = profileClone._id;
+                if (!ownerProfileId) { //check for existing profiles if no id passed in
+                    const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId }) || {};
+                    ownerProfileId = ownerProfile._id;
+                    profileClone = _.merge(ownerProfile, profileClone);
+                }
+                if (!profileClone.ownerUserId) profileClone.ownerUserId = profileClone.ownerUserId || userId;
+                const profileGUID = Profiles.upsert({ _id: ownerProfileId }, profileClone);
+                profileClone._id = profileClone._id || profileGUID.insertedId || ownerProfileId;
+                delete profileClone.ownerUserId
+                //emergency contacts section
+                emergencyContactsClone.forEach((ec) => { //set owner and profile ids to emergency contacts
+                    ec.ownerUserId = ec.ownerUserId || userId;
+                    ec.profileId = profileClone._id || profileGUID.insertedId;
                 });
-                const emergencyGUIDs = emergencyContacts.map(ec => EmergencyContacts.upsert({ _id: ec._id }, ec));
+                const emergencyGUIDs = emergencyContactsClone.map(ec => EmergencyContacts.upsert({ _id: ec._id }, ec));
+                emergencyContactsClone.forEach((ec, idx) => {
+                    const GUID = emergencyGUIDs[idx] || {};
+                    ec._id = GUID.insertedId || ec._id;
+                    delete ec.ownerUserId;
+                    delete ec.profileId;
+                });
+                //interests section
+                if (!interestsClone._id) {
+                    const ownerInterests = Interests.findOne({ ownerUserId: interestsClone.ownerUserId || userId }) || {};
+                    interestsClone = _.merge(ownerInterests, interestsClone);
+                }
+                interestsClone.ownerUserId = interestsClone.ownerUserId || userId;
+                interestsClone.profileId = profileClone._id || profileGUID.insertedId;
+                const interestsGUID = Interests.upsert({ _id: interestsClone._id }, interestsClone);
+                interestsClone._id = interestsGUID.insertedId || interestsClone._id;
+                delete interestsClone.ownerUserId;
+                delete interestsClone.profileId;
 
-
-                interests.ownerUserId = Meteor.userId();
-                interests.profileId = profileGUID.insertedId;
-                const interestsGUID = Interests.upsert({ _id: interests._id }, interests);
-
-                consoleLogHelper(`Profile ${profileParams._id? 'updated' : 'added'} success`, genericSuccessCode, Meteor.userId(), JSON.stringify(profileParams));
-                return serviceSuccessBuilder({profileGUID, emergencyGUIDs, interestsGUID}, genericSuccessCode, {
-                    serviceMessage: `Profile ${profileParams._id? 'updated' : 'added'}, with key ${profileGUID.insertedId}`,
-                })
-            } catch(err) {
+                consoleLogHelper(`Profile ${profileClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(profileClone));
+                return serviceSuccessBuilder({ profileGUID, emergencyGUIDs, interestsGUID}, genericSuccessCode, {
+                    serviceMessage: `Profile ${profileClone._id ? 'updated' : 'added'}, with key ${profileGUID.insertedId}`,
+                    data: {
+                        interests: interestsClone,
+                        emergencyContacts: emergencyContactsClone,
+                        profile: profileClone,
+                    },
+                });
+            } catch (err) {
+                console.log(err.stack);
                 consoleErrorHelper('Profile create or update failed', upsertFailedCode, Meteor.userId(), err);
-                return serviceErrorBuilder('Profile create or update failed', upsertFailedCode, {err})
+                return serviceErrorBuilder('Profile create or update failed', upsertFailedCode, err);
             }
         } else {
             consoleErrorHelper('Profile create or update failed', insufficentParamsCode, Meteor.userId());

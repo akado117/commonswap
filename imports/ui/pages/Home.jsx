@@ -14,7 +14,7 @@ class Home extends Component {
                 <Navbar></Navbar>
                 <header>
                     <div className="video-container">
-                        <video src="http://stretchflex.net/photos/csVideo2.mp4" poster="" autoPlay loop muted>
+                        <video src="https://stretchflex.net/photos/csVideo2.mp4" poster="" autoPlay loop muted>
                             <source src=""/>
                         </video>
                         <div className="embed-responsive-item">

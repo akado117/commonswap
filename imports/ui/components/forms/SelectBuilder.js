@@ -4,12 +4,12 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 class SelectBuilder extends Component {
-    constructor(){
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            value: undefined,
-        }
+            value: props.defaultValue,
+        };
     }
     onChangeHandler = (e, t, value) => {
         this.props.onChange(value);
@@ -23,11 +23,18 @@ class SelectBuilder extends Component {
             defaultSelection}
          = this.props;
         return (
-            <SelectField fullWidth floatingLabelText={label} {...extraProps} onChange={this.onChangeHandler} value={this.state.value}>
+            <SelectField fullWidth
+                         underlineStyle={{ borderBottomColor: '#9e9e9e' }}
+                         floatingLabelText={label}
+                         floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e' }}
+                         {...extraProps}
+                         onChange={this.onChangeHandler}
+                         value={this.state.value}
+            >
                 {defaultSelection ? <MenuItem disabled value={undefined} primaryText={defaultSelection}/> : ''}
                 {selectArrObj.values.map((value, idx) => <MenuItem key={`${label}-${idx}`} value={value}
                                                                    primaryText={selectArrObj.displayNames[idx]}/>)}
-            </SelectField>)
+            </SelectField>);
     }
 }
 
@@ -40,6 +47,7 @@ SelectBuilder.propTypes = {
     label: PropTypes.string,
     onChange: PropTypes.func,
     extraProps: PropTypes.object,
+    defaultValue: PropTypes.string,
 };
 
 export default SelectBuilder

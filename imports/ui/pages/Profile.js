@@ -13,9 +13,10 @@ import PlaceComponent from '../components/placeComponents/PlaceComponent.js';
 import Navbar from '../components/Navbar';
 
 import ProfileActions from '../../actions/ProfileActions';
+import PlaceActions from '../../actions/PlaceActions';
 const profileIcon = <FontIcon className="material-icons">person</FontIcon>;
 const trust = <FontIcon className="material-icons">favorite</FontIcon>;
-const place = <FontIcon className="material-icons">weekend</FontIcon>;
+const placeIcon = <FontIcon className="material-icons">weekend</FontIcon>;
 
 const scrolling = {
     position: 'fixed',
@@ -27,6 +28,11 @@ class Profile extends React.Component {
         profile: new Map(),
         interests: new Map(),
         emergencyContacts: new Map(),
+    }
+    placeValueMap = {
+        place: new Map(),
+        address: new Map(),
+        amenities: new Map(),
     }
     constructor() {
         super();
@@ -76,6 +82,11 @@ class Profile extends React.Component {
         if (realSection) realSection.set(key, value);
     }
 
+    addValueOnChangePlace = (section, key, value) => {
+        const realSection = this.placeValueMap[section];
+        if (realSection) realSection.set(key, value);
+    }
+
     getFormData = (profileStore) => {
         const formData = {
             profile: {},
@@ -95,19 +106,39 @@ class Profile extends React.Component {
         return _.merge({}, profileStore, formData);
     };
 
+    getPlaceFormData = (placeStore) => {
+        const formData = {};
+        Object.keys(this.placeValueMap).forEach((key) => {
+            formData[key] = {};
+            this.placeValueMap[key].forEach((value, mapKey) => {
+                formData[key][mapKey] = value;
+            });
+        });
+
+        return _.merge({}, placeStore, formData);
+    };
+
+    saveProfileFunction = (transitionOnSave) => {
+        this.props.profileActions.upsertProfile(this.getFormData(this.props.profile), transitionOnSave ? () => this.setState({ selectedIndex: 1 }) : () => {});
+    }
+
+    savePlaceFunction = () => {
+        this.props.placeActions.upsertPlace(this.getPlaceFormData(this.props.profile));
+    }
+
     render() {
         let internalComponent;
         if (this.state.selectedIndex === 0){
-            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} />;
+            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} saveProfile={this.saveProfileFunction} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />;
+            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }
 
         return (
             <section className="profile-container" >
                 <Navbar />
-                <Paper zDepth={1}>
-                    <BottomNavigation selectedIndex={this.state.selectedIndex} style={{ position: 'fixed',zIndex: '999' }}>
+                <Paper id="profile-nav" zDepth={1} /*Todo: animate and use transitions to have it follow scroll*/>
+                    <BottomNavigation selectedIndex={this.state.selectedIndex}>
                         <BottomNavigationItem
                             label="My Profile"
                             icon={profileIcon}
@@ -115,7 +146,7 @@ class Profile extends React.Component {
                         />
                         <BottomNavigationItem
                             label="My Place"
-                            icon={place}
+                            icon={placeIcon}
                             onClick={() => this.select(1)}
                         />
                         <BottomNavigationItem
@@ -134,7 +165,7 @@ class Profile extends React.Component {
                             </div>
                             <div className="col s12">
                                 <p><i className="fa fa-plus-square-o fa-2x" aria-hidden="true"></i> Add Photo</p>
-                                <input type="file" value={this.state.picture}/>
+                                <input type="file" value={this.state.picture} />
                             </div>
                         </div>
                         <div className="col s9 offset-s3 sub-container">
@@ -142,30 +173,31 @@ class Profile extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="btn waves-effect waves-light" type="submit" onClick={() => this.props.profileActions.upsertProfile(this.getFormData(this.props.profile))}>Submit
-                    <i className="material-icons right">send</i>
-                </button>
             </section>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { profile } = state;
+    const { profile, place } = state;
     return {
         profile,
+        place,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         profileActions: bindActionCreators(ProfileActions, dispatch),
+        placeActions: bindActionCreators(PlaceActions, dispatch),
     };
 }
 
 Profile.propTypes = {
     profileActions: PropTypes.object.isRequired, //eslint-disable-line
+    placeActions: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
+    place: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withApollo(Profile));

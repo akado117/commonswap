@@ -1,5 +1,5 @@
-import { SUCCESS, actionTypes } from '../lib/Constants';
 import _ from 'lodash';
+import { SUCCESS, actionTypes } from '../lib/Constants';
 
 const initialState = {
     profile: {},
@@ -9,8 +9,6 @@ const initialState = {
 
 function profileReducer(state = initialState, action = {}) {
     switch (action.type) {
-    case `${actionTypes.GET_PROFILE}_${SUCCESS}`:
-        return _.assign({}, state, { user: action.user });
     case `${actionTypes.SAVE_PROFILE}_${SUCCESS}`:
         return _.assign({}, state, {
             profile: action.profile,

@@ -1,6 +1,7 @@
 import { graphql, gql } from 'react-apollo';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 import ProfileActions from './ProfileActions';
+import PlaceActions from './PlaceActions';
 import Store from '../store/store';
 
 const actions = {
@@ -28,6 +29,7 @@ const actions = {
     },
     userLoggedIn: (user) => {
         Store.dispatch(ProfileActions.upsertProfile({}));
+        Store.dispatch(PlaceActions.upsertPlace({}));
         return {
             type: `${actionTypes.LOGIN_}${SUCCESS}`,
             user,

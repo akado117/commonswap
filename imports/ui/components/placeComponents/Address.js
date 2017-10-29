@@ -27,8 +27,8 @@ const AddressComponent = ({ getValueFunc = () => {}, defaultValues = {} }) => {
                 <input id="street" type="text" onChange={e => getValueFunc('street', onChangeHelper(e))} defaultValue={defaultValues.street} />
             </div>
             <div className="col s6 input-field inline">
-                <label htmlFor="street">Street</label>
-                <input id="street" type="text" onChange={e => getValueFunc('city', onChangeHelper(e))} defaultValue={defaultValues.city} />
+                <label htmlFor="city">City</label>
+                <input id="city" type="text" onChange={e => getValueFunc('city', onChangeHelper(e))} defaultValue={defaultValues.city} />
             </div>
             <div className="col s3">
                 <SelectBuilder

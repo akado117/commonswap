@@ -74,9 +74,9 @@ class ProfileComponent extends Component {
         const genderFields = {
             defaultField: <span><i className="fa fa-venus fa-1x" aria-hidden="true"></i> I am: </span>,
             fields: {
-                displayNames: ['Male', 'Female'],
-                values: ['male', 'female'],
-            }
+                displayNames: ['Male', 'Female', 'Non-Binary', 'Trans', 'Other'],
+                values: ['male', 'female', 'nonbinary', 'trans', 'other'],
+            },
         };
 
         const langFields = {
@@ -90,40 +90,44 @@ class ProfileComponent extends Component {
         return (
             <div className="row">
                 <div className="col s6 input-field inline">
-                    <input type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName} />
+                    <input id="firstName" type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName} />
                     <label htmlFor="firstName">First Name: </label>
                 </div>
                 <div className="col s6 input-field inline">
-                    <input type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" id="lastName" defaultValue={profile.lastName} />
+                    <input id="lastName" type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" defaultValue={profile.lastName} />
                     <label htmlFor="lastName">Last Name: </label>
                 </div>
                 <div className="col s6 input-field inline">
                     <SelectBuilder
-                        onChange={(value) => getValueFunc('gender', value)}
+                        label={<span><i className="fa fa-venus fa-1x" aria-hidden="true"></i>Gender</span>}
+                        onChange={value => getValueFunc('gender', value)}
                         selectArrObj={genderFields.fields}
                         defaultSelection={genderFields.defaultField}
                         defaultValue={profile.gender}
+                        extraProps={{ floatingLabelFixed: true }}
                     />
                 </div>
                 <div className="col s6 input-field">
                     <SelectBuilder
-                        onChange={(value) => getValueFunc('lang', value)}
+                        label="Language"
+                        onChange={value => getValueFunc('lang', value)}
                         selectArrObj={langFields.fields}
                         defaultSelection={langFields.defaultField}
                         defaultValue={profile.lang}
+                        extraProps={{ floatingLabelFixed: true }}
                     />
                 </div>
                 <div className="col s6 input-field inline">
-                    <label htmlFor=""><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</label>
-                    <input type="text" className="datepicker" onChange={e => getValueFunc('birthday', onChangeHelper(e))} defaultValue={profile.birthday} />
+                    <label htmlFor="dob"><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</label>
+                    <input id="dob" type="text" className="datepicker" onChange={e => getValueFunc('birthday', onChangeHelper(e))} defaultValue={profile.birthday} />
                 </div>
                 <div className="col s6 input-field inline">
-                    <label><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
-                    <input type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email} />
+                    <label htmlFor="email"><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
+                    <input id="email" type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email} />
                     <p className="help-block text-danger"></p>
                 </div>
                 <div className="col s6 input-field inline">
-                    <label><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
+                    <label htmlFor="phone"><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
                     <input type="tel" className="" id="phone" onChange={e => getValueFunc('phone', onChangeHelper(e))} defaultValue={profile.phone} />
                     <p className="help-block text-danger"></p>
                 </div>
@@ -138,28 +142,31 @@ class ProfileComponent extends Component {
                     <TextFieldStandardized
                         floatingLabelText={<span><i className="fa fa-pencil" aria-hidden="true"></i> Describe Yourself</span>}
                         onChange={(e, value) => getValueFunc('personalSummary', value)}
+                        extraProps={{
+                            defaultValue: profile.personalSummary,
+                        }}
                     />
                 </div>
                 <div className="col s6 input-field inline">
-                    <label><i className="fa fa-university fa-1x" aria-hidden="true"></i> School</label>
+                    <label htmlFor="school"><i className="fa fa-university fa-1x" aria-hidden="true"></i> School</label>
                     <input type="text" className="validate" id="school" onChange={e => getValueFunc('school', onChangeHelper(e))} defaultValue={profile.school} />
                 </div>
                 <div className="col s6 input-field inline">
-                    <label>Class of: </label>
-                    <input type="number" min="1950" max="2035" className="validate" onChange={e => getValueFunc('classOf', onChangeHelper(e))} defaultValue={profile.classOf} />
+                    <label htmlFor="class">Class of: </label>
+                    <input id="class" type="number" min="1950" max="2035" className="validate" onChange={e => getValueFunc('classOf', onChangeHelper(e))} defaultValue={profile.classOf} />
                 </div>
                 <div className="col s12">
                     <p className="range-field">
                         <label htmlFor="amount">Somewhat clean</label>
                         <label htmlFor="amount" style={{ float: 'right' }}>Clean</label>
-                        <input type="range" id="test5" min="0" max="100" onChange={e => getValueFunc('cleanliness', onChangeHelper(e))} defaultValue={profile.cleanliness} />
+                        <input type="range" id="cleanliness" min="0" max="100" onChange={e => getValueFunc('cleanliness', onChangeHelper(e))} defaultValue={profile.cleanliness} />
                     </p>
                 </div>
                 <div className="col s12">
                     <p className="range-field">
                         <label htmlFor="amount">A Homebody</label>
                         <label htmlFor="amount" style={{ float: 'right' }} >A Party Animal</label>
-                        <input type="range" id="test5" min="0" max="100" onChange={e => getValueFunc('personality', onChangeHelper(e))} defaultValue={profile.personality} />
+                        <input type="range" id="personality" min="0" max="100" onChange={e => getValueFunc('personality', onChangeHelper(e))} defaultValue={profile.personality} />
                     </p>
                 </div>
                 <ButtonArray getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} defaultValues={interests} />

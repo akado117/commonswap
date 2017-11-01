@@ -1,12 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 
 const CheckBox = ({label, active, onClick, name}) => {
     return (
-        <div className="col s4 checkbox-container">
+        <div className="col s6 m4 checkbox-container">
             <label>{label}</label>
-            <button type="button" className={`btn btn-sm ${active ? 'active' : ''}`} onClick={e => onClick(e, name)}><i className={`fa ${active ? 'fa-check' : 'fa-times'}`} aria-hidden="true"/></button>
+            <button type="button" className={`btn btn-sm ${active ? 'active' : ''}`} onClick={e => onClick(e, name)}><i className={`fa ${active ? 'fa-check' : 'fa-times'}`} aria-hidden="true" /></button>
         </div>
     )
 }
@@ -18,4 +18,8 @@ CheckBox.propTypes = {
     label: PropTypes.string.isRequired,
 };
 
-export default CheckBox
+CheckBox.defaultProps = {
+    active: false,
+};
+
+export default CheckBox;

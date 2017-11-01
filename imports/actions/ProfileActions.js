@@ -1,8 +1,7 @@
-import { graphql, gql } from 'react-apollo';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 
 export default {
-    upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }) => {
+    upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }, callBack) => {
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
             if (error) {
                 console.log(error);
@@ -12,12 +11,13 @@ export default {
                 });
             } else {
                 if (result.data) {
-                    return dispatch({
+                    dispatch({
                         type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
                         profile: result.data.profile,
                         interests: result.data.interests,
                         emergencyContacts: result.data.emergencyContacts,
                     });
+                    return callBack ? callBack() : '';
                 };
                 return dispatch({
                     type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
@@ -26,17 +26,4 @@ export default {
             }
         });
     },
-    getRoomById: (id, cb) => {
-        const query =  gql`{
-          getSavedRoom(Id:"${id}") {
-            _id
-            roomies {
-              name
-              daysInRoom
-              amountOwed
-            }
-          }
-        }`;
-        return graphql(query, <Helper callbackFunc={cb}/>)
-    }
 }

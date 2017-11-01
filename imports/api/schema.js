@@ -73,9 +73,11 @@ export default [
   
   type Address {
     _id: String!
-    ownerUserId: String!
+    ownerUserId: String
     place: Place
+    placeId: String
     profile: Profile
+    profileId: String
     street: String
     apt: String
     city: String
@@ -87,9 +89,11 @@ export default [
   
   type Amenity {
     _id: String!
-    ownerUserId: String!
+    ownerUserId: String
     profile: Profile
+    profileId: String
     place: Place
+    placeId: String
     essentials: Boolean
     wiFi: Boolean
     heat: Boolean
@@ -105,6 +109,7 @@ export default [
     _id: String!
     ownerUserId: String
     profile: Profile
+    profileId: String
     address: Address
     shortDesc: String
     detailedDesc: String

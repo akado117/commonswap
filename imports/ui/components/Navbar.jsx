@@ -13,8 +13,8 @@ class Navbar extends React.Component {
 
     render() {
         return (
-            <nav >
-                <div className="nav-wrapper">
+            <nav className="nav-wrapper">
+                <div>
                     <a href="#!" className="brand-logo"><img src="http://stretchflex.net/photos/csLogo.jpg" alt="" style={{maxHeight:'64px'}}/></a>
                     <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
                     <ul className="right hide-on-med-and-down">
@@ -30,6 +30,7 @@ class Navbar extends React.Component {
                         <li><Link to="/login">Login</Link></li>
                     </ul>
                 </div>
+                {this.props.children}
             </nav>
         );
     }

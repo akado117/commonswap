@@ -94,7 +94,7 @@ Meteor.methods({
 
                 consoleLogHelper(`Profile ${profileClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(profileClone));
                 return serviceSuccessBuilder({ profileGUID, emergencyGUIDs, interestsGUID}, genericSuccessCode, {
-                    serviceMessage: `Profile ${profileClone._id ? 'updated' : 'added'}, with key ${profileGUID.insertedId}`,
+                    serviceMessage: `Profile ${profileClone._id ? 'updated' : 'added'}, with key ${profileGUID.insertedId || profileClone._id}`,
                     data: {
                         interests: interestsClone,
                         emergencyContacts: emergencyContactsClone,
@@ -109,6 +109,62 @@ Meteor.methods({
         } else {
             consoleErrorHelper('Profile create or update failed', insufficentParamsCode, Meteor.userId());
             return serviceErrorBuilder('Profile create or update failed', insufficentParamsCode)
+        }
+    },
+    upsertPlace(place = {}, address = {}, amenities = {}) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
+        let placeClone = _.cloneDeep(place);
+        let addressClone = _.cloneDeep(address);
+        let amenitiesClone = _.cloneDeep(amenities);
+        try {
+            //place Section
+            let ownerPlaceId = placeClone._id;
+            if (!ownerPlaceId) { //check for existing profiles if no id passed in
+                const ownerPlace = Places.findOne({ ownerUserId: placeClone.ownerUserId || userId }) || {};
+                ownerPlaceId = ownerPlace._id;
+                placeClone = _.merge(ownerPlace, placeClone);//overwrite with new data
+            }
+            if (!placeClone.ownerUserId) placeClone.ownerUserId = userId;
+            const placeGUID = Places.upsert({ _id: ownerPlaceId }, placeClone);
+            if (placeGUID.insertedId) placeClone._id = placeGUID.insertedId; //should have a _id already inless placeGUID had it. As a new doc is created without it
+            delete placeClone.ownerUserId;
+            //address section
+            if (!addressClone._id) {
+                const oldAddress = Addresses.findOne({ placeId: placeClone._id }) || {}; //attempt to find any created and merge new data with it
+                addressClone = _.merge(oldAddress, addressClone);
+            }
+            if (!addressClone.ownerUserId) addressClone.ownerUserId = userId;
+            if (!addressClone.placeId) addressClone.placeId = placeClone._id; //should have id from insertGUID or already passed in
+            const addressGUID = Addresses.upsert({ _id: addressClone._id }, addressClone);
+            if (addressGUID.insertedId) addressClone._id = addressGUID.insertedId;
+            delete addressClone.ownerUserId;
+            delete addressClone.placeId;
+            //ammenities section
+            if (!amenitiesClone._id) {
+                const placeAmenities = Amenities.findOne({ placeId: placeClone._id }) || {};
+                amenitiesClone = _.merge(placeAmenities, amenitiesClone);
+            }
+            amenitiesClone.ownerUserId = amenitiesClone.ownerUserId || userId;
+            if (!amenitiesClone.placeId) amenitiesClone.placeId = placeClone._id;
+            const amenitiesGUID = Amenities.upsert({ _id: amenitiesClone._id }, amenitiesClone);
+            if (amenitiesGUID.insertedId) amenitiesClone._id = amenitiesGUID.insertedId; //will exist if _id doesn't
+            delete amenitiesClone.ownerUserId;
+            delete amenitiesClone.placeId;
+
+            consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(placeClone));
+            return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID}, genericSuccessCode, {
+                serviceMessage: `Place ${placeClone._id ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
+                data: {
+                    amenities: amenitiesClone,
+                    address: addressClone,
+                    place: placeClone,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Place create or update failed', upsertFailedCode, userId, err);
+            return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
     saveRoomies(room){

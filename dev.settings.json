@@ -14,5 +14,8 @@
   "AWSAccessKeyId": "AKIAIMHGQUSVHR55INYQ",
   "AWSSecretAccessKey": "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",
   "AWSRegion": "us-east-2",
-  "AWSProperty": "com-swap-images-dev"
+  "AWSProperty": "com-swap-images-dev",
+  "ajaxUrls": {
+    "emailUrl": "https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==",
+  }
 }

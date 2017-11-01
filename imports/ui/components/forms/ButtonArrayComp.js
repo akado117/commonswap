@@ -22,7 +22,7 @@ class InterestsComponent extends Component {
             return <Checkbox key={`interests-${idx}`} onClick={this.onChangeHandler} name={btnData.name} active={this.state[btnData.name]} label={btnData.label} />;
         });
         return (
-            <div className="row interests-container" style={{ paddingTop: '15px' }}>
+            <div className="interests-container" style={{ paddingTop: '15px' }}>
                 {buttons}
             </div>
         );

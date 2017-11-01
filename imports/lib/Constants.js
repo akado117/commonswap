@@ -9,6 +9,8 @@ export const actionTypes = {
     LOGIN_: 'LOGIN_',
     GET_PROFILE: 'GET_PROFILE',
     SAVE_PROFILE: 'SAVE_PROFILE',
+    GET_PLACE: 'GET_PLACE',
+    SAVE_PLACE: 'SAVE_PLACE',
 };
 
 export const serviceErrorBuilder = (message, code, err = {}, extraParams = {}) => ({

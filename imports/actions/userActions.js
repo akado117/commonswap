@@ -1,6 +1,7 @@
 import { graphql, gql } from 'react-apollo';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 import ProfileActions from './ProfileActions';
+import PlaceActions from './PlaceActions';
 import Store from '../store/store';
 
 const actions = {
@@ -23,11 +24,12 @@ const actions = {
             google: dispatch => Meteor.loginWithGoogle((error,res) => callBack(error, res, dispatch)),
             twitter: dispatch => Meteor.loginWithTwitter((error,res) => callBack(error, res, dispatch)),
         };
-        if (!loginType[loginType]) console.error('please use a defined loginType');
+        if (!loginType[loginType]) console.error(`${loginType} is not a defined loginType`);
         return loginFunctions[loginType];
     },
     userLoggedIn: (user) => {
-        Store.dispatch(ProfileActions.upsertProfile({},{},[]));
+        Store.dispatch(ProfileActions.upsertProfile({}));
+        Store.dispatch(PlaceActions.upsertPlace({}));
         return {
             type: `${actionTypes.LOGIN_}${SUCCESS}`,
             user,
@@ -45,7 +47,7 @@ const actions = {
           }
         }`;
         return graphql(query, <Helper callbackFunc={cb}/>)
-    }
+    },
 }
 
 Accounts.onLogin(() => { //this is a listener for logon;

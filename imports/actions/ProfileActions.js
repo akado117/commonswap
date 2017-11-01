@@ -26,4 +26,34 @@ export default {
             }
         });
     },
+    requestEmail: (data) => {
+        return (dispatch) => {
+            dispatch({
+                type: 'email_pending',
+            });
+            const { arrival, departure, notes, guests } = data;
+            fetch('https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    arrival,
+                    departure,
+                    notes,
+                }),
+            }).then((res) => {
+                dispatch({
+                    type: 'email_sent',
+                    ...res,
+                });
+            }).catch((err) => {
+                dispatch({
+                    type: 'email_failed',
+                    ...err,
+                });
+            })
+        }
+    }
 }

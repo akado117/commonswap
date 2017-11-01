@@ -16,9 +16,34 @@ import RaisedButton from 'material-ui/RaisedButton';
 const profile = <FontIcon className="material-icons">person</FontIcon>;
 
 class ViewProfile extends React.Component {
-    constructor() {
-        super();
-        this.state = {};
+    constructor(props) {
+        super(props);
+        this.state = {
+            arrival: '',
+            departure: '',
+            notes: ''
+        };
+
+        this.updateArrival = this.updateArrival.bind(this);
+        this.updateDeparture = this.updateDeparture.bind(this);
+        this.updateNotes = this.updateNotes.bind(this);
+    }
+
+    updateArrival = (evt) => {
+        console.log(evt);
+        this.setState({
+            arrival: evt.target.value
+        });
+    }
+    updateDeparture = (evt) => {
+        this.setState({
+            departure: evt.target.value
+        });
+    }
+    updateNotes = (evt) => {
+        this.setState({
+            notes: evt.target.value
+        });
     }
 
     componentDidMount = () => {
@@ -143,18 +168,18 @@ class ViewProfile extends React.Component {
                                 <div className="row">
                                     <div className="input-field col s12">
                                         <label htmlFor=""><FontIcon className="material-icons">date_range</FontIcon> Arrival</label>
-                                        <input type="text" className="datepicker" />
+                                        <input type="text" className="datepicker" value={this.state.arrival} onChange={this.updateArrival} />
                                     </div>
                                     <div className="input-field col s12">
                                         <label htmlFor=""><FontIcon className="material-icons">date_range</FontIcon> Departure</label>
-                                        <input type="text" className="datepicker" />
+                                        <input type="text" className="datepicker" value={this.state.departure} onChange={this.updateDeparture} />
                                     </div>
                                     <div className="input-field col s12">
-                                        <label for="textarea1">Add a message: </label>
-                                        <textarea id="textarea1" className="materialize-textarea" data-length="400"></textarea>
+                                        <label htmlFor="textarea1">Add a message: </label>
+                                        <textarea id="textarea1" className="materialize-textarea" data-length="400" value={this.state.notes} onChange={this.updateNotes}></textarea>
                                     </div>
                                     <div className="col s12">
-                                        <RaisedButton label="Request Swap" primary={true} fullWidth={true} />
+                                        <RaisedButton label="Request Swap" primary={true} fullWidth={true} onClick={() => this.requestSwap()} />
                                     </div>
                                 </div>
                             </div>
@@ -255,6 +280,24 @@ class ViewProfile extends React.Component {
     }
     testState = () => {
         roomiesActions.saveRoom(this.state, this.props.dispatch)
+    }
+
+    requestSwap = () => {
+        alert('A name was submitted: ' + this.state.arrival);
+        console.log(this.state.arrival);
+        console.log(this.state.departure);
+        fetch('https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Arrival: this.state.arrival,
+                Departure: this.state.departure,
+                Notes: this.state.notes
+            })
+        })
     }
 }
 export default ViewProfile

@@ -32,7 +32,7 @@ export default {
                 type: 'email_pending',
             });
             const { arrival, departure, notes, guests } = data;
-            fetch('https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+            fetch(Meteor.settings.ajaxUrls.emailUrl, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

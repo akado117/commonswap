@@ -15,6 +15,8 @@ function profileReducer(state = initialState, action = {}) {
             interests: action.interests,
             emergencyContacts: action.emergencyContacts,
         });
+    case actionTypes.LOGOUT:
+        return initialState;
     case 'email_pending':
         return _.merge({}, state, {
             isPending: true,

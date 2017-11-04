@@ -35,6 +35,12 @@ const actions = {
             user,
         };
     },
+    LogUserOut: (callBack) => {
+        Meteor.logout(typeof callBack === 'function' ? callBack : () => {});
+        return {
+            type: actionTypes.LOGOUT,
+        };
+    },
     getRoomById: (id, cb) => {
         const query =  gql`{
           getSavedRoom(Id:"${id}") {

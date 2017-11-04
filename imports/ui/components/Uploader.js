@@ -4,6 +4,7 @@ import { Tracker } from 'meteor/tracker';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import uploadToS3 from '../../helpers/upload-to-s3';
 import Progress from './Progress';
+import Pica from 'pica';
 
 class Uploader extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class Uploader extends React.Component {
     this.upload = new Slingshot.Upload('uploadPlaceToAmazonS3');
     this.calculateProgress();
     const file = event.target.files[0];
+    const pica = Pica;
     uploadToS3(this, file).then((url) => {
       this.uploadComputation.stop();
       Meteor.call('files.store', { url, name: file.name }, (error) => {

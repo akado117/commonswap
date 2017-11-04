@@ -9,14 +9,16 @@ const initialState = {
 
 function placeReducer(state = initialState, action = {}) {
     switch (action.type) {
-        case `${actionTypes.SAVE_PLACE}_${SUCCESS}`:
-            return _.assign({}, state, {
-                place: action.place,
-                address: action.address,
-                amenities: action.amenities,
-            });
-        default:
-            return state;
+    case `${actionTypes.SAVE_PLACE}_${SUCCESS}`:
+        return _.assign({}, state, {
+            place: action.place,
+            address: action.address,
+            amenities: action.amenities,
+        });
+    case actionTypes.LOGOUT:
+        return initialState;
+    default:
+        return state;
     }
 }
 

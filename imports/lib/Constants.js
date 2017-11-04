@@ -7,6 +7,7 @@ export const upsertFailedCode = 23;
 export const actionTypes = {
     SAVE_ROOMIES: 'SAVE_ROOMIES',
     LOGIN_: 'LOGIN_',
+    LOGOUT: 'LOGOUT',
     GET_PROFILE: 'GET_PROFILE',
     SAVE_PROFILE: 'SAVE_PROFILE',
     GET_PLACE: 'GET_PLACE',

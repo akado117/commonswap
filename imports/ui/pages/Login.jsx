@@ -110,7 +110,7 @@ class LoginPage extends React.Component {
                                     <i className="fa fa-twitter fa-lg" />
                                     <span style={styles.btnSpan}>Log in with Twitter</span>
                                 </button>
-                                <button href="" onClick={() => Meteor.logout(() => {this.forceUpdate()})} style={{ ...styles.btn, ...styles.btnTwitter }}>
+                                <button href="" onClick={() => UserActions.LogUserOut(() => { this.forceUpdate() })} style={{ ...styles.btn, ...styles.btnTwitter }}>
                                     <i className={`fa ${Meteor.userId() ? 'fa-lock' : 'fa-key'} fa-lg`} />
                                     <span style={styles.btnSpan}>{Meteor.userId() ? 'Logout' : 'Please log in' }</span>
                                 </button>

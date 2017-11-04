@@ -23,7 +23,6 @@ Slingshot.createDirective( "uploadToAmazonS3", Slingshot.S3Storage, {
     },
     key: function(file) {
         const user = Meteor.users.findOne( this.userId );
-        console.log(user);
         if(user) return `${keys.users}/${keys.placeImages}/${user._id}/${file.name}`;
         return `${keys.users}/${keys.placeImages}/guest/${file.name}`;
     }
@@ -45,7 +44,7 @@ Slingshot.createDirective( "uploadPlaceToAmazonS3", Slingshot.S3Storage, {
     },
     key: function(file) {
         const user = Meteor.users.findOne( this.userId );
-        if(user) return `${keys.users}/${user._id}/${keys.placeImages}/${file.name}`;
+        if(user) return `${keys.users}/${hashFunc(user._id)}/${keys.placeImages}/${file.name}`;
         return `${keys.users}/guest/${keys.placeImages}/${file.name}`;
     }
 })
@@ -66,7 +65,7 @@ Slingshot.createDirective( "uploadPlaceThumbnailToAmazonS3", Slingshot.S3Storage
     },
     key: function(file) {
         const user = Meteor.users.findOne( this.userId );
-        if(user) return `${keys.users}/${user._id}/${keys.placeThumbImages}/${file.name}`;
+        if(user) return `${keys.users}/${hashFunc(user._id)}/${keys.placeThumbImages}/${file.name}`;
         return `${keys.users}/guest/${keys.placeImages}/${file.name}`;
     }
 })
@@ -87,7 +86,18 @@ Slingshot.createDirective( "uploadProfileToAmazonS3", Slingshot.S3Storage, {
     },
     key: function(file) {
         const user = Meteor.users.findOne( this.userId );
-        if(user) return `${keys.users}/${user._id}/${keys.profileImages}/${file.name}`;
+        if(user) return `${keys.users}/${hashFunc(user._id)}/${keys.profileImages}/${file.name}`;
         return `${keys.users}/guest/${keys.profileImages}/${file.name}`;
     }
 })
+
+function hashFunc (string) {
+    var hash = 0, i, chr;
+    if (string.length === 0) return hash;
+    for (i = 0; i < string.length; i++) {
+        chr   = string.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+};

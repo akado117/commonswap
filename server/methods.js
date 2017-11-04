@@ -48,7 +48,7 @@ const fakeProfile = () => ({
 })
 
 Meteor.methods({
-    upsertProfile(profileParams = fakeProfile(), interests = fakeInter(), emergencyContacts = [fakeEC()]) {
+    upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
         if (profileParams && typeof profileParams === 'object') {
@@ -111,7 +111,7 @@ Meteor.methods({
             return serviceErrorBuilder('Profile create or update failed', insufficentParamsCode)
         }
     },
-    upsertPlace(place = {}, address = {}, amenities = {}) {
+    upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
         let placeClone = _.cloneDeep(place);

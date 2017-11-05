@@ -29,7 +29,7 @@ class Uploader extends React.Component {
     this.upload = new Slingshot.Upload('uploadPlaceToAmazonS3');
     this.calculateProgress();
     const file = event.target.files[0];
-    const pica = Pica;
+    const pica = Pica();
     uploadToS3(this, file).then((url) => {
       this.uploadComputation.stop();
       Meteor.call('files.store', { url, name: file.name }, (error) => {

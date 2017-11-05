@@ -12,10 +12,8 @@ class Progress extends React.Component {
   }
 
   render() {
-    return (<div className="Progress">
-      <div className="progress-bar">
-        <div className="fill" style={{ width: this.calculateFill() }}></div>
-      </div>
+    return (<div className="progress" >
+        <div className="determinate" style={{ width: this.calculateFill() }}></div>
     </div>);
   }
 }

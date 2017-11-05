@@ -21,6 +21,7 @@
 @import "{}/client/sass/components/_Checkbox.scss";
 @import "{}/client/sass/components/_NavBar.scss";
 @import "{}/client/sass/components/_PlaceComponent.scss";
+@import "{}/client/sass/components/_Uploader.scss";
 
 .img-gal {
   height: 400px;
@@ -29,6 +30,7 @@
   background-color: black;
   .image-gallery-image {
     height: 100%;
+    overflow: hidden;
     img {
       max-height: 100%;
       width: auto;

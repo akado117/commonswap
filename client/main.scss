@@ -31,8 +31,13 @@
   .image-gallery-image {
     height: 100%;
     overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     img {
       max-height: 100%;
+      max-width: 100%;
       width: auto;
     }
   }

@@ -66,7 +66,7 @@ class Uploaders extends React.Component {
     render() {
         return (
             <div className="preview-container">
-                {this.props.deleteFunc ?  <button className="delete" onClick={this.deleteHandler}>&times;</button> : ''}
+                {this.props.deleteFunc && !this.state.isUploading ?  <button className="delete" onClick={this.deleteHandler}>&times;</button> : ''}
                 {this.state.isUploading ?
                     <div className="progress-container"><Progress bottom={ this.state.uploadProgress } top={ 100 } /></div>
                     : <img src={this.props.file.preview} alt="preview" />}

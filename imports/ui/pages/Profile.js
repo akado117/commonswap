@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect }  from 'react-redux';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
+import { browserHistory } from 'react-router';
 const _ = require('lodash');//required so it can be used easily in chrome dev tools.
 
 import FontIcon from 'material-ui/FontIcon';
@@ -11,6 +12,7 @@ import Paper from 'material-ui/Paper';
 import ProfileComponent from '../components/profileComps/ProfileComponent.js';
 import PlaceComponent from '../components/placeComponents/PlaceComponent.js';
 import Navbar from '../components/Navbar';
+import CreditCard from '../components/verificationComponent/CreditCard.js';
 
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
@@ -137,7 +139,10 @@ class Profile extends React.Component {
         } else if (this.state.selectedIndex === 1) {
             internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }
-
+        else if (this.state.selectedIndex === 2) {
+            internalComponent = <CreditCard />;
+        }
+        const path = browserHistory.getCurrentLocation().pathname === '/profile';
         return (
             <section className="profile-container" >
                 <Navbar />

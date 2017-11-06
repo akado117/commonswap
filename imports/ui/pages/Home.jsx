@@ -11,19 +11,17 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <Navbar></Navbar>
+                <Navbar className="invisible"></Navbar>
                 <header>
                     <div className="video-container">
                         <video src="https://stretchflex.net/photos/csVideo2.mp4" poster="" autoPlay loop muted>
-                            <source src=""/>
+                            <source src="" />
                         </video>
-                        <div className="embed-responsive-item">
-                            <div className="d-flex align-items-center justify-content-center flex-wrap center-align">
-                                <div className="header-container overlay-desc">
-                                    <h1 className="header-title"> CommonSwap <br />
-                                        <strong>Experience More</strong>
-                                    </h1>
-                                </div>
+                        <div className="col s12 center-align">
+                            <div className="header-container overlay-desc">
+                                <h1 className="header-title"> CommonSwap <br />
+                                    <strong>Experience More</strong>
+                                </h1>
                             </div>
                         </div>
                     </div>
@@ -33,7 +31,7 @@ class Home extends Component {
                         <div className="col s6">
                             <div className="row">
                                 <div className="col s6">
-                                    <img src="" alt=""/>
+                                    <img src="" alt="" />
                                 </div>
                             </div>
                             <div className="row center-align">

@@ -30,7 +30,7 @@ Slingshot.createDirective( "uploadToAmazonS3", Slingshot.S3Storage, {
 
 Slingshot.fileRestrictions("uploadPlaceToAmazonS3", {
     allowedFileTypes: [ "image/png", "image/jpeg", "image/gif" ],
-    maxSize: 3 * 1024 * 1024
+    maxSize: 2 * 1024 * 1024
 });
 
 Slingshot.createDirective( "uploadPlaceToAmazonS3", Slingshot.S3Storage, {

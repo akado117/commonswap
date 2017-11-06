@@ -144,7 +144,7 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12">
                         <div className="row">
-                            <div className="col s3 offset-s9">
+                            <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">
                                 <button
                                     className="waves-effect waves-light btn-large"
                                     type="submit"

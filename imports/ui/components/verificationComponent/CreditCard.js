@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Payment from 'payment';
-import { Row, Col, FormGroup, ControlLabel, Button, Alert } from '../../../../node_modules/react-bootstrap';
+import { Row, Col, FormGroup, ControlLabel, Button, Alert } from 'react-bootstrap';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { getStripeToken } from '../../../modules/get-stripe-token.js';
 var FontAwesome = require('react-fontawesome');

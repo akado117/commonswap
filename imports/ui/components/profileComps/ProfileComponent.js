@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import SelectBuilder from '../forms/SelectBuilder.js'
 import ButtonArray from '../forms/ButtonArrayComp.js'
 import TextFieldStandardized from '../forms/TextFieldStandardized';
+import DatePicker from 'material-ui/DatePicker';
 
 function onChangeHelper(event) {
     return event.target.value;
@@ -91,11 +92,11 @@ class ProfileComponent extends Component {
             <div className="row">
                 <div className="col s6 input-field inline">
                     <input id="firstName" type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName} />
-                    <label htmlFor="firstName">First Name: </label>
+                    <label htmlFor="firstName">First Name </label>
                 </div>
                 <div className="col s6 input-field inline">
                     <input id="lastName" type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" defaultValue={profile.lastName} />
-                    <label htmlFor="lastName">Last Name: </label>
+                    <label htmlFor="lastName">Last Name </label>
                 </div>
                 <div className="col s6 input-field inline">
                     <SelectBuilder
@@ -118,10 +119,6 @@ class ProfileComponent extends Component {
                     />
                 </div>
                 <div className="col s6 input-field inline">
-                    <label htmlFor="dob"><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</label>
-                    <input id="dob" type="text" className="datepicker" onChange={e => getValueFunc('birthday', onChangeHelper(e))} defaultValue={profile.birthday} />
-                </div>
-                <div className="col s6 input-field inline">
                     <label htmlFor="email"><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
                     <input id="email" type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email} />
                     <p className="help-block text-danger"></p>
@@ -130,6 +127,14 @@ class ProfileComponent extends Component {
                     <label htmlFor="phone"><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
                     <input type="tel" className="" id="phone" onChange={e => getValueFunc('phone', onChangeHelper(e))} defaultValue={profile.phone} />
                     <p className="help-block text-danger"></p>
+                </div>
+                <div className="col s6 input-field inline">
+                    <DatePicker
+                        className="date-picker"
+                        defaultDate={typeof profile.birthday === 'object' ? profile.birthday : undefined}
+                        onChange={(nul, date) => getValueFunc('birthday', date)}
+                        floatingLabelText={<span><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</span>}
+                    />
                 </div>
                 <div className="col s12">
                     <div className="card-panel teal">

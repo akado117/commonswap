@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ButtonArrayComp from '../forms/ButtonArrayComp';
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import Address from './Address';
+import Uploader from '../Uploader';
+import ImageCarousel from '../ImageCarousel';
 
 const BUTTONS = [
     { label: 'Essentials (towels, etc)', name: 'essentials' },
@@ -27,6 +29,7 @@ class PlaceComponent extends Component {
 
         this.state = {
             ...props.place.place,
+            uploadActive: false,
         };
     }
 
@@ -57,9 +60,22 @@ class PlaceComponent extends Component {
         }
     }
 
-    render(){
+    getImageSection = (images) => {
+        let component;
+        if (!images.length || this.state.uploadActive) {
+            component = <Uploader addToDbFunc={(dataObj, cb) => this.props.savePlaceImage(dataObj,cb)}/>
+        } else {
+            component = <ImageCarousel />
+        }
+        <div>
+
+        </div>
+    }
+
+    render() {
         const getValFunc = this.getValueFunc;
         const { place, address, amenities } = this.props.place;
+        const remappedImages = this.props.placeImages.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
         return (
             <div className="place-container">
                 <Address getValueFunc={(key,value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
@@ -166,6 +182,8 @@ PlaceComponent.propTypes = {
     getValueFunc: PropTypes.func.isRequired,
     place: PropTypes.object.isRequired,
     savePlace: PropTypes.func.isRequired,
+    savePlaceImage: PropTypes.func.isRequired,
+    placeImages: PropTypes.array.isRequired,
 };
 
 export default PlaceComponent;

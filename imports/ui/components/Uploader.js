@@ -40,15 +40,15 @@ class Uploaders extends React.Component {
         const pica = Pica();
         uploadToS3(this, file).then((url) => {
             this.uploadComputation.stop();
-            Meteor.call('files.store', { url, name: file.name }, (error) => {
+            this.props.addToDbFunc({ url, name: file.name }, (error, resp) => {
                 if (error) {
                     this.setState({ isUploading: false, uploadProgress: 0 });
-                    console.log(error.reason, 'danger');
+                    return error;
                 }
 
                 if (!error && this.state.uploadProgress === 100) {
                     setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0 }); }, 500);
-                    console.log('File uploaded!', 'success');
+                    return resp;
                 }
             });
         })
@@ -77,6 +77,7 @@ class Uploaders extends React.Component {
 Uploaders.propTypes = {
     file: PropTypes.object.isRequired,
     uploaderInstance: PropTypes.string.isRequired,
+    addToDbFunc: PropTypes.func.isRequired,
     uploadTrigger: PropTypes.bool.isRequired,
     onUploadComplete: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func,
@@ -151,6 +152,7 @@ class Uploader extends React.Component {
                             onUploadComplete={() => this.markFileUploadComplete(idx)}
                             file={file}
                             deleteFunc={() => this.removeFile(idx)}
+                        addToDbFunc={this.props.addToDbFunc}
                         />
                         ))
                 }
@@ -160,6 +162,8 @@ class Uploader extends React.Component {
     }
 }
 
-Uploader.propTypes = {};
+Uploader.propTypes = {
+    addToDbFunc: PropTypes.func.isRequired,
+};
 
 export default Uploader;

@@ -5,7 +5,7 @@ import Roomies from '../imports/collections/Roomies';
 import FileUrls from '../imports/collections/FileUrls';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode } from '../imports/lib/Constants'
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes } from '../imports/lib/Constants'
 import S3 from './s3';
 import _ from 'lodash'
 
@@ -51,6 +51,7 @@ Meteor.methods({
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
+        if ((profileParams._id && profileParams.ownerUserId !== userId) || (interests._id && interests.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', profileErrorCode);
         if (profileParams && typeof profileParams === 'object') {
             let profileClone = _.cloneDeep(profileParams);
             let interestsClone = _.cloneDeep(interests);
@@ -113,7 +114,8 @@ Meteor.methods({
     },
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
+        if ((place._id && place.ownerUserId !== userId) || (address._id && address.ownerUserId !== userId) || (amenities._id && amenities.userId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', placeErrorCode);
         let placeClone = _.cloneDeep(place);
         let addressClone = _.cloneDeep(address);
         let amenitiesClone = _.cloneDeep(amenities);
@@ -185,6 +187,48 @@ Meteor.methods({
                 serviceMessage: `${JSON.stringify(room)} failed to be created`
             }
         }
+    },
+    'images.place.store': function placeImageStore(fileObj) {
+        check(fileObj, Object);
+        if (!fileObj.placeId) return serviceErrorBuilder('Please create and save a profile first', placeErrorCode);
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
+        const insertObj = {
+            userId: this.userId,
+            placeId: fileObj.placeId,
+            url: fileObj.url,
+            fileName: fileObj.name,
+            type: FileTypes.PLACE,
+            added: new Date(),
+        };
+
+        const insertId = FileUrls.insert(insertObj);
+
+        consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(fileObj));
+        return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
+            serviceMessage: `Image added, with key ${insertId}`,
+            data: {
+                _id: insertId,
+                url: insertObj.url,
+            },
+        });
+    },
+    'images.place.get': function placeImageGet({ placeId }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
+        const fieldsToReturn = {
+            url: 1,
+            _id: 1,
+        };
+        const files = FileUrls.find({ placeId, type: FileTypes.PLACE }, fieldsToReturn).fetch();
+
+        consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
+        return serviceSuccessBuilder({}, genericSuccessCode, {
+            serviceMessage: `Get place images success with ${files.length} found`,
+            data: {
+                images: files,
+            },
+        });
     },
     'files.store': function filesStoreMethod(file) {
         check(file, Object);

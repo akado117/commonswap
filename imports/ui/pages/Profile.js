@@ -77,7 +77,7 @@ class Profile extends React.Component {
             });
         }
         if (prevProps.place.place && !prevProps.place.place._id && this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-            this.props.fileActions.getImagesForPlace(this.props.place.place._id);
+            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
         }
     }
 
@@ -135,7 +135,7 @@ class Profile extends React.Component {
         if (this.state.selectedIndex === 0){
             internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} saveProfile={this.saveProfileFunction} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
+            internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }
 
         return (

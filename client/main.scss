@@ -22,23 +22,4 @@
 @import "{}/client/sass/components/_NavBar.scss";
 @import "{}/client/sass/components/_PlaceComponent.scss";
 @import "{}/client/sass/components/_Uploader.scss";
-
-.img-gal {
-  height: 400px;
-  width: 100%;
-  display: block;
-  background-color: black;
-  .image-gallery-image {
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    img {
-      max-height: 100%;
-      max-width: 100%;
-      width: auto;
-    }
-  }
-}
+@import "{}/client/sass/components/_ImageCarousel.scss";

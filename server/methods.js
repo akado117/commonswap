@@ -169,31 +169,13 @@ Meteor.methods({
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
-    saveRoomies(room){
-        if(room && typeof room === 'object' && room.roomies){
-            delete room._id
-            const roomieGUID = Roomies.insert(room);
-            console.log(`Roomies inserted ${JSON.stringify(room)}, with key ${roomieGUID}`);
-
-            return {
-                serviceStatus: 'SUCCESS',
-                serviceMessage: `Roomies inserted ${room}, with key ${roomieGUID}`,
-                roomieId: roomieGUID
-            }
-        } else {
-
-            return {
-                serviceStatus: 'FAILURE',
-                serviceMessage: `${JSON.stringify(room)} failed to be created`
-            }
-        }
-    },
     'images.place.store': function placeImageStore(fileObj) {
         check(fileObj, Object);
         if (!fileObj.placeId) return serviceErrorBuilder('Please create and save a profile first', placeErrorCode);
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
         const insertObj = {
+            deleted: false,
             userId: this.userId,
             placeId: fileObj.placeId,
             url: fileObj.url,
@@ -204,7 +186,7 @@ Meteor.methods({
 
         const insertId = FileUrls.insert(insertObj);
 
-        consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(fileObj));
+        consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
         return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
             serviceMessage: `Image added, with key ${insertId}`,
             data: {
@@ -220,7 +202,7 @@ Meteor.methods({
             url: 1,
             _id: 1,
         };
-        const files = FileUrls.find({ placeId, type: FileTypes.PLACE }, fieldsToReturn).fetch();
+        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, fieldsToReturn).fetch();
 
         consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
         return serviceSuccessBuilder({}, genericSuccessCode, {

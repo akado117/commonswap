@@ -60,22 +60,37 @@ class PlaceComponent extends Component {
         }
     }
 
+    toggleUploadActive = () => {
+        this.setState({ uploadActive: !this.state.uploadActive })
+    }
+
     getImageSection = (images) => {
         let component;
-        if (!images.length || this.state.uploadActive) {
-            component = <Uploader addToDbFunc={(dataObj, cb) => this.props.savePlaceImage(dataObj,cb)}/>
+        if (!this.props.place.place._id) {
+            component = <span>Please create or update your profile to add pictures!</span>;
+        } else if (!images.length || this.state.uploadActive) {
+            component = (<Uploader
+                addToDbFunc={this.props.savePlaceImage}
+                metaContext={{ placeId: this.props.place.place._id }}
+                onUploadComplete={this.toggleUploadActive}
+            />);
         } else {
-            component = <ImageCarousel />
+            const remappedImages = images.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
+            component = <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />;
         }
-        <div>
-
-        </div>
+        return (
+            <div className="image-section-container col s12">
+                <div className="teal img-header">
+                    <h3 className="container-desc">Photos & Video<span className="click-text" onClick={this.toggleUploadActive}> {images.length ? '- click to add more' : ''}</span></h3>
+                </div>
+                {component}
+            </div>
+        );
     }
 
     render() {
         const getValFunc = this.getValueFunc;
         const { place, address, amenities } = this.props.place;
-        const remappedImages = this.props.placeImages.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
         return (
             <div className="place-container">
                 <Address getValueFunc={(key,value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
@@ -158,6 +173,7 @@ class PlaceComponent extends Component {
                             extraProps={{ defaultValue: place.notesOnArea }}
                         />
                     </div>
+                    {this.getImageSection(this.props.placeImages)}
                     <div className="col s12">
                         <div className="row">
                             <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">

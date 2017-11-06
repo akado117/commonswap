@@ -6,6 +6,9 @@ const filePubfields = {
     url: 1,
     fileName: 1,
     added: 1,
+    deleted: 1,
+    placeId: 1,
+    type: 1,
 };
 
 const getImagesPub = function (pageSkip = 0, filter) {

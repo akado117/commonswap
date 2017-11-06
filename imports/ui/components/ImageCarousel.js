@@ -13,11 +13,14 @@ class ImageCarousel extends React.Component {
 
     render() {
         return (
-            <ImageGallery
-                items={this.props.images}
-                slideInterval={2000}
-                onImageLoad={this.handleImageLoad}
-            />
+            <div className="image-carousel">
+                <ImageGallery
+                    items={this.props.images}
+                    slideInterval={2000}
+                    onImageLoad={this.handleImageLoad}
+                    {...this.props.extraProps}
+                />
+            </div>
         );
     }
 
@@ -25,6 +28,11 @@ class ImageCarousel extends React.Component {
 
 ImageCarousel.propTypes = {
     images: PropTypes.array.isRequired,
+    extraProps: PropTypes.object,
+}
+
+ImageCarousel.defaultProps = {
+    extraProps: {},
 }
 
 export default ImageCarousel;

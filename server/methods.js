@@ -51,7 +51,7 @@ Meteor.methods({
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
-        if ((profileParams._id && profileParams.ownerUserId !== userId) || (interests._id && interests.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', profileErrorCode);
+        //if ((profileParams._id && profileParams.ownerUserId !== userId) || (interests._id && interests.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', profileErrorCode);
         if (profileParams && typeof profileParams === 'object') {
             let profileClone = _.cloneDeep(profileParams);
             let interestsClone = _.cloneDeep(interests);
@@ -115,7 +115,7 @@ Meteor.methods({
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
-        if ((place._id && place.ownerUserId !== userId) || (address._id && address.ownerUserId !== userId) || (amenities._id && amenities.userId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', placeErrorCode);
+        //if ((place._id && place.ownerUserId !== userId) || (address._id && address.ownerUserId !== userId) || (amenities._id && amenities.userId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', placeErrorCode);
         let placeClone = _.cloneDeep(place);
         let addressClone = _.cloneDeep(address);
         let amenitiesClone = _.cloneDeep(amenities);

@@ -6,25 +6,14 @@ const initialState = {
     interests: {},
     emergencyContacts: [],
 };
-
+//case is exactly the same as the type
 function profileReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.SAVE_PROFILE}_${SUCCESS}`:
-        return _.merge({}, state, {
+        return _.assign({}, state, {
             profile: action.profile,
             interests: action.interests,
             emergencyContacts: action.emergencyContacts,
-        });
-    case actionTypes.LOGOUT:
-        return initialState;
-    case 'email_pending':
-        return _.merge({}, state, {
-            isPending: true,
-        });
-    case 'email_sent':
-        return _.merge({}, state, {
-            isPending: false,
-            data: action,
         });
     default:
         return state;

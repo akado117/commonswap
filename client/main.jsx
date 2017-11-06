@@ -16,6 +16,8 @@ import Planner from '../imports/ui/pages/Planner';
 import Home from '../imports/ui/pages/Home';
 import ViewProfile from '../imports/ui/pages/ViewProfile';
 import store from '../imports/store/store';
+import CreditCard from '../imports/ui/components/verificationComponent/CreditCard';
+import Browse from '../imports/ui/pages/Browse';
 
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
@@ -38,6 +40,8 @@ Meteor.startup(() => {
                 <Route path="planner" component={Planner} />
                 <Route path="home" component={Home} />
                 <Route path="viewprofile" component={ViewProfile} />
+                <Route path="card" component={CreditCard} />
+                <Route path="browse" component={Browse} />
             </Route>
         </Router>
      </ApolloProvider>,

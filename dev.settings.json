@@ -17,5 +17,6 @@
   "AWSProperty": "com-swap-images-dev",
   "ajaxUrls": {
     "emailUrl": "https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw=="
-  }
+  },
+  "stripe": "pk_test_YSCffEJB0CIc3DrqVBE56Hjl"
 }

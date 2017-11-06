@@ -4,6 +4,7 @@ import user from './userReducer';
 import pageSkip from './pageSkip';
 import profile from './profileReducer';
 import place from './placeReducer';
+import images from './imagesReducer';
 
 const rootReducer = combineReducers({
     pageSkip,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     user,
     profile,
     place,
+    images,
 });
 
 export default rootReducer;

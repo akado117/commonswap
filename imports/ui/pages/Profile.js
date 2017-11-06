@@ -14,6 +14,7 @@ import Navbar from '../components/Navbar';
 
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
+import FileActions from '../../actions/FileActions';
 const profileIcon = <FontIcon className="material-icons">person</FontIcon>;
 const trust = <FontIcon className="material-icons">favorite</FontIcon>;
 const placeIcon = <FontIcon className="material-icons">weekend</FontIcon>;
@@ -70,10 +71,13 @@ class Profile extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps.profile.profile && !prevProps.profile.profile._id && this.props.profile.profile._id ) {
+        if (prevProps.profile.profile && !prevProps.profile.profile._id && this.props.profile.profile._id) {
             this.setState({ selectedIndex: 1 }, () => {
                 this.setState({ selectedIndex: 0 });
             });
+        }
+        if (prevProps.place.place && !prevProps.place.place._id && this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
+            this.props.fileActions.getImagesForPlace(this.props.place.place._id);
         }
     }
 
@@ -131,7 +135,7 @@ class Profile extends React.Component {
         if (this.state.selectedIndex === 0){
             internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} saveProfile={this.saveProfileFunction} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
+            internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }
 
         return (
@@ -179,10 +183,11 @@ class Profile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { profile, place } = state;
+    const { profile, place, images } = state;
     return {
         profile,
         place,
+        images,
     };
 }
 
@@ -190,14 +195,17 @@ function mapDispatchToProps(dispatch) {
     return {
         profileActions: bindActionCreators(ProfileActions, dispatch),
         placeActions: bindActionCreators(PlaceActions, dispatch),
+        fileActions: bindActionCreators(FileActions, dispatch),
     };
 }
 
 Profile.propTypes = {
     profileActions: PropTypes.object.isRequired, //eslint-disable-line
     placeActions: PropTypes.object.isRequired,
+    fileActions: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     place: PropTypes.object.isRequired,
+    images: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withApollo(Profile));

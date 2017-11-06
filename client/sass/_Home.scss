@@ -1,5 +1,11 @@
- * {
+* {
      font-style: sans-serif;
+ }
+
+ .invisible {
+    nav {
+        background-color: white;
+     }
  }
 .delivery-image {
     background-image: url('');
@@ -25,9 +31,11 @@ video {
 
 .overlay-desc {
     position:absolute;
-    top:5%;
-    left:22%;
+    top:20%;
+    left:50%;
     z-index:1;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
 }
 
 header {

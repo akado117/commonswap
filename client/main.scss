@@ -21,21 +21,4 @@
 @import "{}/client/sass/components/_Checkbox.scss";
 @import "{}/client/sass/components/_NavBar.scss";
 @import "{}/client/sass/components/_PlaceComponent.scss";
-
-.img-gal {
-  height: 400px;
-  width: 711px;
-  display: flex;
-  flex-wrap: wrap;
-  background-color: black;
-  align-items: center;
-  justify-content: center;
-  .image-gallery-image {
-    height: 100%;
-    img {
-      max-height: 100%;
-      max-width: 100%;
-      width: auto;
-    }
-  }
-}
+@import "{}/client/sass/components/CreditCard.scss";

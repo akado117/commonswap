@@ -35,12 +35,12 @@ class Uploaders extends React.Component {
     }
 
     uploadtoS3 = (file) => {
-        this.upload = new Slingshot.Upload(this.props.uploaderInstance);//THIS HAS TO BE AN AVAILABLE SLINGSHOT INSTANCE
+        this.upload = new Slingshot.Upload(this.props.uploaderInstance, this.props.metaContext);//THIS HAS TO BE AN AVAILABLE SLINGSHOT INSTANCE
         this.calculateProgress();
         const pica = Pica();
         uploadToS3(this, file).then((url) => {
             this.uploadComputation.stop();
-            this.props.addToDbFunc({ url, name: file.name }, (error, resp) => {
+            this.props.addToDbFunc({ url, name: file.name, ...this.props.metaContext }, (error, resp) => {
                 if (error) {
                     this.setState({ isUploading: false, uploadProgress: 0 });
                     return error;
@@ -54,7 +54,7 @@ class Uploaders extends React.Component {
         })
             .catch((error) => {
                 this.setState({ isUploading: false, uploadProgress: 0 });
-                console.log(error.reason, 'danger');
+                console.log(error.message, 'danger');
             });
     }
 
@@ -81,6 +81,11 @@ Uploaders.propTypes = {
     uploadTrigger: PropTypes.bool.isRequired,
     onUploadComplete: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func,
+    metaContext: PropTypes.object,
+}
+
+Uploaders.defaultProps = {
+    metaContext: {},
 }
 
 const initialState = {
@@ -125,7 +130,7 @@ class Uploader extends React.Component {
         if (!Object.keys(upload).length) return false;
         let uploadCompleted = true;
         Object.keys(upload).forEach((key) => {
-            uploadCompleted = upload[key];
+            if (!upload[key]) uploadCompleted = upload[key];
         });
         return uploadCompleted;
     }
@@ -140,22 +145,23 @@ class Uploader extends React.Component {
         this.setState({ files, uploadComplete: this.buildUploadCompleteObj(files) });
     }
 
+    getUploaders = files => files.map((file, idx) => (
+        <Uploaders
+            key={`uploader-${idx}`}
+            uploaderInstance="uploadPlaceToAmazonS3"
+            uploadTrigger={this.state.triggerUpload}
+            onUploadComplete={() => this.markFileUploadComplete(idx)}
+            file={file}
+            deleteFunc={() => this.removeFile(idx)}
+            addToDbFunc={this.props.addToDbFunc}
+            metaContext={this.props.metaContext}
+        />
+    ));
+
     render() {
-        return (<div className="uploader row">
+        return (<div className="uploader">
             <Dropzone className="dropzone col s12" onDrop={this.onDrop}>
-                {
-                    this.state.files.map((file, idx) => (
-                        <Uploaders
-                        key={`uploader-${idx}`}
-                            uploaderInstance="uploadPlaceToAmazonS3"
-                            uploadTrigger={this.state.triggerUpload}
-                            onUploadComplete={() => this.markFileUploadComplete(idx)}
-                            file={file}
-                            deleteFunc={() => this.removeFile(idx)}
-                        addToDbFunc={this.props.addToDbFunc}
-                        />
-                        ))
-                }
+                { this.state.files.length ? this.getUploaders(this.state.files) : 'Please drop files to upload into zone or click to open file picker'}
             </Dropzone>
             <button className="waves-effect waves-light btn-large col s6 m4 l3 offset-s6 offset-m8 offset-l9" disabled={this.canUpload(this.state.uploadComplete)} onClick={this.triggerUpload}>Upload</button>
         </div>);
@@ -164,6 +170,13 @@ class Uploader extends React.Component {
 
 Uploader.propTypes = {
     addToDbFunc: PropTypes.func.isRequired,
+    metaContext: PropTypes.object,
+    onUploadComplete: PropTypes.func,
+};
+
+Uploader.defaultProps = {
+    metaContext: {},
+    onUploadComplete: () => {},
 };
 
 export default Uploader;

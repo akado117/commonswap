@@ -24,7 +24,7 @@ export default {
             }
         });
     },
-    addImageToDataBase: (insertObj, callback) => {
+    addPlaceImageToDataBase: (insertObj, callback) => {
         return dispatch => Meteor.call('images.place.store', insertObj, (error, result) => {
             if (error) {
                 console.log(error);

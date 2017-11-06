@@ -44,7 +44,10 @@ SelectBuilder.propTypes = {
         values: PropTypes.array,
         displayNames: PropTypes.array,
     }),
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element,
+    ]),
     onChange: PropTypes.func,
     extraProps: PropTypes.object,
     defaultValue: PropTypes.string,

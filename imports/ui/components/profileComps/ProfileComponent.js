@@ -172,13 +172,13 @@ class ProfileComponent extends Component {
                 <ButtonArray getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} defaultValues={interests} />
                 <div className="col s12">
                     <div className="row">
-                        <div className="col s3 offset-s6">
+                        <div className="col s6 m4 l3 offset-m4 offset-l6">
                             <button onClick={() => this.props.saveProfile()} className="waves-effect waves-light btn-large" type="submit" style={{ width: '100%' }}>
                                 <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />
                                 Save
                             </button>
                         </div>
-                        <div className="col s3">
+                        <div className="col s6 m4 l3">
                             <button onClick={() => this.props.saveProfile(true)} className="waves-effect waves-light btn-large" type="submit" style={{ width: '100%' }}>
                                 <i className="fa fa-hand-o-right" aria-hidden="true" style={{ float: 'left' }} />
                                 Next

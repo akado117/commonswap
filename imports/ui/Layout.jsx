@@ -1,13 +1,14 @@
 import React, { PropTypes } from 'react';
 import { graphql, gql } from 'react-apollo';
-const test = gql;
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const test = gql;
+
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 
 class Layout extends React.Component {
     componentDidMount() {
@@ -21,11 +22,6 @@ class Layout extends React.Component {
     }
 }
 Layout.propTypes = { children: PropTypes.object };
-
-
-
-
-
 
 // Initialize GraphQL queries or mutations with the `gql` tag
 const query = gql`query {say {
@@ -41,4 +37,4 @@ const query = gql`query {say {
 // Or, we can bind the execution of MyMutation to a prop
 // export default graphql(MyMutation)(MyComponent);
 
-export default Layout
+export default Layout;

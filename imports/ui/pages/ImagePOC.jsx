@@ -9,6 +9,7 @@ import FileUrls from '../../collections/FileUrls';
 import Uploader from '../components/Uploader';
 
 import ImageList from '../components/ImageList';
+import ImageCarousel from '../components/ImageCarousel';
 
 class ImagePOC extends React.Component {
     constructor() {
@@ -22,9 +23,11 @@ class ImagePOC extends React.Component {
                 handlePageClick={(data)=> {return dispatch(changePage(data.selected));}}
                 pageCount={this.props.imageCount / 20}
             />) : '';
+        const remappedImages = this.props.imageList.map(image => ({original: image.url, thumbnail: image.url, originalClass:"img-gal" }));
         return(
             <div className="container">
-                <Uploader/>
+                <ImageCarousel images={remappedImages} />
+                <Uploader />
                 <ImageList images={this.props.imageList} />
                 {pagination}
             </div>

@@ -27,7 +27,7 @@ class ImagePOC extends React.Component {
         return(
             <div className="container">
                 <ImageCarousel images={remappedImages} />
-                <Uploader />
+                <Uploader addToDbFunc={(dataObj, cb) => Meteor.call('files.store', dataObj, cb)}/>
                 <ImageList images={this.props.imageList} />
                 {pagination}
             </div>

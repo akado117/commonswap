@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
 import { connect }  from 'react-redux';
 import React  from 'react';
 
@@ -39,7 +39,7 @@ class ImagePOC extends React.Component {
 //hooks meteor container up so data streams can be subscribed to.
 //inserts these as props via their key name
 //takes props already present on page, aka pageSkip and visibility to know what items to grab
-const ImagePOCContainer = createContainer(({pageSkip, filter = {}}) => {
+const ImagePOCContainer = withTracker(({pageSkip, filter = {}}) => {
     const imageSub = Meteor.subscribe('getImages', pageSkip, filter);
 
     return {

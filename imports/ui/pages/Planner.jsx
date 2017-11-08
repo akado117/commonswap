@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import SimpleModalSlideshow from 'react-simple-modal-slideshow';
-import SlideShow from 'react-image-slideshow';
+//import SlideShow from 'react-image-slideshow';
 import InfiniteCalendar, { Calendar, defaultMultipleDateInterpolation, withMultipleDates } from 'react-infinite-calendar';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import Navbar from '../components/Navbar';
@@ -51,9 +51,9 @@ class Planner extends React.Component {
         var options = CITIES[this.state.country];
     }
 
-    handleSlideshowOpen(index) {
-        this.refs.SlideShow.handleModalOpen(index);
-    };
+    // handleSlideshowOpen(index) {
+    //     this.refs.SlideShow.handleModalOpen(index);
+    // };
 
     changeRating(newRating) {
         this.setState({
@@ -316,7 +316,7 @@ class Planner extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col s12">
-                            <SlideShow imgs={this.state.imgsData} ref="SlideShow" />
+                            {/*<SlideShow imgs={this.state.imgsData} ref="SlideShow" />*/}
                         </div>
                     </div>
                 </div>

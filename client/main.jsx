@@ -10,7 +10,7 @@ import App from '../imports/ui/Layout.jsx';
 import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx';
 import Fuse from '../imports/ui/components/FuseTestContainer.jsx';
 import Profile from '../imports/ui/pages/Profile';
-import Login from '../imports/ui/pages/Login.jsx';
+import Login from '../imports/ui/pages/Login.js';
 import ImagePOC from '../imports/ui/pages/ImagePOC';
 import Planner from '../imports/ui/pages/Planner';
 import Home from '../imports/ui/pages/Home';

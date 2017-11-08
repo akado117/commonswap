@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
-import { withRouter } from 'react-router';
+import Login from '../pages/Login'
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -43,6 +43,7 @@ class Navbar extends React.Component {
                             <li><Link to="/profile">Profile</Link></li>
                             <li><Link to="/login">Login</Link></li>
                         </ul>
+                        <Login className="nav-login" />
                     </div>
                     {this.props.children}
                 </nav>
@@ -57,7 +58,7 @@ Navbar.propTypes = {
 };
 
 Navbar.defaultProps = {
-    className: {},
+    className: '',
 };
 
 export default withRouter(Navbar);

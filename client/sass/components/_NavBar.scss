@@ -1,6 +1,9 @@
 nav {
   background-color: white;
+  ul li a {
+    color: black;
+  }
+  .nav-login {
+    float: right;
+  }
 }
-nav ul li a{
-  color: black;
-}  

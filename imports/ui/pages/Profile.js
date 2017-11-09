@@ -73,9 +73,12 @@ class Profile extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps.profile.profile && !prevProps.profile.profile._id && this.props.profile.profile._id) {
-            this.setState({ selectedIndex: 1 }, () => {
-                this.setState({ selectedIndex: 0 });
+        const oldProf = prevProps.profile.profile;
+        const newProf = this.props.profile.profile;
+        if ((Object.keys(oldProf).length === 0 && Object.keys(newProf)).length || (Object.keys(oldProf).length && Object.keys(newProf)).length === 0) {
+            const curIdx = this.state.selectedIndex;
+            this.setState({ selectedIndex: curIdx + 1 }, () => {
+                this.setState({ selectedIndex: curIdx });
             });
         }
         if (prevProps.place.place && !prevProps.place.place._id && this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login

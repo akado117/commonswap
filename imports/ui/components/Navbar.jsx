@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
-import { withRouter } from 'react-router';
+import Login from '../pages/Login'
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -31,11 +31,11 @@ class Navbar extends React.Component {
                     <div>
                         <div onClick={this.travelHome} className="brand-logo"><img src="http://stretchflex.net/photos/CommonSwapNew2.png" alt="" style={{ maxHeight: '64px', paddingLeft:'15px',paddingBottom:'5px'}} /></div>
                         <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
+                        <Login className="nav-login" />
                         <ul className="right hide-on-med-and-down">
                             <li style={{ color: 'black' }}><Link to="/home">How It Works</Link></li>
                             <li style={{ color: 'black' }}><Link to="/planner">Planner</Link></li>
                             <li style={{ color: 'black' }}><Link to="/profile">Profile</Link></li>
-                            <li style={{ color: 'black' }}><Link to="/login">Login</Link></li>
                         </ul>
                         <ul className="side-nav" id="mobile-demo">
                             <li><Link to="/home">How It Works</Link></li>
@@ -57,7 +57,7 @@ Navbar.propTypes = {
 };
 
 Navbar.defaultProps = {
-    className: {},
+    className: '',
 };
 
 export default withRouter(Navbar);

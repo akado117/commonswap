@@ -1,5 +1,7 @@
-import React, { PropTypes } from 'react';
-import { graphql, gql } from 'react-apollo';
+import React from 'react';
+import PropTypes from 'prop-types'
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

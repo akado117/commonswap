@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-class Progress extends React.Component {
+class Progress extends Component {
   constructor(props) {
     super(props);
     this.calculateFill = this.calculateFill.bind(this);
@@ -19,8 +20,8 @@ class Progress extends React.Component {
 }
 
 Progress.propTypes = {
-  bottom: React.PropTypes.number,
-  top: React.PropTypes.number,
+  bottom: PropTypes.number,
+  top: PropTypes.number,
 };
 
 export default Progress;

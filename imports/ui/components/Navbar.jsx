@@ -58,7 +58,7 @@ class Navbar extends React.Component {
 Navbar.propTypes = {
     router: PropTypes.object.isRequired,
     className: PropTypes.string,
-};
+}; 
 
 Navbar.defaultProps = {
     className: '',

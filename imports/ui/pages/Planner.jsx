@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import SimpleModalSlideshow from 'react-simple-modal-slideshow';
@@ -330,9 +331,9 @@ class Planner extends React.Component {
                                 </div>
                                 <div className="col s5">
                                     <div className="col s12">
-                                        <StarRating name="commonswap-rating" 
-                                        caption="Rate your stay!" 
-                                        totalStars={5} 
+                                        <StarRating name="commonswap-rating"
+                                        caption="Rate your stay!"
+                                        totalStars={5}
                                         editing={true}/>
                                     </div>
                                     <div className="col s12">

@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import SimpleModalSlideshow from 'react-simple-modal-slideshow';
 //import SlideShow from 'react-image-slideshow';
 import InfiniteCalendar, { Calendar, defaultMultipleDateInterpolation, withMultipleDates } from 'react-infinite-calendar';
 import '../../../node_modules/react-infinite-calendar/styles.css';

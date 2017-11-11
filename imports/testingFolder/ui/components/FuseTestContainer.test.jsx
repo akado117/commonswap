@@ -17,7 +17,7 @@ describe('FuseTestContainer Component', function(){
 
     beforeEach(function(){
         sandbox = sinon.sandbox.create();
-        FuseTestContainerComponent = ReactTestUtils.renderIntoDocument(React.createElement(FuseTestContainer))
+        //FuseTestContainerComponent = ReactTestUtils.renderIntoDocument(React.createElement(FuseTestContainer))
 
         setStateSpy = sandbox.spy(FuseTestContainerComponent, 'setState');
     });

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class FloatLabelForm extends React.Component {
     constructor() {
@@ -33,13 +34,13 @@ class FloatLabelForm extends React.Component {
 }
 
 FloatLabelForm.PropTypes = {
-    name: React.PropTypes.string,
-    type: React.PropTypes.string,
-    customClass: React.PropTypes.string,
-    dataError: React.PropTypes.string,
-    dataSuccess: React.PropTypes.string,
-    required: React.PropTypes.bool,
-    disabled: React.PropTypes.bool
+    name: PropTypes.string,
+    type: PropTypes.string,
+    customClass: PropTypes.string,
+    dataError: PropTypes.string,
+    dataSuccess: PropTypes.string,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool
 }
 
 export default FloatLabelForm

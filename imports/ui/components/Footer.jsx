@@ -13,7 +13,7 @@ class Footer extends React.Component {
                     <div className="row">
                         <div className="col l4 s12">
                             <h5 className="white-text">CommonSwap, LLC</h5>
-                            <p className="grey-text text-lighten-4">
+                            <div className="grey-text text-lighten-4">
                                 <div className="col s2">
                                     <i className="fa fa-twitter fa-2x" aria-hidden="true"></i>
                                 </div>
@@ -26,7 +26,7 @@ class Footer extends React.Component {
                                 <div className="col s2">
                                     <i className="fa fa-pinterest-p fa-2x" aria-hidden="true"></i>
                                 </div>
-                            </p>
+                            </div>
                         </div>
                         <div className="col l2 s12">
                             <h5 className="white-text">About</h5>

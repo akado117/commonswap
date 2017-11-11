@@ -82,7 +82,7 @@ class Browse extends Component {
                         <MapComponent className="" style={{ height: '100%' }}></MapComponent>
                     </div>
                     <div className="scroll-listing col s6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
-                        <div className="col s12 z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                        <div className="col s12 z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
                             <div className="col s6">
                                 <div className="premier-image" style={{height:'100%'}}>
                                     <img src="http://stretchflex.net/photos/apartment.jpeg" alt="" style={{height:'350px', width: '100%'}} />

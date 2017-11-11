@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-export default {
-    actionTypes: {
-        SAVE_ROOMIES: 'SAVE_ROOMIES',
-        LOGIN_: 'LOGIN_',
-        SAVE_PROFILE: 'SAVE_PROFILE',
-=======
 export const FAILURE = 'FAILURE';
 export const SUCCESS = 'SUCCESS';
 export const genericSuccessCode = 10;
@@ -36,7 +29,6 @@ export const serviceErrorBuilder = (message, code, err = {}, extraParams = {}) =
     err: {
         stack: err.stack,
         message: err.message,
->>>>>>> 7edba5db916754459eef65d63cc79cb740b619d0
     },
     ...extraParams,
 });

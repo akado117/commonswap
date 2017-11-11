@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import ApolloClient from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { meteorClientConfig } from 'meteor/apollo';
+import { Provider } from 'react-redux';
 
 import App from '../imports/ui/Layout.jsx';
 import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx';
@@ -27,7 +28,7 @@ const client = new ApolloClient(meteorClientConfig());
 
 Meteor.startup(() => {
   render(
-     <ApolloProvider client={client} store={store} >
+     <Provider client={client} store={store} >
         <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory} >
             <Route path="/" component={App} >
                 <IndexRoute component={Home} />
@@ -44,6 +45,6 @@ Meteor.startup(() => {
                 <Route path="browse" component={Browse} />
             </Route>
         </Router>
-     </ApolloProvider>,
+     </Provider>,
     document.getElementById('render-target'));
 });

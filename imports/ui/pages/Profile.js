@@ -1,7 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect }  from 'react-redux';
-import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 const _ = require('lodash');//required so it can be used easily in chrome dev tools.
@@ -169,21 +168,7 @@ class Profile extends React.Component {
                     </BottomNavigation>
                 </Paper>
                 <div className="container" style={{ paddingTop: '45px' }}>
-                    <div className="row">
-                        <div className="col s3" id="header-inner" style={{ position: 'fixed', display: 'block' }}>
-                            <h4>Profile Page</h4>
-                            <div className="col s6 offset-s2">
-                                <i className="fa fa-user-circle fa-4x" aria-hidden="true"></i>
-                            </div>
-                            <div className="col s12">
-                                <p><i className="fa fa-plus-square-o fa-2x" aria-hidden="true"></i> Add Photo</p>
-                                <input type="file" value={this.state.picture} />
-                            </div>
-                        </div>
-                        <div className="col s9 offset-s3 sub-container">
-                            {internalComponent}
-                        </div>
-                    </div>
+                    {internalComponent}
                 </div>
             </section>
         );
@@ -216,4 +201,4 @@ Profile.propTypes = {
     images: PropTypes.object.isRequired,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withApollo(Profile));
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

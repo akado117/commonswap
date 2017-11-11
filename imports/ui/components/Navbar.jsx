@@ -2,7 +2,9 @@ import React from 'react';
 import { Link, withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
-import Login from '../pages/Login'
+import Login from '../pages/Login';
+
+const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px'}
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -33,15 +35,17 @@ class Navbar extends React.Component {
                         <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
                         <Login className="nav-login" />
                         <ul className="right hide-on-med-and-down">
-                            <li style={{ color: 'black' }}><Link to="/home">How It Works</Link></li>
-                            <li style={{ color: 'black' }}><Link to="/planner">Planner</Link></li>
-                            <li style={{ color: 'black' }}><Link to="/profile">Profile</Link></li>
+                            <li style={{ color: 'black' }}><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
+                            <li style={{ color: 'black' }}><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
+                            <li style={{ color: 'black' }}><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
+                            <li style={{ color: 'black' }}><Link to="/browse" activeStyle={ACTIVE}>Browse</Link></li>
                         </ul>
                         <ul className="side-nav" id="mobile-demo">
-                            <li><Link to="/home">How It Works</Link></li>
-                            <li><Link to="/planner">Planner</Link></li>
-                            <li><Link to="/profile">Profile</Link></li>
-                            <li><Link to="/login">Login</Link></li>
+                            <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
+                            <li><Link to="/browse" activeStyle={ACTIVE}>Browse</Link></li>
+                            <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
+                            <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
+                            <li><Link to="/login" activeStyle={ACTIVE}>Login</Link></li>
                         </ul>
                     </div>
                     {this.props.children}
@@ -54,7 +58,7 @@ class Navbar extends React.Component {
 Navbar.propTypes = {
     router: PropTypes.object.isRequired,
     className: PropTypes.string,
-};
+}; 
 
 Navbar.defaultProps = {
     className: '',

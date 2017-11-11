@@ -12,7 +12,7 @@ import TextField from 'material-ui/TextField';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import SelectBuilder from '../components/forms/SelectBuilder';
-import StarRating from '../../../node_modules/react-star-rating';
+import StarRating from 'react-star-rating';
 
 const styles = {
     button: {
@@ -330,7 +330,10 @@ class Planner extends React.Component {
                                 </div>
                                 <div className="col s5">
                                     <div className="col s12">
-                                        {/* <StarRating name="commonswap-rating" caption="Rate your stay!" totalStars={5} editing={true}/> */}
+                                        <StarRating name="commonswap-rating" 
+                                        caption="Rate your stay!" 
+                                        totalStars={5} 
+                                        editing={true}/>
                                     </div>
                                     <div className="col s12">
                                         <TextField

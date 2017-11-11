@@ -14,27 +14,29 @@ const actions = {
                     type: `${actionTypes.LOGIN_}${FAILURE}`,
                 });
             };
-            console.log(res);
-            return dispatch({
-                type: `${actionTypes.LOGIN_}${SUCCESS}`,
-                user: Meteor.user(),
-            });
+            // return dispatch({ //this is handled with the onLogin listener at this time. Thanks meteor
+            //     type: `${actionTypes.LOGIN_}${SUCCESS}`,
+            // });
         };
         const loginFunctions = {
-            facebook: dispatch => Meteor.loginWithFacebook((error,res) => callBack(error, res, dispatch)),
+            facebook: dispatch => Meteor.loginWithFacebook(/*{ requestPermissions: ['public_profile', 'email', 'user_location', 'user_birthday'] }, */(error,res) => callBack(error, res, dispatch)),
             google: dispatch => Meteor.loginWithGoogle((error,res) => callBack(error, res, dispatch)),
             twitter: dispatch => Meteor.loginWithTwitter((error,res) => callBack(error, res, dispatch)),
         };
         if (!loginType[loginType]) console.error(`${loginType} is not a defined loginType`);
         return loginFunctions[loginType];
     },
-    userLoggedIn: (user) => {
-        Store.dispatch(ProfileActions.upsertProfile({}));
+    userLoggedIn: () => {
+        Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
         Store.dispatch(PlaceActions.upsertPlace({}));
         return {
+            type: 'USER_LOGGING_IN',
+        };
+    },
+    setUserData: () => { //needs to be called after something else has connected to backend
+        return {
             type: `${actionTypes.LOGIN_}${SUCCESS}`,
-            user,
-
+            user: Meteor.user().oAuthData,
         };
     },
     LogUserOut: (callBack) => {
@@ -42,19 +44,6 @@ const actions = {
         return {
             type: actionTypes.LOGOUT,
         };
-    },
-    getRoomById: (id, cb) => {
-        const query =  gql`{
-          getSavedRoom(Id:"${id}") {
-            _id
-            roomies {
-              name
-              daysInRoom
-              amountOwed
-            }
-          }
-        }`;
-        return graphql(query, <Helper callbackFunc={cb}/>)
     },
 }
 

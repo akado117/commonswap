@@ -69,9 +69,15 @@ class ProfileComponent extends Component {
         }
     }
 
+    addDefaultToMap = (value, key) => {
+        if (value) this.getValueFunc(key, value);
+        return value;
+    }
+
     render() {
         const getValueFunc = this.getValueFunc;
         const { profile, interests } = this.props.profile;
+        const user = this.props.user;
         const genderFields = {
             defaultField: <span><i className="fa fa-venus fa-1x" aria-hidden="true"></i> I am: </span>,
             fields: {
@@ -91,11 +97,11 @@ class ProfileComponent extends Component {
         return (
             <div className="row">
                 <div className="col s6 input-field inline">
-                    <input id="firstName" type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName} />
+                    <input id="firstName" type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName || this.addDefaultToMap(user.firstName, 'firstName')} />
                     <label htmlFor="firstName">First Name </label>
                 </div>
                 <div className="col s6 input-field inline">
-                    <input id="lastName" type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" defaultValue={profile.lastName} />
+                    <input id="lastName" type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" defaultValue={profile.lastName || this.addDefaultToMap(user.lastName, 'lastName')} />
                     <label htmlFor="lastName">Last Name </label>
                 </div>
                 <div className="col s6 input-field inline">
@@ -120,7 +126,7 @@ class ProfileComponent extends Component {
                 </div>
                 <div className="col s6 input-field inline">
                     <label htmlFor="email"><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
-                    <input id="email" type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email} />
+                    <input id="email" type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email || this.addDefaultToMap(user.email, 'email')} />
                     <p className="help-block text-danger"></p>
                 </div>
                 <div className="col s6 input-field inline">
@@ -200,6 +206,7 @@ ProfileComponent.propTypes = {
     getValueFunc: PropTypes.func.isRequired,
     profile: PropTypes.object.isRequired,
     saveProfile: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 

@@ -33,14 +33,15 @@ const getImagesPub = function (pageSkip = 0, filter) {
 };
 
 const userPubFields = {
-    "services.facebook.first_name": 1,
-    "services.facebook.last_name": 1,
-    "services.facebook.email": 1,
-    "services.facebook.gender": 1,
-    "services.google.email": 1,
-    "services.google.given_name": 1,
-    "services.google.family_name": 1,
-    "services.google.picture": 1,
+    // "services.facebook.first_name": 1,
+    // "services.facebook.last_name": 1,
+    // "services.facebook.email": 1,
+    // "services.facebook.gender": 1,
+    // "services.google.email": 1,
+    // "services.google.given_name": 1,
+    // "services.google.family_name": 1,
+    // "services.google.picture": 1,
+    oAuthData: 1,
 };
 const user = () => Meteor.users.find({ _id: Meteor.userId }, { fields: userPubFields });
 

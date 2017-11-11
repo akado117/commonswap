@@ -15,14 +15,14 @@ const getImagesPub = function (pageSkip = 0, filter) {
     const query = {};
 
     switch (filter) {
-        case 'SHOW_COMPLETED':
-            query.completed = true;
-            break;
-        case 'SHOW_ACTIVE':
-            query.completed = false;
-            break;
-        default:
-            break;
+    case 'SHOW_COMPLETED':
+        query.completed = true;
+        break;
+    case 'SHOW_ACTIVE':
+        query.completed = false;
+        break;
+    default:
+        break;
     }
     Counts.publish(this, 'ImageCount', FileUrls.find(query));
     return FileUrls.find(query, {
@@ -32,4 +32,19 @@ const getImagesPub = function (pageSkip = 0, filter) {
     });
 };
 
+const userPubFields = {
+    "services.facebook.first_name": 1,
+    "services.facebook.last_name": 1,
+    "services.facebook.email": 1,
+    "services.facebook.gender": 1,
+    "services.google.email": 1,
+    "services.google.given_name": 1,
+    "services.google.family_name": 1,
+    "services.google.picture": 1,
+};
+const user = () => Meteor.users.find({ _id: Meteor.userId }, { fields: userPubFields });
+
+console.log(user().fetch());
+
 Meteor.publish('getImages', getImagesPub);
+Meteor.publish("userData", user);

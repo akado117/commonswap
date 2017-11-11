@@ -1,0 +1,44 @@
+.uploader {
+  button {
+    transform: scale(.75);
+  }
+  .dropzone {
+    min-height: 200px;
+    min-width: 200px;
+    border: black dashed 1.5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px 0;
+
+    .preview-container {
+      padding: 5px 5px;
+      position: relative;
+      min-width: 100px;
+      .delete {
+        width: 20px;
+        height: 20px;
+        background-color: #333;
+        border-radius: 10px;
+        font-size: 9px;
+        color: white;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+      .preview-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+      }
+      img {
+        max-height: 100px;
+        padding: 5px;
+        border: black solid 1px;
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+.place-container {
+  .amenities-container {
+    margin-bottom: 0;
+    div {
+      padding-top: 15px;
+    }
+  }
+  .image-section-container {
+    .img-header {
+      width: 100%;
+      .container-desc {
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 10px;
+        .click-text {
+          font-weight: normal;
+          font-size: 16px;
+          &:hover {
+            color: #333333;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

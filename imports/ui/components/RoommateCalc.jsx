@@ -4,14 +4,14 @@ import { connect }  from 'react-redux';
 import { withApollo } from 'react-apollo';
 import { graphql, gql } from 'react-apollo';
 
-import FloatLabel from './forms/FloatLabelForm.jsx'
+import FloatLabel from './forms/FloatLabelForm.js'
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 
-import roomiesActions from '../../actions/roomateActions'
+import roomiesActions from '../../actions/RoomateAction'
 
 import DayProrater from './dayProrater.jsx';
 
@@ -273,9 +273,9 @@ function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange,day
 
 
 function mapStateToProps(state) {
-    const {roomies} = state;
+    const { roomies } = state;
     return {
-        roomies
+        roomies,
     };
 }
 //can also feed in dispatch mapper - this prevents the need to wrap every action function in dispatch

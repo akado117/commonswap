@@ -1,0 +1,1 @@
+Stripe.setPublishableKey(Meteor.settings.stripe);

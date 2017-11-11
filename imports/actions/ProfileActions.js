@@ -1,14 +1,33 @@
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 
 export default {
-    saveProfile : (room, dispatch) => Meteor.call('saveRoomies',room,(error,result)=>{
-        if(error){
-            console.log(error);
-            dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_FAIL',
-                ...error
-            })
-        } else {
+    upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }, callBack) => {
+        return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
+            if (error) {
+                console.log(error);
+                return dispatch({
+                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
+                    ...error,
+                });
+            } else {
+                if (result.data) {
+                    dispatch({
+                        type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
+                        profile: result.data.profile,
+                        interests: result.data.interests,
+                        emergencyContacts: result.data.emergencyContacts,
+                    });
+                    return callBack ? callBack() : '';
+                };
+                return dispatch({
+                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
+                    ...error,
+                });
+            }
+        });
+    },
+    requestEmail: (data) => {
+        return (dispatch) => {
             dispatch({
                 type: 'email_pending',
             });

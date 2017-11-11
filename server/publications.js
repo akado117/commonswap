@@ -44,7 +44,5 @@ const userPubFields = {
 };
 const user = () => Meteor.users.find({ _id: Meteor.userId }, { fields: userPubFields });
 
-console.log(user().fetch());
-
 Meteor.publish('getImages', getImagesPub);
 Meteor.publish("userData", user);

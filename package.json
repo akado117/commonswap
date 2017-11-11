@@ -38,6 +38,8 @@
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.1.0",
     "react-dropzone": "^4.2.1",
+    "react-file-input": "^0.2.5",
+    "react-google-maps": "^9.2.2",
     "react-image-gallery": "^0.8.5",
     "react-image-slideshow": "^1.5.4",
     "react-infinite-calendar": "^2.3.1",

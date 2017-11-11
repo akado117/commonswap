@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SelectBuilder from '../forms/SelectBuilder'
+import SelectBuilder from '../forms/SelectBuilder';
 
 function onChangeHelper(event) {
     return event.target.value;

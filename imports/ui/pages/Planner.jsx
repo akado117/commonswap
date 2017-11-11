@@ -11,12 +11,21 @@ import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
-//import StarRatings from '../../../node_modules/react-star-ratings';
+import SelectBuilder from '../components/forms/SelectBuilder';
 
 const styles = {
-    button: { 
+    button: {
         margin: 12,
     }
+};
+
+const stateFields = {
+    fields: {
+        displayNames: ["N/A", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
+            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+        values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE",
+            "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"],
+    },
 };
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
@@ -51,9 +60,9 @@ class Planner extends React.Component {
         var options = CITIES[this.state.country];
     }
 
-    // handleSlideshowOpen(index) {
-    //     this.refs.SlideShow.handleModalOpen(index);
-    // };
+    handleSlideshowOpen(index) {
+        //this.refs.SlideShow.handleModalOpen(index);
+    };
 
     changeRating(newRating) {
         this.setState({
@@ -77,7 +86,7 @@ class Planner extends React.Component {
                             <AppBar
                                 title={<span>My Calendar</span>}
                                 showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex:'0' }}
+                                style={{ marginBottom: '10px', zIndex: '0' }}
                             />
                             <div className="z-depth-2">
                                 <div className="row">
@@ -90,6 +99,32 @@ class Planner extends React.Component {
                                             layout={'portrait'}
                                             width={'100%'}
                                         />
+                                    </div>
+                                </div>
+                                <div className="col s12">
+                                    <div className="card-panel primary">
+                                        <span className="blue-text text-darken-2">
+                                            Desired locations to stay
+                                    </span>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col s12">
+                                        <div className="col s6">
+                                            <SelectBuilder
+                                                //onChange={value => getValueFunc('state', value)}
+                                                selectArrObj={stateFields.fields}
+                                                label="State"
+                                                extraProps={{
+                                                    style: { top: '-7px' },
+                                                }}
+                                            //defaultValue={defaultValues.state}
+                                            />
+                                        </div>
+                                        <div className="col s6 input-field inline">
+                                            <label htmlFor="city">City</label>
+                                            <input id="city" type="text" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -128,7 +163,7 @@ class Planner extends React.Component {
                             <AppBar
                                 title={<span>Activity</span>}
                                 showMenuIconButton={false}
-                                style={{ marginBottom: '10px' , zIndex:'0'}}
+                                style={{ marginBottom: '10px', zIndex: '0' }}
                             />
                             <div className="row">
                                 <div className="col s12">
@@ -249,7 +284,7 @@ class Planner extends React.Component {
                             <AppBar
                                 title={<span>Upcoming Trips</span>}
                                 showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex:'0' }}
+                                style={{ marginBottom: '10px', zIndex: '0' }}
                             />
                             <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                                 <div className="col s3">
@@ -274,7 +309,7 @@ class Planner extends React.Component {
                             <AppBar
                                 title={<span>Past Trips</span>}
                                 showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex:'0' }}
+                                style={{ marginBottom: '10px', zIndex: '0' }}
                             />
                             <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                                 <div className="col s3">
@@ -293,21 +328,13 @@ class Planner extends React.Component {
                                 </div>
                                 <div className="col s5">
                                     <div className="col s12">
-                                        <h6>Rate your Experience: </h6>
-                                        {/* <StarRatings
-                                            rating={rating}
-                                            isSelectable={true}
-                                            isAggregateRating={false}
-                                            changeRating={this.changeRating}
-                                            numOfStars={5}
-                                        /> */}
                                     </div>
                                     <div className="col s12">
                                         <TextField
                                             hintText="Feedback"
                                             floatingLabelText="Tell us about your experience"
                                             multiLine={true}
-                                            rows={4}
+                                            rows={3}
                                         />
                                     </div>
                                 </div>

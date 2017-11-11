@@ -29,7 +29,7 @@
     "node-s3-public-url": "1.0.2",
     "payment": "2.3.0",
     "pica": "4.0.1",
-    "prop-types": "^15.6.0",
+    "prop-types": "15.6.0",
     "random-words": "0.0.1",
     "react": "^16.1.0",
     "react-addons-css-transition-group": "15.6.2",

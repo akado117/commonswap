@@ -13,7 +13,7 @@ class SelectBuilder extends Component {
     }
     onChangeHandler = (e, t, value) => {
         this.props.onChange(value);
-        this.setState({value})
+        this.setState({ value });
     };
     render () {
         const {
@@ -23,13 +23,15 @@ class SelectBuilder extends Component {
             defaultSelection}
          = this.props;
         return (
-            <SelectField fullWidth
-                         underlineStyle={{ borderBottomColor: '#9e9e9e' }}
-                         floatingLabelText={label}
-                         floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e' }}
-                         {...extraProps}
-                         onChange={this.onChangeHandler}
-                         value={this.state.value}
+            <SelectField
+                fullWidth
+                style={{ marginTop: '-25px' }}
+                underlineStyle={{ borderBottomColor: '#9e9e9e' }}
+                floatingLabelText={label}
+                floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e' }}
+                {...extraProps}
+                onChange={this.onChangeHandler}
+                value={this.state.value}
             >
                 {defaultSelection ? <MenuItem disabled value={undefined} primaryText={defaultSelection}/> : ''}
                 {selectArrObj.values.map((value, idx) => <MenuItem key={`${label}-${idx}`} value={value}

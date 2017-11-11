@@ -107,15 +107,32 @@ class LoginPage extends React.Component {
 
     getDropDownText = () => {
         if (!Meteor.userId()) return 'Login';
-        const firstName = this.props.profile.firstName;
+        const firstName = this.props.profile.firstName || this.props.user.firstName;
         if (firstName) return `Welcome, ${firstName}`;
         return 'Welcome, Traveler';
     }
 
-    getButtonElement = () => <span><i className="fa fa-user-o fa-1x" aria-hidden="true" /><span className="hide-on-small-only">{this.getDropDownText()}</span></span>;
+    getButtonElement = () => {
+        const imgUrl = this.props.user.picture;
+        const photo = imgUrl ? <img src={imgUrl} alt="" /> : <i className="fa fa-user-o fa-1x" aria-hidden="true" />;
+        return (
+            <div className="button-element">
+                <span className="hide-on-small-only">{this.getDropDownText()}</span>{photo}
+            </div>);
+    }
+
+    loginHandler = (type) => {
+        const { userActions } = this.props;
+        if (type === 'close') {
+            userActions.LogUserOut(() => { this.forceUpdate(); });
+        } else {
+            userActions.loginWithOAuth(type);
+        }
+        this.handleRequestClose();
+    }
 
     render() {
-        const { userActions, className } = this.props;
+        const { className } = this.props;
         return (
             <div className={className}>
                 <RaisedButton
@@ -133,13 +150,13 @@ class LoginPage extends React.Component {
                 >
                     <Menu className="login-container">
                         <MenuItem innerDivStyle={styles.menuItem}>
-                            <button className="login-button" href="" onClick={() => userActions.loginWithOAuth('facebook')} style={{...styles.btnFacebook }}>
+                            <button className="login-button" href="" onClick={() => this.loginHandler('facebook')} style={{...styles.btnFacebook }}>
                             <i className="fa fa-facebook fa-lg" />
                             <span style={styles.btnSpan}>Log in with Facebook</span>
                             </button>
                         </MenuItem>
                         <MenuItem innerDivStyle={styles.menuItem}>
-                            <button className="login-button" href="" onClick={() => userActions.loginWithOAuth('google')} style={{...styles.btnGoogle }}>
+                            <button className="login-button" href="" onClick={() => this.loginHandler('google')} style={{...styles.btnGoogle }}>
                                 <i className="fa fa-google-plus fa-lg" />
                                 <span style={styles.btnSpan}>Log in with Google</span>
                             </button>
@@ -149,7 +166,7 @@ class LoginPage extends React.Component {
                         {/*<span style={styles.btnSpan}>Log in with Twitter</span>*/}
                         {/*</button>*/}
                         {Meteor.userId() ? <MenuItem innerDivStyle={styles.menuItem}>
-                            <button className="login-button" href="" onClick={() => userActions.LogUserOut(() => { this.forceUpdate() })} style={{...styles.btnTwitter }}>
+                            <button className="login-button" href="" onClick={() => this.loginHandler('close')} style={{...styles.btnTwitter }}>
                                 <i className={`fa ${Meteor.userId() ? 'fa-lock' : 'fa-key'} fa-lg`} />
                                 <span style={styles.btnSpan}>Logout</span>
                             </button>
@@ -164,6 +181,7 @@ class LoginPage extends React.Component {
 LoginPage.propTypes = {
     profile: PropTypes.object.isRequired,
     className: PropTypes.string,
+    userActions: PropTypes.object.isRequired,
 }
 
 LoginPage.defaultProps = {

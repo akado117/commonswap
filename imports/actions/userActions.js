@@ -3,6 +3,7 @@ import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 import ProfileActions from './ProfileActions';
 import PlaceActions from './PlaceActions';
 import Store from '../store/store';
+import { mapUserServiceToProfile } from '../helpers/userHelper';
 
 const actions = {
     loginWithOAuth: (loginType) => {
@@ -33,6 +34,7 @@ const actions = {
         return {
             type: `${actionTypes.LOGIN_}${SUCCESS}`,
             user,
+
         };
     },
     LogUserOut: (callBack) => {
@@ -59,5 +61,7 @@ const actions = {
 Accounts.onLogin(() => { //this is a listener for logon;
     Store.dispatch(actions.userLoggedIn(Meteor.user()));
 });
+
+Meteor.subscribe('userData');
 
 export default actions;

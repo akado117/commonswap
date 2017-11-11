@@ -167,7 +167,7 @@ class Profile extends React.Component {
                         />
                     </BottomNavigation>
                 </Paper>
-                <div className="container" style={{ paddingTop: '45px' }}>
+                <div className="container">
                     {internalComponent}
                 </div>
             </section>

@@ -1,4 +1,5 @@
 .profile-container {
+  margin-bottom: 75px;
   .float-button {
     border-radius: 30px;
     float: right;
@@ -11,6 +12,15 @@
    // top: '63px';
   }
   .sub-container {
+  }
+  .container {
+    padding-top: 25px;
+  }
+  #profile-nav {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 5;
   }
   .custom-switch {
     color: #9e9e9e;

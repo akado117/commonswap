@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import SimpleModalSlideshow from 'react-simple-modal-slideshow';
-import SlideShow from 'react-image-slideshow';
+//import SlideShow from 'react-image-slideshow';
 import InfiniteCalendar, { Calendar, defaultMultipleDateInterpolation, withMultipleDates } from 'react-infinite-calendar';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import Navbar from '../components/Navbar';
@@ -13,7 +12,6 @@ import TextField from 'material-ui/TextField';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import SelectBuilder from '../components/forms/SelectBuilder';
-import StarRating from 'react-star-rating';
 
 const styles = {
     button: {
@@ -63,7 +61,7 @@ class Planner extends React.Component {
     }
 
     handleSlideshowOpen(index) {
-        this.refs.SlideShow.handleModalOpen(index);
+        //this.refs.SlideShow.handleModalOpen(index);
     };
 
     changeRating(newRating) {
@@ -82,7 +80,6 @@ class Planner extends React.Component {
         return (
             <div>
                 <Navbar></Navbar>
-                <link rel="stylesheet" href="../../../node_modules/react-star-rating/dist/css/react-star-rating.css"/>
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
                     <div className="row" >
                         <div className="col s12 calendar-parent">
@@ -331,10 +328,6 @@ class Planner extends React.Component {
                                 </div>
                                 <div className="col s5">
                                     <div className="col s12">
-                                        <StarRating name="commonswap-rating"
-                                        caption="Rate your stay!"
-                                        totalStars={5}
-                                        editing={true}/>
                                     </div>
                                     <div className="col s12">
                                         <TextField
@@ -350,7 +343,7 @@ class Planner extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col s12">
-                            <SlideShow imgs={this.state.imgsData} ref="SlideShow" />
+                            {/*<SlideShow imgs={this.state.imgsData} ref="SlideShow" />*/}
                         </div>
                     </div>
                 </div>

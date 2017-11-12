@@ -35,9 +35,7 @@ const AddressComponent = ({ getValueFunc = () => {}, defaultValues = {} }) => {
                     onChange={value => getValueFunc('state', value)}
                     selectArrObj={stateFields.fields}
                     label="State"
-                    extraProps={{
-                        style: { top: '-7px' },
-                    }}
+                    extraProps={{}}
                     defaultValue={defaultValues.state}
                 />
             </div>

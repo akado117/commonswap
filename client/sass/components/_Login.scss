@@ -17,11 +17,26 @@
   min-width: 40px !important;
   button {
     background-color: transparent !important;
-    span {
+    height: $nav-wrapper-height !important;
+    .button-element {
+      display: flex;
+      align-items: center;
+      margin-top: -39px;
+      img {
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      span {
+        padding-right: 10px;
+      }
+    }
+    div {
       text-transform: none !important;
     }
     i {
       padding-right: 8px;
+      height: 16px;
     }
   }
 }

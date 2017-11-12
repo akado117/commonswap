@@ -51,9 +51,7 @@ class Profile extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        const oldProf = prevProps.profile.profile;
-        const newProf = this.props.profile.profile;
-        if ((Object.keys(oldProf).length === 0 && Object.keys(newProf)).length || (Object.keys(oldProf).length && Object.keys(newProf)).length === 0) {
+        if (this.didUserChange(prevProps, this.props)) {
             const curIdx = this.state.selectedIndex;
             this.setState({ selectedIndex: curIdx + 1 }, () => {
                 this.setState({ selectedIndex: curIdx });
@@ -62,6 +60,12 @@ class Profile extends React.Component {
         if (prevProps.place.place && !prevProps.place.place._id && this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
             this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
         }
+    }
+
+    didUserChange = (prevProps, props) => {
+        const oldUser = prevProps.user;
+        const newUser = props.user;
+        return (Object.keys(oldUser).length === 0 && Object.keys(newUser)).length || (Object.keys(oldUser).length && Object.keys(newUser)).length === 0
     }
 
     addValueOnChange = (section, key, value) => {
@@ -116,7 +120,7 @@ class Profile extends React.Component {
     render() {
         let internalComponent;
         if (this.state.selectedIndex === 0){
-            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} saveProfile={this.saveProfileFunction} />;
+            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} user={this.props.user} saveProfile={this.saveProfileFunction} />;
         } else if (this.state.selectedIndex === 1) {
             internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }
@@ -155,11 +159,12 @@ class Profile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { profile, place, images } = state;
+    const { profile, place, images, user } = state;
     return {
         profile,
         place,
         images,
+        user,
     };
 }
 
@@ -178,6 +183,7 @@ Profile.propTypes = {
     profile: PropTypes.object.isRequired,
     place: PropTypes.object.isRequired,
     images: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

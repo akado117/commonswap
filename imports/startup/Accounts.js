@@ -1,7 +1,11 @@
-Accounts.onCreateUser(function(options, user) {
-    if (options.profile) {
-        options.profile.picture = "http://graph.facebook.com/" + user.services.facebook.id + "/picture/?type=large";
-        user.oAuthData = options.profile;
+import { mapUserServiceToProfile } from '../helpers/userHelper';
+
+Accounts.onCreateUser((options, user) => {
+    //console.log(Meteor.http.get("https://graph.facebook.com/me", {
+    //params: {access_token: user.services.facebook.accessToken}}));
+
+    if (user.services) {
+        user.oAuthData = mapUserServiceToProfile(user);
     }
     return user;
 });

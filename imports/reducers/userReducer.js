@@ -8,7 +8,7 @@ const initialState = {
 export default function userReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.LOGIN_}${SUCCESS}`:
-        return _.assign({},state, { user: action.user });
+        return _.merge({},state, { ...action.user });
     case actionTypes.LOGOUT:
         return initialState;
     default:

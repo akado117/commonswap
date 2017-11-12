@@ -65,7 +65,7 @@ class Profile extends React.Component {
     didUserChange = (prevProps, props) => {
         const oldUser = prevProps.user;
         const newUser = props.user;
-        return (Object.keys(oldUser).length === 0 && Object.keys(newUser)).length || (Object.keys(oldUser).length && Object.keys(newUser)).length === 0
+        return (Object.keys(oldUser).length === 0 && Object.keys(newUser).length) || (Object.keys(oldUser).length && Object.keys(newUser).length === 0);
     }
 
     addValueOnChange = (section, key, value) => {
@@ -120,7 +120,7 @@ class Profile extends React.Component {
     render() {
         let internalComponent;
         if (this.state.selectedIndex === 0){
-            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} user={this.props.user} saveProfile={this.saveProfileFunction} />;
+            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} user={this.props.user} saveProfile={this.saveProfileFunction} saveProfileImage={this.props.fileActions.addProfileImageToDataBase} profileImg={this.props.images.profileImg} />;
         } else if (this.state.selectedIndex === 1) {
             internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }

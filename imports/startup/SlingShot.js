@@ -1,5 +1,5 @@
 import FileUrls from '../collections/FileUrls';
-import { FileTypes } from '../lib/Constants';
+import { FileTypes, consoleLogHelper, imageSuccessCode } from '../lib/Constants';
 
 const keys = {
     users: 'customers',
@@ -8,41 +8,65 @@ const keys = {
     placeThumbImages: 'place_thumbs',
 }
 
-Slingshot.fileRestrictions("uploadPlaceToAmazonS3", {
-    allowedFileTypes: [ "image/png", "image/jpeg", "image/gif" ],
-    maxSize: 2 * 1024 * 1024
+Slingshot.fileRestrictions('uploadPlaceToAmazonS3', {
+    allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
+    maxSize: 2 * 1024 * 1024,
 });
 
-Slingshot.createDirective( "uploadPlaceToAmazonS3", Slingshot.S3Storage, {
+Slingshot.createDirective( 'uploadPlaceToAmazonS3', Slingshot.S3Storage, {
     bucket: Meteor.settings.AWSProperty,
-    acl: "public-read",
+    acl: 'public-read',
     region: Meteor.settings.AWSRegion,
-    authorize: function (file, metaContext) {
+    authorize(file, metaContext) {
         if (!this.userId) return false;
         const findObj = { userId: this.userId, type: FileTypes.PLACE, deleted: false };
         findObj.placeId = metaContext.placeId;
         const userFileCount = FileUrls.find(findObj).count();
-        console.log('UserFileCount', userFileCount);
-        return userFileCount < 20 ? true : false;
+        consoleLogHelper(`Attempting to upload place image with ${userFileCount} images already`, imageSuccessCode, this.userId);
+        return userFileCount <= 20;
     },
-    key: function (file) {
-        const user = Meteor.users.findOne( this.userId );
-        if(user) return `${keys.users}/${hashFunc(user._id)}/${keys.placeImages}/${file.name}`;
+    key(file) {
+        const user = Meteor.users.findOne(this.userId);
+        if (user) return `${keys.users}/${hashFunc(user._id)}/${keys.placeImages}/${file.name}`;
         return `${keys.users}/guest/${keys.placeImages}/${file.name}`;
     },
-})
+});
 
-Slingshot.fileRestrictions("uploadPlaceThumbnailToAmazonS3", {
-    allowedFileTypes: [ "image/png", "image/jpeg", "image/gif" ],
+Slingshot.fileRestrictions('uploadProfileToAmazonS3', {
+    allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
+    maxSize: 0.75 * 1024 * 1024,
+});
+
+Slingshot.createDirective( 'uploadProfileToAmazonS3', Slingshot.S3Storage, {
+    bucket: Meteor.settings.AWSProperty,
+    acl: 'public-read',
+    region: Meteor.settings.AWSRegion,
+    authorize(file, metaContext) {
+        if (!this.userId) return false;
+        const findObj = { userId: this.userId, type: FileTypes.PROFILE, deleted: false };
+        findObj.profileId = metaContext.profileId;
+        const userFileCount = FileUrls.find(findObj).count();
+        consoleLogHelper(`Attempting to upload profile image with ${userFileCount} images already`, imageSuccessCode, this.userId);
+        return userFileCount <= 20;
+    },
+    key(file) {
+        const user = Meteor.users.findOne(this.userId);
+        if (user) return `${keys.users}/${hashFunc(user._id)}/${keys.profileImages}/${file.name}`;
+        return `${keys.users}/guest/${keys.profileImages}/${file.name}`;
+    },
+});
+
+Slingshot.fileRestrictions('uploadPlaceThumbnailToAmazonS3', {
+    allowedFileTypes: [ 'image/png', 'image/jpeg', 'image/gif' ],
     maxSize: 0.5 * 1024 * 1024,
 });
 
-Slingshot.createDirective( "uploadPlaceThumbnailToAmazonS3", Slingshot.S3Storage, {
-    bucket: "com-swap-images-dev",
-    acl: "public-read",
+Slingshot.createDirective( 'uploadPlaceThumbnailToAmazonS3', Slingshot.S3Storage, {
+    bucket: 'com-swap-images-dev',
+    acl: 'public-read',
     region: 'us-east-2',
     authorize: function() {
-        let userFileCount = FileUrls.find( { "userId": this.userId } ).count();
+        let userFileCount = FileUrls.find({ userId: this.userId }).count();
         console.log('UserFileCount', userFileCount);
         return userFileCount < 40 ? true : false;
     },
@@ -50,27 +74,6 @@ Slingshot.createDirective( "uploadPlaceThumbnailToAmazonS3", Slingshot.S3Storage
         const user = Meteor.users.findOne( this.userId );
         if(user) return `${keys.users}/${hashFunc(user._id)}/${keys.placeThumbImages}/${file.name}`;
         return `${keys.users}/guest/${keys.placeImages}/${file.name}`;
-    }
-})
-
-Slingshot.fileRestrictions("uploadProfileToAmazonS3", {
-    allowedFileTypes: [ "image/png", "image/jpeg", "image/gif" ],
-    maxSize: 0.75 * 1024 * 1024,
-});
-
-Slingshot.createDirective( "uploadProfileToAmazonS3", Slingshot.S3Storage, {
-    bucket: "com-swap-images-dev",
-    acl: "public-read",
-    region: 'us-east-2',
-    authorize: function() {
-        let userFileCount = FileUrls.find( { "userId": this.userId } ).count();
-        console.log('UserFileCount', userFileCount);
-        return userFileCount < 20 ? true : false;
-    },
-    key: function(file) {
-        const user = Meteor.users.findOne( this.userId );
-        if(user) return `${keys.users}/${hashFunc(user._id)}/${keys.profileImages}/${file.name}`;
-        return `${keys.users}/guest/${keys.profileImages}/${file.name}`;
     }
 })
 

@@ -2,6 +2,7 @@ import { graphql, gql } from 'react-apollo';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
 import ProfileActions from './ProfileActions';
 import PlaceActions from './PlaceActions';
+import FileActions from './FileActions';
 import Store from '../store/store';
 import { mapUserServiceToProfile } from '../helpers/userHelper';
 
@@ -27,6 +28,7 @@ const actions = {
         return loginFunctions[loginType];
     },
     userLoggedIn: () => {
+        Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
         Store.dispatch(PlaceActions.upsertPlace({}));
         return {

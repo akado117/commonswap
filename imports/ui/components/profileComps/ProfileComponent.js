@@ -98,7 +98,11 @@ class ProfileComponent extends Component {
         return (
             <div className="row">
                 <div className="col s6 m4 ">
-                    <ProfileImage imageSrc={user.picture} />
+                    <ProfileImage
+                        imageSrc={this.props.profileImg.url || user.picture}
+                        profile={profile}
+                        saveProfileImage={this.props.saveProfileImage}
+                    />
                 </div>
                 <div className="col s6 m4 input-field inline">
                     <input id="firstName" type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName || this.addDefaultToMap(user.firstName, 'firstName')} />
@@ -209,6 +213,8 @@ ProfileComponent.propTypes = {
     profile: PropTypes.object.isRequired,
     saveProfile: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
+    saveProfileImage: PropTypes.func.isRequired,
+    profileImg: PropTypes.object.isRequired,
 };
 
 

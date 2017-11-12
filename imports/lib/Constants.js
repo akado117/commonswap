@@ -1,6 +1,7 @@
 export const FAILURE = 'FAILURE';
 export const SUCCESS = 'SUCCESS';
 export const genericSuccessCode = 10;
+export const imageSuccessCode = 11;
 export const profileErrorCode = 21;
 export const placeErrorCode = 24;
 export const insufficentParamsCode = 22;
@@ -15,11 +16,14 @@ export const actionTypes = {
     SAVE_PLACE: 'SAVE_PLACE',
     GET_PLACE_IMAGES: 'GET_PLACE_IMAGES',
     ADD_PLACE_IMAGE: 'ADD_PLACE_IMAGE',
+    GET_PROFILE_IMAGE: 'GET_PROFILE_IMAGE',
+    ADD_PROFILE_IMAGE: 'ADD_PROFILE_IMAGE',
 };
 
 export const FileTypes = {
     PLACE: 'PLACE',
-}
+    PROFILE: 'PROFILE',
+};
 
 
 export const serviceErrorBuilder = (message, code, err = {}, extraParams = {}) => ({

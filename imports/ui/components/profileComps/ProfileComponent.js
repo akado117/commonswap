@@ -4,6 +4,7 @@ import SelectBuilder from '../forms/SelectBuilder.js'
 import ButtonArray from '../forms/ButtonArrayComp.js'
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import DatePicker from 'material-ui/DatePicker';
+import ProfileImage from './ProfileImage';
 
 function onChangeHelper(event) {
     return event.target.value;
@@ -96,15 +97,34 @@ class ProfileComponent extends Component {
 
         return (
             <div className="row">
-                <div className="col s6 input-field inline">
+                <div className="col s6 m4 ">
+                    <ProfileImage imageSrc={user.picture} />
+                </div>
+                <div className="col s6 m4 input-field inline">
                     <input id="firstName" type="text" onChange={e => getValueFunc('firstName', onChangeHelper(e))} className="validate" defaultValue={profile.firstName || this.addDefaultToMap(user.firstName, 'firstName')} />
                     <label htmlFor="firstName">First Name </label>
                 </div>
-                <div className="col s6 input-field inline">
+                <div className="col s6 m4 input-field inline">
                     <input id="lastName" type="text" onChange={e => getValueFunc('lastName', onChangeHelper(e))} className="validate" defaultValue={profile.lastName || this.addDefaultToMap(user.lastName, 'lastName')} />
                     <label htmlFor="lastName">Last Name </label>
                 </div>
-                <div className="col s6 input-field inline">
+                <div className="col s6 m4 input-field inline">
+                    <label htmlFor="email"><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
+                    <input id="email" type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email || this.addDefaultToMap(user.email, 'email')} />
+                </div>
+                <div className="col s6 m4 input-field inline">
+                    <label htmlFor="phone"><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
+                    <input type="tel" className="" id="phone" onChange={e => getValueFunc('phone', onChangeHelper(e))} defaultValue={profile.phone} />
+                </div>
+                <div className="col s6 m4 input-field inline">
+                    <DatePicker
+                        className="date-picker"
+                        defaultDate={typeof profile.birthday === 'object' ? profile.birthday : undefined}
+                        onChange={(nul, date) => getValueFunc('birthday', date)}
+                        floatingLabelText={<span><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</span>}
+                    />
+                </div>
+                <div className="col s6 m4">
                     <SelectBuilder
                         label={<span><i className="fa fa-venus fa-1x" aria-hidden="true"></i>Gender</span>}
                         onChange={value => getValueFunc('gender', value)}
@@ -114,7 +134,7 @@ class ProfileComponent extends Component {
                         extraProps={{ floatingLabelFixed: true }}
                     />
                 </div>
-                <div className="col s6 input-field">
+                <div className="col s6 m4">
                     <SelectBuilder
                         label="Language"
                         onChange={value => getValueFunc('lang', value)}
@@ -122,24 +142,6 @@ class ProfileComponent extends Component {
                         defaultSelection={langFields.defaultField}
                         defaultValue={profile.lang}
                         extraProps={{ floatingLabelFixed: true }}
-                    />
-                </div>
-                <div className="col s6 input-field inline">
-                    <label htmlFor="email"><i className="fa fa-envelope-o fa-1x" aria-hidden="true"></i> Email</label>
-                    <input id="email" type="email" className="" onChange={e => getValueFunc('email', onChangeHelper(e))} defaultValue={profile.email || this.addDefaultToMap(user.email, 'email')} />
-                    <p className="help-block text-danger"></p>
-                </div>
-                <div className="col s6 input-field inline">
-                    <label htmlFor="phone"><i className="fa fa-mobile fa-1x" aria-hidden="true"></i> Phone</label>
-                    <input type="tel" className="" id="phone" onChange={e => getValueFunc('phone', onChangeHelper(e))} defaultValue={profile.phone} />
-                    <p className="help-block text-danger"></p>
-                </div>
-                <div className="col s6 input-field inline">
-                    <DatePicker
-                        className="date-picker"
-                        defaultDate={typeof profile.birthday === 'object' ? profile.birthday : undefined}
-                        onChange={(nul, date) => getValueFunc('birthday', date)}
-                        floatingLabelText={<span><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</span>}
                     />
                 </div>
                 <div className="col s12">

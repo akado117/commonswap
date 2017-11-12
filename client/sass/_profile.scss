@@ -35,6 +35,8 @@
 
   }
   .date-picker {
+    height: 42px;
+    margin-top: 18px;
     div:first-child {
       width: 100% !important;
       margin-top: -40px ;
@@ -42,6 +44,7 @@
     label {
       font-size: 0.8em !important;
       color: #9e9e9e !important;
+      top: 30px !important;
     }
     hr {
       border-bottom-color: #9e9e9e !important;

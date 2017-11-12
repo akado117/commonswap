@@ -25,11 +25,13 @@ class SelectBuilder extends Component {
         return (
             <SelectField
                 fullWidth
-                style={{ marginTop: '-25px' }}
-                underlineStyle={{ borderBottomColor: '#9e9e9e' }}
+                style={{ height: '48px', marginBottom: '10px', top: '9px' }}
+                underlineStyle={{ borderBottomColor: '#9e9e9e', bottom: '0px' }}
                 floatingLabelText={label}
-                floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e' }}
+                floatingLabelStyle={{ top: '14px', fontSize: '1rem', color: '#9e9e9e' }}
                 {...extraProps}
+                labelStyle={{marginTop: '-20px' }}
+                iconStyle={{marginTop: '-20px' }}
                 onChange={this.onChangeHandler}
                 value={this.state.value}
             >

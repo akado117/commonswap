@@ -328,9 +328,6 @@ class ViewProfile extends React.Component {
         );
     }
     requestSwap = () => {
-        // console.log(this.state.notes);
-        // console.log(this.state.arrival);
-        // console.log(this.state.departure);
         this.props.profileActions.requestEmail({
             Arrival: this.state.arrival,
             Departure: this.state.departure,

@@ -2,16 +2,26 @@ import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { render } from 'react-dom';
 
 class Home extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isTop: true
+        };
     }
+
+    componentDidMount() {
+        document.addEventListener('scroll', () => {
+          this.setState({ isTop: window.scrollY < 100 })
+        });
+      }
 
     render() {
         return (
-            <div>
-                <Navbar className="invisible"></Navbar>
+            <div className="home-container">
+                <Navbar className={this.state.isTop ? 'invisible' : 'visible'} ></Navbar>
                 <header>
                     <div className="video-container">
                         <video src="https://stretchflex.net/photos/csVideo2.mp4" poster="" autoPlay loop muted>

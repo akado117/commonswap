@@ -113,8 +113,8 @@ class LoginPage extends React.Component {
     }
 
     getButtonElement = () => {
-        const imgUrl = this.props.user.picture;
-        const photo = imgUrl ? <img src={imgUrl} alt="" /> : <i className="fa fa-user-o fa-1x" aria-hidden="true" />;
+        const imgUrl = this.props.userImage.url ||this.props.user.picture;
+        const photo = imgUrl ? <div className="img-holder"><img src={imgUrl} alt="" /></div> : <i className="fa fa-user-o fa-1x" aria-hidden="true" />;
         return (
             <div className="button-element">
                 <span className="hide-on-small-only">{this.getDropDownText()}</span>{photo}
@@ -182,6 +182,7 @@ LoginPage.propTypes = {
     profile: PropTypes.object.isRequired,
     className: PropTypes.string,
     userActions: PropTypes.object.isRequired,
+    userImage: PropTypes.object.isRequired,
 }
 
 LoginPage.defaultProps = {
@@ -189,9 +190,10 @@ LoginPage.defaultProps = {
 }
 
 function mapStateToProps(state) {
-    const { user, profile } = state;
+    const { user, profile, images } = state;
     return {
         user,
+        userImage: images.profileImg,
         profile: profile.profile,
     };
 }

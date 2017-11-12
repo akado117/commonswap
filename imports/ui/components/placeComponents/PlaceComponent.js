@@ -30,6 +30,7 @@ class PlaceComponent extends Component {
         this.state = {
             ...props.place.place,
             uploadActive: false,
+            isUploading: false,
         };
     }
 
@@ -47,7 +48,6 @@ class PlaceComponent extends Component {
 
     checkBoxHelper = (e, type) => {
         const value = e.target.checked;
-        console.log(value)
         this.getValueFunc(type, value);
         this.setState({
             [type]: value,
@@ -60,8 +60,9 @@ class PlaceComponent extends Component {
         }
     }
 
-    toggleUploadActive = () => {
-        this.setState({ uploadActive: !this.state.uploadActive })
+    toggleUploadActive = (onComplete) => {
+        if (!onComplete && this.state.isUploading) return;
+        this.setState({ uploadActive: !this.state.uploadActive, isUploading: false });
     }
 
     getImageSection = (images) => {
@@ -72,7 +73,10 @@ class PlaceComponent extends Component {
             component = (<Uploader
                 addToDbFunc={this.props.savePlaceImage}
                 metaContext={{ placeId: this.props.place.place._id }}
-                onUploadComplete={this.toggleUploadActive}
+                onUploadComplete={() => this.toggleUploadActive(true)}
+                uploaderInstance="uploadPlaceToAmazonS3"
+                onCloseClick={() => this.toggleUploadActive()}
+                onUploading={() => this.setState({ isUploading: true })}
             />);
         } else {
             const remappedImages = images.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));

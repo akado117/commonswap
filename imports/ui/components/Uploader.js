@@ -6,6 +6,7 @@ import { Tracker } from 'meteor/tracker';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import uploadToS3 from '../../helpers/upload-to-s3';
 import Progress from './Progress';
+import CloseButton from './forms/CloseButton';
 import Pica from 'pica';
 import _ from 'lodash';
 
@@ -124,6 +125,7 @@ class Uploader extends React.Component {
 
     onUploadComplete = () => {
         this.setState(initialState);
+        this.props.onUploadComplete();
     }
 
     canUpload = (upload) => {
@@ -136,7 +138,10 @@ class Uploader extends React.Component {
     }
 
     triggerUpload = () => {
-        if (this.state.files.length) this.setState({ triggerUpload: true });
+        if (this.state.files.length) {
+            this.setState({ triggerUpload: true });
+            this.props.onUploading();
+        }
     }
 
     removeFile = (idx) => {
@@ -148,7 +153,7 @@ class Uploader extends React.Component {
     getUploaders = files => files.map((file, idx) => (
         <Uploaders
             key={`uploader-${idx}`}
-            uploaderInstance="uploadPlaceToAmazonS3"
+            uploaderInstance={this.props.uploaderInstance}
             uploadTrigger={this.state.triggerUpload}
             onUploadComplete={() => this.markFileUploadComplete(idx)}
             file={file}
@@ -158,13 +163,21 @@ class Uploader extends React.Component {
         />
     ));
 
+    onCloseClick = (e) => {
+        e.stopPropagation();
+        this.props.onCloseClick();
+    }
+
     render() {
-        return (<div className="uploader">
-            <Dropzone className="dropzone col s12" onDrop={this.onDrop}>
-                { this.state.files.length ? this.getUploaders(this.state.files) : 'Please drop files to upload into zone or click to open file picker'}
-            </Dropzone>
-            <button className="waves-effect waves-light btn-large col s6 m4 l3 offset-s6 offset-m8 offset-l9" disabled={this.canUpload(this.state.uploadComplete)} onClick={this.triggerUpload}>Upload</button>
-        </div>);
+        const { onCloseClick } = this.props;
+        return (
+            <div className="uploader">
+                <Dropzone className="dropzone col s12" onDrop={this.onDrop} multiple={this.props.multiple} >
+                    <CloseButton onClick={this.onCloseClick} />
+                    { this.state.files.length ? this.getUploaders(this.state.files) : 'Please drop files to upload into zone or click to open file picker'}
+                </Dropzone>
+                <button className="waves-effect waves-light btn-large col s6 m4 l3 offset-s6 offset-m8 offset-l9" disabled={this.canUpload(this.state.uploadComplete)} onClick={this.triggerUpload}>Upload</button>
+            </div>);
     }
 }
 
@@ -172,11 +185,18 @@ Uploader.propTypes = {
     addToDbFunc: PropTypes.func.isRequired,
     metaContext: PropTypes.object,
     onUploadComplete: PropTypes.func,
+    uploaderInstance: PropTypes.string.isRequired,
+    multiple: PropTypes.bool,
+    onCloseClick: PropTypes.func,
+    onUploading: PropTypes.func,
 };
 
 Uploader.defaultProps = {
     metaContext: {},
     onUploadComplete: () => {},
+    multiple: true,
+    onCloseClick: () => {},
+    onUploading: () => {},
 };
 
 export default Uploader;

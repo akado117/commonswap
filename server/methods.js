@@ -5,7 +5,7 @@ import Roomies from '../imports/collections/Roomies';
 import FileUrls from '../imports/collections/FileUrls';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes } from '../imports/lib/Constants'
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes } from '../imports/lib/Constants';
 import S3 from './s3';
 import _ from 'lodash'
 
@@ -45,7 +45,35 @@ const fakeProfile = () => ({
     timeZone: 'est',
     cleanliness:  Math.floor((Math.random() * 10)),
     extroversion:  Math.floor((Math.random() * 10)),
-})
+});
+
+function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
+    check(fileObj, Object);
+    if (!fileObj[boundToProp]) return serviceErrorBuilder(`Please create and save a ${imgType} first`, placeErrorCode);
+    if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
+    const insertObj = {
+        deleted: false,
+        userId,
+        [boundToProp]: fileObj[boundToProp],
+        url: fileObj.url,
+        fileName: fileObj.name,
+        type: imgType,
+        added: new Date(),
+    };
+
+    const insertId = FileUrls.insert(insertObj);
+
+    consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
+    return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
+        serviceMessage: `Image added, with key ${insertId}`,
+        data: {
+            image: {
+                _id: insertId,
+                url: insertObj.url,
+            },
+        },
+    });
+}
 
 Meteor.methods({
     upsertProfile(profileParams, interests, emergencyContacts) {
@@ -59,13 +87,14 @@ Meteor.methods({
 
             try {
                 //profile section
-                let ownerProfileId = profileClone._id;
+                let ownerProfileId = profileClone._id;//assumes must be an update if there is an id being passed back
                 if (!ownerProfileId) { //check for existing profiles if no id passed in
-                    const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId }) || {};
+                    const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
                     ownerProfileId = ownerProfile._id;
                     profileClone = _.merge(ownerProfile, profileClone);
                 }
                 if (!profileClone.ownerUserId) profileClone.ownerUserId = profileClone.ownerUserId || userId;
+                if (!profileClone.added) profileClone.added = new Date();
                 const profileGUID = Profiles.upsert({ _id: ownerProfileId }, profileClone);
                 profileClone._id = profileClone._id || profileGUID.insertedId || ownerProfileId;
                 delete profileClone.ownerUserId
@@ -83,11 +112,12 @@ Meteor.methods({
                 });
                 //interests section
                 if (!interestsClone._id) {
-                    const ownerInterests = Interests.findOne({ ownerUserId: interestsClone.ownerUserId || userId }) || {};
+                    const ownerInterests = Interests.findOne({ ownerUserId: interestsClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
                     interestsClone = _.merge(ownerInterests, interestsClone);
                 }
                 interestsClone.ownerUserId = interestsClone.ownerUserId || userId;
                 interestsClone.profileId = profileClone._id || profileGUID.insertedId;
+                if (!interestsClone.added) interestsClone.added = new Date();
                 const interestsGUID = Interests.upsert({ _id: interestsClone._id }, interestsClone);
                 interestsClone._id = interestsGUID.insertedId || interestsClone._id;
                 delete interestsClone.ownerUserId;
@@ -121,34 +151,37 @@ Meteor.methods({
         let amenitiesClone = _.cloneDeep(amenities);
         try {
             //place Section
-            let ownerPlaceId = placeClone._id;
+            let ownerPlaceId = placeClone._id;//assumes it must be from the db and an update if this is here
             if (!ownerPlaceId) { //check for existing profiles if no id passed in
-                const ownerPlace = Places.findOne({ ownerUserId: placeClone.ownerUserId || userId }) || {};
+                const ownerPlace = Places.findOne({ ownerUserId: placeClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
                 ownerPlaceId = ownerPlace._id;
                 placeClone = _.merge(ownerPlace, placeClone);//overwrite with new data
             }
             if (!placeClone.ownerUserId) placeClone.ownerUserId = userId;
+            if (!placeClone.added) placeClone.added = new Date();
             const placeGUID = Places.upsert({ _id: ownerPlaceId }, placeClone);
             if (placeGUID.insertedId) placeClone._id = placeGUID.insertedId; //should have a _id already inless placeGUID had it. As a new doc is created without it
             delete placeClone.ownerUserId;
             //address section
             if (!addressClone._id) {
-                const oldAddress = Addresses.findOne({ placeId: placeClone._id }) || {}; //attempt to find any created and merge new data with it
+                const oldAddress = Addresses.findOne({ placeId: placeClone._id }, { sort: { added: -1 } }) || {}; //attempt to find any created and merge new data with it
                 addressClone = _.merge(oldAddress, addressClone);
             }
             if (!addressClone.ownerUserId) addressClone.ownerUserId = userId;
             if (!addressClone.placeId) addressClone.placeId = placeClone._id; //should have id from insertGUID or already passed in
+            if (!addressClone.added) addressClone.added = new Date();
             const addressGUID = Addresses.upsert({ _id: addressClone._id }, addressClone);
             if (addressGUID.insertedId) addressClone._id = addressGUID.insertedId;
             delete addressClone.ownerUserId;
             delete addressClone.placeId;
             //ammenities section
             if (!amenitiesClone._id) {
-                const placeAmenities = Amenities.findOne({ placeId: placeClone._id }) || {};
+                const placeAmenities = Amenities.findOne({ placeId: placeClone._id }, { sort: { added: -1 } }) || {};
                 amenitiesClone = _.merge(placeAmenities, amenitiesClone);
             }
             amenitiesClone.ownerUserId = amenitiesClone.ownerUserId || userId;
             if (!amenitiesClone.placeId) amenitiesClone.placeId = placeClone._id;
+            if (!amenitiesClone.added) amenitiesClone.added = new Date();
             const amenitiesGUID = Amenities.upsert({ _id: amenitiesClone._id }, amenitiesClone);
             if (amenitiesGUID.insertedId) amenitiesClone._id = amenitiesGUID.insertedId; //will exist if _id doesn't
             delete amenitiesClone.ownerUserId;
@@ -170,45 +203,45 @@ Meteor.methods({
         }
     },
     'images.place.store': function placeImageStore(fileObj) {
-        check(fileObj, Object);
-        if (!fileObj.placeId) return serviceErrorBuilder('Please create and save a profile first', placeErrorCode);
-        const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
-        const insertObj = {
-            deleted: false,
-            userId: this.userId,
-            placeId: fileObj.placeId,
-            url: fileObj.url,
-            fileName: fileObj.name,
-            type: FileTypes.PLACE,
-            added: new Date(),
-        };
-
-        const insertId = FileUrls.insert(insertObj);
-
-        consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
-        return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
-            serviceMessage: `Image added, with key ${insertId}`,
-            data: {
-                _id: insertId,
-                url: insertObj.url,
-            },
-        });
+        return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());
     },
     'images.place.get': function placeImageGet({ placeId }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         const fieldsToReturn = {
-            url: 1,
             _id: 1,
+            url: 1,
         };
-        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, fieldsToReturn).fetch();
+        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn }).fetch();
 
         consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
         return serviceSuccessBuilder({}, genericSuccessCode, {
             serviceMessage: `Get place images success with ${files.length} found`,
             data: {
                 images: files,
+            },
+        });
+    },
+    'images.profile.store': function placeImageStore(fileObj) {
+        return imageServiceHelper(fileObj, FileTypes.PROFILE, 'profileId', Meteor.userId());
+    },
+    'images.profile.getOne': function profileImageGet() {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
+        const fieldsToReturn = {
+            url: 1,
+            _id: 1,
+        };
+        const file = FileUrls.findOne({userId, type: FileTypes.PROFILE, deleted: false }, {
+            fields: fieldsToReturn,
+            sort: { added: -1 },
+        });
+
+        consoleLogHelper('Get profile images success with 1 found', genericSuccessCode, userId);
+        return serviceSuccessBuilder({}, genericSuccessCode, {
+            serviceMessage: 'Get one profile images success with 1 found',
+            data: {
+                image: file,
             },
         });
     },

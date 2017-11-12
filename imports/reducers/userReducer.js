@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import { actionTypes, SUCCESS} from '../lib/Constants';
 
-const initialState = {
-    user: {},
-};
+const initialState = {};
 
 export default function userReducer(state = initialState, action = {}) {
     switch (action.type) {

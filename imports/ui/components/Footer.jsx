@@ -9,7 +9,7 @@ class Footer extends React.Component {
 
     render() {
         return (
-            <footer className="page-footer" style={{float:'bottom'}}>
+            <footer className={`page-footer ${this.props.className}`} style={{float:'bottom'}}>
                 <div className="container">
                     <div className="row">
                         <div className="col l4 s12">

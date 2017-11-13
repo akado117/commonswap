@@ -2,4 +2,13 @@
     .content {
         line-height: 45px;
     }
+    margin-bottom: 65px;
+    #faq-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        button {
+            min-width: 65px !important;
+        }
+    }
 }

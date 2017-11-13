@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
+import Paper from 'material-ui/Paper';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Founders from '../components/about/Founders';
 import AboutUs from '../components/about/AboutUs';
-import Paper from 'material-ui/Paper';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import Remove from 'material-ui/svg-icons/content/remove';
 
 const menuItemStyle = {
     fontSize: '14px',
@@ -15,7 +15,7 @@ const menuItemStyle = {
     overflow: 'hidden',
     wordWrap: 'break-word',
     whiteSpace: 'normal',
-    lineHeight: '36px'
+    lineHeight: '36px',
 };
 
 class FAQ extends Component {
@@ -25,11 +25,25 @@ class FAQ extends Component {
             selectedIndex: 0,
         };
     }
+    FAQNav = [
+        "How's It Work?",
+        "Cost?",
+        "Safety",
+        "Sign-up?",
+        "Problems/ Feedback"
+    ];
+    FAQNavIcons = [
+        'question',
+        'dollar',
+        'heart',
+        'user-circle',
+        'envelope',
+    ]
     FAQFields = [
         "Exactly how does CommonSwap work?",
         "How much does CommonSwap cost?",
         "Is CommonSwap safe?",
-        "How do I enter my swap’s place?",
+        "How do I add my place?",
         "How do I report a problem or provide feedback?"
     ];
     FAQContent = [
@@ -69,15 +83,35 @@ class FAQ extends Component {
     ]
 
 
-    select = (index) => this.setState({ selectedIndex: index });
+    select = index => this.setState({ selectedIndex: index });
+    getBottomNav = () => {
+        const navItems = this.FAQNav.map((item, idx) => {
+            return (
+                <BottomNavigationItem
+                    key={`nav-item-${idx}`}
+                    label={item}
+                    onClick={() => this.select(idx)}
+                    icon={<i className={`fa fa-${this.FAQNavIcons[idx]} fa-1x`} aria-hidden="true" style={{ color: this.state.selectedIndex === idx ? 'rgb(0, 188, 212)' : 'rgba(0, 0, 0, 0.54)' }} />}
+                />
+            );
+        });
+        return (
+            <Paper id="faq-nav" zDepth={1} /*Todo: animate and use transitions to have it follow scroll*/>
+                <BottomNavigation selectedIndex={this.state.selectedIndex}>
+                    {navItems}
+                </BottomNavigation>
+            </Paper>
+        );
+    }
 
     render() {
-        const menuItems = this.FAQFields.map((field, idx) => <MenuItem
+        const menuItems = this.FAQNav.map((field, idx) => <MenuItem
             primaryText={field}
             key={`faq-${idx}`}
             onClick={() => this.select(idx)}
             style={menuItemStyle}
-            leftIcon={<Remove />}
+            innerDivStyle={{ paddingLeft: '45px' }}
+            leftIcon={<i className="fa fa-minus fa-1x" aria-hidden="true" />}
         />
         )
         return (
@@ -85,7 +119,7 @@ class FAQ extends Component {
                 <Navbar className="invisible"></Navbar>
                 <div className="row container faq-container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
                     <div className="col s4">
-                        <div className="col s12">
+                        <div className="col s12 hide-on-med-and-down">
                             <Paper>
                                 <Menu width={'100%'}>
                                     {menuItems}
@@ -93,7 +127,7 @@ class FAQ extends Component {
                             </Paper>
                         </div>
                     </div>
-                    <div className="col s8">
+                    <div className="col s12 l8">
                         <div className="header">
                             <h4><strong>{this.FAQFields[this.state.selectedIndex]}</strong></h4>
                         </div>
@@ -102,7 +136,8 @@ class FAQ extends Component {
                         </div>
                     </div>
                 </div>
-                <Footer />
+                {this.getBottomNav()}
+                <Footer className="hide-on-med-and-down" />
             </div>
         );
     }

@@ -35,7 +35,6 @@ Meteor.startup(() => {
             <Route path="/" component={App} >
                 <IndexRoute component={Home} />
                 <Route path="profile" component={Profile} />
-                <Route path="login" component={Login} />
                 <Route path="imagePOC" component={ImagePOC} />
                 <Route path="room/:roomId" component={RoomieCalc} />
                 <Route path="room" component={RoomieCalc} />

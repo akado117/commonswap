@@ -131,6 +131,22 @@ class LoginPage extends React.Component {
         this.handleRequestClose();
     }
 
+    getLoginButtons = userId => (!userId ?
+        <div>
+            <MenuItem innerDivStyle={styles.menuItem}>
+                <button className="login-button" href="" onClick={() => this.loginHandler('facebook')} style={{...styles.btnFacebook }}>
+                    <i className="fa fa-facebook fa-lg" />
+                    <span style={styles.btnSpan}>Log in with Facebook</span>
+                </button>
+            </MenuItem>
+            <MenuItem innerDivStyle={styles.menuItem}>
+                <button className="login-button" href="" onClick={() => this.loginHandler('google')} style={{...styles.btnGoogle }}>
+                    <i className="fa fa-google-plus fa-lg" />
+                    <span style={styles.btnSpan}>Log in with Google</span>
+                </button>
+            </MenuItem>
+        </div> : null);
+
     render() {
         const { className } = this.props;
         return (
@@ -149,18 +165,7 @@ class LoginPage extends React.Component {
                     autoCloseWhenOffScreen
                 >
                     <Menu className="login-container">
-                        <MenuItem innerDivStyle={styles.menuItem}>
-                            <button className="login-button" href="" onClick={() => this.loginHandler('facebook')} style={{...styles.btnFacebook }}>
-                            <i className="fa fa-facebook fa-lg" />
-                            <span style={styles.btnSpan}>Log in with Facebook</span>
-                            </button>
-                        </MenuItem>
-                        <MenuItem innerDivStyle={styles.menuItem}>
-                            <button className="login-button" href="" onClick={() => this.loginHandler('google')} style={{...styles.btnGoogle }}>
-                                <i className="fa fa-google-plus fa-lg" />
-                                <span style={styles.btnSpan}>Log in with Google</span>
-                            </button>
-                        </MenuItem>
+                        {this.getLoginButtons(Meteor.userId())}
                         {/*<button href="" onClick={() => UserActions.loginWithOAuth('twitter')} style={{ ...styles.btn, ...styles.btnTwitter }}>*/}
                         {/*<i className="fa fa-twitter fa-lg" />*/}
                         {/*<span style={styles.btnSpan}>Log in with Twitter</span>*/}

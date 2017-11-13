@@ -45,7 +45,6 @@ class Navbar extends React.Component {
                             <li><Link to="/browse" activeStyle={ACTIVE}>Browse</Link></li>
                             <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
                             <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
-                            <li><Link to="/login" activeStyle={ACTIVE}>Login</Link></li>
                         </ul>
                     </div>
                     {this.props.children}

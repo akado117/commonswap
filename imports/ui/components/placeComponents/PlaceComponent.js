@@ -101,26 +101,26 @@ class PlaceComponent extends Component {
                 <div className="row">
                     <div className="col s12 input-field inline">
                         <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e)) } defaultValue={place.shortDesc} />
-                        <label htmlFor="short-desc"><i className="fa fa-pencil" aria-hidden="true"></i> Write a short description about your place: (This is what users will see)</label>
+                        <label htmlFor="short-desc"><i className="fa fa-pencil" aria-hidden="true"></i> Short description about your place</label>
                     </div>
                     <div className="col s6 input-field inline">
-                        <label htmlFor="rent"><i className="fa fa-usd" aria-hidden="true"></i> What is your monthly rent?</label>
+                        <label htmlFor="rent"><i className="fa fa-usd" aria-hidden="true"></i> Current Monthly Rent</label>
                         <input type="text" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e)) } defaultValue={place.rent} />
                     </div>
                     <div className="col s6 input-field inline">
                         <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e)) } defaultValue={place.beds} />
-                        <label htmlFor="beds"><i className="fa fa-bed" aria-hidden="true"></i> How many beds can guests use?</label>
+                        <label htmlFor="beds"><i className="fa fa-bed" aria-hidden="true"></i> Guest beds Available</label>
                     </div>
                     <div className="col s6 input-field inline">
                         <input type="number" className="" id="bathrooms" min="0" onChange={e => getValFunc('bathrooms', onChangeHelper(e)) } defaultValue={place.bathrooms} />
-                        <label htmlFor="bathrooms"><i className="fa fa-bath" aria-hidden="true"></i> How many bathrooms can guest use?</label>
+                        <label htmlFor="bathrooms"><i className="fa fa-bath" aria-hidden="true"></i> Guest Baths Available</label>
                     </div>
                     <div className="col s6 input-field inline">
                         <input type="number" className="" id="guest-cap" onChange={e => getValFunc('numOfGuests', onChangeHelper(e)) } defaultValue={place.numOfGuests} />
-                        <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many?</label>
+                        <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
                     </div>
                     <div className="col s6 input-field">
-                        <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> How many bedrooms can guest use?</label>
+                        <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms Available</label>
                         <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e)) } defaultValue={place.bedrooms} />
                     </div>
                     <div className="col s6 custom-switch" >
@@ -149,7 +149,7 @@ class PlaceComponent extends Component {
                         <label htmlFor="pet-type">What kind of pets are allowed?</label>
                         <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e)) } defaultValue={place.typeOfPets} />
                     </div>
-                    <div className="col s12 amenities-container">
+                    <div className="amenities-container">
                         <ButtonArrayComp
                             getValueFunc={(key, value) => this.props.getValueFunc('amenities', key, value) }
                             defaultValues={amenities}
@@ -158,7 +158,7 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12">
                         <TextFieldStandardized
-                            floatingLabelText="Write a detailed description about your place:"
+                            floatingLabelText="Write a detailed description about your place"
                             onChange={(e, value) => getValFunc('detailedDesc', value)}
                             extraProps={{ defaultValue: place.detailedDesc }}
                         />
@@ -172,7 +172,7 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12">
                         <TextFieldStandardized
-                            floatingLabelText="About the Area & Neighborhood (Transportatin, What's Near, etc.)"
+                            floatingLabelText="About the Area (Transportation, What's Near, etc.)"
                             onChange={(e, value) => getValFunc('notesOnArea', value)}
                             extraProps={{ defaultValue: place.notesOnArea }}
                         />

@@ -115,9 +115,9 @@ class FAQ extends Component {
         />
         )
         return (
-            <div>
+            <div className="faq-container">
                 <Navbar className="invisible"></Navbar>
-                <div className="row container faq-container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
+                <div className="row container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
                     <div className="col s4">
                         <div className="col s12 hide-on-med-and-down">
                             <Paper>

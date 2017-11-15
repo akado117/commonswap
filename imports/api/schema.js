@@ -71,6 +71,12 @@ export default [
     places: [Place]
   }
   
+  type DesiredDate {
+    _id: String!
+    ownerUserId: String
+    day: String
+  }
+
   type Address {
     _id: String!
     ownerUserId: String

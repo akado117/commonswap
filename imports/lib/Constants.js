@@ -6,6 +6,7 @@ export const profileErrorCode = 21;
 export const placeErrorCode = 24;
 export const insufficentParamsCode = 22;
 export const upsertFailedCode = 23;
+export const plannerErrorCode = 25;
 export const actionTypes = {
     SAVE_ROOMIES: 'SAVE_ROOMIES',
     LOGIN_: 'LOGIN_',
@@ -18,6 +19,7 @@ export const actionTypes = {
     ADD_PLACE_IMAGE: 'ADD_PLACE_IMAGE',
     GET_PROFILE_IMAGE: 'GET_PROFILE_IMAGE',
     ADD_PROFILE_IMAGE: 'ADD_PROFILE_IMAGE',
+    SAVE_DESIRED_DATES: 'SAVE_DESIRED_DATES',
 };
 
 export const FileTypes = {

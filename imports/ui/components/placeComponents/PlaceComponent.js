@@ -6,6 +6,7 @@ import TextFieldStandardized from '../forms/TextFieldStandardized';
 import Address from './Address';
 import Uploader from '../Uploader';
 import ImageCarousel from '../ImageCarousel';
+import AppBar from 'material-ui/AppBar';
 
 const BUTTONS = [
     { label: 'Essentials (towels, etc)', name: 'essentials' },
@@ -84,9 +85,14 @@ class PlaceComponent extends Component {
         }
         return (
             <div className="image-section-container col s12">
-                <div className="teal img-header">
+                <AppBar
+                    title={<span>Photos &amp; Videos</span>}
+                    showMenuIconButton={false}
+                    style={{ marginBottom: '10px', zIndex: '0' }}
+                />
+                {/* <div className="teal img-header">
                     <h3 className="container-desc">Photos & Video<span className="click-text" onClick={this.toggleUploadActive}> {images.length ? '- click to add more' : ''}</span></h3>
-                </div>
+                </div> */}
                 {component}
             </div>
         );
@@ -97,31 +103,31 @@ class PlaceComponent extends Component {
         const { place, address, amenities } = this.props.place;
         return (
             <div className="place-container">
-                <Address getValueFunc={(key,value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
+                <Address getValueFunc={(key, value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
                 <div className="row">
                     <div className="col s12 input-field inline">
-                        <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e)) } defaultValue={place.shortDesc} />
+                        <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e))} defaultValue={place.shortDesc} />
                         <label htmlFor="short-desc"><i className="fa fa-pencil" aria-hidden="true"></i> Short description about your place</label>
                     </div>
                     <div className="col s6 input-field inline">
                         <label htmlFor="rent"><i className="fa fa-usd" aria-hidden="true"></i> Current Monthly Rent</label>
-                        <input type="text" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e)) } defaultValue={place.rent} />
+                        <input type="text" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e))} defaultValue={place.rent} />
                     </div>
                     <div className="col s6 input-field inline">
-                        <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e)) } defaultValue={place.beds} />
+                        <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e))} defaultValue={place.beds} />
                         <label htmlFor="beds"><i className="fa fa-bed" aria-hidden="true"></i> Guest beds Available</label>
                     </div>
                     <div className="col s6 input-field inline">
-                        <input type="number" className="" id="bathrooms" min="0" onChange={e => getValFunc('bathrooms', onChangeHelper(e)) } defaultValue={place.bathrooms} />
+                        <input type="number" className="" id="bathrooms" min="0" onChange={e => getValFunc('bathrooms', onChangeHelper(e))} defaultValue={place.bathrooms} />
                         <label htmlFor="bathrooms"><i className="fa fa-bath" aria-hidden="true"></i> Guest Baths Available</label>
                     </div>
                     <div className="col s6 input-field inline">
-                        <input type="number" className="" id="guest-cap" onChange={e => getValFunc('numOfGuests', onChangeHelper(e)) } defaultValue={place.numOfGuests} />
+                        <input type="number" className="" id="guest-cap" onChange={e => getValFunc('numOfGuests', onChangeHelper(e))} defaultValue={place.numOfGuests} />
                         <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
                     </div>
                     <div className="col s6 input-field">
                         <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms Available</label>
-                        <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e)) } defaultValue={place.bedrooms} />
+                        <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e))} defaultValue={place.bedrooms} />
                     </div>
                     <div className="col s6 custom-switch" >
                         <div>Smoking Allowed?</div>
@@ -147,11 +153,11 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12 input-field inline" style={{ paddingRight: '0px' }}>
                         <label htmlFor="pet-type">What kind of pets are allowed?</label>
-                        <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e)) } defaultValue={place.typeOfPets} />
+                        <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e))} defaultValue={place.typeOfPets} />
                     </div>
                     <div className="amenities-container">
                         <ButtonArrayComp
-                            getValueFunc={(key, value) => this.props.getValueFunc('amenities', key, value) }
+                            getValueFunc={(key, value) => this.props.getValueFunc('amenities', key, value)}
                             defaultValues={amenities}
                             buttonData={BUTTONS}
                         />

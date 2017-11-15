@@ -1,4 +1,7 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+const _ = require('lodash')
 import PropTypes from 'prop-types'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -12,6 +15,10 @@ import TextField from 'material-ui/TextField';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import SelectBuilder from '../components/forms/SelectBuilder';
+import Rater from 'react-rater'
+import 'react-rater/lib/react-rater.css'
+import BetaWarning from '../components/BetaWarning';
+import ProfileActions from '../../actions/ProfileActions';
 
 const styles = {
     button: {
@@ -43,7 +50,9 @@ class Planner extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            controlledDate: null,
+            controlledDate: [new Date()],
+            testDates: [new Date(),new Date(), new Date()],
+            selectedDates:[],
             imgsData: [
                 {
                     url: 'http://stretchflex.net/photos/apartment.jpeg'
@@ -70,17 +79,31 @@ class Planner extends React.Component {
         });
     }
 
+    displayDates() {
+        console.log("SELECTED DATES");
+        console.log(this.state.selectedDates);
+    }
+
     componentDidMount = () => {
         //this.handleSlideshowOpen(0);
         console.log('CITIES');
         console.log(CITIES);
     }
 
+    saveDatesTest() {
+        const testDates = [new Date(),new Date(), new Date()];
+
+        this.props.profileActions.saveSelectedDates({
+            SelectedDates: testDates
+        });
+    }
+
     render() {
         return (
-            <div>
+            <div className="planner-container">
                 <Navbar></Navbar>
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
+                <BetaWarning></BetaWarning>
                     <div className="row" >
                         <div className="col s12 calendar-parent">
                             <AppBar
@@ -95,9 +118,10 @@ class Planner extends React.Component {
                                             Component={MultipleDatesCalendar}
                                             height={250}
                                             interpolateSelection={defaultMultipleDateInterpolation}
-                                            selected={[new Date()]}
+                                            selected={this.state.selectedDates}
                                             layout={'portrait'}
                                             width={'100%'}
+                                            onSelect={(selectedDate) => defaultMultipleDateInterpolation(selectedDate, this.state.selectedDates)}
                                         />
                                     </div>
                                 </div>
@@ -110,7 +134,7 @@ class Planner extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col s12">
-                                        <div className="col s6">
+                                        <div className="col s12 l6">
                                             <SelectBuilder
                                                 //onChange={value => getValueFunc('state', value)}
                                                 selectArrObj={stateFields.fields}
@@ -121,7 +145,7 @@ class Planner extends React.Component {
                                             //defaultValue={defaultValues.state}
                                             />
                                         </div>
-                                        <div className="col s6 input-field inline">
+                                        <div className="col s12 l6 input-field inline">
                                             <label htmlFor="city">City</label>
                                             <input id="city" type="text" />
                                         </div>
@@ -136,7 +160,7 @@ class Planner extends React.Component {
                                     multi={true}/> */}
                                 </div>
                                 <div className="row">
-                                    <div className="col s6">
+                                    <div className="col s12 l6">
                                         <RaisedButton
                                             className=""
                                             target="_blank"
@@ -144,6 +168,7 @@ class Planner extends React.Component {
                                             primary={true}
                                             style={styles.button}
                                             icon={<FontIcon className="material-icons">check</FontIcon>}
+                                            onClick={() => this.saveDatesTest()}
                                         />
                                         <RaisedButton
                                             className=""
@@ -168,13 +193,15 @@ class Planner extends React.Component {
                             <div className="row">
                                 <div className="col s12">
                                     <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                        <div className="col s3">
+                                        <div className="col s12 l3">
                                             <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                         </div>
-                                        <div className="col s5" id="message" style={{ top: '5px' }}>
-                                            <p><strong>Kevin accepted your request.</strong></p>
+                                        <div className="col s12 l5">
+                                            <div className="col s12" id="message" style={{ top: '5px' }}>
+                                                <p><strong>Kevin accepted your request.</strong></p>
+                                            </div>
                                         </div>
-                                        <div className="col s4">
+                                        <div className="col l4">
                                             <div className="col s12">
                                                 <p>Washington DC</p>
                                             </div>
@@ -188,13 +215,15 @@ class Planner extends React.Component {
                             <div className="row">
                                 <div className="col s12">
                                     <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                        <div className="col s3">
+                                        <div className="col s12 l3">
                                             <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                         </div>
-                                        <div className="col s5" id="message" style={{ top: '5px' }}>
-                                            <p><strong>Your request to swap with Mike is pending</strong></p>
+                                        <div className="col s12 l5">
+                                            <div className="col s12" id="message" style={{ top: '5px' }}>
+                                                <p><strong>Your request to swap with Mike is pending</strong></p>
+                                            </div>
                                         </div>
-                                        <div className="col s4">
+                                        <div className="col l4">
                                             <div className="col s12">
                                                 <p>San Francisco</p>
                                             </div>
@@ -214,25 +243,25 @@ class Planner extends React.Component {
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col s2">
+                                            <div className="col s12 l2">
                                                 <div className="col s12">
                                                     <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock2.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                                 </div>
-                                                <div className="col s12">
+                                                <div className="col s4 l12">
                                                     <p>Katherine</p>
                                                 </div>
-                                                <div className="col s12">
-                                                    <p style={{ marginTop: '0px' }}>Chicago, IL</p>
+                                                <div className="col s6 l12">
+                                                    <p className="location">Chicago, IL</p>
                                                 </div>
                                             </div>
-                                            <div className="col s4 img-cont" onClick={() => this.handleSlideshowOpen(0)}>
+                                            <div className="col s12 l4 img-cont" onClick={() => this.handleSlideshowOpen(0)}>
                                                 <img src="http://stretchflex.net/photos/apartment.jpeg" alt="" className="image" style={{ height: '250px', width: '100%' }} />
                                                 <div className="middle">
                                                     <div className="text">View Place</div>
                                                 </div>
                                             </div>
 
-                                            <div className="col s6">
+                                            <div className="col s12 l6">
                                                 <div className="row">
                                                     <div className="col s4" style={{ textAlign: 'center' }}>
                                                         <p>Entire Apt</p>
@@ -255,7 +284,7 @@ class Planner extends React.Component {
                                         </div>
 
                                         <div className="row">
-                                            <div className="col s6">
+                                            <div className="col s12 l6">
                                                 <RaisedButton
                                                     className=""
                                                     target="_blank"
@@ -287,10 +316,10 @@ class Planner extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: '0' }}
                             />
                             <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                <div className="col s3">
+                                <div className="col s12 l3">
                                     <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                 </div>
-                                <div className="col s9">
+                                <div className="col s12 l9">
                                     <div className="col s12">
                                         <h5>Tim</h5>
                                     </div>
@@ -312,10 +341,10 @@ class Planner extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: '0' }}
                             />
                             <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                <div className="col s3">
+                                <div className="col s12 l3">
                                     <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                 </div>
-                                <div className="col s4">
+                                <div className="col s12 l4">
                                     <div className="col s12">
                                         <h5>Alex</h5>
                                     </div>
@@ -326,8 +355,13 @@ class Planner extends React.Component {
                                         <p>November 12, 2017 - November 16, 2017</p>
                                     </div>
                                 </div>
-                                <div className="col s5">
+                                <div className="col s12 l5">
                                     <div className="col s12">
+                                        <Rater 
+                                            total={5} 
+                                            rating={2} 
+                                            interactive={true} 
+                                            />
                                     </div>
                                     <div className="col s12">
                                         <TextField
@@ -353,4 +387,21 @@ class Planner extends React.Component {
     }
 }
 
-export default Planner
+function mapStateToProps(state) {
+    const { profile, place } = state;
+    return {
+        profile,
+        place,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        profileActions: bindActionCreators(ProfileActions, dispatch),
+    };
+}
+
+Planner.propTypes = {
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Planner);

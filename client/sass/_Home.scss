@@ -1,4 +1,21 @@
+// @media #{$small-and-down} {
+//     // styles for small screens and down
+//   }
+//   @media #{$medium-and-up} {
+//     // styles for medium screens and larger
+//   }
+//   @media #{$medium-and-down} {
+//     // styles for medium screens and down
+//   }
+//   @media #{$large-and-up} {
+//     // styles for large screens and up
+//   }
+//   @media #{$extra-large-and-up} {
+//     // styles for extra large screens and up
+//   }
+
 .home-container {
+
     * {
         font-style: sans-serif;
     }
@@ -24,96 +41,302 @@
     .visible {
        nav {
            background-color: white;
+    }
+}
+    
+  
+  @media #{$medium-and-up} {
+    // styles for medium screens and larger
+  }
+  @media #{$medium-and-down} {
+    // styles for medium screens and down
+    video {
+        max-height:700px;
+        width: 100%;
+        object-fit: fill;
+        //top: -5px;
+        overflow: hidden;
+        opacity: .8;
+    }
+    .video-container {
+        height:80vh;
+        position: absolute;
+        top: 0px;
+        z-index: 0;
+    }
+    
+    .overlay-desc {
+        position:absolute;
+        top:30%;
+        left:50%;
+        z-index:1;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+    
+    header {
+        min-height: 700px;
+        max-height: 700px;
+        opacity: 0.9;
+    }
+    .delivery-image {
+        background-image: url('');
+        background-repeat: no-repeat;
+        background-position: bottom-right;
+        background-size: auto 100%;
+        padding: 15rem 0;
+        background-origin: padding-box;
+    }
+    
+    .header-title {
+        color: white;
+        font-size:5.5rem;
+    }
+    .register-image {
+        background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        min-height: 700px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .book-image {
+        background-image: url('http://stretchflex.net/photos/travel.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        min-height: 500px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .travel-image {
+        background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        min-height: 500px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .how-desc-title
+    {
+        font-size: 4.5rem;
+        font-weight: 500;
+        color:#00CED1;
+    }
+    .how-desc {
+        font-size: 2.5rem;
+        font-weight: 500;
+        color:white;
+        background-color:rgba(0, 0, 0, 0.5);
+    }
+  }
+  @media #{$large-and-up} {
+    video {
+        max-height:700px;
+        width: 100%;
+        object-fit: fill;
+        //top: -5px;
+        overflow: hidden;
+        opacity: .8;
+    }
+    .video-container {
+        height:80vh;
+        position: absolute;
+        top: 0px;
+        z-index: 0;
+    }
+    
+    .overlay-desc {
+        position:absolute;
+        top:30%;
+        left:50%;
+        z-index:1;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+    
+    header {
+        // background-image: url('http://stretchflex.net/photos/pexels-photo2.jpeg');
+        // background-repeat: no-repeat;
+        // background-position: center;
+        // background-size: 100% 100%;
+        // background-origin: padding-box;
+        min-height: 700px;
+        max-height: 700px;
+        opacity: 0.9;
+    }
+    .delivery-image {
+        background-image: url('');
+        background-repeat: no-repeat;
+        background-position: bottom-right;
+        background-size: auto 100%;
+        padding: 15rem 0;
+        background-origin: padding-box;
+    }
+    
+    .header-title {
+        color: white;
+        font-size:5.5rem;
+    }
+    .register-image {
+        background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        min-height: 700px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .book-image {
+        background-image: url('http://stretchflex.net/photos/travel.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        min-height: 500px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .travel-image {
+        background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        min-height: 500px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .how-desc-title
+    {
+        font-size: 4.5rem;
+        font-weight: 500;
+        color:#00CED1;
+    }
+    .how-desc {
+        font-size: 2.5rem;
+        font-weight: 500;
+        color:white;
+        background-color:rgba(0, 0, 0, 0.5);
+    }
+  }
+
+@media #{$small-and-down} {
+    video {
+        max-height:600px;
+        min-height: 550px;
+        width: 100%;
+        object-fit: fill;
+        //top: -5px;
+        overflow: hidden;
+        opacity: .8;
+    }
+    .video-container {
+        height:100%;
+        position: absolute;
+        top: 0px;
+        z-index: 0;
+    }
+
+    .head-mobile {
+        min-height: 500px;
+        max-height: 500px;
+        opacity: 0.9;
+    }
+    
+    .overlay-desc {
+        position:absolute;
+        top:30%;
+        left:50%;
+        z-index:1;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+
+    .delivery-image {
+        background-image: url('');
+        background-repeat: no-repeat;
+        background-position: bottom-right;
+        background-size: auto 100%;
+        padding: 15rem 0;
+        background-origin: padding-box;
+    }
+    
+    .header-title {
+        color: white;
+        font-size:2.5rem;
+    }
+    .register-image {
+        background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
+        background-repeat: no-repeat;
+        background-position: 74% 20%;
+        background-size: 290%;
+        min-height: 600px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .book-image {
+        background-image: url('http://stretchflex.net/photos/travel.jpeg');
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 100% 100%;
+        min-height: 500px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .travel-image {
+        background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
+        background-repeat: no-repeat;
+        background-position: -90px 0px;
+        background-size: 210% 100%;
+        min-height: 500px;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    
+    .how-desc-title
+    {
+        font-size: 4.5rem;
+        font-weight: 500;
+        color:#00CED1;
+    }
+    .how-desc {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color:white;
+        background-color:rgba(0, 0, 0, 0.5);
+    }
+    .invisible {
+        nav {
+            background-color: transparent;
+            ul li a {
+                color: black;
+                border-bottom: none !important;
+    
+            }
+            img {
+                display: none;
+            }
+            span {
+                color: white;
+            }
+            box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
+         }
+     }
+    
+     .visible {
+        nav {
+            background-color: white;
         }
     }
-   .delivery-image {
-       background-image: url('');
-       background-repeat: no-repeat;
-       background-position: bottom-right;
-       background-size: auto 100%;
-       padding: 15rem 0;
-       background-origin: padding-box;
-   }
-   
-   video {
-       max-height:700px;
-       width: 100%;
-       object-fit: fill;
-       //top: -5px;
-       overflow: hidden;
-       opacity: .8;
-   }
-   .video-container {
-       height:80vh;
-       position: absolute;
-       top: 0px;
-       z-index: 0;
-   }
-   
-   .overlay-desc {
-       position:absolute;
-       top:30%;
-       left:50%;
-       z-index:1;
-       transform: translate(-50%, -50%);
-       -ms-transform: translate(-50%, -50%);
-   }
-   
-   header {
-       // background-image: url('http://stretchflex.net/photos/pexels-photo2.jpeg');
-       // background-repeat: no-repeat;
-       // background-position: center;
-       // background-size: 100% 100%;
-       // background-origin: padding-box;
-       min-height: 700px;
-       max-height: 700px;
-       opacity: 0.9;
-   }
-   
-   .header-title {
-       color: white;
-       font-size:5.5rem;
-   }
-   .register-image {
-       background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
-       background-repeat: no-repeat;
-       background-position: center center;
-       background-size: 100%;
-       min-height: 700px;
-       padding: 0 0;
-       background-origin: padding-box;
-   }
-   
-   .book-image {
-       background-image: url('http://stretchflex.net/photos/travel.jpeg');
-       background-repeat: no-repeat;
-       background-position: center center;
-       background-size: 100%;
-       min-height: 500px;
-       padding: 0 0;
-       background-origin: padding-box;
-   }
-   
-   .travel-image {
-       background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
-       background-repeat: no-repeat;
-       background-position: center center;
-       background-size: 100%;
-       min-height: 500px;
-       padding: 0 0;
-       background-origin: padding-box;
-   }
-   
-   .how-desc-title
-   {
-       font-size: 4.5rem;
-       font-weight: 500;
-       color:#00CED1;
-   }
-   .how-desc {
-       font-size: 2.5rem;
-       font-weight: 500;
-       color:white;
-       background-color:rgba(0, 0, 0, 0.5);
-   }
+
+  }
 }

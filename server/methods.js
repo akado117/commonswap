@@ -3,9 +3,9 @@ import { check } from 'meteor/check';
 import random from 'random-words'
 import Roomies from '../imports/collections/Roomies';
 import FileUrls from '../imports/collections/FileUrls';
-import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts } from '../imports/collections/mainCollection';
+import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes } from '../imports/lib/Constants';
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode } from '../imports/lib/Constants';
 import S3 from './s3';
 import _ from 'lodash'
 
@@ -140,6 +140,26 @@ Meteor.methods({
         } else {
             consoleErrorHelper('Profile create or update failed', insufficentParamsCode, Meteor.userId());
             return serviceErrorBuilder('Profile create or update failed', insufficentParamsCode)
+        }
+    },
+    saveSelectedDates(dates) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting planner info', plannerErrorCode);
+        try {
+            var datesArray = []
+            for(var i in dates)
+                datesArray.push([i, dates[i]])
+            for(var desiredDate in datesArray)
+            {
+                let desiredDateClone = _.cloneDeep(dates);
+                const desiredDateGUID = DesiredDate.upsert({ _id: desiredDateClone._id }, desiredDateClone);
+            }
+        } 
+        catch (err)
+        {
+            console.log(err.stack);
+            consoleErrorHelper('Planner save desired dates failed', upsertFailedCode, userId, err);
+            return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
     upsertPlace(place, address, amenities) {

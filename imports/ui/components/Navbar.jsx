@@ -36,12 +36,14 @@ class Navbar extends React.Component {
                         <Login className="nav-login" />
                         <ul className="right hide-on-med-and-down">
                             <li style={{ color: 'black' }}><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
+                            <li style={{ color: 'black' }}><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
                             <li style={{ color: 'black' }}><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
                             <li style={{ color: 'black' }}><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                             <li style={{ color: 'black' }}><Link to="/browse" activeStyle={ACTIVE}>Browse</Link></li>
                         </ul>
                         <ul className="side-nav" id="mobile-demo">
                             <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
+                            <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
                             <li><Link to="/browse" activeStyle={ACTIVE}>Browse</Link></li>
                             <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
                             <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>

@@ -26,6 +26,31 @@ export default {
             }
         });
     },
+    saveSelectedDates: (data) => {
+        console.log("Save selected dates entered");
+        console.log(data);
+        return dispatch => Meteor.call('saveSelectedDates', SelectedDates, (error, result) => {
+            if (error) {
+                console.log(error);
+                return dispatch({
+                    type: `${actionTypes.SAVE_DESIRED_DATES}_${FAILURE}`,
+                    ...error,
+                });
+            } else {
+                if (result.data) {
+                    dispatch({
+                        type: `${actionTypes.SAVE_DESIRED_DATES}_${SUCCESS}`,
+                        dates: result.data.dates
+                    });
+                    return callBack ? callBack() : '';
+                };
+                return dispatch({
+                    type: `${actionTypes.SAVE_DESIRED_DATES}_${FAILURE}`,
+                    ...error,
+                });
+            }
+        });
+    },
     requestEmail: (data) => {
         return (dispatch) => {
             dispatch({

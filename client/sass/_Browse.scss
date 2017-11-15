@@ -1,0 +1,18 @@
+  .browse-container {
+    @media #{$medium-and-up} {
+        // styles for medium screens and larger
+      }
+      @media #{$medium-and-down} {
+        // styles for medium screens and down
+      }
+      @media #{$large-and-up} {
+        // styles for large screens and up
+      }
+    
+    @media #{$small-and-down} {
+        // styles for small screens and down
+        .scroll-listing {
+            padding-top: 10px;
+        }
+    }
+  }

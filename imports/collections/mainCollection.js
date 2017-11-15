@@ -6,3 +6,4 @@ export const Profiles = new Mongo.Collection('profiles');
 export const Addresses = new Mongo.Collection('addresses');
 export const Amenities = new Mongo.Collection('amenities');
 export const Places = new Mongo.Collection('places');
+export const DesiredDate = new Mongo.Collection('desiredDate');

@@ -111,6 +111,11 @@ export default [
     parking: Boolean
   }
   
+  type PlaceDate {
+    end: Int
+    start: Int
+  }
+  
   type Place {
     _id: String!
     ownerUserId: String
@@ -119,6 +124,7 @@ export default [
     address: Address
     shortDesc: String
     detailedDesc: String
+    availableDates: [PlaceDate]
     amenities: Amenity
     numOfGuests: Int
     beds: [String]

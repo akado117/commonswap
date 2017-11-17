@@ -2,23 +2,21 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const _ = require('lodash')
-import PropTypes from 'prop-types'
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-//import SlideShow from 'react-image-slideshow';
-import InfiniteCalendar, { Calendar, defaultMultipleDateInterpolation, withMultipleDates } from 'react-infinite-calendar';
+import PropTypes from 'prop-types';
+import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import Navbar from '../components/Navbar';
-import Select from 'react-select';
 import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
-import SelectBuilder from '../components/forms/SelectBuilder';
 import Rater from 'react-rater'
 import 'react-rater/lib/react-rater.css'
 import BetaWarning from '../components/BetaWarning';
 import ProfileActions from '../../actions/ProfileActions';
+import PlaceActions from '../../actions/PlaceActions';
 
 const styles = {
     button: {
@@ -39,8 +37,7 @@ const stateFields = {
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
 
 
-var today = new Date();
-const MultipleDatesCalendar = withMultipleDates(Calendar);
+const today = new Date();
 
 function logChange(val) {
     console.log("Selected: " + JSON.stringify(val));
@@ -49,10 +46,11 @@ function logChange(val) {
 class Planner extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             controlledDate: [new Date()],
             testDates: [new Date(),new Date(), new Date()],
-            selectedDates:[],
+            selectedDates: props.place.place.availableDates || [],
             imgsData: [
                 {
                     url: 'http://stretchflex.net/photos/apartment.jpeg'
@@ -64,9 +62,16 @@ class Planner extends React.Component {
                     url: 'http://stretchflex.net/photos/apartment3.jpeg'
                 }
             ],
-            cities: []
+            cities: [],
         };
         var options = CITIES[this.state.country];
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
+            const selectedDates = this.props.place.place.availableDates || [];
+            this.setState({ selectedDates });
+        }
     }
 
     handleSlideshowOpen(index) {
@@ -86,16 +91,16 @@ class Planner extends React.Component {
 
     componentDidMount = () => {
         //this.handleSlideshowOpen(0);
-        console.log('CITIES');
-        console.log(CITIES);
     }
 
-    saveDatesTest() {
-        const testDates = [new Date(),new Date(), new Date()];
+    saveDates = () => {
+        this.props.placeActions.updatePlaceDates(this.state.selectedDates || []);
+    }
 
-        this.props.profileActions.saveSelectedDates({
-            SelectedDates: testDates
-        });
+    onCalendarSelect = (selectedDates, eventData) => {
+        if (eventData && eventData.eventType === EVENT_TYPES.END) {
+            this.setState({ selectedDates });
+        }
     }
 
     render() {
@@ -107,7 +112,7 @@ class Planner extends React.Component {
                     <div className="row" >
                         <div className="col s12 calendar-parent">
                             <AppBar
-                                title={<span>My Calendar</span>}
+                                title={<span>{"My Swap's Availability"}</span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: '0' }}
                             />
@@ -115,40 +120,19 @@ class Planner extends React.Component {
                                 <div className="row">
                                     <div className="col s12 calendar-container" >
                                         <InfiniteCalendar
-                                            Component={MultipleDatesCalendar}
-                                            height={250}
-                                            interpolateSelection={defaultMultipleDateInterpolation}
+                                            Component={withMultipleRanges(Calendar)}
+                                            height={350}
+                                            min={new Date(2017,8,1)}
                                             selected={this.state.selectedDates}
+                                            // selected={[
+                                            //     new Date(2017, 11, 12),
+                                            //     new Date(2017, 11, 16),
+                                            //     new Date(2017, 11, 20),
+                                            // ]}
                                             layout={'portrait'}
                                             width={'100%'}
-                                            onSelect={(selectedDate) => defaultMultipleDateInterpolation(selectedDate, this.state.selectedDates)}
+                                            onSelect={this.onCalendarSelect}
                                         />
-                                    </div>
-                                </div>
-                                <div className="col s12">
-                                    <div className="card-panel primary">
-                                        <span className="blue-text text-darken-2">
-                                            Desired locations to stay
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col s12">
-                                        <div className="col s12 l6">
-                                            <SelectBuilder
-                                                //onChange={value => getValueFunc('state', value)}
-                                                selectArrObj={stateFields.fields}
-                                                label="State"
-                                                extraProps={{
-                                                    style: { top: '-7px' },
-                                                }}
-                                            //defaultValue={defaultValues.state}
-                                            />
-                                        </div>
-                                        <div className="col s12 l6 input-field inline">
-                                            <label htmlFor="city">City</label>
-                                            <input id="city" type="text" />
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -164,19 +148,11 @@ class Planner extends React.Component {
                                         <RaisedButton
                                             className=""
                                             target="_blank"
-                                            label="Available"
+                                            label="Save"
                                             primary={true}
                                             style={styles.button}
                                             icon={<FontIcon className="material-icons">check</FontIcon>}
-                                            onClick={() => this.saveDatesTest()}
-                                        />
-                                        <RaisedButton
-                                            className=""
-                                            target="_blank"
-                                            label="Remove"
-                                            secondary={true}
-                                            style={styles.button}
-                                            icon={<FontIcon className="material-icons">close</FontIcon>}
+                                            onClick={this.saveDates}
                                         />
                                     </div>
                                 </div>
@@ -398,10 +374,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         profileActions: bindActionCreators(ProfileActions, dispatch),
+        placeActions: bindActionCreators(PlaceActions, dispatch),
     };
 }
 
 Planner.propTypes = {
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);

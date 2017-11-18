@@ -7,6 +7,11 @@
 
   .Cal__Header__dateWrapper.Cal__Header__day {
     font-size: 36px;
+    @media #{$small-and-down} {
+      font-size: 23px;
+      letter-spacing: -1px;
+    }
+
   }
 
   .img-cont {

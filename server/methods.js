@@ -162,6 +162,32 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
+    'places.updateAvailability': function getByAvailability({ availableDates, _id }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
+        if (!_id || !availableDates) return serviceErrorBuilder('Please provide correct params', placeErrorCode);
+        const setObj = {
+            $set: {
+                availableDates,
+            },
+        };
+        Places.update({ _id, ownerUserId: userId }, setObj);//ownerUserId means that only if the place is owned by the logged in user it can be updated
+        try {
+            consoleLogHelper('Place Availability updated successfully', genericSuccessCode, userId, JSON.stringify(availableDates));
+            return serviceSuccessBuilder({ numberOfDates: availableDates.length }, genericSuccessCode, {
+                serviceMessage: `Place availability successfully updated to ${availableDates.length} dates`,
+                data: {
+                    place: {
+                        availableDates,
+                    },
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Place availability update failed', upsertFailedCode, userId, err);
+            return serviceErrorBuilder('Place availability update failed', upsertFailedCode, err);
+        }
+    },
     'places.getByAvailability': function getByAvailability(startDate, endDate) {
         return Places.find({ availableDates: { $elemMatch: { start: { $lte: startDate }, end: { $gte: endDate } } } }).fetch();
     },

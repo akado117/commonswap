@@ -15,7 +15,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
-import MapComponent from '../components/MapComponent';
+//import MapComponent from '../components/MapComponent';
+import MapComponent from '../components/MapWithASearchBox';
 import BetaWarning from '../components/BetaWarning';
 
 const items = [

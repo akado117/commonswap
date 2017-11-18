@@ -4,7 +4,16 @@
   $react-rater-link: #ccc !default;   // color of star not rated
   $react-rater-hover: #666 !default;  // color of star on hover
   $react-rater-active: #000 !default; // color of star rated
-  
+
+  .Cal__Header__dateWrapper.Cal__Header__day {
+    font-size: 36px;
+    @media #{$small-and-down} {
+      font-size: 23px;
+      letter-spacing: -1px;
+    }
+
+  }
+
   .img-cont {
       position: relative;
       cursor: pointer;

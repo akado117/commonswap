@@ -15,6 +15,12 @@ function placeReducer(state = initialState, action = {}) {
             address: action.address,
             amenities: action.amenities,
         });
+    case `${actionTypes.SAVE_PLACE_AVAILABILITY}_${SUCCESS}`:
+        return _.assign({}, state, {
+            place: action.data.place,
+            address: action.data.address,
+            amenities: action.data.amenities,
+        });
     case actionTypes.LOGOUT:
         return initialState;
     default:

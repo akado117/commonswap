@@ -96,7 +96,7 @@ class FAQ extends Component {
             );
         });
         return (
-            <Paper id="faq-nav" zDepth={1} /*Todo: animate and use transitions to have it follow scroll*/>
+            <Paper className="hide-on-large-only" id="faq-nav" zDepth={1} /*Todo: animate and use transitions to have it follow scroll*/>
                 <BottomNavigation selectedIndex={this.state.selectedIndex}>
                     {navItems}
                 </BottomNavigation>
@@ -115,9 +115,9 @@ class FAQ extends Component {
         />
         )
         return (
-            <div>
+            <div className="faq-container">
                 <Navbar className="invisible"></Navbar>
-                <div className="row container faq-container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
+                <div className="row container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
                     <div className="col s4">
                         <div className="col s12 hide-on-med-and-down">
                             <Paper>
@@ -136,7 +136,9 @@ class FAQ extends Component {
                         </div>
                     </div>
                 </div>
-                {this.getBottomNav()}
+                <div className="faq-footer">
+                    {this.getBottomNav()}
+                </div>
                 <Footer className="hide-on-med-and-down" />
             </div>
         );

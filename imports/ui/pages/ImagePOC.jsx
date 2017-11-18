@@ -6,14 +6,15 @@ import React  from 'react';
 import Pagination from '../components/Pagination';
 import changePage from '../../actions/ChangePage';
 import FileUrls from '../../collections/FileUrls';
+import { Places } from '../../collections/mainCollection';
 import Uploader from '../components/Uploader';
 
 import ImageList from '../components/ImageList';
 import ImageCarousel from '../components/ImageCarousel';
 
 class ImagePOC extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props);
     }
 
     render() {
@@ -27,7 +28,7 @@ class ImagePOC extends React.Component {
         return(
             <div className="container">
                 <ImageCarousel images={remappedImages} />
-                <Uploader addToDbFunc={(dataObj, cb) => Meteor.call('files.store', dataObj, cb)}/>
+                //<Uploader addToDbFunc={(dataObj, cb) => Meteor.call('files.store', dataObj, cb)}/>
                 <ImageList images={this.props.imageList} />
                 {pagination}
             </div>
@@ -41,14 +42,15 @@ class ImagePOC extends React.Component {
 //takes props already present on page, aka pageSkip and visibility to know what items to grab
 const ImagePOCContainer = withTracker(({pageSkip, filter = {}}) => {
     const imageSub = Meteor.subscribe('getImages', pageSkip, filter);
-
+    const placeSub = Meteor.subscribe('places', pageSkip, filter);
+    const placesPOC = Places;
     return {
         imageSubReady: imageSub.ready(),
         imageList: FileUrls.find({}).fetch() || [],
         imageCount: Counts.get('ImageCount'),
         currentUser: Meteor.user(),
     };
-}, ImagePOC);
+})(ImagePOC);
 
 function mapStateToProps(state) {
     return {

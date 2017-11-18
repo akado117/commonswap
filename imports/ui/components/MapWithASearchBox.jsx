@@ -9,7 +9,7 @@ const MapSearchBox = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `750px` }} />,
+    containerElement: <div style={{ height: `450px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({
@@ -37,6 +37,14 @@ const MapSearchBox = compose(
         onPlacesChanged: () => {
           const places = refs.searchBox.getPlaces();
           const bounds = new google.maps.LatLngBounds();
+          
+          places.map(({ address_components, geometry: { location } }) =>{
+            console.log(location);
+            this.props.onSetLocation({
+              lat: location.lat(),
+              lng: location.lng()
+            });
+          });
 
           places.forEach(place => {
             if (place.geometry.viewport) {
@@ -105,9 +113,6 @@ class MapComponent extends React.PureComponent {
     super(props);
     this.state = { isMarkerShown: false }
   }
-  //   state = {
-  //     isMarkerShown: false,
-  //   }
 
   componentDidMount() {
     this.delayedShowMarker()
@@ -135,7 +140,9 @@ class MapComponent extends React.PureComponent {
 }
 
 MapComponent.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  latitude: PropTypes.string,
+  longitude: PropTypes.string
 };
 
 MapComponent.defaultProps = {

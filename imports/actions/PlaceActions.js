@@ -38,21 +38,22 @@ const PlaceActions = {
     updatePlaceDates: (availableDates = []) => dispatch => {
         const state = Store.getState();
         if (state.place.place._id && Meteor.user()) {
-            const place = {
+            const updatedDateObj = {
+                _id: state.place.place._id,
                 availableDates,
             };
-            Meteor.call('upsertPlace', place, {}, {}, (error, result) => {
+            Meteor.call('places.updateAvailability', updatedDateObj, (error, result) => {
                 return standardResponseFunc(error, result, actionTypes.SAVE_PLACE_AVAILABILITY, dispatch);
             });
         } else {
             const { place, amenities, address } = cloneDeep(state.place);
             place.availableDates = dateArr;
             dispatch({
-                type: `${actionTypes.SAVE_PLACE_AVAILABILITY}_${FAILURE}`,
+                type: `${actionTypes.SAVE_PLACE_AVAILABILITY}_${SUCCESS}`,
                 data: {
-                    place,
-                    amenities,
-                    address,
+                    place: {
+                        availableDates,
+                    },
                 },
             });
             return {

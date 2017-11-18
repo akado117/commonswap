@@ -79,12 +79,12 @@ class Profile extends React.Component {
         if (realSection) realSection.set(key, value);
     }
 
-    getFormData = (profileStore) => {
+    getFormData = () => {
         const formData = {
             profile: {},
             interests: {},
             emergencyContacts: [],
-        }
+        };
         this.valueMap.profile.forEach((value, key) => {
             formData.profile[key] = value;
         });
@@ -95,10 +95,10 @@ class Profile extends React.Component {
             formData.emergencyContacts.push(value);
         });
 
-        return _.merge({}, profileStore, formData);
+        return formData;
     };
 
-    getPlaceFormData = (placeStore) => {
+    getPlaceFormData = () => {
         const formData = {};
         Object.keys(this.placeValueMap).forEach((key) => {
             formData[key] = {};
@@ -107,15 +107,15 @@ class Profile extends React.Component {
             });
         });
 
-        return _.merge({}, placeStore, formData);
+        return formData;
     };
 
     saveProfileFunction = (transitionOnSave) => {
-        this.props.profileActions.upsertProfile(this.getFormData(this.props.profile), transitionOnSave ? () => this.setState({ selectedIndex: 1 }) : () => {});
+        this.props.profileActions.upsertProfile(this.getFormData(), transitionOnSave ? () => this.setState({ selectedIndex: 1 }) : () => {});
     }
 
     savePlaceFunction = () => {
-        this.props.placeActions.upsertPlace(this.getPlaceFormData(this.props.profile));
+        this.props.placeActions.upsertPlace(this.getPlaceFormData());
     }
 
     render() {

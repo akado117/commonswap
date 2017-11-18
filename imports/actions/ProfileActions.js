@@ -1,7 +1,16 @@
+import { merge } from 'lodash';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
+import Store from '../store/store';
 
-export default {
-    upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }, callBack) => {
+const ProfileActions = {
+    upsertProfile: (profileData, callBack) => {
+        const curProfData = Store.getState().profile;
+        const mappedProfData = {
+            profile: curProfData.profile || {},
+            interests: curProfData.interests || {},
+            emergencyContacts: curProfData.emergencyContacts || {},
+        };
+        const { profile, interests, emergencyContacts } = merge({}, mappedProfData, profileData);//technically more bandwidth but less sever load
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
             if (error) {
                 console.log(error);
@@ -21,31 +30,6 @@ export default {
                 };
                 return dispatch({
                     type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
-                    ...error,
-                });
-            }
-        });
-    },
-    saveSelectedDates: (data) => {
-        console.log("Save selected dates entered");
-        console.log(data);
-        return dispatch => Meteor.call('saveSelectedDates', SelectedDates, (error, result) => {
-            if (error) {
-                console.log(error);
-                return dispatch({
-                    type: `${actionTypes.SAVE_DESIRED_DATES}_${FAILURE}`,
-                    ...error,
-                });
-            } else {
-                if (result.data) {
-                    dispatch({
-                        type: `${actionTypes.SAVE_DESIRED_DATES}_${SUCCESS}`,
-                        dates: result.data.dates
-                    });
-                    return callBack ? callBack() : '';
-                };
-                return dispatch({
-                    type: `${actionTypes.SAVE_DESIRED_DATES}_${FAILURE}`,
                     ...error,
                 });
             }
@@ -84,3 +68,5 @@ export default {
         }
     }
 }
+
+export default ProfileActions

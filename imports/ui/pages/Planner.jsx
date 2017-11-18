@@ -80,7 +80,7 @@ class Planner extends React.Component {
 
     changeRating(newRating) {
         this.setState({
-            rating: newRating
+            rating: newRating,
         });
     }
 
@@ -99,7 +99,11 @@ class Planner extends React.Component {
 
     onCalendarSelect = (selectedDates, eventData) => {
         if (eventData && eventData.eventType === EVENT_TYPES.END) {
-            this.setState({ selectedDates });
+            const dateObj = selectedDates[eventData.modifiedDateIndex] || {};
+            this.setState({
+                selectedDates,
+                initialSelectedDate: dateObj.start,
+            });
         }
     }
 
@@ -124,6 +128,7 @@ class Planner extends React.Component {
                                             height={350}
                                             min={new Date(2017,8,1)}
                                             selected={this.state.selectedDates}
+                                            initialSelectedDate={this.state.initialSelectedDate}
                                             // selected={[
                                             //     new Date(2017, 11, 12),
                                             //     new Date(2017, 11, 16),

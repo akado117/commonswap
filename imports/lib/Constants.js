@@ -28,6 +28,34 @@ export const FileTypes = {
     PROFILE: 'PROFILE',
 };
 
+export function standardResponseFunc(error, result, actionType, dispatch, cb) {
+    let callback = cb;
+    if (!cb) {
+        callback = () => {};
+    }
+    if (error) {
+        console.log(error);
+        callback(error);
+        return dispatch({
+            type: `${actionType}_${FAILURE}`,
+            ...error,
+        });
+    } else {
+        if (result.data) {
+            callback(undefined, result);
+            return dispatch({
+                type: `${actionType}_${SUCCESS}`,
+                data: result.data,
+            });
+        };
+        callback(result);
+        return dispatch({
+            type: `${actionType}_${FAILURE}`,
+            errorMessage: result.message,
+            ...result,
+        });
+    }
+};
 
 export const serviceErrorBuilder = (message, code, err = {}, extraParams = {}) => ({
     message,

@@ -1,7 +1,16 @@
+import { merge } from 'lodash';
 import { actionTypes, SUCCESS, FAILURE } from '../lib/Constants';
+import Store from '../store/store';
 
 const ProfileActions = {
-    upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }, callBack) => {
+    upsertProfile: (profileData, callBack) => {
+        const curProfData = Store.getState().profile;
+        const mappedProfData = {
+            profile: curProfData.profile || {},
+            interests: curProfData.interests || {},
+            emergencyContacts: curProfData.emergencyContacts || {},
+        };
+        const { profile, interests, emergencyContacts } = merge({}, mappedProfData, profileData);//technically more bandwidth but less sever load
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
             if (error) {
                 console.log(error);

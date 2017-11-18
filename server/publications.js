@@ -1,4 +1,5 @@
-import FileUrls from '../imports/collections/FileUrls'
+import FileUrls from '../imports/collections/FileUrls';
+import { Places } from '../imports/collections/mainCollection';
 
 const filePubfields = {
     _id: 1,
@@ -32,6 +33,10 @@ const getImagesPub = function (pageSkip = 0, filter) {
     });
 };
 
+const getPlacesPub = function () {
+    return Places.find();
+}
+
 const userPubFields = {
     // "services.facebook.first_name": 1,
     // "services.facebook.last_name": 1,
@@ -47,3 +52,4 @@ const user = () => Meteor.users.find({ _id: Meteor.userId }, { fields: userPubFi
 
 Meteor.publish('getImages', getImagesPub);
 Meteor.publish("userData", user);
+Meteor.publish("places", getPlacesPub);

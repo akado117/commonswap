@@ -1,51 +1,11 @@
 import s3PublicUrl from 'node-s3-public-url';
 import { check } from 'meteor/check';
-import random from 'random-words'
-import Roomies from '../imports/collections/Roomies';
 import FileUrls from '../imports/collections/FileUrls';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode } from '../imports/lib/Constants';
 import S3 from './s3';
 import _ from 'lodash'
-
-const fakeEC = () => ({
-    name: random({ exactly: 2, join: ' ' }),
-    phone: Math.floor((Math.random() * 1e10)) + '',
-    email: random(),
-    relation: random(),
-});
-
-
-const randBool = () => !Math.floor(Math.random()*2);
-const fakeInter = () => ({
-    photography: randBool(),
-    wineries: randBool(),
-    beachBum: randBool(),
-    film: randBool(),
-    hiking: randBool(),
-    clubber: randBool(),
-    liveMusic: randBool(),
-    foodie: randBool(),
-    orgTour: randBool(),
-});
-
-const fakeProfile = () => ({
-    firstName: random(),
-    lastName: random(),
-    gender: random(),
-    dob: new Date().getDate(),
-    email: random(),
-    phone: Math.floor((Math.random() * 1e10)) + '',
-    lang: random(),
-    personalSummary: random({ exactly: 15, join: ' ' }),
-    school: `University of ${random()}`,
-    classOf:  Math.floor((Math.random() * 10)) + 2013,
-    work:  random({ exactly: 10, join: ' ' }),
-    timeZone: 'est',
-    cleanliness:  Math.floor((Math.random() * 10)),
-    extroversion:  Math.floor((Math.random() * 10)),
-});
 
 function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
     check(fileObj, Object);
@@ -75,7 +35,7 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
     });
 }
 
-Meteor.methods({
+Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQUIRES REFACTOR TO USE SETTERS FOR UPSERT (prop: $set: data)
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
@@ -142,26 +102,6 @@ Meteor.methods({
             return serviceErrorBuilder('Profile create or update failed', insufficentParamsCode)
         }
     },
-    saveSelectedDates(dates) {
-        const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please Sign in before submitting planner info', plannerErrorCode);
-        try {
-            var datesArray = []
-            for(var i in dates)
-                datesArray.push([i, dates[i]])
-            for(var desiredDate in datesArray)
-            {
-                let desiredDateClone = _.cloneDeep(dates);
-                const desiredDateGUID = DesiredDate.upsert({ _id: desiredDateClone._id }, desiredDateClone);
-            }
-        } 
-        catch (err)
-        {
-            console.log(err.stack);
-            consoleErrorHelper('Planner save desired dates failed', upsertFailedCode, userId, err);
-            return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
-        }
-    },
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
@@ -221,6 +161,9 @@ Meteor.methods({
             consoleErrorHelper('Place create or update failed', upsertFailedCode, userId, err);
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
+    },
+    'places.getByAvailability': function getByAvailability(startDate, endDate) {
+        return Places.find({ availableDates: { $elemMatch: { start: { $lte: startDate }, end: { $gte: endDate } } } }).fetch();
     },
     'images.place.store': function placeImageStore(fileObj) {
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());

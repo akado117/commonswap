@@ -108,8 +108,6 @@ class PlaceComponent extends Component {
         const { place, address, amenities } = this.props.place;
         return (
             <div className="place-container">
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1VkVvNXQUiKRzjVJoWfsyrusO5pkAWE&callback=initMap"
-                    type="text/javascript"></script>
                 <Address getValueFunc={(key, value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
                 <div className="col s12">
                     <div className="card-panel teal">

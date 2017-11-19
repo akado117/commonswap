@@ -21,6 +21,7 @@ export const actionTypes = {
     GET_PROFILE_IMAGE: 'GET_PROFILE_IMAGE',
     ADD_PROFILE_IMAGE: 'ADD_PROFILE_IMAGE',
     SAVE_DESIRED_DATES: 'SAVE_DESIRED_DATES',
+    SAVE_CUSTOMER: 'SAVE_CUSTOMER',
 };
 
 export const FileTypes = {

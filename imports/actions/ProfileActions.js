@@ -35,6 +35,7 @@ const ProfileActions = {
             }
         });
     },
+    
     requestEmail: (data) => {
         return (dispatch) => {
             dispatch({

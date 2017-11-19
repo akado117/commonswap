@@ -1,0 +1,23 @@
+.community-container {
+    header {
+        background-image: url(https://s3.us-east-2.amazonaws.com/cslistingphotos/trustHeader/AdobeStock_130247071.jpeg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 100%;
+        height:80vh;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
+    .header-title {
+        color: white;
+        font-size:5.5rem;
+    }
+    .overlay-desc {
+        position:absolute;
+        top:30%;
+        left:50%;
+        z-index:1;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+}

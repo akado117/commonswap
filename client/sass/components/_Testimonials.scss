@@ -8,6 +8,15 @@
     .pad-top {
         padding-top: 75px;
     }
+    header {
+        height: 100vh;
+        background-image: url('https://s3.us-east-2.amazonaws.com/cslistingphotos/trustHeader/AdobeStock_127851352.jpeg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 120%;
+        padding: 0 0;
+        background-origin: padding-box;
+    }
     @media #{$medium-and-down} {
         
     }

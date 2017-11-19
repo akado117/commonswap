@@ -46,8 +46,8 @@ const interestsTextMap = {
     hiking: 'Hiking',
     clubber: 'Clubbing & Nightlife',
     liveMusic: 'Live Music',
-    foodie: 'Food and Restaurants'
-    //orgTour: Boolean
+    foodie: 'Food and Restaurants',
+    orgTour: 'Organized Tours'
 }
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
@@ -102,8 +102,11 @@ class ViewProfile extends React.Component {
             close: 'Ok',
             closeOnSelect: false // Close upon selecting a date,
         });
-
-
+    }
+    componentDidUpdate = (prevProps) => {
+        if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
+            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
+        }
     }
 
     render() {
@@ -120,7 +123,19 @@ class ViewProfile extends React.Component {
                 return (
                     <div key={key} className="col s6 m4 checkbox-container">
                         <label>{amenitiesTextMap[key]}</label>
-                        <button type="button" className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                        <button type="button" style={{backgroundColor:'rgb(0, 188, 212)'}} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                    </div>
+                )
+            }
+        });
+
+        const { interests } = this.props.profile;
+        const interestsElements = Object.keys(interests).map((key) => {
+            if (interests[key] && interestsTextMap[key]) {
+                return (
+                    <div key={key} className="col s6 m4 checkbox-container">
+                        <label>{interestsTextMap[key]}</label>
+                        <button type="button" style={{backgroundColor:'rgb(0, 188, 212)'}} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
                     </div>
                 )
             }
@@ -134,11 +149,11 @@ class ViewProfile extends React.Component {
                     <div className="col s12 z-depth-2 place-images">
                         <div className="row">
                             <div className="col s12 l8 main-image">
-                                <img src="http://stretchflex.net/photos/apartment.jpeg" alt="" className="main-image" />
+                            <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
                             </div>
                             <div className="col l4 scroll-image">
-                                <img src="http://stretchflex.net/photos/apartment2.jpeg" alt="" className="main-image" />
-                                <img src="http://stretchflex.net/photos/apartment3.jpeg" alt="" className="main-image" />
+                            <img src={this.props.images.placeImgs[1] ? this.props.images.placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            <img src={this.props.images.placeImgs[2] ? this.props.images.placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
                             </div>
                         </div>
                     </div>
@@ -174,46 +189,9 @@ class ViewProfile extends React.Component {
                                         <div className="col s12">
                                             <strong>Interests: </strong>
                                         </div>
-                                        <div className="col s12">
-                                            <div className="col s4 checkbox-container">
-                                                <label>Reading</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                            <div className="col s4 checkbox-container">
-                                                <label>Breweries</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                            <div className="col s4 checkbox-container">
-                                                <label>Museums</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                        </div>
-                                        <div className="col s12">
-                                            <div className="col s4 checkbox-container">
-                                                <label>Reading</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                            <div className="col s4 checkbox-container">
-                                                <label>Breweries</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                            <div className="col s4 checkbox-container">
-                                                <label>Museums</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                        </div>
-                                        <div className="col s12">
-                                            <div className="col s4 checkbox-container">
-                                                <label>Reading</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                            <div className="col s4 checkbox-container">
-                                                <label>Breweries</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
-                                            </div>
-                                            <div className="col s4 checkbox-container">
-                                                <label>Museums</label>
-                                                <FontIcon className="material-icons">check</FontIcon>
+                                        <div className="row">
+                                            <div className="col s12">
+                                                {interestsElements}
                                             </div>
                                         </div>
                                     </div>
@@ -293,7 +271,9 @@ class ViewProfile extends React.Component {
                                         <strong>Amenities: </strong>
                                     </div>
                                     <div className="row">
-                                        {amenitiesElements}
+                                        <div className="col s12">
+                                            {amenitiesElements}
+                                        </div>
                                     </div>
                                     <div className="col s12">
                                         <strong>Description: </strong>

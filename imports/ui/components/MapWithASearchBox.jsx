@@ -15,12 +15,12 @@ const MapSearchBox = compose(
   lifecycle({
     componentWillMount() {
       const refs = {}
-      const {lat, lng} = this.props.place.place.coords;
+      //const {lat, lng} = this.props.place.place.coords;
 
       this.setState({
         bounds: null,
         center: {
-          lat: lat || 41.9, lng: lng || -87.624
+          lat: 41.9, lng: -87.624
         },
         markers: [],
         onMapMounted: ref => {

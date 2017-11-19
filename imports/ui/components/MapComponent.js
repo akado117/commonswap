@@ -2,6 +2,7 @@ import React from "react";
 import { compose, withProps } from "recompose";
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 import PropTypes from 'prop-types';
+import SearchBox from "react-google-maps/lib/components/places/SearchBox";
 
 const MyMapComponent = compose(
   withProps({

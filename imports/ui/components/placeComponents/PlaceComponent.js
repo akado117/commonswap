@@ -7,6 +7,7 @@ import Address from './Address';
 import Uploader from '../Uploader';
 import ImageCarousel from '../ImageCarousel';
 import AppBar from 'material-ui/AppBar';
+import MapWithASearchBox from '../MapWithASearchBox';
 
 const BUTTONS = [
     { label: 'Essentials (towels, etc)', name: 'essentials' },
@@ -98,12 +99,27 @@ class PlaceComponent extends Component {
         );
     }
 
+    onSetLocation = cords => {
+        this.getValueFunc('coords', cords)
+    }
+
     render() {
         const getValFunc = this.getValueFunc;
         const { place, address, amenities } = this.props.place;
         return (
             <div className="place-container">
                 <Address getValueFunc={(key, value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
+                <div className="col s12">
+                    <div className="card-panel teal">
+                        <span className="white-text">
+                            Use the map below to determine where you wish the marker to appear when our community searches your listing.
+                        </span>
+                    </div>
+                </div>
+                <MapWithASearchBox
+                    onSetLocation={this.onSetLocation}
+                >
+                </MapWithASearchBox>
                 <div className="row">
                     <div className="col s12 input-field inline">
                         <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e))} defaultValue={place.shortDesc} />

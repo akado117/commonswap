@@ -21,6 +21,7 @@ import CreditCard from '../imports/ui/components/verificationComponent/CreditCar
 import Browse from '../imports/ui/pages/Browse';
 import About from '../imports/ui/pages/About';
 import FAQ from '../imports/ui/pages/FAQ';
+import Testimonials from '../imports/ui/components/Testimonials';
 
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
@@ -46,6 +47,7 @@ Meteor.startup(() => {
                 <Route path="browse" component={Browse} />
                 <Route path="about" component={About} />
                 <Route path="faq" component={FAQ} />
+                <Route path="testimonials" component={Testimonials} />
             </Route>
         </Router>
      </Provider>,

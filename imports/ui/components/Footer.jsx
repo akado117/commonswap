@@ -33,6 +33,7 @@ class Footer extends React.Component {
                             <h5 className="white-text">About</h5>
                             <ul>
                                 <li><Link to="/about" className="grey-text text-lighten-3">About us</Link></li>
+                                <li><Link to="/testimonials" className="grey-text text-lighten-3">Testimonials</Link></li>
                                 <li><a className="grey-text text-lighten-3" href="#!">Team</a></li>
                                 <li><a className="grey-text text-lighten-3" href="#!">Press</a></li>
                             </ul>

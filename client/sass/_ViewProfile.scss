@@ -1,19 +1,31 @@
-.place-images {
-    min-height: 400px;
-    margin-top: 30px;
-}
-
-.main-image {
-    max-width: 100%;
-    padding-right:0px;
-    min-height: 90%;
-}
-
-.scroll-image {
-    max-width: 100%;
-}
-
-.no-pad {
-    padding-left: 0px;
-    padding-right:0px;
+.profile-view-container {
+    .place-images {
+        min-height: 400px;
+        margin-top: 30px;
+    }
+    
+    .main-image {
+        max-width: 100%;
+        padding-right:0px;
+        min-height: 90%;
+    }
+    
+    .scroll-image {
+        max-width: 100%;
+    }
+    
+    .no-pad {
+        padding-left: 0px;
+        padding-right:0px;
+    }
+    
+    .checkbox {
+        border-radius: 30px;
+        padding: 0 9px;
+        float: right;
+        margin: -7px 0px;
+        i {
+          width: 18px;
+        }
+      }
 }

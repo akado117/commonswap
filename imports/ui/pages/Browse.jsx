@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import { connect }  from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 const _ = require('lodash');
@@ -52,7 +52,7 @@ class Browse extends Component {
             <div className="browse-container">
                 <Navbar></Navbar>
                 <div className="container">
-                <BetaWarning></BetaWarning>
+                    <BetaWarning></BetaWarning>
                     <div className="row">
                         <div className="col s12 l4">
                             <TextField
@@ -95,8 +95,8 @@ class Browse extends Component {
                     <div className="scroll-listing col s12 l6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
                         <div className="col s12 z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
                             <div className="col s12 l5">
-                                <div className="premier-image" style={{height:'100%'}}>
-                                    <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{height:'350px', width: '100%'}} />
+                                <div className="premier-image" style={{ height: '100%' }}>
+                                    <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '350px', width: '100%' }} />
                                 </div>
                             </div>
                             <div className="col s12 l7">

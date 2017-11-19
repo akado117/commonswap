@@ -7,7 +7,7 @@ const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox
 
 const MapSearchBox = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1VkVvNXQUiKRzjVJoWfsyrusO5pkAWE&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `450px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
@@ -15,11 +15,12 @@ const MapSearchBox = compose(
   lifecycle({
     componentWillMount() {
       const refs = {}
+      const {lat, lng} = this.props.place.place.coords;
 
       this.setState({
         bounds: null,
         center: {
-          lat: 41.9, lng: -87.624
+          lat: lat || 41.9, lng: lng || -87.624
         },
         markers: [],
         onMapMounted: ref => {

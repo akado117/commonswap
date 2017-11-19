@@ -1,7 +1,11 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 const _ = require('lodash')//required so it can be used easily in chrome dev tools.
+import ProfileActions from '../../actions/ProfileActions';
+import PlaceActions from '../../actions/PlaceActions';
+import FileActions from '../../actions/FileActions';
 import DatePicker from 'material-ui/DatePicker';
 import FontIcon from 'material-ui/FontIcon';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
@@ -17,9 +21,34 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
-import ProfileActions from '../../actions/ProfileActions';
 import BetaWarning from '../components/BetaWarning';
 
+const amenitiesTextMap = {
+    wiFi: 'WiFi',
+    heat: 'Heat',
+    parking: 'Parking',
+    essentials: 'Essentials (towels, etc)',
+    gym: 'Gym/ Fitness Center',
+    dressers: 'Closet/ Drawer',
+    wiFi: 'Wifi',
+    washerDryer: 'Washer/ Dryer',
+    pool: 'Pool',
+    heat: 'Heat',
+    kitchen: 'Kitchen Appliances',
+    parking: 'Parking'
+}
+
+const interestsTextMap = {
+    photography: 'Photography',
+    wineries: 'Wineries',
+    beachBum: 'Beach Bum',
+    film: 'Film',
+    hiking: 'Hiking',
+    clubber: 'Clubbing & Nightlife',
+    liveMusic: 'Live Music',
+    foodie: 'Food and Restaurants'
+    //orgTour: Boolean
+}
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
 
@@ -85,6 +114,18 @@ class ViewProfile extends React.Component {
             internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />
         }
 
+        const { amenities } = this.props.place;
+        const amenitiesElements = Object.keys(amenities).map((key) => {
+            if (amenities[key] && amenitiesTextMap[key]) {
+                return (
+                    <div key={key} className="col s6 m4 checkbox-container">
+                        <label>{amenitiesTextMap[key]}</label>
+                        <button type="button" className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                    </div>
+                )
+            }
+        });
+
         return (
             <section className="profile-view-container">
                 <Navbar></Navbar>
@@ -111,34 +152,24 @@ class ViewProfile extends React.Component {
                                             showMenuIconButton={false}
                                             style={{ marginBottom: '10px', zIndex: 0 }}
                                         />
-                                        <div className="col s6 l3">
-                                            <img className="circle responsive-img"
-                                                src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo"
-                                                style={{ height: '140px', width: '140px' }} />
+                                        <div className="col s6 l6">
+                                            <img className="circle responsive-img" src={this.props.user.picture ? this.props.user.picture : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                         </div>
                                         <div className="col s6" id="message" style={{ top: '5px' }}>
                                             <div className="row">
                                                 <div className="col s12">
-                                                    <h5><strong>John</strong></h5>
+                                                    <h5><strong>{this.props.profile.profile.firstName}</strong></h5>
                                                 </div>
                                                 <div className="col s12">
-                                                    <h5><strong>New York, NY</strong></h5>
+                                                    <h5><strong>{this.props.place.address.city} {this.props.place.address.state}</strong></h5>
                                                 </div>
                                                 <div className="col s12">
-                                                    <p>Fordham University 15'</p>
-                                                    <p>BNY Mellon</p>
+                                                    <p>{this.props.profile.profile.school} {this.props.profile.profile.classOf}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col s12 l6">
-                                            <p>Hello! My name is John and I have been living in New York for a little over
-                                            two years now. I work as a Financial Analyst
-                                            for BNY Mellon. In my free time, I enjoy going to live concerts, and
-                                            experiencing all of what the NYC night life has to
-                                            offer. I am a big fan of the New York Giants and enjoy a nice cold, IPA.
-                                            Send me a swap request - I have reccomendations
-                                            for anything that you are interested in!
-                                        </p>
+                                        <div className="col s12">
+                                            <p>{this.props.profile.profile.personalSummary}</p>
                                         </div>
                                         <div className="col s12">
                                             <strong>Interests: </strong>
@@ -196,8 +227,6 @@ class ViewProfile extends React.Component {
                                         <DatePicker
                                             onChange={(nul, date) => this.updateArrival(date)}
                                             floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
-                                        //defaultDate={this.state.arrival}
-                                        //disableYearSelection={this.state.disableYearSelection}
                                         />
                                     </div>
                                     <div className="input-field col s12">
@@ -251,11 +280,11 @@ class ViewProfile extends React.Component {
                                                 <p><FontIcon className="material-icons large">home</FontIcon></p>
                                             </div>
                                             <div className="col s4" style={{ textAlign: 'center' }}>
-                                                <p>4 guests</p>
+                                                <p>{this.props.place.place.numOfGuests} guests</p>
                                                 <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
                                             </div>
                                             <div className="col s4" style={{ textAlign: 'center' }}>
-                                                <p>1 Bedroom</p>
+                                                <p>{this.props.place.place.bedrooms} Bedroom</p>
                                                 <p><FontIcon className="material-icons large">hotel</FontIcon></p>
                                             </div>
                                         </div>
@@ -263,60 +292,27 @@ class ViewProfile extends React.Component {
                                     <div className="col s12">
                                         <strong>Amenities: </strong>
                                     </div>
-                                    <div className="col s12">
-                                        <div className="col s4 checkbox-container">
-                                            <label>Essentials</label>
-                                            <FontIcon className="material-icons">check</FontIcon>
-                                        </div>
-                                        <div className="col s4 checkbox-container">
-                                            <label>Wifi</label>
-                                            <FontIcon className="material-icons">check</FontIcon>
-                                        </div>
-                                        <div className="col s4 checkbox-container">
-                                            <label>Heat</label>
-                                            <FontIcon className="material-icons">check</FontIcon>
-                                        </div>
-                                    </div>
-                                    <div className="col s12">
-                                        <div className="col s4 checkbox-container">
-                                            <label>Gym/ Fitness Center</label>
-                                            <FontIcon className="material-icons">check</FontIcon>
-                                        </div>
-                                        <div className="col s4 checkbox-container">
-                                            <label>Washer/ dryer</label>
-                                            <FontIcon className="material-icons">check</FontIcon>
-                                        </div>
-                                        <div className="col s4 checkbox-container">
-                                            <label>Kitchen</label>
-                                            <FontIcon className="material-icons">check</FontIcon>
-                                        </div>
+                                    <div className="row">
+                                        {amenitiesElements}
                                     </div>
                                     <div className="col s12">
                                         <strong>Description: </strong>
                                     </div>
                                     <div className="col s12">
-                                        <p>A spacious modern 1 bedroom condo near downtown! This place can accomodate up to
-                                        2 guests.
-                                        You will have access to the entire place, including the kitchen.
-                                    </p>
+                                        <p>{this.props.place.place.detailedDesc}</p>
                                     </div>
                                     <div className="col s12">
                                         <strong>Special Instructions: </strong>
                                     </div>
                                     <div className="col s12">
-                                        <p>I have a key pad lock right outside the door which I will provide the code.
-                                        Please no smoking
-                                        inside the house.
-                                    </p>
+                                        <p>{this.props.place.place.specialInst}
+                                        </p>
                                     </div>
                                     <div className="col s12">
                                         <strong>About the area and neighborhood: </strong>
                                     </div>
                                     <div className="col s12">
-                                        <p>My place is about a ten minute walk from the heart of Times Square. There is a
-                                        subway stop just a
-                                        block away. Also there is a convenience store downstairs near the lobby.
-                                    </p>
+                                        <p>{this.props.place.place.notesOnArea}</p>
                                     </div>
                                 </div>
                             </div>
@@ -337,21 +333,31 @@ class ViewProfile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { profile, place } = state;
+    const { profile, place, images, user } = state;
     return {
         profile,
         place,
+        images,
+        user
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         profileActions: bindActionCreators(ProfileActions, dispatch),
-        //placeActions: bindActionCreators(PlaceActions, dispatch),
+        placeActions: bindActionCreators(PlaceActions, dispatch),
+        fileActions: bindActionCreators(FileActions, dispatch),
     };
 }
 
 ViewProfile.propTypes = {
+    profileActions: PropTypes.object.isRequired, //eslint-disable-line
+    placeActions: PropTypes.object.isRequired,
+    fileActions: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired,
+    place: PropTypes.object.isRequired,
+    images: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProfile);

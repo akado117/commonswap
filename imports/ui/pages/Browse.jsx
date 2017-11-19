@@ -50,8 +50,6 @@ class Browse extends Component {
     render() {
         return (
             <div className="browse-container">
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1VkVvNXQUiKRzjVJoWfsyrusO5pkAWE&callback=initMap"
-                    type="text/javascript"></script>
                 <Navbar></Navbar>
                 <div className="container">
                     <BetaWarning></BetaWarning>

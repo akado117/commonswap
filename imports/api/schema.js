@@ -15,6 +15,14 @@ export default [
     amountOwed: Float
   }
 
+  type Customer {
+    _id: String!
+    ownerUserId: String
+    accountBalance: Int
+    created: String!
+    currency: String!
+  }
+
   type Room {
     _id: String!
     daysRented: Int!

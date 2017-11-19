@@ -1,8 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+const _ = require('lodash')//required so it can be used easily in chrome dev tools.a
 import Payment from 'payment';
 import { Row, Col, FormGroup, ControlLabel, Button, Alert } from 'react-bootstrap';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { getStripeToken } from '../../../modules/get-stripe-token.js';
+import { createCustomer } from '../../../modules/store-card.js';
 
 class CreditCard extends Component {
   constructor(props) {
@@ -37,14 +42,23 @@ class CreditCard extends Component {
     const card = { number, exp_month, exp_year, cvc };
 
     getStripeToken(card)
-    .then((token) => {
-      card.token = token;
-      this.setState(card);
-    }).catch((error) => {
-      Bert.alert(error, 'danger');
-    });
+      .then((token) => {
+        card.token = token;
+        this.setState(card);
+      }).catch((error) => {
+        Bert.alert(error, 'danger');
+      });
+
+    createCustomer(card.token, this.props.profile.profile.email)
+      .then((customer) => {
+        console.log('success on client');
+      }).catch((error) => {
+        Bert.alert(error,'danger');
+      });
   }
-  
+
+
+
 
   setCardType(event) {
     const type = Payment.fns.cardType(event.target.value);
@@ -79,13 +93,13 @@ class CreditCard extends Component {
   }
 
   renderCardForm() {
-    return (<form className="CardForm" onSubmit={ this.handleSubmit }>
+    return (<form className="CardForm" onSubmit={this.handleSubmit}>
       <Row>
-        <Col xs={ 12 }>
+        <Col xs={12}>
           <FormGroup>
             <ControlLabel>Card Number</ControlLabel>
             <input
-              onKeyUp={ this.setCardType }
+              onKeyUp={this.setCardType}
               className="form-control"
               type="text"
               ref="number"
@@ -95,7 +109,7 @@ class CreditCard extends Component {
         </Col>
       </Row>
       <Row>
-        <Col xs={ 6 } sm={ 5 }>
+        <Col xs={6} sm={5}>
           <FormGroup>
             <ControlLabel>Expiration</ControlLabel>
             <input
@@ -106,7 +120,7 @@ class CreditCard extends Component {
             />
           </FormGroup>
         </Col>
-        <Col xs={ 6 } sm={ 4 } smOffset={ 3 }>
+        <Col xs={6} sm={4} smOffset={3}>
           <FormGroup>
             <ControlLabel>CVC</ControlLabel>
             <input
@@ -125,24 +139,39 @@ class CreditCard extends Component {
   renderCard() {
     const { number, exp_month, exp_year, cvc, token } = this.state;
     return number ? (<Alert bsStyle="info">
-      <h5>{ number }</h5>
+      <h5>{number}</h5>
       <p className="exp-cvc">
-        <span>{ exp_month }/{ exp_year }</span>
-        <span>{ cvc }</span>
+        <span>{exp_month}/{exp_year}</span>
+        <span>{cvc}</span>
       </p>
-      <em>{ token }</em>
+      <em>{token}</em>
     </Alert>) : '';
   }
-  
+
   render() {
     return (<div className="CreditCard">
-      { this.renderCardList() }
-      { this.renderCardForm() }
-      { this.renderCard() }
+      {this.renderCardList()}
+      {this.renderCardForm()}
+      {this.renderCard()}
     </div>);
   }
 }
+function mapStateToProps(state) {
+  const { profile } = state;
+  return {
+    profile
+  };
+}
 
-CreditCard.propTypes = {};
+function mapDispatchToProps(dispatch) {
+  return {
 
-export default CreditCard;
+  };
+}
+
+
+CreditCard.propTypes = {
+  profile: PropTypes.object.isRequired
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreditCard);

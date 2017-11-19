@@ -1,6 +1,7 @@
 import { cloneDeep, merge } from 'lodash';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../lib/Constants';
 import Store from '../store/store';
+import { FormateDates, FormateDate } from '../helpers/DateHelpers';
 
 const PlaceActions = {
     upsertPlace: (placeData) => {
@@ -35,7 +36,8 @@ const PlaceActions = {
             }
         });
     },
-    updatePlaceDates: (availableDates = []) => dispatch => {
+    updatePlaceDates: (datesToFormate = []) => dispatch => {
+        const availableDates = FormateDates(datesToFormate);
         const state = Store.getState();
         if (state.place.place._id && Meteor.user()) {
             const updatedDateObj = {
@@ -46,9 +48,7 @@ const PlaceActions = {
                 return standardResponseFunc(error, result, actionTypes.SAVE_PLACE_AVAILABILITY, dispatch);
             });
         } else {
-            const { place, amenities, address } = cloneDeep(state.place);
-            place.availableDates = dateArr;
-            dispatch({
+            dispatch({//to save so when they log in they can just hit save again
                 type: `${actionTypes.SAVE_PLACE_AVAILABILITY}_${SUCCESS}`,
                 data: {
                     place: {
@@ -62,6 +62,13 @@ const PlaceActions = {
             };
         }
     },
+    getPlaceBasedUponAvailability: (unFormattedDates) => {
+        const arrival = FormateDate(unFormattedDates.arrival);
+        const departure = FormateDate(unFormattedDates.departure);
+        return dispatch => Meteor.call('places.getByAvailability', {arrival, departure}, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_AVAILABILITY, dispatch);
+        });
+    },
 };
 
-export default PlaceActions
+export default PlaceActions;

@@ -147,7 +147,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             delete amenitiesClone.ownerUserId;
             delete amenitiesClone.placeId;
 
-            consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(placeClone));
+            consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Place Id ${JSON.stringify(placeClone._id)}`);
             return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID}, genericSuccessCode, {
                 serviceMessage: `Place ${placeClone._id ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
                 data: {
@@ -171,8 +171,8 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 availableDates,
             },
         };
-        Places.update({ _id, ownerUserId: userId }, setObj);//ownerUserId means that only if the place is owned by the logged in user it can be updated
         try {
+            Places.update({ _id, ownerUserId: userId }, setObj);//ownerUserId means that only if the place is owned by the logged in user it can be updated
             consoleLogHelper('Place Availability updated successfully', genericSuccessCode, userId, JSON.stringify(availableDates));
             return serviceSuccessBuilder({ numberOfDates: availableDates.length }, genericSuccessCode, {
                 serviceMessage: `Place availability successfully updated to ${availableDates.length} dates`,
@@ -188,8 +188,24 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Place availability update failed', upsertFailedCode, err);
         }
     },
-    'places.getByAvailability': function getByAvailability(startDate, endDate) {
-        return Places.find({ availableDates: { $elemMatch: { start: { $lte: startDate }, end: { $gte: endDate } } } }).fetch();
+    'places.getByAvailability': function getByAvailability({ arrival, departure }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
+        if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
+        try {
+            const places = Places.find({ availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }).fetch();
+            consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId);
+            return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
+                serviceMessage: `We found ${places.length} places within date range`,
+                data: {
+                    places,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Searching for places with ${arrival} and ${arrival} failed`, placeErrorCode, userId, err);
+            return serviceErrorBuilder(`Searching for places with ${arrival} and ${arrival} failed`, placeErrorCode, err);
+        }
     },
     'images.place.store': function placeImageStore(fileObj) {
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());

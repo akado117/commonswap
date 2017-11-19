@@ -118,8 +118,8 @@ class PlaceComponent extends Component {
                 </div>
                 <MapWithASearchBox
                     onSetLocation={this.onSetLocation}
-                >
-                </MapWithASearchBox>
+                    place={place}
+                />
                 <div className="row">
                     <div className="col s12 input-field inline">
                         <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e))} defaultValue={place.shortDesc} />

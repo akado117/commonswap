@@ -49,12 +49,7 @@ class CreditCard extends Component {
         Bert.alert(error, 'danger');
       });
 
-    createCustomer(card.token, this.props.profile.profile.email)
-      .then((customer) => {
-        console.log('success on client');
-      }).catch((error) => {
-        Bert.alert(error,'danger');
-      });
+    this.props.dispatch(createCustomer(card.token, this.props.profile.profile.email))
   }
 
 
@@ -163,15 +158,8 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-
-  };
-}
-
-
 CreditCard.propTypes = {
   profile: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreditCard);
+export default connect(mapStateToProps)(CreditCard);

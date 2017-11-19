@@ -1,11 +1,4 @@
-export const createCustomer = (token, email) => 
-  new Promise((resolve, reject) => {
-  var stripe = require("stripe")("sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc");
-  stripe.customers.create({
-    email: email,
-    source: token
-  }).then(function(customer) {
-    return dispatch => Meteor.call('upsertCard', customer, (error, result) => {
+export const createCustomer = (token, email) => dispatch => Meteor.call('upsertCard', { token, email }, (error, result) => {
       if (error) {
           console.log(error);
           return dispatch({
@@ -25,8 +18,6 @@ export const createCustomer = (token, email) =>
               ...error,
           });
       }
-  });
-  })
 });
 
 // // Token is created using Checkout or Elements!

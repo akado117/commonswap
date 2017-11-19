@@ -26,6 +26,8 @@ const items = [
     <MenuItem key={5} value={5} primaryText="5" />,
 ];
 
+const SEARCHED = 'SEACHED';
+
 class Browse extends Component {
     constructor(props) {
         super(props);
@@ -36,56 +38,60 @@ class Browse extends Component {
 
     handleChange = (event, index, guests) => this.setState({ guests });
 
-    updateArrival = (date) => {
-        this.setState({
-            arrival: date.getDate()
-        });
-    }
-    updateDeparture = (date) => {
-        this.setState({
-            departure: date.getDate()
-        });
+    searchForPlaces = () => {
+        const { arrival, departure } = this.state;
+        if (!arrival || !departure) return this.setState({ searchMessage: 'Please select your dates to travel' });
+        this.setState({ searchMessage: SEARCHED });
+        this.props.placeActions.getPlaceBasedUponAvailability({ arrival,departure });
+        return undefined;
     }
 
     render() {
+        const { placesForBrowsing } = this.props.place;
         return (
             <div className="browse-container">
                 <Navbar></Navbar>
                 <div className="container">
                     <BetaWarning></BetaWarning>
                     <div className="row">
-                        <div className="col s12 l4">
-                            <TextField
-                                hintText=""
-                                floatingLabelText={<span><FontIcon className="material-icons">near_me</FontIcon> Enter your destination</span>}
-                            />
-                        </div>
-                        <div className="col s12 l2">
-                            <SelectField
-                                value={this.state.guests}
-                                onChange={this.handleChange}
-                                floatingLabelText={<span><FontIcon className="material-icons">person</FontIcon> Number of Guests</span>}
-                                floatingLabelFixed={true}
-                                hintText=""
-                            >
-                                {items}
-                            </SelectField>
-                        </div>
-                        <div className="col s12 l3">
+                        {/*<div className="col s6 l2">*/}
+                            {/*<SelectField*/}
+                                {/*value={this.state.guests}*/}
+                                {/*onChange={this.handleChange}*/}
+                                {/*floatingLabelText={<span><FontIcon className="material-icons">person</FontIcon> Number of Guests</span>}*/}
+                                {/*floatingLabelFixed={true}*/}
+                                {/*hintText=""*/}
+                            {/*>*/}
+                                {/*{items}*/}
+                            {/*</SelectField>*/}
+                        {/*</div>*/}
+                        <div className="col s6 m4 l3">
                             <DatePicker
-                                onChange={(nul, date) => this.updateArrival(date)}
+                                onChange={(nul, date) => this.setState({ arrival: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
+                                textFieldStyle={{width: '100%'}}
                             //defaultDate={this.state.arrival}
                             //disableYearSelection={this.state.disableYearSelection}
                             />
                         </div>
-                        <div className="col s12 l3">
+                        <div className="col s6 m4 l3">
                             <DatePicker
-                                onChange={(nul, date) => this.updateDeparture(date)}
+                                onChange={(nul, date) => this.setState({ departure: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
-
+                                textFieldStyle={{width: '100%'}}
                             />
                         </div>
+                        <div className="col s6 m4 l3 offset-s6 valign-wrapper">
+                            <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >
+                                <i className="fa fa-search-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className={`row ${this.state.searchMessage === '' ? 'hide' : ''}`}>
+                    <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
+                        {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
                     </div>
                 </div>
                 <div className="row">

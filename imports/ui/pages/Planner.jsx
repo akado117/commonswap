@@ -95,7 +95,7 @@ class Planner extends React.Component {
     }
 
     saveDates = () => {
-        this.props.placeActions.updatePlaceDates(FormateDates(this.state.selectedDates || []));
+        this.props.placeActions.updatePlaceDates(this.state.selectedDates || []);
     }
 
     onCalendarSelect = (selectedDates, eventData) => {

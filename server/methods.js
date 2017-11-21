@@ -1,17 +1,22 @@
 import s3PublicUrl from 'node-s3-public-url';
 import { check } from 'meteor/check';
 import FileUrls from '../imports/collections/FileUrls';
+import ApolloClient from 'apollo-client';
+import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode } from '../imports/lib/Constants';
 import S3 from './s3';
 import _ from 'lodash'
 
-function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
+const client = new ApolloClient(meteorClientConfig());
+
+function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
     if (!fileObj[boundToProp]) return serviceErrorBuilder(`Please create and save a ${imgType} first`, placeErrorCode);
     if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
     const insertObj = {
+        active: activeFlag,
         deleted: false,
         userId,
         [boundToProp]: fileObj[boundToProp],
@@ -22,6 +27,15 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
     };
 
     const insertId = FileUrls.insert(insertObj);
+    if (activeFlag) {
+        const searchForObj = {
+            active: true,
+            _id: { $ne: insertId },
+        };
+        if (boundToProp) searchForObj[boundToProp] = fileObj[boundToProp];
+        const numberUpdated = FileUrls.update(searchForObj, { $set: { active: false } });
+        consoleLogHelper(`${numberUpdated} Images changed to inactive`, genericSuccessCode, userId, '');
+    }
 
     consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
     return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
@@ -228,7 +242,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         });
     },
     'images.profile.store': function placeImageStore(fileObj) {
-        return imageServiceHelper(fileObj, FileTypes.PROFILE, 'profileId', Meteor.userId());
+        return imageServiceHelper(fileObj, FileTypes.PROFILE, 'profileId', Meteor.userId(), true);
     },
     'images.profile.getOne': function profileImageGet() {
         const userId = Meteor.userId();

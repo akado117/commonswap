@@ -83,3 +83,17 @@ export const consoleErrorHelper = (message, code, userId, error = {}) => {
 export const consoleLogHelper = (message, code, userId, error = '') => {
     console.log(`${new Date().toLocaleString()}: ${userId}, ${code}, ${message}, ${error}`)
 };
+
+export const FieldsForBrowseProfile = {
+    placeImgs: 1,
+    shortDesc: 1,
+    numOfGuests: 1,
+    bedrooms: 1,
+    bathrooms: 1,
+    profileImg: 1,
+    firstName: 1,
+    city: 1,
+    state: 1,
+    school: 1,
+    classOf: 1,
+}

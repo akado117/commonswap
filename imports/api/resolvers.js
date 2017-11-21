@@ -1,9 +1,13 @@
 import Urls from '../collections/urls';
 import Roomies from '../collections/Roomies';
-import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts } from '../collections/mainCollection';
-import { serviceErrorBuilder, consoleLogHelper } from '../lib/Constants'
+import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts} from '../collections/mainCollection';
+import FileUrls from '../collections/FileUrls';
+import { serviceErrorBuilder, consoleLogHelper, FileTypes } from '../lib/Constants';
 
-
+const publicImageFields = {
+    _id: 1,
+    url: 1,
+};
 export default {
     RootQuery: {
         say(/* root, args, context */) {
@@ -28,6 +32,12 @@ export default {
             console.log(context);
             consoleLogHelper(`profile searched for by userId: ${userId}`, 1, context.userId || 'guest', JSON.stringify(profile));
             return profile;
+        },
+        getPlacesForBrowse(root, { userId, arrival, departure}, context) {
+            const placesForBrowse = {};
+            const places = Places.find({ availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }).fetch()
+            const profile = []
+            return Places.find({}).fetch();
         },
     },
     RootMutation: {
@@ -60,6 +70,6 @@ export default {
         address: (place) => Addresses.findOne({ placeId: place._id }),
         profile: (place) => Profiles.findOne({ _id: place.profileId }),
         amenities: (place) => Amenities.findOne({ placeId: place._id}),
-    }
-
+        placeImages: place => FileUrls.find({ placeId: place._id, type: FileTypes.PLACE, deleted: false }, { fields: publicImageFields }).fetch(),
+    },
 }

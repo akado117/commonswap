@@ -14,7 +14,6 @@ import '../../../node_modules/react-infinite-calendar/styles.css';
 import Navbar from '../components/Navbar';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
-import BetaWarning from '../components/BetaWarning';
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
 
@@ -113,7 +112,6 @@ class Planner extends React.Component {
             <div className="planner-container">
                 <Navbar></Navbar>
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
-                <BetaWarning></BetaWarning>
                     <div className="row" >
                         <div className="col s12 calendar-parent">
                             <AppBar
@@ -168,7 +166,7 @@ class Planner extends React.Component {
                     <div className="row">
                         <div className="col s12">
                             <AppBar
-                                title={<span>Activity</span>}
+                                title={<span>Activity - UNDER CONSTRUCTION</span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: '0' }}
                             />

@@ -1,4 +1,6 @@
 import { cloneDeep, merge } from 'lodash';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../lib/Constants';
 import Store from '../store/store';
 import { FormateDates, FormateDate } from '../helpers/DateHelpers';
@@ -63,6 +65,24 @@ const PlaceActions = {
         }
     },
     getPlaceBasedUponAvailability: (unFormattedDates) => {
+        const data = unFormattedDates.query({query: gql`
+          query getPlacesForBrowse {
+            getPlacesForBrowse {
+            shortDesc
+            numOfGuests
+            bedrooms
+            address {
+              city
+              state
+            }
+            placeImages {
+              _id
+              url
+            }
+          }
+          }
+        `}).then(console.log);
+        debugger
         const arrival = FormateDate(unFormattedDates.arrival);
         const departure = FormateDate(unFormattedDates.departure);
         return dispatch => Meteor.call('places.getByAvailability', {arrival, departure}, (error, result) => {

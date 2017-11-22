@@ -22,7 +22,7 @@ function placeReducer(state = initialState, action = {}) {
         return stateClone;
     case `${actionTypes.GET_PLACE_BY_AVAILABILITY}_${SUCCESS}`:
         stateClone = cloneDeep(state);
-        stateClone.placesForBrowsing = action.data.places;
+        stateClone.placesForBrowsing = action.data || [];
         return stateClone;
     case actionTypes.LOGOUT:
         return initialState;

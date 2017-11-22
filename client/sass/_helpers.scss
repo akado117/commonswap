@@ -8,3 +8,32 @@
   align-items: center;
   margin-right: 10px;
 }
+
+.image-carousel {
+  .image-gallery-content.fullscreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    .image-gallery-slide.img-gal {
+      height: 80vh;
+    }
+  }
+}
+
+.material-date-picker {
+  div:first-child {
+    height: 65px !important;
+    label {
+      top: 20px !important;
+      span { color: #9e9e9e !important; }
+    }
+    input {
+      margin-top: 4px !important;
+    }
+    hr {
+      border-bottom-width: 2px !important;
+    }
+  }
+}

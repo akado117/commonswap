@@ -1,30 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImageCarousel from '../ImageCarousel';
 
-const PlaceForBrowse = ({profile, address, profileImg, place}) => {
+const PlaceForBrowse = ({placeForBrowse, address, profileImg, placeImgs, profile }) => {
+    const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
     return (
-        <div className="browse-place-container col s12 z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
-            <div className="col s12 l5">
-                <div className="premier-image" style={{ height: '100%' }}>
-                    <img src={place.placeImgs[0] ? place.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" />
-                </div>
+        <div className="browse-place-container row z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
+            <div className="col s12 l5 place-images">
+                {remappedImages.length ? <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} /> : ''}
             </div>
             <div className="col s12 l7">
                 <div className="row">
                     <div className="col s12">
-                        <p><strong>{place.shortDesc}</strong></p>
+                        <p><strong>{placeForBrowse.shortDesc}</strong></p>
                     </div>
                     <div className="col s12">
                         <div className="col s6 l5">
-                            <p><i className="fa fa-users" aria-hidden="true"></i> Guests: {place.numOfGuests}</p>
+                            <p><i className="fa fa-users" aria-hidden="true"></i> Guests: {placeForBrowse.numOfGuests}</p>
                         </div>
                         <div className="col s6 l7">
-                            <p><i className="fa fa-bed" aria-hidden="true"></i> Bedrooms: {place.bedrooms}</p>
+                            <p><i className="fa fa-bed" aria-hidden="true"></i> Bedrooms: {placeForBrowse.bedrooms}</p>
                         </div>
                     </div>
                     <div className="col s12">
                         <div className="col s6 l5">
-                            <p><i className="fa fa-bath" aria-hidden="true"></i> Baths: {place.bathrooms}</p>
+                            <p><i className="fa fa-bath" aria-hidden="true"></i> Baths: {placeForBrowse.bathrooms}</p>
                         </div>
                         <div className="col s6 l5">
                             <p><i className="fa fa-home" aria-hidden="true"></i> Partial Apt.</p>
@@ -32,7 +32,7 @@ const PlaceForBrowse = ({profile, address, profileImg, place}) => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col s6">
+                    <div className="col s6 profile-image-container">
                         <div className="profile-image">
                             <img src={profileImg.url ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
                         </div>
@@ -55,10 +55,16 @@ const PlaceForBrowse = ({profile, address, profileImg, place}) => {
 }
 
 PlaceForBrowse.propTypes = {
-    profile: PropTypes.object.isRequired,
+    placeForBrowse: PropTypes.object.isRequired,
     address: PropTypes.object.isRequired,
-    profileImg: PropTypes.object.isRequired,
-    place: PropTypes.object.isRequired,
-}
+    profileImg: PropTypes.object,
+    placeImgs: PropTypes.array,
+    profile: PropTypes.object.isRequired,
+};
+
+PlaceForBrowse.defaultProps = {
+    profileImg: {},
+    placeImgs: [],
+};
 
 export default PlaceForBrowse;

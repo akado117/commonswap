@@ -84,10 +84,11 @@ class PlaceComponent extends Component {
             const remappedImages = images.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
             component = <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />;
         }
+        const toggleText = !this.state.uploadActive ? '- Click to Add Photos' : '- Click to See Photos'
         return (
             <div className="image-section-container col s12">
                 <AppBar
-                    title={<span>Photos &amp; Videos</span>}
+                    title={<span>Photos &amp; Videos<span onClick={this.toggleUploadActive} style={{ fontSize: '16px', cursor: 'pointer' }} role="button">{toggleText}</span></span>}
                     showMenuIconButton={false}
                     style={{ marginBottom: '10px', zIndex: '0' }}
                 />

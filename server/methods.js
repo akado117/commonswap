@@ -5,7 +5,7 @@ import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode } from '../imports/lib/Constants';
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile } from '../imports/lib/Constants';
 import S3 from './s3';
 import _ from 'lodash'
 
@@ -202,17 +202,33 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Place availability update failed', upsertFailedCode, err);
         }
     },
-    'places.getByAvailability': function getByAvailability({ arrival, departure }) {
+    'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
         if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
         try {
-            const places = Places.find({ availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }).fetch();
+            const searchObj = { availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }
+            if (numOfGuests) searchObj.numOfGuests = { $gte: numOfGuests };
+            const places = Places.find(searchObj, { fields: FieldsForBrowseProfile}).fetch();
+            const placeIds = [];
+            const ownerUserIds = [];
+            places.forEach((place) => {
+                placeIds.push(place._id);
+                ownerUserIds.push(place.ownerUserId);
+            });
+            const addresses = Addresses.find({ placeId: { $in: placeIds } }, { fields: FieldsForBrowseProfile }).fetch();
+            const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
+            const profileImgs = FileUrls.find({ userId: { $in: ownerUserIds }, deleted: false, active: true }, { fields: FieldsForBrowseProfile }).fetch();
+            const profiles = Profiles.find({ ownerUserId: { $in: ownerUserIds }}, { fields: FieldsForBrowseProfile }).fetch();
             consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId);
             return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
                 serviceMessage: `We found ${places.length} places within date range`,
                 data: {
                     places,
+                    addresses,
+                    placeImgs,
+                    profileImgs,
+                    profiles,
                 },
             });
         } catch (err) {

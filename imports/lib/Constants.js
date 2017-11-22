@@ -85,12 +85,16 @@ export const consoleLogHelper = (message, code, userId, error = '') => {
 };
 
 export const FieldsForBrowseProfile = {
+    _id: 1,
+    ownerUserId: 1,
+    userId: 1,
+    placeId: 1,
     placeImgs: 1,
     shortDesc: 1,
     numOfGuests: 1,
     bedrooms: 1,
     bathrooms: 1,
-    profileImg: 1,
+    url: 1,
     firstName: 1,
     city: 1,
     state: 1,

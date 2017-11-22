@@ -151,9 +151,17 @@ export default [
   }
   
   type PlaceForBrowse {
-    places: Place
+     _id: String
+    ownerUserId: String
+    placeId: String
+    placeImgs: [Image]
+    shortDesc: String
+    numOfGuests: Int
+    bedrooms: Int
+    bathrooms: Int
+    profileImg: Image
+    address: Address
     profile: Profile
-    image: Image
   }
 
   type RootMutation {

@@ -1,8 +1,21 @@
 .browse-place-container {
-
-  .profile-img {
+  .place-images {
+    .image-gallery-slide.img-gal {
+      height: 300px;
+    }
+  }
+  .profile-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .profile-image {
     @extend .true-circle;
-    height: 100px;
-    width: 100px;
+    height: 150px;
+    width: 150px;
+    img {
+      height: 150px !important;
+      width: 150px !important;
+    }
   }
 }

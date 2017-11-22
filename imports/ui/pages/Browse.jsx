@@ -19,6 +19,7 @@ import DatePicker from 'material-ui/DatePicker';
 import MapComponent from '../components/MapComponent';
 import BetaWarning from '../components/BetaWarning';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
+import { onChangeHelper } from '../../helpers/DataHelpers';
 
 const items = [
     <MenuItem key={1} value={1} primaryText="1" />,
@@ -35,17 +36,17 @@ class Browse extends Component {
         super(props);
         this.state = {
             guests: null,
+            numOfGuests: 0,
         };
     }
 
     handleChange = (event, index, guests) => this.setState({ guests });
 
     searchForPlaces = () => {
-        const { arrival, departure } = this.state;
-        const { query } = this.props.client;
+        const { arrival, departure, numOfGuests } = this.state;
         if (!arrival || !departure) return this.setState({ searchMessage: 'Please select your dates to travel' });
         this.setState({ searchMessage: SEARCHED });
-        this.props.placeActions.getPlaceBasedUponAvailability({ arrival,departure, query });
+        this.props.placeActions.getPlaceBasedUponAvailability({ arrival, departure, numOfGuests });
         return undefined;
     }
 
@@ -59,19 +60,25 @@ class Browse extends Component {
                     <div className="row">
                         <div className="col s6 m4 l3">
                             <DatePicker
+                                className="material-date-picker"
                                 onChange={(nul, date) => this.setState({ arrival: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
-                                textFieldStyle={{width: '100%'}}
+                                textFieldStyle={{ width: '100%' }}
                             //defaultDate={this.state.arrival}
                             //disableYearSelection={this.state.disableYearSelection}
                             />
                         </div>
                         <div className="col s6 m4 l3">
                             <DatePicker
+                                className="material-date-picker"
                                 onChange={(nul, date) => this.setState({ departure: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
-                                textFieldStyle={{width: '100%'}}
+                                textFieldStyle={{ width: '100%' }}
                             />
+                        </div>
+                        <div className="col s6 m4 l3  input-field inline">
+                            <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
+                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
                         </div>
                         <div className="col s6 m4 l3 offset-s6 valign-wrapper">
                             <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >
@@ -87,7 +94,16 @@ class Browse extends Component {
                     </div>
                 </div>
                 <div className="scroll-listing col s12 l6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
-
+                    {placesForBrowsing.map((place, idx) => (
+                        <PlaceForBrowse
+                            key={place.profile ? `${place.profile.firstName}-${idx}` : `browsePlace-${idx}`}
+                            placeForBrowse={place}
+                            address={place.address}
+                            profile={place.profile}
+                            placeImgs={place.placeImgs}
+                            profileImg={place.profileImg}
+                        />
+                    ))}
                 </div>
                 <Footer />
             </div>

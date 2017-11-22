@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../lib/Constants';
 import Store from '../store/store';
 import { FormateDates, FormateDate } from '../helpers/DateHelpers';
+import { buildPlaceForBrowseObjs } from '../helpers/DataHelpers'
 
 const PlaceActions = {
     upsertPlace: (placeData) => {
@@ -65,27 +66,29 @@ const PlaceActions = {
         }
     },
     getPlaceBasedUponAvailability: (unFormattedDates) => {
-        const data = unFormattedDates.query({query: gql`
-          query getPlacesForBrowse {
-            getPlacesForBrowse {
-            shortDesc
-            numOfGuests
-            bedrooms
-            address {
-              city
-              state
-            }
-            placeImages {
-              _id
-              url
-            }
-          }
-          }
-        `}).then(console.log);
-        debugger
-        const arrival = FormateDate(unFormattedDates.arrival);
-        const departure = FormateDate(unFormattedDates.departure);
-        return dispatch => Meteor.call('places.getByAvailability', {arrival, departure}, (error, result) => {
+        // const data = unFormattedDates.query({query: gql`
+        //   query getPlacesForBrowse {
+        //     getPlacesForBrowse {
+        //     shortDesc
+        //     numOfGuests
+        //     bedrooms
+        //     address {
+        //       city
+        //       state
+        //     }
+        //     placeImages {
+        //       _id
+        //       url
+        //     }
+        //   }
+        //   }
+        // `}).then(console.log);
+        // debugger
+        const dateObj = cloneDeep(unFormattedDates);
+        dateObj.arrival = FormateDate(unFormattedDates.arrival);
+        dateObj.departure = FormateDate(unFormattedDates.departure);
+        return dispatch => Meteor.call('places.getByAvailability', dateObj, (error, result) => {
+            result.data = buildPlaceForBrowseObjs(result.data);
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_AVAILABILITY, dispatch);
         });
     },

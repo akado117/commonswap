@@ -50,14 +50,14 @@ class Profile extends React.Component {
 
     }
 
-    componentDidUpdate = (prevProps) => {
+    componentDidUpdate = (prevProps, prevState) => {
         if (this.didUserChange(prevProps, this.props)) {
             const curIdx = this.state.selectedIndex;
             this.setState({ selectedIndex: curIdx + 1 }, () => {
                 this.setState({ selectedIndex: curIdx });
             });
         }
-        if (prevProps.place.place && !prevProps.place.place._id && this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
+        if (prevProps.place.place && (!prevProps.place.place._id || (!prevState.selectedIndex && this.state.selectedIndex)) && this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login or check for new ones when going from profile to place (and signed in and image length zero)
             this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
         }
     }

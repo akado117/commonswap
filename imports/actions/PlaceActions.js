@@ -65,6 +65,11 @@ const PlaceActions = {
             };
         }
     },
+    saveBrowseDates: ({ arrival, departure }) => ({
+        type: actionTypes.SAVE_BROWSE_DATES,
+        arrival,
+        departure,
+    }),
     getPlaceBasedUponAvailability: (unFormattedDates) => {
         // const data = unFormattedDates.query({query: gql`
         //   query getPlacesForBrowse {

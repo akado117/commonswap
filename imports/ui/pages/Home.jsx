@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
+import ReactPlayer from 'react-player';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { render } from 'react-dom';
@@ -8,25 +9,29 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isTop: true
+            isTop: true,
+            muted: true,
         };
     }
 
     componentDidMount() {
         document.addEventListener('scroll', () => {
-          this.setState({ isTop: window.scrollY < 100 })
+            this.setState({isTop: window.scrollY < 100})
         });
-      }
+    }
+
+    toggleMuted = () => this.setState({ muted: !this.state.muted });
 
     render() {
         return (
             <div className="home-container">
                 <Navbar className={this.state.isTop ? 'invisible' : 'visible'} ></Navbar>
-                <header className="head-mobile">
+                <header className="head-mobile video-parent">
+                    <button className="mute-button" onClick={this.toggleMuted}>
+                        <i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />
+                    </button>
                     <div className="video-container">
-                        <video src="https://s3.us-east-2.amazonaws.com/com-swap-images-dev/home_video/csVideo2.mp4" poster="" autoPlay loop muted>
-                            <source src="" />
-                        </video>
+                        <ReactPlayer url="https://www.youtube.com/embed/0gL-1YksKIE?ecver" playing loop muted={this.state.muted} width="100%" height="100%" />
                         <div className="col s12 center-align">
                             <div className="header-container overlay-desc">
                                 <h1 className="header-title"> CommonSwap <br />

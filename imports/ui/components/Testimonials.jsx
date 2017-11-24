@@ -12,9 +12,7 @@ class Testimonials extends Component {
     return (
       <div className="testimonial-container" >
         <Navbar></Navbar>
-        <div className="col s12 center-align">
-          <h1>Testimonials</h1>
-        </div>
+        <header></header>
         <div className="container pad-top">
           <div className="row">
             <div className="col s12 l4">

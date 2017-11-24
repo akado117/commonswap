@@ -1,14 +1,15 @@
 import s3PublicUrl from 'node-s3-public-url';
 import { check } from 'meteor/check';
+import Stripe from 'stripe';
 import FileUrls from '../imports/collections/FileUrls';
 import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
-import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate } from '../imports/collections/mainCollection';
+import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile } from '../imports/lib/Constants';
 import S3 from './s3';
 import { parseInts, parseFloats } from '../imports/helpers/DataHelpers';
-import _ from 'lodash'
+import _ from 'lodash';
 
 const client = new ApolloClient(meteorClientConfig());
 
@@ -116,6 +117,26 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             consoleErrorHelper('Profile create or update failed', insufficentParamsCode, Meteor.userId());
             return serviceErrorBuilder('Profile create or update failed', insufficentParamsCode)
         }
+    },
+    upsertCard({ email, token }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting card info', placeErrorCode);
+        var stripe = Stripe("sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc");
+        stripe.customers.create({
+            email: email,
+            source: token,
+        }).then(function(customer) {
+            try {
+                console.log('Inside upsert card');
+                console.log(JSON.stringify(customer));
+                //send success data to client
+            }
+            catch (err) {
+                console.log(err.stack);
+                consoleErrorHelper('Customer create or update failed', upsertFailedCode, userId, err);
+                return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
+            }
+        });
     },
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();

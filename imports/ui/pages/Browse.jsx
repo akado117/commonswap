@@ -50,6 +50,12 @@ class Browse extends Component {
         return undefined;
     }
 
+    componentDidUpdate = (prevProps) => {
+        if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
+            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
+        }
+    }
+
     render() {
         const { placesForBrowsing } = this.props.place;
         return (

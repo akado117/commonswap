@@ -34,7 +34,7 @@ class Footer extends React.Component {
                             <ul>
                                 <li><Link to="/about" className="grey-text text-lighten-3">About us</Link></li>
                                 <li><Link to="/testimonials" className="grey-text text-lighten-3">Testimonials</Link></li>
-                                <li><a className="grey-text text-lighten-3" href="#!">Team</a></li>
+                                <li><Link to="/about/1" className="grey-text text-lighten-3" href="#!">Team</Link></li>
                                 <li><a className="grey-text text-lighten-3" href="#!">Press</a></li>
                             </ul>
                         </div>
@@ -49,7 +49,7 @@ class Footer extends React.Component {
                         <div className="col l3 s12">
                             <h5 className="white-text">Safety</h5>
                             <ul>
-                                <li><a className="grey-text text-lighten-3" href="#!">Trust &amp; Safety</a></li>
+                                <li><Link to="/faq/2" className="grey-text text-lighten-3">Trust &amp; Safety</Link></li>
                                 <li><Link to="/faq" className="grey-text text-lighten-3">FAQ</Link></li>
                                 <li><a className="grey-text text-lighten-3" href="#!">Community Values</a></li>
                             </ul>

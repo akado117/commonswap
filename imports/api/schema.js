@@ -55,7 +55,7 @@ export default [
     firstName: String!
     lastName: String!
     gender: String
-    dob: Float
+    dob: String
     email: String!
     phone: String
     lang: String
@@ -69,6 +69,11 @@ export default [
     extroversion: Int
     interests: Interests
     places: [Place]
+  }
+  
+  type Coords {
+    lat: Float
+    lng: Float
   }
   
   type DesiredDate {
@@ -128,7 +133,7 @@ export default [
     amenities: Amenity
     numOfGuests: Int
     beds: [String]
-    rent: String
+    rent: Float
     bathrooms: Int
     smoking: Boolean
     bedrooms: Int

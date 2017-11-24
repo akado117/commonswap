@@ -7,6 +7,7 @@ import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, D
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile } from '../imports/lib/Constants';
 import S3 from './s3';
+import { parseInts, parseFloats } from '../imports/helpers/DataHelpers';
 import _ from 'lodash'
 
 const client = new ApolloClient(meteorClientConfig());
@@ -133,6 +134,8 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             }
             if (!placeClone.ownerUserId) placeClone.ownerUserId = userId;
             if (!placeClone.added) placeClone.added = new Date();
+            parseInts(placeClone);
+            parseFloats(placeClone);
             const placeGUID = Places.upsert({ _id: ownerPlaceId }, placeClone);
             if (placeGUID.insertedId) placeClone._id = placeGUID.insertedId; //should have a _id already inless placeGUID had it. As a new doc is created without it
             delete placeClone.ownerUserId;
@@ -208,8 +211,8 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
         try {
             const searchObj = { availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }
-            if (numOfGuests) searchObj.numOfGuests = { $gte: numOfGuests };
-            const places = Places.find(searchObj, { fields: FieldsForBrowseProfile}).fetch();
+            if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
+            const places = Places.find(searchObj, { fields: FieldsForBrowseProfile }).fetch();
             const placeIds = [];
             const ownerUserIds = [];
             places.forEach((place) => {
@@ -220,7 +223,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
             const profileImgs = FileUrls.find({ userId: { $in: ownerUserIds }, deleted: false, active: true }, { fields: FieldsForBrowseProfile }).fetch();
             const profiles = Profiles.find({ ownerUserId: { $in: ownerUserIds }}, { fields: FieldsForBrowseProfile }).fetch();
-            consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId);
+            consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId, JSON.stringify(searchObj));
             return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
                 serviceMessage: `We found ${places.length} places within date range`,
                 data: {

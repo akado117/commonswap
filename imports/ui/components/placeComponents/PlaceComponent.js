@@ -101,7 +101,7 @@ class PlaceComponent extends Component {
     }
 
     onSetLocation = cords => {
-        this.getValueFunc('coords', cords)
+        this.getValueFunc('coords', cords);
     }
 
     render() {

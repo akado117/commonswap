@@ -15,327 +15,237 @@
 //   }
 
 .home-container {
+  * {
+    font-style: sans-serif;
+  }
 
-    * {
-        font-style: sans-serif;
+  .navbar-fixed {
+    margin-bottom: -65px;
+  }
+  .invisible {
+    nav {
+      background-color: transparent;
+      ul li a {
+        color: white;
+        border-bottom: none !important;
+
+      }
+      .brand-logo {
+        display: none;
+      }
+      span {
+        color: white;
+      }
+      box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
     }
-   
-    .invisible {
-       nav {
-           background-color: transparent;
-           ul li a {
-               color: white;
-               border-bottom: none !important;
-   
-           }
-           img {
-               display: none;
-           }
-           span {
-               color: white;
-           }
-           box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
-        }
+    .side-nav {
+      a {
+        color: black !important;
+      }
     }
-   
-    .visible {
-       nav {
-           background-color: white;
+  }
+  .visible {
+    nav {
+      background-color: white;
     }
-}
-    
-  
+  }
+  .video-parent {
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+    .mute-button {
+      position: absolute;
+      bottom: 25px;
+      right: 5px;
+      z-index: 20;
+      background: none;
+      border: none;
+      font-size: 30px;
+      color: white;
+    }
+  }
+  .video-container {
+    left: -25%;
+    width: 150%;
+    top: 0px;
+    z-index: 0;
+    position: relative;
+    height: 70vh;
+    margin-bottom: 25px;
+  }
+
+
+  .delivery-image {
+    background-image: url('');
+    background-repeat: no-repeat;
+    background-position: bottom-right;
+    background-size: cover;
+    padding: 15rem 0;
+    background-origin: padding-box;
+  }
+  .register-image {
+    background-image: url('https://s3.us-east-2.amazonaws.com/com-swap-prod/static/pexels-photos.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    min-height: 700px;
+    padding: 0 0;
+    background-origin: padding-box;
+  }
+
+  .book-image {
+    background-image: url('https://s3.us-east-2.amazonaws.com/com-swap-prod/static/travel.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    min-height: 500px;
+    padding: 0 0;
+    background-origin: padding-box;
+  }
+
+  .travel-image {
+    background-image: url('https://s3.us-east-2.amazonaws.com/com-swap-prod/static/pexels-photo3s.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    min-height: 500px;
+    padding: 0 0;
+    background-origin: padding-box;
+  }
+
+  .header-title {
+    color: white;
+    font-size: 5.5rem;
+  }
+
+  .how-desc-title {
+    font-size: 4.5rem;
+    font-weight: 500;
+    color: #00CED1;
+  }
+  .how-desc {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  @media #{$large-and-up} {
+    .overlay-desc {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+    }
+
+    header {
+      // background-image: url('http://stretchflex.net/photos/pexels-photo2.jpeg');
+      // background-repeat: no-repeat;
+      // background-position: center;
+      // background-size: 100% 100%;
+      // background-origin: padding-box;
+      max-height: 700px;
+      opacity: 0.9;
+    }
+  }
+
   @media #{$medium-and-up} {
     // styles for medium screens and larger
   }
   @media #{$medium-and-down} {
     // styles for medium screens and down
-    video {
-        max-height:700px;
-        width: 100%;
-        object-fit: fill;
-        //top: -5px;
-        overflow: hidden;
-        opacity: .8;
-    }
     .video-container {
-        height:80vh;
-        position: absolute;
-        top: 0px;
-        z-index: 0;
+      left: -25%;
+      width: 150%;
+      height: 50vh;
     }
-    
+
+    .header-title {
+      color: white;
+      font-size: 4rem;
+    }
+
     .overlay-desc {
-        position:absolute;
-        top:30%;
-        left:50%;
-        z-index:1;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
     }
-    
+
     header {
-        min-height: 700px;
-        max-height: 700px;
-        opacity: 0.9;
+      opacity: 0.9;
+    }
+
+    .register-image {
+      min-height: 700px;
+    }
+
+    .book-image {
+      min-height: 500px;
+    }
+
+    .travel-image {
+      min-height: 500px;
     }
     .delivery-image {
-        background-image: url('');
-        background-repeat: no-repeat;
-        background-position: bottom-right;
-        background-size: auto 100%;
-        padding: 15rem 0;
-        background-origin: padding-box;
-    }
-    
-    .header-title {
-        color: white;
-        font-size:5.5rem;
-    }
-    .register-image {
-        background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
-        min-height: 700px;
-        padding: 0 0;
-        background-origin: padding-box;
-    }
-    
-    .book-image {
-        background-image: url('http://stretchflex.net/photos/travel.jpeg');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
-        min-height: 500px;
-        padding: 0 0;
-        background-origin: padding-box;
-    }
-    
-    .travel-image {
-        background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
-        min-height: 500px;
-        padding: 0 0;
-        background-origin: padding-box;
-    }
-    
-    .how-desc-title
-    {
-        font-size: 4.5rem;
-        font-weight: 500;
-        color:#00CED1;
-    }
-    .how-desc {
-        font-size: 2.5rem;
-        font-weight: 500;
-        color:white;
-        background-color:rgba(0, 0, 0, 0.5);
-    }
-  }
-  @media #{$large-and-up} {
-    video {
-        max-height:700px;
-        width: 100%;
-        object-fit: fill;
-        //top: -5px;
-        overflow: hidden;
-        opacity: .8;
-    }
-    .video-container {
-        height:80vh;
-        position: absolute;
-        top: 0px;
-        z-index: 0;
-    }
-    
-    .overlay-desc {
-        position:absolute;
-        top:30%;
-        left:50%;
-        z-index:1;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-    }
-    
-    header {
-        // background-image: url('http://stretchflex.net/photos/pexels-photo2.jpeg');
-        // background-repeat: no-repeat;
-        // background-position: center;
-        // background-size: 100% 100%;
-        // background-origin: padding-box;
-        min-height: 700px;
-        max-height: 700px;
-        opacity: 0.9;
-    }
-    .delivery-image {
-        background-image: url('');
-        background-repeat: no-repeat;
-        background-position: bottom-right;
-        background-size: auto 100%;
-        padding: 15rem 0;
-        background-origin: padding-box;
-    }
-    
-    .header-title {
-        color: white;
-        font-size:5.5rem;
-    }
-    .register-image {
-        background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
-        min-height: 700px;
-        padding: 0 0;
-        background-origin: padding-box;
-    }
-    
-    .book-image {
-        background-image: url('http://stretchflex.net/photos/travel.jpeg');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
-        min-height: 500px;
-        padding: 0 0;
-        background-origin: padding-box;
-    }
-    
-    .travel-image {
-        background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
-        min-height: 500px;
-        padding: 0 0;
-        background-origin: padding-box;
-    }
-    
-    .how-desc-title
-    {
-        font-size: 4.5rem;
-        font-weight: 500;
-        color:#00CED1;
-    }
-    .how-desc {
-        font-size: 2.5rem;
-        font-weight: 500;
-        color:white;
-        background-color:rgba(0, 0, 0, 0.5);
+      background-image: url('');
+      background-position: bottom-right;
     }
   }
 
-@media #{$small-and-down} {
-    video {
-        max-height:600px;
-        min-height: 550px;
-        width: 100%;
-        object-fit: fill;
-        //top: -5px;
-        overflow: hidden;
-        opacity: .8;
+  @media #{$small-and-down} {
+    .navbar-fixed {
+      margin-bottom: -56px;
     }
     .video-container {
-        height:100%;
-        position: absolute;
-        top: 0px;
-        z-index: 0;
+      left: -50%;
+      width: 200%;
+      height: 50vh;
     }
 
     .head-mobile {
-        min-height: 500px;
-        max-height: 500px;
-        opacity: 0.9;
+      min-height: 50vh;
+      max-height: 500px;
+      opacity: 0.9;
     }
-    
+
     .overlay-desc {
-        position:absolute;
-        top:30%;
-        left:50%;
-        z-index:1;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
     }
 
     .delivery-image {
-        background-image: url('');
-        background-repeat: no-repeat;
-        background-position: bottom-right;
-        background-size: auto 100%;
-        padding: 15rem 0;
-        background-origin: padding-box;
+      background-image: url('');
+      background-position: bottom-right;
     }
-    
+
     .header-title {
-        color: white;
-        font-size:2.5rem;
+      color: white;
+      font-size: 2.5rem;
     }
     .register-image {
-        background-image: url('http://stretchflex.net/photos/pexels-photo.jpeg');
-        background-repeat: no-repeat;
-        background-position: 74% 20%;
-        background-size: 290%;
-        min-height: 600px;
-        padding: 0 0;
-        background-origin: padding-box;
+      background-position: 74% 20%;
+      min-height: 500px;
     }
-    
+
     .book-image {
-        background-image: url('http://stretchflex.net/photos/travel.jpeg');
-        background-repeat: no-repeat;
-        background-position: left center;
-        background-size: 100% 100%;
-        min-height: 500px;
-        padding: 0 0;
-        background-origin: padding-box;
+      min-height: 400px;
     }
-    
+
     .travel-image {
-        background-image: url('http://stretchflex.net/photos/pexels-photo3.jpeg');
-        background-repeat: no-repeat;
-        background-position: -90px 0px;
-        background-size: 210% 100%;
-        min-height: 500px;
-        padding: 0 0;
-        background-origin: padding-box;
+      min-height: 400px;
     }
-    
-    .how-desc-title
-    {
-        font-size: 4.5rem;
-        font-weight: 500;
-        color:#00CED1;
-    }
+
     .how-desc {
-        font-size: 1.2rem;
-        font-weight: 500;
-        color:white;
-        background-color:rgba(0, 0, 0, 0.5);
-    }
-    .invisible {
-        nav {
-            background-color: transparent;
-            ul li a {
-                color: black;
-                border-bottom: none !important;
-    
-            }
-            img {
-                display: none;
-            }
-            span {
-                color: white;
-            }
-            box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
-         }
-     }
-    
-     .visible {
-        nav {
-            background-color: white;
-        }
+      font-size: 1.2rem;
     }
 
   }

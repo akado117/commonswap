@@ -1,13 +1,22 @@
   .browse-container {
+    .container {
+      margin-top: 25px;
+    }
     .search-button {
       height: 45px;
       line-height: 0;
+    }
+    .scroll-listing {
+      min-height: 400px;
     }
     @media #{$medium-and-up} {
         // styles for medium screens and larger
       }
       @media #{$medium-and-down} {
         // styles for medium screens and down
+        .scroll-listing {
+          min-height: 300px;
+        }
       }
       @media #{$large-and-up} {
         // styles for large screens and up

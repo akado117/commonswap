@@ -35,12 +35,11 @@ class Browse extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            guests: null,
             numOfGuests: 0,
+            arrival: props.place.arrival || new Date(),
+            departure: props.place.departure || new Date(),
         };
     }
-
-    handleChange = (event, index, guests) => this.setState({ guests });
 
     searchForPlaces = () => {
         const { arrival, departure, numOfGuests } = this.state;
@@ -56,13 +55,20 @@ class Browse extends Component {
         }
     }
 
+    componentWillUnmount = () => {
+        const { arrival, departure } = this.state;
+        this.props.placeActions.saveBrowseDates({
+            arrival,
+            departure,
+        });
+    }
+
     render() {
         const { placesForBrowsing } = this.props.place;
         return (
             <div className="browse-container">
                 <Navbar></Navbar>
                 <div className="container">
-                    <BetaWarning></BetaWarning>
                     <div className="row">
                         <div className="col s6 m4 l3">
                             <DatePicker
@@ -70,7 +76,7 @@ class Browse extends Component {
                                 onChange={(nul, date) => this.setState({ arrival: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
                                 textFieldStyle={{ width: '100%' }}
-                            //defaultDate={this.state.arrival}
+                                defaultDate={this.state.arrival}
                             //disableYearSelection={this.state.disableYearSelection}
                             />
                         </div>
@@ -80,6 +86,7 @@ class Browse extends Component {
                                 onChange={(nul, date) => this.setState({ departure: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
                                 textFieldStyle={{ width: '100%' }}
+                                defaultDate={this.state.departure}
                             />
                         </div>
                         <div className="col s6 m4 l3  input-field inline">

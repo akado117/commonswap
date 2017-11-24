@@ -6,6 +6,8 @@ const initialState = {
     address: {},
     amenities: {},
     placesForBrowsing: [],
+    arrival: null,
+    departure: null,
 };
 let stateClone;
 function placeReducer(state = initialState, action = {}) {
@@ -23,6 +25,11 @@ function placeReducer(state = initialState, action = {}) {
     case `${actionTypes.GET_PLACE_BY_AVAILABILITY}_${SUCCESS}`:
         stateClone = cloneDeep(state);
         stateClone.placesForBrowsing = action.data || [];
+        return stateClone;
+    case actionTypes.SAVE_BROWSE_DATES:
+        stateClone = cloneDeep(state);
+        stateClone.arrival = action.arrival;
+        stateClone.departure = action.departure;
         return stateClone;
     case actionTypes.LOGOUT:
         return initialState;

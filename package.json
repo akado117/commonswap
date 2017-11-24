@@ -45,6 +45,7 @@
     "react-image-slideshow": "^1.5.4",
     "react-infinite-calendar": "github:akado117/react-infinite-calendar#4ba8588a3aba8cd6bdc3e1a706c5bdcfcb713fba",
     "react-paginate": "^5.0.0",
+    "react-player": "^0.25.3",
     "react-portal": "^4.0.0",
     "react-rater": "^0.4.6",
     "react-redux": "^5.0.6",

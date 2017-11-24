@@ -24,7 +24,7 @@ class Home extends Component {
                 <Navbar className={this.state.isTop ? 'invisible' : 'visible'} ></Navbar>
                 <header className="head-mobile">
                     <div className="video-container">
-                        <video src="https://stretchflex.net/photos/csVideo2.mp4" poster="" autoPlay loop muted>
+                        <video src="https://s3.us-east-2.amazonaws.com/com-swap-images-dev/home_video/csVideo2.mp4" poster="" autoPlay loop muted>
                             <source src="" />
                         </video>
                         <div className="col s12 center-align">

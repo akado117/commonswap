@@ -84,10 +84,11 @@ class PlaceComponent extends Component {
             const remappedImages = images.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
             component = <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />;
         }
+        const toggleText = !this.state.uploadActive ? '- Click to Add Photos' : '- Click to See Photos'
         return (
             <div className="image-section-container col s12">
                 <AppBar
-                    title={<span>Photos &amp; Videos</span>}
+                    title={<span>Photos &amp; Videos<span onClick={this.toggleUploadActive} style={{ fontSize: '16px', cursor: 'pointer' }} role="button">{toggleText}</span></span>}
                     showMenuIconButton={false}
                     style={{ marginBottom: '10px', zIndex: '0' }}
                 />
@@ -100,7 +101,7 @@ class PlaceComponent extends Component {
     }
 
     onSetLocation = cords => {
-        this.getValueFunc('coords', cords)
+        this.getValueFunc('coords', cords);
     }
 
     render() {
@@ -118,8 +119,8 @@ class PlaceComponent extends Component {
                 </div>
                 <MapWithASearchBox
                     onSetLocation={this.onSetLocation}
-                >
-                </MapWithASearchBox>
+                    place={place}
+                />
                 <div className="row">
                     <div className="col s12 input-field inline">
                         <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e))} defaultValue={place.shortDesc} />

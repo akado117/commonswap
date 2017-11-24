@@ -38,6 +38,10 @@ class ProfileImage extends Component {
         if (this.state.uploaderActive) {
             content = this.getUploader();
         } else {
+            const fillerText = this.props.profile._id
+                ?  <p><i className="fa fa-plus-square-o fa-2x" aria-hidden="true"/> Add Photo</p>
+                : <p>Please Sign In</p>;
+
             content = this.props.imageSrc ? (
                 <button onClick={this.toggleUploader} style={{ border: 'none', background: 'transparent' }}>
                     <img src={this.props.imageSrc} alt="" />
@@ -49,7 +53,7 @@ class ProfileImage extends Component {
                             <i className="fa fa-user-circle fa-4x" aria-hidden="true"/>
                         </div>
                         <div className="col s12">
-                            <p><i className="fa fa-plus-square-o fa-2x" aria-hidden="true"/> Add Photo</p>
+                            {fillerText}
                         </div>
                     </div>);
         }

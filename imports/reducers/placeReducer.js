@@ -1,26 +1,29 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import { SUCCESS, actionTypes } from '../lib/Constants';
 
 const initialState = {
     place: {},
     address: {},
     amenities: {},
+    placesForBrowsing: [],
 };
-
+let stateClone;
 function placeReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.SAVE_PLACE}_${SUCCESS}`:
-        return _.assign({}, state, {
-            place: action.place,
-            address: action.address,
-            amenities: action.amenities,
-        });
+        stateClone = cloneDeep(state);
+        stateClone.place = action.place;
+        stateClone.address = action.address;
+        stateClone.amenities = action.amenities;
+        return stateClone;
     case `${actionTypes.SAVE_PLACE_AVAILABILITY}_${SUCCESS}`:
-        return _.assign({}, state, {
-            place: action.data.place,
-            address: action.data.address,
-            amenities: action.data.amenities,
-        });
+        stateClone = cloneDeep(state);
+        stateClone.place.availableDates = action.data.place.availableDates;
+        return stateClone;
+    case `${actionTypes.GET_PLACE_BY_AVAILABILITY}_${SUCCESS}`:
+        stateClone = cloneDeep(state);
+        stateClone.placesForBrowsing = action.data || [];
+        return stateClone;
     case actionTypes.LOGOUT:
         return initialState;
     default:

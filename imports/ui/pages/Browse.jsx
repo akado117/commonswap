@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withApollo } from 'react-apollo';
 import { browserHistory } from 'react-router';
 const _ = require('lodash');
 import ProfileActions from '../../actions/ProfileActions';
@@ -17,6 +18,8 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import MapComponent from '../components/MapComponent';
 import BetaWarning from '../components/BetaWarning';
+import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
+import { onChangeHelper } from '../../helpers/DataHelpers';
 
 const items = [
     <MenuItem key={1} value={1} primaryText="1" />,
@@ -26,25 +29,25 @@ const items = [
     <MenuItem key={5} value={5} primaryText="5" />,
 ];
 
+const SEARCHED = 'SEACHED';
+
 class Browse extends Component {
     constructor(props) {
         super(props);
         this.state = {
             guests: null,
+            numOfGuests: 0,
         };
     }
 
     handleChange = (event, index, guests) => this.setState({ guests });
 
-    updateArrival = (date) => {
-        this.setState({
-            arrival: date.getDate()
-        });
-    }
-    updateDeparture = (date) => {
-        this.setState({
-            departure: date.getDate()
-        });
+    searchForPlaces = () => {
+        const { arrival, departure, numOfGuests } = this.state;
+        if (!arrival || !departure) return this.setState({ searchMessage: 'Please select your dates to travel' });
+        this.setState({ searchMessage: SEARCHED });
+        this.props.placeActions.getPlaceBasedUponAvailability({ arrival, departure, numOfGuests });
+        return undefined;
     }
 
     componentDidUpdate = (prevProps) => {
@@ -54,99 +57,59 @@ class Browse extends Component {
     }
 
     render() {
+        const { placesForBrowsing } = this.props.place;
         return (
             <div className="browse-container">
                 <Navbar></Navbar>
                 <div className="container">
                     <BetaWarning></BetaWarning>
                     <div className="row">
-                        <div className="col s12 l4">
-                            <TextField
-                                hintText=""
-                                floatingLabelText={<span><FontIcon className="material-icons">near_me</FontIcon> Enter your destination</span>}
-                            />
-                        </div>
-                        <div className="col s12 l2">
-                            <SelectField
-                                value={this.state.guests}
-                                onChange={this.handleChange}
-                                floatingLabelText={<span><FontIcon className="material-icons">person</FontIcon> Number of Guests</span>}
-                                floatingLabelFixed={true}
-                                hintText=""
-                            >
-                                {items}
-                            </SelectField>
-                        </div>
-                        <div className="col s12 l3">
+                        <div className="col s6 m4 l3">
                             <DatePicker
-                                onChange={(nul, date) => this.updateArrival(date)}
+                                className="material-date-picker"
+                                onChange={(nul, date) => this.setState({ arrival: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
+                                textFieldStyle={{ width: '100%' }}
                             //defaultDate={this.state.arrival}
                             //disableYearSelection={this.state.disableYearSelection}
                             />
                         </div>
-                        <div className="col s12 l3">
+                        <div className="col s6 m4 l3">
                             <DatePicker
-                                onChange={(nul, date) => this.updateDeparture(date)}
+                                className="material-date-picker"
+                                onChange={(nul, date) => this.setState({ departure: date })}
                                 floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
-
+                                textFieldStyle={{ width: '100%' }}
                             />
+                        </div>
+                        <div className="col s6 m4 l3  input-field inline">
+                            <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
+                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
+                        </div>
+                        <div className="col s6 m4 l3 offset-s6 valign-wrapper">
+                            <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >
+                                <i className="fa fa-search-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />
+                                Search
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div className="row">
-                    <div style={{ minHeight: '750px' }} className="col s12 l6">
-                        <MapComponent className="" style={{ height: '100%' }}></MapComponent>
+                <div className={`row ${this.state.searchMessage === '' ? 'hide' : ''}`}>
+                    <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
+                        {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
                     </div>
-                    <div className="scroll-listing col s12 l6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
-                        <div className="col s12 z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
-                            <div className="col s12 l5">
-                                <div className="premier-image" style={{ height: '100%' }}>
-                                    <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '350px', width: '100%' }} />
-                                </div>
-                            </div>
-                            <div className="col s12 l7">
-                                <div className="row">
-                                    <div className="col s12">
-                                        <p><strong>{this.props.place.place.shortDesc}</strong></p>
-                                    </div>
-                                    <div className="col s12">
-                                        <div className="col s6 l5">
-                                            <p><i className="fa fa-users" aria-hidden="true"></i> Guests: {this.props.place.place.numOfGuests}</p>
-                                        </div>
-                                        <div className="col s6 l7">
-                                            <p><i className="fa fa-bed" aria-hidden="true"></i> Bedrooms: {this.props.place.place.bedrooms}</p>
-                                        </div>
-                                    </div>
-                                    <div className="col s12">
-                                        <div className="col s6 l5">
-                                            <p><i className="fa fa-bath" aria-hidden="true"></i> Baths: {this.props.place.place.bathrooms}</p>
-                                        </div>
-                                        <div className="col s6 l5">
-                                            <p><i className="fa fa-home" aria-hidden="true"></i> Partial Apt.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col s6">
-                                        <img className="circle responsive-img" src={this.props.user.picture ? this.props.user.picture : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                        {/* <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} /> */}
-                                    </div>
-                                    <div className="col s6">
-                                        <div className="col s12 l4">
-                                            <p><strong>{this.props.profile.profile.firstName}</strong></p>
-                                        </div>
-                                        <div className="col s12 l8">
-                                            <p><strong>{this.props.place.address.city} {this.props.place.address.state}</strong></p>
-                                        </div>
-                                        <div className="col l12">
-                                            <p>{this.props.profile.profile.school} {this.props.profile.profile.classOf}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div className="scroll-listing col s12 l6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
+                    {placesForBrowsing.map((place, idx) => (
+                        <PlaceForBrowse
+                            key={place.profile ? `${place.profile.firstName}-${idx}` : `browsePlace-${idx}`}
+                            placeForBrowse={place}
+                            address={place.address}
+                            profile={place.profile}
+                            placeImgs={place.placeImgs}
+                            profileImg={place.profileImg}
+                        />
+                    ))}
                 </div>
                 <Footer />
             </div>
@@ -182,4 +145,4 @@ Browse.propTypes = {
     user: PropTypes.object.isRequired,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Browse);
+export default connect(mapStateToProps, mapDispatchToProps)(withApollo(Browse));

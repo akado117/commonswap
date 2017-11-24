@@ -16,6 +16,7 @@ export const actionTypes = {
     GET_PLACE: 'GET_PLACE',
     SAVE_PLACE: 'SAVE_PLACE',
     SAVE_PLACE_AVAILABILITY: 'SAVE_PLACE_AVAILABILITY',
+    GET_PLACE_BY_AVAILABILITY: 'GET_PLACE_BY_AVAILABILITY',
     GET_PLACE_IMAGES: 'GET_PLACE_IMAGES',
     ADD_PLACE_IMAGE: 'ADD_PLACE_IMAGE',
     GET_PROFILE_IMAGE: 'GET_PROFILE_IMAGE',
@@ -83,3 +84,21 @@ export const consoleErrorHelper = (message, code, userId, error = {}) => {
 export const consoleLogHelper = (message, code, userId, error = '') => {
     console.log(`${new Date().toLocaleString()}: ${userId}, ${code}, ${message}, ${error}`)
 };
+
+export const FieldsForBrowseProfile = {
+    _id: 1,
+    ownerUserId: 1,
+    userId: 1,
+    placeId: 1,
+    placeImgs: 1,
+    shortDesc: 1,
+    numOfGuests: 1,
+    bedrooms: 1,
+    bathrooms: 1,
+    url: 1,
+    firstName: 1,
+    city: 1,
+    state: 1,
+    school: 1,
+    classOf: 1,
+}

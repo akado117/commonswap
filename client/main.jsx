@@ -33,6 +33,7 @@ const client = new ApolloClient(meteorClientConfig());
 
 Meteor.startup(() => {
   render(
+      <ApolloProvider client={client}>
      <Provider client={client} store={store} >
         <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory} >
             <Route path="/" component={App} >
@@ -54,6 +55,6 @@ Meteor.startup(() => {
                 <Route path="community" component={Community} />
             </Route>
         </Router>
-     </Provider>,
+     </Provider></ApolloProvider>,
     document.getElementById('render-target'));
 });

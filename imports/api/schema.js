@@ -144,8 +144,33 @@ export default [
     typeOfPets: String
     specialInst: String
     notesOnArea: String
+    placeImages: [Image]
   }
   
+  type Image {
+    _id: String
+    deleted: Boolean
+    userId: String
+    placeId: String
+    url: String
+    fileName: String
+    type: String
+    added: Int
+  }
+  
+  type PlaceForBrowse {
+     _id: String
+    ownerUserId: String
+    placeId: String
+    placeImgs: [Image]
+    shortDesc: String
+    numOfGuests: Int
+    bedrooms: Int
+    bathrooms: Int
+    profileImg: Image
+    address: Address
+    profile: Profile
+  }
 
   type RootMutation {
     insertUrl(url: String!): Url
@@ -158,6 +183,7 @@ export default [
       getSavedRoom(Id: String!): Room
       getSavedRooms: [Room]
       getProfileByUserId(userId: String!, profileId: String): Profile
+      getPlacesForBrowse: [PlaceForBrowse]
   }
 
   schema {

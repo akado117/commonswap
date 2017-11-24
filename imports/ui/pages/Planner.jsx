@@ -1,22 +1,22 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-const _ = require('lodash')
+import Rater from 'react-rater';
+import 'react-rater/lib/react-rater.css';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import PropTypes from 'prop-types';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
+import TextField from 'material-ui/TextField';
+import AppBar from 'material-ui/AppBar';
+import { FormateDates, ParseDates } from '../../helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import Navbar from '../components/Navbar';
-import AppBar from 'material-ui/AppBar';
-import TextField from 'material-ui/TextField';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
-import Rater from 'react-rater'
-import 'react-rater/lib/react-rater.css'
-import BetaWarning from '../components/BetaWarning';
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
+
 
 const styles = {
     button: {
@@ -50,7 +50,7 @@ class Planner extends React.Component {
         this.state = {
             controlledDate: [new Date()],
             testDates: [new Date(),new Date(), new Date()],
-            selectedDates: props.place.place.availableDates || [],
+            selectedDates: ParseDates(props.place.place.availableDates || []),
             imgsData: [
                 {
                     url: 'http://stretchflex.net/photos/apartment.jpeg'
@@ -69,7 +69,7 @@ class Planner extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
-            const selectedDates = this.props.place.place.availableDates || [];
+            const selectedDates = ParseDates(this.props.place.place.availableDates || []);
             this.setState({ selectedDates });
         }
     }
@@ -112,7 +112,6 @@ class Planner extends React.Component {
             <div className="planner-container">
                 <Navbar></Navbar>
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
-                <BetaWarning></BetaWarning>
                     <div className="row" >
                         <div className="col s12 calendar-parent">
                             <AppBar
@@ -167,7 +166,7 @@ class Planner extends React.Component {
                     <div className="row">
                         <div className="col s12">
                             <AppBar
-                                title={<span>Activity</span>}
+                                title={<span>Activity - UNDER CONSTRUCTION</span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: '0' }}
                             />

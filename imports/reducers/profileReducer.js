@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import { SUCCESS, actionTypes } from '../lib/Constants';
 
 const initialState = {
@@ -6,15 +6,16 @@ const initialState = {
     interests: {},
     emergencyContacts: [],
 };
+let stateClone;
 //case is exactly the same as the type
 function profileReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.SAVE_PROFILE}_${SUCCESS}`:
-        return _.assign({}, state, {
-            profile: action.profile,
-            interests: action.interests,
-            emergencyContacts: action.emergencyContacts,
-        });
+        stateClone = cloneDeep(state);
+        stateClone.profile = action.profile;
+        stateClone.interests = action.interests;
+        stateClone.emergencyContacts = action.emergencyContacts;
+        return stateClone;
     case actionTypes.LOGOUT:
         return initialState;
     default:

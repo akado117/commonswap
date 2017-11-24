@@ -2,17 +2,22 @@ import s3PublicUrl from 'node-s3-public-url';
 import { check } from 'meteor/check';
 import Stripe from 'stripe';
 import FileUrls from '../imports/collections/FileUrls';
+import ApolloClient from 'apollo-client';
+import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers } from '../imports/collections/mainCollection';
 import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode } from '../imports/lib/Constants';
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile } from '../imports/lib/Constants';
 import S3 from './s3';
 import _ from 'lodash';
 
-function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
+const client = new ApolloClient(meteorClientConfig());
+
+function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
     if (!fileObj[boundToProp]) return serviceErrorBuilder(`Please create and save a ${imgType} first`, placeErrorCode);
     if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
     const insertObj = {
+        active: activeFlag,
         deleted: false,
         userId,
         [boundToProp]: fileObj[boundToProp],
@@ -23,6 +28,15 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId) {
     };
 
     const insertId = FileUrls.insert(insertObj);
+    if (activeFlag) {
+        const searchForObj = {
+            active: true,
+            _id: { $ne: insertId },
+        };
+        if (boundToProp) searchForObj[boundToProp] = fileObj[boundToProp];
+        const numberUpdated = FileUrls.update(searchForObj, { $set: { active: false } });
+        consoleLogHelper(`${numberUpdated} Images changed to inactive`, genericSuccessCode, userId, '');
+    }
 
     consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
     return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
@@ -168,7 +182,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             delete amenitiesClone.ownerUserId;
             delete amenitiesClone.placeId;
 
-            consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(placeClone));
+            consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Place Id ${JSON.stringify(placeClone._id)}`);
             return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID}, genericSuccessCode, {
                 serviceMessage: `Place ${placeClone._id ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
                 data: {
@@ -183,8 +197,66 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
-    'places.getByAvailability': function getByAvailability(startDate, endDate) {
-        return Places.find({ availableDates: { $elemMatch: { start: { $lte: startDate }, end: { $gte: endDate } } } }).fetch();
+    'places.updateAvailability': function getByAvailability({ availableDates, _id }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
+        if (!_id || !availableDates) return serviceErrorBuilder('Please provide correct params', placeErrorCode);
+        const setObj = {
+            $set: {
+                availableDates,
+            },
+        };
+        try {
+            Places.update({ _id, ownerUserId: userId }, setObj);//ownerUserId means that only if the place is owned by the logged in user it can be updated
+            consoleLogHelper('Place Availability updated successfully', genericSuccessCode, userId, JSON.stringify(availableDates));
+            return serviceSuccessBuilder({ numberOfDates: availableDates.length }, genericSuccessCode, {
+                serviceMessage: `Place availability successfully updated to ${availableDates.length} dates`,
+                data: {
+                    place: {
+                        availableDates,
+                    },
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Place availability update failed', upsertFailedCode, userId, err);
+            return serviceErrorBuilder('Place availability update failed', upsertFailedCode, err);
+        }
+    },
+    'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
+        if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
+        try {
+            const searchObj = { availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }
+            if (numOfGuests) searchObj.numOfGuests = { $gte: numOfGuests };
+            const places = Places.find(searchObj, { fields: FieldsForBrowseProfile}).fetch();
+            const placeIds = [];
+            const ownerUserIds = [];
+            places.forEach((place) => {
+                placeIds.push(place._id);
+                ownerUserIds.push(place.ownerUserId);
+            });
+            const addresses = Addresses.find({ placeId: { $in: placeIds } }, { fields: FieldsForBrowseProfile }).fetch();
+            const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
+            const profileImgs = FileUrls.find({ userId: { $in: ownerUserIds }, deleted: false, active: true }, { fields: FieldsForBrowseProfile }).fetch();
+            const profiles = Profiles.find({ ownerUserId: { $in: ownerUserIds }}, { fields: FieldsForBrowseProfile }).fetch();
+            consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId);
+            return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
+                serviceMessage: `We found ${places.length} places within date range`,
+                data: {
+                    places,
+                    addresses,
+                    placeImgs,
+                    profileImgs,
+                    profiles,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Searching for places with ${arrival} and ${arrival} failed`, placeErrorCode, userId, err);
+            return serviceErrorBuilder(`Searching for places with ${arrival} and ${arrival} failed`, placeErrorCode, err);
+        }
     },
     'images.place.store': function placeImageStore(fileObj) {
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());
@@ -207,7 +279,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         });
     },
     'images.profile.store': function placeImageStore(fileObj) {
-        return imageServiceHelper(fileObj, FileTypes.PROFILE, 'profileId', Meteor.userId());
+        return imageServiceHelper(fileObj, FileTypes.PROFILE, 'profileId', Meteor.userId(), true);
     },
     'images.profile.getOne': function profileImageGet() {
         const userId = Meteor.userId();

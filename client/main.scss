@@ -7,6 +7,7 @@
 // import main scss file
 @import "{poetic:materialize-scss}/sass/materialize.scss";
 
+@import "{}/client/sass/_helpers.scss";
 @import "{}/client/sass/_FuseTest.scss";
 @import "{}/client/sass/_RoommateCalc.scss";
 @import "{}/client/sass/_DayProrater.scss";
@@ -35,3 +36,4 @@
 @import "{}/client/sass/components/_CloseButton.scss";
 @import "{}/client/sass/components/_Testimonials.scss";
 @import "{}/client/sass/components/_About.scss";
+@import "{}/client/sass/components/_PlaceForBrowse.scss";

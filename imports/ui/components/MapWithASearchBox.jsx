@@ -114,22 +114,22 @@ class MapComponent extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.state = {isMarkerShown: false}
+        this.state = { isMarkerShown: false };
     }
 
     componentDidMount() {
-        this.delayedShowMarker()
+        this.delayedShowMarker();
     }
 
     delayedShowMarker = () => {
         setTimeout(() => {
-            this.setState({isMarkerShown: true})
-        }, 3000)
+            this.setState({ isMarkerShown: true });
+        }, 3000);
     }
 
     handleMarkerClick = () => {
         this.setState({isMarkerShown: false})
-        this.delayedShowMarker()
+        this.delayedShowMarker();
     }
 
     render() {
@@ -145,11 +145,11 @@ class MapComponent extends React.PureComponent {
 MapComponent.propTypes = {
     className: PropTypes.string,
     latitude: PropTypes.string,
-    longitude: PropTypes.string
+    longitude: PropTypes.string,
 };
 
 MapComponent.defaultProps = {
-    className: ''
+    className: '',
 };
 
 export default MapSearchBox;

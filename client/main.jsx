@@ -22,6 +22,8 @@ import Browse from '../imports/ui/pages/Browse';
 import About from '../imports/ui/pages/About';
 import FAQ from '../imports/ui/pages/FAQ';
 import Testimonials from '../imports/ui/components/Testimonials';
+import Trust from '../imports/ui/pages/Trust';
+import Community from '../imports/ui/pages/Community';
 
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
@@ -49,6 +51,8 @@ Meteor.startup(() => {
                 <Route path="about" component={About} />
                 <Route path="faq" component={FAQ} />
                 <Route path="testimonials" component={Testimonials} />
+                <Route path="trust" component={Trust} />
+                <Route path="community" component={Community} />
             </Route>
         </Router>
      </Provider></ApolloProvider>,

@@ -88,6 +88,7 @@ export const FieldsForBrowseProfile = {
     _id: 1,
     ownerUserId: 1,
     userId: 1,
+    profileId: 1,
     placeId: 1,
     placeImgs: 1,
     shortDesc: 1,
@@ -101,3 +102,6 @@ export const FieldsForBrowseProfile = {
     school: 1,
     classOf: 1,
 }
+
+export const intTypeParams = ['numOfGuests', 'bathrooms', 'bedrooms', 'beds'];
+export const doubleTypeParams = ['rent', 'lat', 'lng'];

@@ -128,7 +128,7 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s6 input-field inline">
                         <label htmlFor="rent"><i className="fa fa-usd" aria-hidden="true"></i> Current Monthly Rent</label>
-                        <input type="text" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e))} defaultValue={place.rent} />
+                        <input type="number" min="0" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e))} defaultValue={place.rent} />
                     </div>
                     <div className="col s6 input-field inline">
                         <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e))} defaultValue={place.beds} />

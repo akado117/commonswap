@@ -46,8 +46,8 @@ Meteor.startup(() => {
                 <Route path="viewprofile" component={ViewProfile} />
                 <Route path="card" component={CreditCard} />
                 <Route path="browse" component={Browse} />
-                <Route path="about" component={About} />
-                <Route path="faq" component={FAQ} />
+                <Route path="about(/:index)" component={About} />
+                <Route path="faq(/:index)" component={FAQ} />
                 <Route path="testimonials" component={Testimonials} />
             </Route>
         </Router>

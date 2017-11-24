@@ -22,7 +22,7 @@ class FAQ extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: 0,
+            selectedIndex: props.params.index || 0,
         };
     }
     FAQNav = [

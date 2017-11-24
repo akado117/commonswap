@@ -12,7 +12,7 @@ class About extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: 0,
+            selectedIndex: parseInt(props.params.index, 10) || 0,
         };
     }
 

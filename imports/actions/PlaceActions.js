@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../lib/Constants';
 import Store from '../store/store';
 import { FormateDates, FormateDate } from '../helpers/DateHelpers';
-import { buildPlaceForBrowseObjs } from '../helpers/DataHelpers'
+import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords } from '../helpers/DataHelpers'
 
 const PlaceActions = {
     upsertPlace: (placeData) => {
@@ -15,6 +15,7 @@ const PlaceActions = {
             amenities: currentPlaceData.amenities || {},
         };
         const { place, address, amenities } = merge({}, mappedCurrentPlaceDate, placeData);//technically more bandwidth but less sever load
+        mapMongoGeoSpatialCoords(place);
         return dispatch => Meteor.call('upsertPlace', place, address, amenities, (error, result) => {
             if (error) {
                 console.log(error);
@@ -65,10 +66,9 @@ const PlaceActions = {
             };
         }
     },
-    saveBrowseDates: ({ arrival, departure }) => ({
+    saveBrowseData: data => ({
         type: actionTypes.SAVE_BROWSE_DATES,
-        arrival,
-        departure,
+        ...data,
     }),
     getPlaceBasedUponAvailability: (unFormattedDates) => {
         // const data = unFormattedDates.query({query: gql`

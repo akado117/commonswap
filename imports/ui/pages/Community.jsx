@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 
@@ -20,8 +19,7 @@ class Community extends Component {
         }
         return (
             <div className="community-container">
-                <Navbar className="invisible"></Navbar>
-                <header style={{ paddingTop: '35px' }}>
+                <header >
                     <div className="col s12 center-align">
                         <div className="header-container overlay-desc">
                             <h1 className="header-title">Community Values<br />

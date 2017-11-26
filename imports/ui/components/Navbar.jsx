@@ -4,20 +4,40 @@ import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 import Login from '../pages/Login';
 
-const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px'}
+const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px' };
 
 class Navbar extends React.Component {
+    invisHeaderRoutes = /^(\/|\/home|\/community)$/;
     constructor(props) {
         super(props);
-        this.state = { scrollClass: 'transparent ' }
-    }
-
-    handleScroll(e) {
-        this.setState({ scrollClass: 'no-transparent' })
+        this.state = {
+            isTop: this.isInvisRoute(props),
+        };
     }
 
     componentDidMount = () => {
-        $(".button-collapse").sideNav();
+        $('.button-collapse').sideNav();
+        if (this.isInvisRoute(this.props)) document.addEventListener('scroll', this.scrollFunc);
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.location.pathname === this.props.location.pathname) return;
+        if (this.isInvisRoute(prevProps) && !this.isInvisRoute(this.props)) {
+            document.removeEventListener('scroll', this.scrollFunc);
+        } else {
+            document.addEventListener('scroll', this.scrollFunc);
+        }
+        this.setState({ isTop: this.isInvisRoute(this.props) });
+        $('.button-collapse').sideNav('hide');
+    }
+
+    isInvisRoute = props => !!props.location.pathname.match(this.invisHeaderRoutes);
+
+    scrollFunc = () => {
+        if ((window.scrollY < 100) !== this.state.isTop) {
+            if (!this.isInvisRoute(this.props)) return;
+            this.setState({ isTop: window.scrollY < 100 });
+        }
     }
 
     travelHome = (e) => {
@@ -26,9 +46,10 @@ class Navbar extends React.Component {
     }
 
     render() {
-        let { scrollClass } = this.state
+        const { className } = this.props;
+        const invisToggle = this.isInvisRoute(this.props);
         return (
-            <div className={`navbar-fixed ${this.props.className}`} >
+            <div className={`navbar-fixed ${className} ${invisToggle ? 'invis-toggle-true ' : ' '}${this.state.isTop ? 'invisible' : 'visible'}`} >
                 <nav className="nav-wrapper">
                     <div>
                         <div onClick={this.travelHome} className="brand-logo"><img src="http://stretchflex.net/photos/CommonSwapNew2.png" alt="" style={{ maxHeight: '64px', paddingLeft:'15px',paddingBottom:'5px'}} /></div>
@@ -58,11 +79,14 @@ class Navbar extends React.Component {
 
 Navbar.propTypes = {
     router: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     className: PropTypes.string,
+    invisToggle: PropTypes.bool,
 }; 
 
 Navbar.defaultProps = {
     className: '',
+    invisToggle: false,
 };
 
 export default withRouter(Navbar);

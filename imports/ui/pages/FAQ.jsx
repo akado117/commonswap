@@ -4,7 +4,6 @@ import Paper from 'material-ui/Paper';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Founders from '../components/about/Founders';
 import AboutUs from '../components/about/AboutUs';
@@ -116,7 +115,6 @@ class FAQ extends Component {
         )
         return (
             <div className="faq-container">
-                <Navbar className="invisible"></Navbar>
                 <div className="row container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
                     <div className="col s4">
                         <div className="col s12 hide-on-med-and-down">

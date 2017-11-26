@@ -1,4 +1,5 @@
 import '../imports/startup';
+import { Places } from '../imports/collections/mainCollection';
 import { createApolloServer } from 'meteor/apollo';
 import { makeExecutableSchema } from 'graphql-tools';
 
@@ -13,3 +14,5 @@ const schema = makeExecutableSchema({
 createApolloServer({
   schema,
 });
+
+Places._ensureIndex({ location: '2dsphere'});

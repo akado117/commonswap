@@ -3,21 +3,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
-import { browserHistory } from 'react-router';
-const _ = require('lodash');
+const { cloneDeep } = require('lodash');
+import FontIcon from 'material-ui/FontIcon';
+import MenuItem from 'material-ui/MenuItem';
+import DatePicker from 'material-ui/DatePicker';
+
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
 import FileActions from '../../actions/FileActions';
-
-import FontIcon from 'material-ui/FontIcon';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
-import MapComponent from '../components/MapComponent';
-import BetaWarning from '../components/BetaWarning';
+import MapWithASearchBox from '../components/MapWithASearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
 import { onChangeHelper } from '../../helpers/DataHelpers';
 
@@ -35,17 +30,18 @@ class Browse extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            numOfGuests: 0,
+            numOfGuests: props.place.numOfGuests,
             arrival: props.place.arrival || new Date(),
             departure: props.place.departure || new Date(),
+            coords: props.place.coords,
         };
     }
 
     searchForPlaces = () => {
-        const { arrival, departure, numOfGuests } = this.state;
+        const { arrival, departure, numOfGuests, coords } = this.state;
         if (!arrival || !departure) return this.setState({ searchMessage: 'Please select your dates to travel' });
         this.setState({ searchMessage: SEARCHED });
-        this.props.placeActions.getPlaceBasedUponAvailability({ arrival, departure, numOfGuests });
+        this.props.placeActions.getPlaceBasedUponAvailability({ arrival, departure, numOfGuests ,coords });
         return undefined;
     }
 
@@ -56,18 +52,35 @@ class Browse extends Component {
     }
 
     componentWillUnmount = () => {
-        const { arrival, departure } = this.state;
-        this.props.placeActions.saveBrowseDates({
+        const {
             arrival,
             departure,
-        });
+            coords,
+            numOfGuests,
+        } = this.state;
+        const halfwayHouse = {
+            arrival,
+            departure,
+            coords,
+            numOfGuests,
+        };
+        this.props.placeActions.saveBrowseData(halfwayHouse);
+    }
+
+    onSetLocation = (coords) => {
+        this.setState({ coords });
+    }
+
+    updateCordsDistance = (distance) => {
+        const coords = cloneDeep(this.state.coords || {});
+        coords.distance = parseInt(distance);
+        this.setState({ coords });
     }
 
     render() {
-        const { placesForBrowsing } = this.props.place;
+        const { placesForBrowsing, place, coords } = this.props.place;
         return (
             <div className="browse-container">
-                <Navbar></Navbar>
                 <div className="container">
                     <div className="row">
                         <div className="col s6 m4 l3">
@@ -91,7 +104,11 @@ class Browse extends Component {
                         </div>
                         <div className="col s6 m4 l3  input-field inline">
                             <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
-                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
+                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true" /> Sleeps how many</label>
+                        </div>
+                        <div className="col s6 m4 l3  input-field inline">
+                            <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
+                            <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Range: Miles</label>
                         </div>
                         <div className="col s6 m4 l3 offset-s6 valign-wrapper">
                             <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >
@@ -100,6 +117,11 @@ class Browse extends Component {
                             </button>
                         </div>
                     </div>
+                    {this.state.coords && this.state.coords.distance > 0 ? <MapWithASearchBox
+                        profile={place}
+                        coords={coords}
+                        onSetLocation={this.onSetLocation}
+                    /> : ''}
                 </div>
                 <div className={`row ${this.state.searchMessage === '' ? 'hide' : ''}`}>
                     <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >

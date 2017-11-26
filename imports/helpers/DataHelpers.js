@@ -49,3 +49,13 @@ export function parseFloats(obj, propArrToConv = doubleTypeParams) { //modifies 
     });
     return obj;
 }
+
+export function mapMongoGeoSpatialCoords(obj) { //modifies original object
+    if (obj && obj.coords && obj.coords.lat !== undefined && obj.coords.lng !== undefined) {
+        const { lng, lat } = obj.coords;
+        obj.location = {
+            type: 'Point',
+            coordinates: [lng, lat],
+        };
+    }
+}

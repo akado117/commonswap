@@ -8,6 +8,8 @@ const initialState = {
     placesForBrowsing: [],
     arrival: null,
     departure: null,
+    coords: null,
+    numOfGuests: null,
 };
 let stateClone;
 function placeReducer(state = initialState, action = {}) {
@@ -28,8 +30,11 @@ function placeReducer(state = initialState, action = {}) {
         return stateClone;
     case actionTypes.SAVE_BROWSE_DATES:
         stateClone = cloneDeep(state);
-        stateClone.arrival = action.arrival;
-        stateClone.departure = action.departure;
+        Object.keys(action).forEach((key) => {
+            if (key !== 'type' && action[key]) {
+                stateClone[key] = action[key];
+            }
+        });
         return stateClone;
     case actionTypes.LOGOUT:
         return initialState;

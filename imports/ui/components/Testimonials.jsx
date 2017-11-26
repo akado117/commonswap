@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 class Testimonials extends Component {
@@ -7,11 +6,9 @@ class Testimonials extends Component {
         super(props);
     }
 
-
     render() {
         return (
             <div className="testimonial-container">
-                <Navbar></Navbar>
                 <header></header>
                 <div className="container pad-top">
                     <div className="row">

@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Navbar from './components/Navbar';
 
 const test = gql;
 
@@ -18,7 +19,10 @@ class Layout extends React.Component {
     render() {
         return (
             <MuiThemeProvider>
-                {this.props.children}
+                <div>
+                    <Navbar />
+                    {this.props.children}
+                </div>
             </MuiThemeProvider>
         );
     }

@@ -2,22 +2,16 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-const _ = require('lodash')//required so it can be used easily in chrome dev tools.
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
 import FileActions from '../../actions/FileActions';
 import DatePicker from 'material-ui/DatePicker';
 import FontIcon from 'material-ui/FontIcon';
-import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
 import ProfileComponent from '../components/profileComps/ProfileComponent.js'
-import InterestsComponent from '../components/forms/ButtonArrayComp.js'
 import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -143,7 +137,6 @@ class ViewProfile extends React.Component {
 
         return (
             <section className="profile-view-container">
-                <Navbar></Navbar>
                 <div className="container">
                     <BetaWarning></BetaWarning>
                     <div className="col s12 z-depth-2 place-images">

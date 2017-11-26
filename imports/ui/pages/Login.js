@@ -6,11 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import { browserHistory, Link } from 'react-router';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { grey500, white } from 'material-ui/styles/colors';
-import ThemeDefault from '../helpers/themes';
-import Navbar from '../components/Navbar';
 import UserActions from '../../actions/userActions';
 
 const styles = {

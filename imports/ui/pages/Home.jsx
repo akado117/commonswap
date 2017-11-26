@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import ReactPlayer from 'react-player';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { render } from 'react-dom';
 
@@ -9,15 +8,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isTop: true,
             muted: true,
         };
-    }
-
-    componentDidMount() {
-        document.addEventListener('scroll', () => {
-            this.setState({isTop: window.scrollY < 100})
-        });
     }
 
     toggleMuted = () => this.setState({ muted: !this.state.muted });
@@ -25,7 +17,6 @@ class Home extends Component {
     render() {
         return (
             <div className="home-container">
-                <Navbar className={this.state.isTop ? 'invisible' : 'visible'} ></Navbar>
                 <header className="head-mobile video-parent">
                     <button className="mute-button" onClick={this.toggleMuted}>
                         <i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />

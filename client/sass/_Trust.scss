@@ -4,15 +4,21 @@
         //background-image: url(https://s3.us-east-2.amazonaws.com/cslistingphotos/trustHeader/AdobeStock_88918338.jpeg);
         background-image: url("https://s3.us-east-2.amazonaws.com/com-swap-prod/static/AdobeStock_85935768s.jpg");
         background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 100%;
+        background-position: 75% 50%;
+        background-size: cover;
         height:80vh;
         padding: 0 0;
         background-origin: padding-box;
+        @media #{$small-and-down} {
+            height: 60vh;
+        }
     }
     .header-title {
         color: white;
         font-size:5.5rem;
+        @media #{$small-and-down} {
+            font-size: 3.5rem;
+        }
     }
     .overlay-desc {
         position:absolute;

@@ -10,8 +10,6 @@ import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNaviga
 import Paper from 'material-ui/Paper';
 import ProfileComponent from '../components/profileComps/ProfileComponent.js';
 import PlaceComponent from '../components/placeComponents/PlaceComponent.js';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import CreditCard from '../components/verificationComponent/CreditCard.js';
 
 import ProfileActions from '../../actions/ProfileActions';
@@ -131,7 +129,6 @@ class Profile extends React.Component {
         const path = browserHistory.getCurrentLocation().pathname === '/profile';
         return (
             <section className="profile-container" >
-                <Navbar />
                 <Paper id="profile-nav" zDepth={1} /*Todo: animate and use transitions to have it follow scroll*/>
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
                         <BottomNavigationItem

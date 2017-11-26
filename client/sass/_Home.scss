@@ -19,36 +19,6 @@
     font-style: sans-serif;
   }
 
-  .navbar-fixed {
-    margin-bottom: -65px;
-  }
-  .invisible {
-    nav {
-      background-color: transparent;
-      ul li a {
-        color: white;
-        border-bottom: none !important;
-
-      }
-      .brand-logo {
-        display: none;
-      }
-      span {
-        color: white;
-      }
-      box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
-    }
-    .side-nav {
-      a {
-        color: black !important;
-      }
-    }
-  }
-  .visible {
-    nav {
-      background-color: white;
-    }
-  }
   .video-parent {
     width: 100vw;
     overflow: hidden;
@@ -198,9 +168,6 @@
   }
 
   @media #{$small-and-down} {
-    .navbar-fixed {
-      margin-bottom: -56px;
-    }
     .video-container {
       left: -50%;
       width: 200%;

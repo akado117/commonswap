@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Founders from '../components/about/Founders';
 import AboutUs from '../components/about/AboutUs';
@@ -28,7 +27,6 @@ class About extends Component {
         }
         return (
             <div>
-                <Navbar className="invisible"></Navbar>
                 <div className="row container" style={{ marginTop: '35px' }}>
                     <div className="col s3">
                         <div className="col s12">

@@ -16,7 +16,7 @@ const MapSearchBox = compose(
     lifecycle({
         componentWillMount() {
             const refs = {}
-            const { lat, lng } = (this.props.place && this.props.place.coords) || {};
+            const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || {};
 
             this.setState({
                 bounds: null,
@@ -45,7 +45,7 @@ const MapSearchBox = compose(
                         console.log(location);
                         this.props.onSetLocation({
                             lat: location.lat(),
-                            lng: location.lng()
+                            lng: location.lng(),
                         });
                     });
 

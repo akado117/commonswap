@@ -1,11 +1,46 @@
 $nav-wrapper-height: 65px;
-.nav-wrapper {
-  background-color: white;
-  height: $nav-wrapper-height;
-  ul li a {
-    color: black;
+.navbar-fixed {
+  &.invis-toggle-true{
+    margin-bottom: -65px;
+    @media #{$small-and-down} {
+      margin-bottom: -56px;
+    }
   }
-  .nav-login {
-    float: right;
+  .nav-wrapper {
+    background-color: white;
+    height: $nav-wrapper-height;
+    ul li a {
+      color: black;
+    }
+    .nav-login {
+      float: right;
+    }
+  }
+  &.invisible {
+    nav {
+      background-color: transparent;
+      ul li a {
+        color: white;
+        border-bottom: none !important;
+
+      }
+      .brand-logo {
+        display: none;
+      }
+      span {
+        color: white;
+      }
+      box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
+    }
+    .side-nav {
+      a {
+        color: black !important;
+      }
+    }
+  }
+  &.visible {
+    nav {
+      background-color: white;
+    }
   }
 }

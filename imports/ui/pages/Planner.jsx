@@ -11,7 +11,6 @@ import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import { FormateDates, ParseDates } from '../../helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
-import Navbar from '../components/Navbar';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import ProfileActions from '../../actions/ProfileActions';
@@ -110,7 +109,6 @@ class Planner extends React.Component {
     render() {
         return (
             <div className="planner-container">
-                <Navbar></Navbar>
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
                     <div className="row" >
                         <div className="col s12 calendar-parent">

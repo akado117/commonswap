@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 
@@ -13,7 +12,6 @@ class Trust extends Component {
     render() {
         return (
             <div className="trust-container">
-                <Navbar className="invisible"></Navbar>
                 <header style={{ paddingTop: '35px' }}>
                     <div className="col s12 center-align">
                         <div className="header-container overlay-desc">

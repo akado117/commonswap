@@ -226,13 +226,22 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Place availability update failed', upsertFailedCode, err);
         }
     },
-    'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests }) {
+    'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests, coords }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
         if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
         try {
             const searchObj = { availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }
             if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
+            if (coords && coords.lat !== undefined && coords.lng !== undefined) {
+                const { lat, lng, distance } = coords;
+                const maxDistance = parseFloat((distance || 50) / 3959);
+                searchObj.location = {
+                    $geoWithin: {
+                        $centerSphere: [[lng, lat], maxDistance],
+                    },
+                };
+            }
             const places = Places.find(searchObj, { fields: FieldsForBrowseProfile }).fetch();
             const placeIds = [];
             const ownerUserIds = [];

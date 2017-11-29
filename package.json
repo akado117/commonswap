@@ -2,7 +2,7 @@
   "name": "ComSwap",
   "private": true,
   "scripts": {
-    "start": "meteor run --settings dev.settings.json",
+    "start": "MONGO_URL=mongodb://takodev:S0meJun3Pw4@ds229415.mlab.com:29415/comswapdev meteor run --settings dev.settings.json",
     "lint": "./node_modules/.bin/eslint client server imports",
     "lint:errors": "npm run lint -- --quiet",
     "lint:fix": "npm run lint -- --fix",

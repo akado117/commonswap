@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { intTypeParams, doubleTypeParams } from '../lib/Constants';
 //arr and indexArry need to match
 export const pullMatchingFromArray = (arr, indexArry, val) => {//arr is obj array, indexArr is array of key index to find, key is key to compare against, value is value to Match
@@ -16,17 +17,13 @@ export const pullMatchingFromArray = (arr, indexArry, val) => {//arr is obj arra
 };
 
 //THIS WILL MODIFIY OBJECTS FED IN
-export const buildPlaceForBrowseObjs = ({ places, addresses, placeImgs, profileImgs, profiles }) => {
+export const buildPlaceForBrowseObjs = ({ places, placeImgs }) => {
     const placeForBrowseArray = [];//notCloning for performance reasons
     const placeImageIdx = placeImgs.map(img => img.placeId || 'NA');
     places.forEach((place) => {
-        const addressIdx = addresses.findIndex(addy => addy.placeId === place._id);
-        const profileImgIdx = profileImgs.findIndex(img => img.userId === place.ownerUserId);
-        const profileIdx = profiles.findIndex(prof => prof.ownerUserId === place.ownerUserId);
-        place.address = addressIdx > -1 ? addresses.splice(addressIdx, 1)[0] : {};
-        place.profileImg = profileImgIdx > -1 ? profileImgs.splice(profileImgIdx, 1)[0] : {};
+        const { address, profile } = place;
+        if (!address || !profile) return;
         place.placeImgs = pullMatchingFromArray(placeImgs, placeImageIdx, place._id) || [];
-        place.profile = profileIdx > -1 ? profiles.splice(profileIdx, 1)[0] : {};
         placeForBrowseArray.push(place);
     });
     return placeForBrowseArray;
@@ -58,4 +55,41 @@ export function mapMongoGeoSpatialCoords(obj) { //modifies original object
             coordinates: [lng, lat],
         };
     }
+}
+
+export function buildPlaceForUpsert(placeData, appState) {
+    if (!placeData || !placeData.place) return placeData;
+    const dataClone = cloneDeep(placeData);
+    Object.keys(dataClone).forEach((key) => { //add Ids
+        const { _id } = appState.place[key];
+        if (_id) {
+            dataClone[key]._id = _id;
+        }
+    });
+    dataClone.place.profileImg = appState.images.profileImg || { url: appState.user.picture };
+    const { firstName, personalSummary, classOf, school } = appState.profile.profile;
+    dataClone.place.profile = { firstName, personalSummary, classOf, school };
+    dataClone.place.interests = appState.profile.interests;
+    const { zip, state, city } = placeData.address;
+    dataClone.place.address = { zip, city, state };
+    dataClone.place.amenities = placeData.amenities;
+
+    return dataClone;
+}
+
+export function buildMarkerObj({ lat, lng }) {
+    if (lat !== undefined || lng !== undefined) {
+        return {
+            position: {
+                lat,
+                lng,
+            },
+        };
+    }
+    return { lat, lng };
+}
+
+export function checkIfCoordsAreValid(coords) {
+    const { lat, lng } = coords;
+    return lat !== undefined && lng !== undefined;
 }

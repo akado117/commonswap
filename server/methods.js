@@ -10,6 +10,7 @@ import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, console
 import S3 from './s3';
 import { parseInts, parseFloats } from '../imports/helpers/DataHelpers';
 import _ from 'lodash';
+import handleSignup from '../imports/modules/server/stripe/handle-signup';
 
 const client = new ApolloClient(meteorClientConfig());
 
@@ -52,6 +53,14 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
 }
 
 Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQUIRES REFACTOR TO USE SETTERS FOR UPSERT (prop: $set: data)
+    signup(customer) {
+        check(customer, Object);
+        return handleSignup(customer)
+        .then(customer => customer)
+        .catch((error) => {
+          throw new Meteor.Error('500', `${error}`);
+        });
+      },
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);

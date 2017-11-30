@@ -3,6 +3,9 @@ import FontIcon from 'material-ui/FontIcon';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import Card from './Card';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import handleSignup from '../../../modules/signup';
 
 class CardForm extends Component {
@@ -34,22 +37,29 @@ class CardForm extends Component {
                     <div className="col l12">
                         <RaisedButton label="Update Card" primary={true} onClick={this.handleSubmit} />
                     </div>
-                    {/* <div className="col l12" style={{ marginTop: '1.5rem' }}>
-                        <div className="col l12" style={{ color: 'red' }} >
-                            Learn about available cities weekly!
-                        </div>
-                        <div className="col l6 input-field inline">
-                            <input type="text" className="" id="short-desc" />
-                            <label htmlFor="short-desc"><i className="fa fa-mail" aria-hidden="true"></i>Email</label>
-                        </div>
-                        <div className="col l12">
-                            <RaisedButton label="Sign up" primary={true} onClick={this.handleSubmit} />
-                        </div>
-                    </div> */}
                 </div>
             </div>
         );
     }
 }
 
-export default CardForm;
+function mapStateToProps(state) {
+    const { profile, user } = state;
+    return {
+        profile,
+        user
+    };
+  }
+  
+  function mapDispatchToProps(dispatch) {
+    return {
+  
+    };
+  }
+  
+  CardForm.propTypes = {
+    user: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired,
+  };
+
+  export default connect(mapStateToProps, mapDispatchToProps)(CardForm);

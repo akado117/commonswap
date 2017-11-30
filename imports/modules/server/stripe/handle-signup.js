@@ -2,24 +2,31 @@
 
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import Customers from '../../../api/customers/customers';
+import Customers from '../../../collections/mainCollection';
 import { createCustomer, createSubscription } from './index';
 
 let action;
 
-//NOTE: This is meteor chef stuff ignore this for now.
-//However will need to create a customer in the database in this method at some point
-// const createCustomerInDatabase = Meteor.bindEnvironment((customer) => {
-//   try {
-//     return Customers.insert(customer);
-//   } catch (exception) {
-//     action.reject(`[handleSignup.createCustomerInDatabase] ${exception}`);
-//   }
-// });
-
-const createCustomerOnStripe = ({ userId, firstName, lastName, email }, source) => {
+//Need logic to update customer in db if one already exists
+const createCustomerInDatabase = Meteor.bindEnvironment((customer) => {
   try {
-    //NOTE:Card token is the source
+    // let customerClone = _.cloneDeep(customer);
+    // let customerId = customerClone.userId;
+    // if(!customerId)
+    // {
+    //   const userId = Meteor.userId();
+    //   const ownerCustomer = Customers.findOne({ userId: customerClone.userId || userId }, { sort: { added: -1 } }) || {};
+    //   ownerCustomerId = √._id;
+    //   customerClone = _.merge(ownerCustomer, customerClone);
+    // }
+    return Customers.upsert(customer);
+  } catch (exception) {
+    action.reject(`[handleSignup.createCustomerInDatabase] ${exception}`);
+  }
+});
+
+const createCustomerOnStripe = ({ userId, profile, email }, source) => {
+  try {
     return createCustomer({ email, source, metadata: profile.name })
     .then(({ id, sources }) => {
       const card = sources.data[0];
@@ -33,7 +40,9 @@ const createCustomerOnStripe = ({ userId, firstName, lastName, email }, source) 
 
 const handleSignup = (options, promise) => {
   try {
+    
     action = promise;
+
     const userId = Meteor.userId();
     createCustomerOnStripe({ ...options.user, userId }, options.source)
     .then(Meteor.bindEnvironment((customer) => {

@@ -8,6 +8,8 @@ import { Profiles } from '../imports/collections/mainCollection';
 
 Meteor.methods({
   signup(customer) {
+    console.log('Customer');
+    console.log(customer);
     check(customer, Object);
     return handleSignup(customer)
     .then(customer => customer)

@@ -2,14 +2,14 @@
 
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import Customers from '../../../collections/mainCollection';
+import { Customers } from '../../../collections/mainCollection';
 import { createCustomer, createSubscription } from './index';
 
 let action;
 
-//Need logic to update customer in db if one already exists
+//Need logic to uasdfasdf
 const createCustomerInDatabase = Meteor.bindEnvironment((customer) => {
-  try {
+    //try {
     // let customerClone = _.cloneDeep(customer);
     // let customerId = customerClone.userId;
     // if(!customerId)
@@ -19,29 +19,32 @@ const createCustomerInDatabase = Meteor.bindEnvironment((customer) => {
     //   ownerCustomerId = √._id;
     //   customerClone = _.merge(ownerCustomer, customerClone);
     // }
-    return Customers.upsert(customer);
-  } catch (exception) {
-    action.reject(`[handleSignup.createCustomerInDatabase] ${exception}`);
-  }
+    return Customers.insert(customer);
+  // } catch (exception) {
+  //   action.reject(`[handleSignup.createCustomerInDatabase] ${exception}`);
+  // }
 });
 
 const createCustomerOnStripe = ({ userId, profile, email }, source) => {
-  try {
+  // try {
     return createCustomer({ email, source, metadata: profile.name })
     .then(({ id, sources }) => {
       const card = sources.data[0];
       return { card, id };
     })
-    .catch(error => action.reject(error));
-  } catch (exception) {
-    action.reject(`[handleSignup.createCustomerOnStripe] ${exception}`);
-  }
+  // .catch(error => action.reject(error));
+  // } catch (exception) {
+  //   action.reject(`[handleSignup.createCustomerOnStripe] ${exception}`);
+  // }
 };
 
 const handleSignup = (options, promise) => {
-  try {
+  // try {
     
     action = promise;
+
+    console.log("Handle Signup");
+    console.log(options);
 
     const userId = Meteor.userId();
     createCustomerOnStripe({ ...options.user, userId }, options.source)
@@ -54,9 +57,9 @@ const handleSignup = (options, promise) => {
         action.resolve();
     }))
     .catch(error => action.reject(`[handleSignup] ${error}`));
-  } catch (exception) {
-    action.reject(`[handleSignup] ${exception}`);
-  }
+  // } catch (exception) {
+  //   action.reject(`[handleSignup] ${exception}`);
+  // }
 };
 
 export default customer =>

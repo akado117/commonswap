@@ -139,17 +139,6 @@ class ViewProfile extends React.Component {
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
-                    <div className="col s12 z-depth-2 place-images">
-                        <div className="row">
-                            <div className="col s12 l8 main-image">
-                            <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                            <img src={this.props.images.placeImgs[1] ? this.props.images.placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            <img src={this.props.images.placeImgs[2] ? this.props.images.placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div>
-                        </div>
-                    </div>
                     <div className="row">
                         <div className="col s12 l8">
                             <div className="row">
@@ -288,6 +277,17 @@ class ViewProfile extends React.Component {
                                         <p>{this.props.place.place.notesOnArea}</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col s12 z-depth-2 place-images">
+                        <div className="row">
+                            <div className="col s12 l8 main-image">
+                            <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
+                            </div>
+                            <div className="col l4 scroll-image">
+                            <img src={this.props.images.placeImgs[1] ? this.props.images.placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            <img src={this.props.images.placeImgs[2] ? this.props.images.placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
                             </div>
                         </div>
                     </div>

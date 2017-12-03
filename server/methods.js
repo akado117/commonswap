@@ -5,13 +5,19 @@ import FileUrls from '../imports/collections/FileUrls';
 import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers } from '../imports/collections/mainCollection';
-import { serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile } from '../imports/lib/Constants';
+import {
+    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
+} from '../imports/lib/Constants';
 import S3 from './s3';
-import { parseInts, parseFloats } from '../imports/helpers/DataHelpers';
-import _ from 'lodash';
+import { parseInts, parseFloats, checkIfCoordsAreValid } from '../imports/helpers/DataHelpers';
+import { merge, cloneDeep } from 'lodash';
+import { HTTP } from 'meteor/http';
+import { Meteor } from 'meteor/meteor';
 
 const client = new ApolloClient(meteorClientConfig());
+let stopLoop = 3;
+let counter = 0;
 
 function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
@@ -51,15 +57,39 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     });
 }
 
+function setterOrInsert(obj) {
+    if (!obj._id) return obj;
+    return {
+        $set: obj,
+    };
+}
+
+function addOwnerIdAndDateStamp(obj, userId, extraProps) {// modifies original object
+    if (obj._id) return; //only way possible is for record to not exist THIS RELYS ON CHECKING DB FOR RECORDS BASED UPON USEROWNERID FIRST
+    obj.ownerUserId = userId;
+    obj.added = new Date();
+    Object.keys(extraProps).forEach((key) => {
+        obj[key] = extraProps[key];
+    });
+}
+
+function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceCheck, extraParams = {}) {
+    if (!objClone._id || forceCheck) { //check for existing profiles if no id passed in
+        const existingDoc = collection.findOne(searchObj, { ...extraParams, sort: { added: -1 } }) || {};
+        return merge(existingDoc, objClone);//overwrite with new data
+    }
+    return objClone;
+}
+
 Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQUIRES REFACTOR TO USE SETTERS FOR UPSERT (prop: $set: data)
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
         //if ((profileParams._id && profileParams.ownerUserId !== userId) || (interests._id && interests.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', profileErrorCode);
         if (profileParams && typeof profileParams === 'object') {
-            let profileClone = _.cloneDeep(profileParams);
-            let interestsClone = _.cloneDeep(interests);
-            let emergencyContactsClone = _.cloneDeep(emergencyContacts);
+            let profileClone = cloneDeep(profileParams);
+            let interestsClone = cloneDeep(interests);
+            let emergencyContactsClone = cloneDeep(emergencyContacts);
 
             try {
                 //profile section
@@ -67,7 +97,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 if (!ownerProfileId) { //check for existing profiles if no id passed in
                     const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
                     ownerProfileId = ownerProfile._id;
-                    profileClone = _.merge(ownerProfile, profileClone);
+                    profileClone = merge(ownerProfile, profileClone);
                 }
                 if (!profileClone.ownerUserId) profileClone.ownerUserId = profileClone.ownerUserId || userId;
                 if (!profileClone.added) profileClone.added = new Date();
@@ -89,7 +119,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 //interests section
                 if (!interestsClone._id) {
                     const ownerInterests = Interests.findOne({ ownerUserId: interestsClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
-                    interestsClone = _.merge(ownerInterests, interestsClone);
+                    interestsClone = merge(ownerInterests, interestsClone);
                 }
                 interestsClone.ownerUserId = interestsClone.ownerUserId || userId;
                 interestsClone.profileId = profileClone._id || profileGUID.insertedId;
@@ -100,7 +130,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 delete interestsClone.profileId;
 
                 consoleLogHelper(`Profile ${profileClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(profileClone));
-                return serviceSuccessBuilder({ profileGUID, emergencyGUIDs, interestsGUID}, genericSuccessCode, {
+                return serviceSuccessBuilder({ profileGUID, emergencyGUIDs, interestsGUID }, genericSuccessCode, {
                     serviceMessage: `Profile ${profileClone._id ? 'updated' : 'added'}, with key ${profileGUID.insertedId || profileClone._id}`,
                     data: {
                         interests: interestsClone,
@@ -125,7 +155,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         stripe.customers.create({
             email: email,
             source: token,
-        }).then(function(customer) {
+        }).then(function (customer) {
             try {
                 console.log('Inside upsert card');
                 console.log(JSON.stringify(customer));
@@ -138,55 +168,105 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             }
         });
     },
+    requestEmail(data) {
+
+        const { Arrival, Departure, Notes, User, placeId } = data;
+        const ownerPlace = Places.findOne({ _id: placeId }) || {};
+        const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
+        const userId = Meteor.userId();
+        console.log("OWNER USER ID");
+        console.log(userId);
+        const RequestorPlace = ownerPlace;
+        const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
+
+        // console.log("methods requestEMAIL");
+        // console.log("REQUESTOR PLACE");
+        // console.log(RequestorPlace);
+        console.log("REQUESTED PLACE");
+        console.log(RequestedPlace);
+
+
+        HTTP.call('POST', 
+        'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+            data:
+                {
+                    User,
+                    Arrival,
+                    Departure,
+                    Notes,
+                    Profile,
+                    RequestorPlace,
+                    RequestedPlace,
+                }
+        }, function( error, response ) {
+            if ( error ) {
+              console.log( error );
+            } else {
+              console.log( response );
+            }
+        });
+
+        // fetch("https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         User,
+        //         Arrival,
+        //         Departure,
+        //         Notes,
+        //         Profile,
+        //     }),
+        // }).then((res) => {
+        //     dispatch({
+        //         type: 'email_sent',
+        //         ...res,
+        //     });
+        // }).catch((err) => {
+        //     dispatch({
+        //         type: 'email_failed',
+        //         ...err,
+        //     });
+        // })
+    },
+
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
         //if ((place._id && place.ownerUserId !== userId) || (address._id && address.ownerUserId !== userId) || (amenities._id && amenities.userId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', placeErrorCode);
-        let placeClone = _.cloneDeep(place);
-        let addressClone = _.cloneDeep(address);
-        let amenitiesClone = _.cloneDeep(amenities);
+        let placeClone = cloneDeep(place);
+        let addressClone = cloneDeep(address);
+        let amenitiesClone = cloneDeep(amenities);
         try {
             //place Section
-            let ownerPlaceId = placeClone._id;//assumes it must be from the db and an update if this is here
-            if (!ownerPlaceId) { //check for existing profiles if no id passed in
-                const ownerPlace = Places.findOne({ ownerUserId: placeClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
-                ownerPlaceId = ownerPlace._id;
-                placeClone = _.merge(ownerPlace, placeClone);//overwrite with new data
-            }
-            if (!placeClone.ownerUserId) placeClone.ownerUserId = userId;
-            if (!placeClone.added) placeClone.added = new Date();
+            placeClone = checkExistingCollectionIfNoId(Places, placeClone, { ownerUserId: placeClone.ownerUserId || userId }, noShowFieldsForPlace);
             parseInts(placeClone);
             parseFloats(placeClone);
-            const placeGUID = Places.upsert({ _id: ownerPlaceId }, placeClone);
+            addOwnerIdAndDateStamp(placeClone, userId);
+            const placeGUID = Places.upsert({ _id: placeClone._id }, setterOrInsert(placeClone));
             if (placeGUID.insertedId) placeClone._id = placeGUID.insertedId; //should have a _id already inless placeGUID had it. As a new doc is created without it
-            delete placeClone.ownerUserId;
+
             //address section
-            if (!addressClone._id) {
-                const oldAddress = Addresses.findOne({ placeId: placeClone._id }, { sort: { added: -1 } }) || {}; //attempt to find any created and merge new data with it
-                addressClone = _.merge(oldAddress, addressClone);
-            }
-            if (!addressClone.ownerUserId) addressClone.ownerUserId = userId;
-            if (!addressClone.placeId) addressClone.placeId = placeClone._id; //should have id from insertGUID or already passed in
-            if (!addressClone.added) addressClone.added = new Date();
-            const addressGUID = Addresses.upsert({ _id: addressClone._id }, addressClone);
+            addressClone = checkExistingCollectionIfNoId(Addresses, addressClone, { placeId: placeClone._id });
+            addOwnerIdAndDateStamp(addressClone, userId, { placeId: placeClone._id });
+            const addressGUID = Addresses.upsert({ _id: addressClone._id }, setterOrInsert(addressClone));
             if (addressGUID.insertedId) addressClone._id = addressGUID.insertedId;
+
+            //ammenities section
+            amenitiesClone = checkExistingCollectionIfNoId(Amenities, amenitiesClone, { placeId: placeClone._id })
+            addOwnerIdAndDateStamp(amenitiesClone, userId, { placeId: placeClone._id });
+            const amenitiesGUID = Amenities.upsert({ _id: amenitiesClone._id }, setterOrInsert(amenitiesClone));
+            if (amenitiesGUID.insertedId) amenitiesClone._id = amenitiesGUID.insertedId; //will exist if _id doesn't
+            delete placeClone.ownerUserId;
             delete addressClone.ownerUserId;
             delete addressClone.placeId;
-            //ammenities section
-            if (!amenitiesClone._id) {
-                const placeAmenities = Amenities.findOne({ placeId: placeClone._id }, { sort: { added: -1 } }) || {};
-                amenitiesClone = _.merge(placeAmenities, amenitiesClone);
-            }
-            amenitiesClone.ownerUserId = amenitiesClone.ownerUserId || userId;
-            if (!amenitiesClone.placeId) amenitiesClone.placeId = placeClone._id;
-            if (!amenitiesClone.added) amenitiesClone.added = new Date();
-            const amenitiesGUID = Amenities.upsert({ _id: amenitiesClone._id }, amenitiesClone);
-            if (amenitiesGUID.insertedId) amenitiesClone._id = amenitiesGUID.insertedId; //will exist if _id doesn't
             delete amenitiesClone.ownerUserId;
             delete amenitiesClone.placeId;
 
             consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Place Id ${JSON.stringify(placeClone._id)}`);
-            return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID}, genericSuccessCode, {
+            return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID }, genericSuccessCode, {
                 serviceMessage: `Place ${placeClone._id ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
                 data: {
                     amenities: amenitiesClone,
@@ -233,7 +313,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         try {
             const searchObj = { availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }
             if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
-            if (coords && coords.lat !== undefined && coords.lng !== undefined) {
+            if (coords && checkIfCoordsAreValid(coords)) {
                 const { lat, lng, distance } = coords;
                 const maxDistance = parseFloat((distance || 50) / 3959);
                 searchObj.location = {
@@ -249,19 +329,13 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 placeIds.push(place._id);
                 ownerUserIds.push(place.ownerUserId);
             });
-            const addresses = Addresses.find({ placeId: { $in: placeIds } }, { fields: FieldsForBrowseProfile }).fetch();
             const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
-            const profileImgs = FileUrls.find({ userId: { $in: ownerUserIds }, deleted: false, active: true }, { fields: FieldsForBrowseProfile }).fetch();
-            const profiles = Profiles.find({ ownerUserId: { $in: ownerUserIds }}, { fields: FieldsForBrowseProfile }).fetch();
             consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId, JSON.stringify(searchObj));
             return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
                 serviceMessage: `We found ${places.length} places within date range`,
                 data: {
                     places,
-                    addresses,
                     placeImgs,
-                    profileImgs,
-                    profiles,
                 },
             });
         } catch (err) {
@@ -274,21 +348,24 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());
     },
     'images.place.get': function placeImageGet({ placeId }) {
-        const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
-        const fieldsToReturn = {
-            _id: 1,
-            url: 1,
-        };
-        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn }).fetch();
+        if (counter < stopLoop) {
+            const userId = Meteor.userId();
+            if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
+            const fieldsToReturn = {
+                _id: 1,
+                url: 1,
+            };
+            const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn }).fetch();
 
-        consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
-        return serviceSuccessBuilder({}, genericSuccessCode, {
-            serviceMessage: `Get place images success with ${files.length} found`,
-            data: {
-                images: files,
-            },
-        });
+            consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
+            return serviceSuccessBuilder({}, genericSuccessCode, {
+                serviceMessage: `Get place images success with ${files.length} found`,
+                data: {
+                    images: files,
+                },
+            });
+            counter++;
+        }
     },
     'images.profile.store': function placeImageStore(fileObj) {
         return imageServiceHelper(fileObj, FileTypes.PROFILE, 'profileId', Meteor.userId(), true);
@@ -300,7 +377,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             url: 1,
             _id: 1,
         };
-        const file = FileUrls.findOne({userId, type: FileTypes.PROFILE, deleted: false }, {
+        const file = FileUrls.findOne({ userId, type: FileTypes.PROFILE, deleted: false }, {
             fields: fieldsToReturn,
             sort: { added: -1 },
         });

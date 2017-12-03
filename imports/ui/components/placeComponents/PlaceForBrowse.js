@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
 import ImageCarousel from '../ImageCarousel';
 
-const PlaceForBrowse = ({placeForBrowse, address, profileImg, placeImgs, profile }) => {
+const PlaceForBrowse = ({placeForBrowse, address, profileImg, placeImgs, profile, goToProfile }) => {
     const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
     return (
         <div className="browse-place-container row z-depth-2 swap-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
@@ -37,7 +39,7 @@ const PlaceForBrowse = ({placeForBrowse, address, profileImg, placeImgs, profile
                             <img src={profileImg.url ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
                         </div>
                     </div>
-                    <div className="col s6">
+                    <div className="col s6 profile-info">
                         <div className="col s12 l4">
                             <p><strong>{profile.firstName}</strong></p>
                         </div>
@@ -46,6 +48,16 @@ const PlaceForBrowse = ({placeForBrowse, address, profileImg, placeImgs, profile
                         </div>
                         <div className="col l12">
                             <p>{profile.school} {profile.classOf}</p>
+                        </div>
+                        <div className="col s8">
+                            <RaisedButton
+                                className="see-profile waves-effect waves-light"
+                                target="_blank"
+                                label="See Profile"
+                                primary={true}
+                                icon={<FontIcon className="material-icons">account_circle</FontIcon>}
+                                onClick={goToProfile}
+                            />
                         </div>
                     </div>
                 </div>
@@ -60,6 +72,7 @@ PlaceForBrowse.propTypes = {
     profileImg: PropTypes.object,
     placeImgs: PropTypes.array,
     profile: PropTypes.object.isRequired,
+    goToProfile: PropTypes.func.isRequired,
 };
 
 PlaceForBrowse.defaultProps = {

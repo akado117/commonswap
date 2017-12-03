@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, merge } from 'lodash';
 import { SUCCESS, actionTypes } from '../lib/Constants';
 
 const initialState = {
@@ -16,9 +16,9 @@ function placeReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.SAVE_PLACE}_${SUCCESS}`:
         stateClone = cloneDeep(state);
-        stateClone.place = action.place;
-        stateClone.address = action.address;
-        stateClone.amenities = action.amenities;
+        merge(stateClone.place, action.place);
+        merge(stateClone.address, action.address);
+        merge(stateClone.amenities, action.amenities);
         return stateClone;
     case `${actionTypes.SAVE_PLACE_AVAILABILITY}_${SUCCESS}`:
         stateClone = cloneDeep(state);

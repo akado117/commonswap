@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { find } from 'lodash';
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
 import FileActions from '../../actions/FileActions';
@@ -88,19 +89,42 @@ class ViewProfile extends React.Component {
     }
 
     componentDidMount = () => {
-        $('.datepicker').pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year,
-            today: 'Today',
-            clear: 'Clear',
-            close: 'Ok',
-            closeOnSelect: false // Close upon selecting a date,
-        });
+        // $('.datepicker').pickadate({
+        //     selectMonths: true, // Creates a dropdown to control month
+        //     selectYears: 15, // Creates a dropdown of 15 years to control year,
+        //     today: 'Today',
+        //     clear: 'Clear',
+        //     close: 'Ok',
+        //     closeOnSelect: false // Close upon selecting a date,
+        // });
     }
-    componentDidUpdate = (prevProps) => {
-        if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
+    // componentDidUpdate = (prevProps) => {
+    //     if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
+    //         //this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
+    //     }
+    // }
+
+    getPlace = () => {
+        const { placeId } = this.props.params;
+        let placeForBrowse;
+        if (placeId) {
+            placeForBrowse = find(this.props.place.placesForBrowsing, place => place._id === placeId)
         }
+        if (placeForBrowse) return placeForBrowse;
+        const { place, amenities, address } = this.props.place;
+        const { profile, interests } = this.props.profile;
+        const { placeImgs } = this.props.images;
+
+        placeForBrowse = {
+            ...this.props.place.place,
+            amenities,
+            address,
+            interests,
+            profile,
+            placeImgs,
+        };
+        return placeForBrowse
+
     }
 
     render() {
@@ -111,25 +135,26 @@ class ViewProfile extends React.Component {
             internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />
         }
 
-        const { amenities } = this.props.place;
+        const place = this.getPlace();
+        const { amenities, interests, profile, profileImg, placeImgs, address } = place;
+
         const amenitiesElements = Object.keys(amenities).map((key) => {
             if (amenities[key] && amenitiesTextMap[key]) {
                 return (
                     <div key={key} className="col s6 m4 checkbox-container">
                         <label>{amenitiesTextMap[key]}</label>
-                        <button type="button" style={{backgroundColor:'rgb(0, 188, 212)'}} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                        <button type="button" style={{ backgroundColor: 'rgb(0, 188, 212)' }} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
                     </div>
                 )
             }
         });
 
-        const { interests } = this.props.profile;
         const interestsElements = Object.keys(interests).map((key) => {
             if (interests[key] && interestsTextMap[key]) {
                 return (
                     <div key={key} className="col s6 m4 checkbox-container">
                         <label>{interestsTextMap[key]}</label>
-                        <button type="button" style={{backgroundColor:'rgb(0, 188, 212)'}} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                        <button type="button" style={{ backgroundColor: 'rgb(0, 188, 212)' }} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
                     </div>
                 )
             }
@@ -139,45 +164,34 @@ class ViewProfile extends React.Component {
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
-                    <div className="col s12 z-depth-2 place-images">
-                        <div className="row">
-                            <div className="col s12 l8 main-image">
-                            <img src={this.props.images.placeImgs[0] ? this.props.images.placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                            <img src={this.props.images.placeImgs[1] ? this.props.images.placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            <img src={this.props.images.placeImgs[2] ? this.props.images.placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div>
-                        </div>
-                    </div>
                     <div className="row">
                         <div className="col s12 l8">
                             <div className="row">
                                 <div className="col s12">
                                     <div className="col s12 z-depth-2" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                                         <AppBar
-                                            title={<span>About John</span>}
+                                            title={<span>About {profile.firstName}</span>}
                                             showMenuIconButton={false}
                                             style={{ marginBottom: '10px', zIndex: 0 }}
                                         />
                                         <div className="col s6 l6">
-                                            <img className="circle responsive-img" src={this.props.user.picture ? this.props.user.picture : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
+                                            <img className="circle responsive-img" src={profileImg ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
                                         </div>
                                         <div className="col s6" id="message" style={{ top: '5px' }}>
                                             <div className="row">
                                                 <div className="col s12">
-                                                    <h5><strong>{this.props.profile.profile.firstName}</strong></h5>
+                                                    <h5><strong>{profile.firstName}</strong></h5>
                                                 </div>
                                                 <div className="col s12">
-                                                    <h5><strong>{this.props.place.address.city} {this.props.place.address.state}</strong></h5>
+                                                    <h5><strong>{address.city} {address.state}</strong></h5>
                                                 </div>
                                                 <div className="col s12">
-                                                    <p>{this.props.profile.profile.school} {this.props.profile.profile.classOf}</p>
+                                                    <p>{profile.school} {profile.classOf}</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col s12">
-                                            <p>{this.props.profile.profile.personalSummary}</p>
+                                            <p>{profile.personalSummary}</p>
                                         </div>
                                         <div className="col s12">
                                             <strong>Interests: </strong>
@@ -240,7 +254,7 @@ class ViewProfile extends React.Component {
                             <div className="row">
                                 <div className="col s12 l8 z-depth-2" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                                     <AppBar
-                                        title={<span>About John's Place</span>}
+                                        title={<span>About {profile.firstName}'s Place</span>}
                                         showMenuIconButton={false}
                                         style={{ marginBottom: '10px', zIndex: 0 }}
                                     />
@@ -251,11 +265,11 @@ class ViewProfile extends React.Component {
                                                 <p><FontIcon className="material-icons large">home</FontIcon></p>
                                             </div>
                                             <div className="col s4" style={{ textAlign: 'center' }}>
-                                                <p>{this.props.place.place.numOfGuests} guests</p>
+                                                <p>{place.numOfGuests} guests</p>
                                                 <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
                                             </div>
                                             <div className="col s4" style={{ textAlign: 'center' }}>
-                                                <p>{this.props.place.place.bedrooms} Bedroom</p>
+                                                <p>{place.bedrooms} Bedroom</p>
                                                 <p><FontIcon className="material-icons large">hotel</FontIcon></p>
                                             </div>
                                         </div>
@@ -272,22 +286,33 @@ class ViewProfile extends React.Component {
                                         <strong>Description: </strong>
                                     </div>
                                     <div className="col s12">
-                                        <p>{this.props.place.place.detailedDesc}</p>
+                                        <p>{place.detailedDesc}</p>
                                     </div>
                                     <div className="col s12">
                                         <strong>Special Instructions: </strong>
                                     </div>
                                     <div className="col s12">
-                                        <p>{this.props.place.place.specialInst}
+                                        <p>{place.specialInst}
                                         </p>
                                     </div>
                                     <div className="col s12">
                                         <strong>About the area and neighborhood: </strong>
                                     </div>
                                     <div className="col s12">
-                                        <p>{this.props.place.place.notesOnArea}</p>
+                                        <p>{place.notesOnArea}</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col s12 z-depth-2 place-images">
+                        <div className="row">
+                            <div className="col s12 l8 main-image">
+                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
+                            </div>
+                            <div className="col l4 scroll-image">
+                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
                             </div>
                         </div>
                     </div>
@@ -297,10 +322,15 @@ class ViewProfile extends React.Component {
         );
     }
     requestSwap = () => {
-        this.props.profileActions.requestEmail({
+        const { placeId } = this.props.params;
+        console.log('placeId');
+        console.log(placeId);
+        this.props.profileActions.requestSwap({ 
+            placeId: placeId,
             Arrival: this.state.arrival,
             Departure: this.state.departure,
             Notes: this.state.notes,
+            User: this.props.user,
         });
     }
 }

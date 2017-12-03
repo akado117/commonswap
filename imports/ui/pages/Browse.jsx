@@ -3,10 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
-const { cloneDeep } = require('lodash');
+const { cloneDeep, merge } = require('lodash');
 import FontIcon from 'material-ui/FontIcon';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
+import addDays from 'date-fns/add_days'
 
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
@@ -31,9 +32,9 @@ class Browse extends Component {
         super(props);
         this.state = {
             numOfGuests: props.place.numOfGuests,
-            arrival: props.place.arrival || new Date(),
-            departure: props.place.departure || new Date(),
-            coords: props.place.coords,
+            arrival: props.place.arrival || addDays(new Date(), -20),
+            departure: props.place.departure || addDays(new Date(), 20),
+            coords: props.place.coords || props.place.place.coords || {},//if place has location or use has already selected a location
         };
     }
 
@@ -41,15 +42,21 @@ class Browse extends Component {
         const { arrival, departure, numOfGuests, coords } = this.state;
         if (!arrival || !departure) return this.setState({ searchMessage: 'Please select your dates to travel' });
         this.setState({ searchMessage: SEARCHED });
-        this.props.placeActions.getPlaceBasedUponAvailability({ arrival, departure, numOfGuests ,coords });
+        const searchObj = { arrival, departure, numOfGuests, coords };
+        if (!coords.distance || coords.distance < 1) delete searchObj.coords;
+        this.props.placeActions.getPlaceBasedUponAvailability(searchObj);
         return undefined;
     }
 
-    componentDidUpdate = (prevProps) => {
-        if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
-        }
-    }
+   //componentDidUpdate = (prevProps) => {
+        // if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
+        //     this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
+        // }
+        // if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
+        //     const coords = merge(this.state.coords, this.props.place.place.coords);
+        //     this.setState({ coords });
+        // }
+   // }
 
     componentWillUnmount = () => {
         const {
@@ -67,7 +74,8 @@ class Browse extends Component {
         this.props.placeActions.saveBrowseData(halfwayHouse);
     }
 
-    onSetLocation = (coords) => {
+    onSetLocation = (coordsObj) => {
+        const coords = merge({}, this.state.coords, coordsObj);
         this.setState({ coords });
     }
 
@@ -77,8 +85,13 @@ class Browse extends Component {
         this.setState({ coords });
     }
 
+    goToProfile = (profileId) => {
+        if (profileId) return this.props.router.push(`/viewProfile/${profileId}`);
+        this.props.router.push('/viewProfile');
+    }
+
     render() {
-        const { placesForBrowsing, place, coords } = this.props.place;
+        const { placesForBrowsing, place } = this.props.place;
         return (
             <div className="browse-container">
                 <div className="container">
@@ -111,7 +124,7 @@ class Browse extends Component {
                     </div>
                     {this.state.coords && this.state.coords.distance > 0 ? <MapWithASearchBox
                         profile={place}
-                        coords={coords}
+                        coords={this.state.coords}
                         onSetLocation={this.onSetLocation}
                     /> : ''}
                 </div>
@@ -121,14 +134,15 @@ class Browse extends Component {
                     </div>
                 </div>
                 <div className="scroll-listing col s12 l6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
-                    {placesForBrowsing.map((place, idx) => (
+                    {placesForBrowsing.map((placeFB, idx) => (
                         <PlaceForBrowse
-                            key={place.profile ? `${place.profile.firstName}-${idx}` : `browsePlace-${idx}`}
-                            placeForBrowse={place}
-                            address={place.address}
-                            profile={place.profile}
-                            placeImgs={place.placeImgs}
-                            profileImg={place.profileImg}
+                            key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}
+                            placeForBrowse={placeFB}
+                            address={placeFB.address}
+                            profile={placeFB.profile}
+                            placeImgs={placeFB.placeImgs}
+                            profileImg={placeFB.profileImg}
+                            goToProfile={() => this.goToProfile(placeFB._id)}
                         />
                     ))}
                 </div>

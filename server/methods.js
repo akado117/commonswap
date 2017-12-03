@@ -186,7 +186,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         console.log(RequestedPlace);
 
 
-        HTTP.call('POST', 
+        HTTP.call('POST',
         'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
             data:
                 {

@@ -48,15 +48,12 @@ class Browse extends Component {
         return undefined;
     }
 
-   //componentDidUpdate = (prevProps) => {
-        // if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-        //     this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
-        // }
-        // if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
-        //     const coords = merge(this.state.coords, this.props.place.place.coords);
-        //     this.setState({ coords });
-        // }
-   // }
+   componentDidUpdate = (prevProps) => {
+        if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
+            const coords = merge(this.state.coords, this.props.place.place.coords);
+            this.setState({ coords });
+        }
+   }
 
     componentWillUnmount = () => {
         const {

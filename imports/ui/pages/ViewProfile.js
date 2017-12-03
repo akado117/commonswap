@@ -88,21 +88,28 @@ class ViewProfile extends React.Component {
         });
     }
 
-    componentDidMount = () => {
-        // $('.datepicker').pickadate({
-        //     selectMonths: true, // Creates a dropdown to control month
-        //     selectYears: 15, // Creates a dropdown of 15 years to control year,
-        //     today: 'Today',
-        //     clear: 'Clear',
-        //     close: 'Ok',
-        //     closeOnSelect: false // Close upon selecting a date,
-        // });
+    getPlace = () => {
+        const { placeId } = this.props.params;
+        let placeForBrowse;
+        if (placeId) {
+            placeForBrowse = find(this.props.place.placesForBrowsing, place => place._id === placeId)
+        }
+        if (placeForBrowse) return placeForBrowse;
+        const { place, amenities, address } = this.props.place;
+        const { profile, interests } = this.props.profile;
+        const { placeImgs } = this.props.images;
+
+        placeForBrowse = {
+            ...this.props.place.place,
+            amenities,
+            address,
+            interests,
+            profile,
+            placeImgs,
+        };
+        return placeForBrowse
+
     }
-    // componentDidUpdate = (prevProps) => {
-    //     if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-    //         //this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
-    //     }
-    // }
 
     getPlace = () => {
         const { placeId } = this.props.params;
@@ -164,6 +171,17 @@ class ViewProfile extends React.Component {
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
+                    <div className="col s12 z-depth-2 place-images">
+                        <div className="row">
+                            <div className="col s12 l8 main-image">
+                            <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
+                            </div>
+                            <div className="col l4 scroll-image">
+                            <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            </div>
+                        </div>
+                    </div>
                     <div className="row">
                         <div className="col s12 l8">
                             <div className="row">
@@ -325,7 +343,7 @@ class ViewProfile extends React.Component {
         const { placeId } = this.props.params;
         console.log('placeId');
         console.log(placeId);
-        this.props.profileActions.requestSwap({ 
+        this.props.profileActions.requestSwap({
             placeId: placeId,
             Arrival: this.state.arrival,
             Departure: this.state.departure,

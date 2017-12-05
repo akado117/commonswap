@@ -45,7 +45,8 @@ Meteor.startup(() => {
                 <Route path="fuse" component={Fuse} />
                 <Route path="planner" component={Planner} />
                 <Route path="home" component={Home} />
-                <Route path="viewprofile" component={ViewProfile} />
+                <Route path="viewprofile(/:placeId)" component={ViewProfile} />
+                <Route path="card" component={CreditCard} />
                 <Route path="browse" component={Browse} />
                 <Route path="about(/:index)" component={About} />
                 <Route path="faq(/:index)" component={FAQ} />

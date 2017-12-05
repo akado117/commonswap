@@ -4,17 +4,13 @@ import gql from 'graphql-tag';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../lib/Constants';
 import Store from '../store/store';
 import { FormateDates, FormateDate } from '../helpers/DateHelpers';
-import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords } from '../helpers/DataHelpers'
+import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert } from '../helpers/DataHelpers'
 
 const PlaceActions = {
     upsertPlace: (placeData) => {
-        const currentPlaceData = Store.getState().place;
-        const mappedCurrentPlaceDate = {
-            place: currentPlaceData.place || {},
-            address: currentPlaceData.address || {},
-            amenities: currentPlaceData.amenities || {},
-        };
-        const { place, address, amenities } = merge({}, mappedCurrentPlaceDate, placeData);//technically more bandwidth but less sever load
+        const currentPlaceData = buildPlaceForUpsert(placeData, Store.getState());
+        const { place = {}, address = {}, amenities = {} } = currentPlaceData;
+
         mapMongoGeoSpatialCoords(place);
         return dispatch => Meteor.call('upsertPlace', place, address, amenities, (error, result) => {
             if (error) {

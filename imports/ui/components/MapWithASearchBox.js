@@ -4,6 +4,7 @@ import {compose, withProps, lifecycle} from "recompose";
 import {withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps";
 import PropTypes from 'prop-types';
 const {SearchBox} = require("react-google-maps/lib/components/places/SearchBox");
+import { buildMarkerObj } from '../../helpers/DataHelpers';
 
 const MapSearchBox = compose(
     withProps(props => ({
@@ -15,16 +16,17 @@ const MapSearchBox = compose(
     })),
     lifecycle({
         componentWillMount() {
-            const refs = {}
+            const refs = {};
             const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || {};
-
+            const initialMarker = lat !== undefined && lng !== undefined ? [buildMarkerObj({ lat, lng })] : [];
             this.setState({
                 bounds: null,
                 center: {
                     lat: lat || 41.9,
                     lng: lng || -87.624,
                 },
-                markers: [],
+                markers: initialMarker,
+                injectedMarkers: this.props.markers || [],
                 onMapMounted: ref => {
                     refs.map = ref;
                 },
@@ -93,7 +95,7 @@ const MapSearchBox = compose(
                     border: `1px solid white`,
                     width: `240px`,
                     height: `32px`,
-                    marginTop: `27px`,
+                    marginTop: `12px`,
                     padding: `0 12px`,
                     borderRadius: `3px`,
                     boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
@@ -128,7 +130,7 @@ class MapComponent extends React.PureComponent {
     }
 
     handleMarkerClick = () => {
-        this.setState({isMarkerShown: false})
+        this.setState({ isMarkerShown: false });
         this.delayedShowMarker();
     }
 

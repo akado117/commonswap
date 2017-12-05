@@ -323,17 +323,6 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col s12 z-depth-2 place-images">
-                        <div className="row">
-                            <div className="col s12 l8 main-image">
-                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <Footer></Footer>
             </section>

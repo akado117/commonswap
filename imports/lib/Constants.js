@@ -44,6 +44,8 @@ export const defaultImageUrls = {
     cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
     alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',
+    sassyChick: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/rsz_1profilestock2.jpg',
+    awesomePlace: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/rsz_apartment.jpg',
 };
 
 export const tripStatus = {

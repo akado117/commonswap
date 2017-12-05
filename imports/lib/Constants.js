@@ -103,7 +103,19 @@ export const FieldsForBrowseProfile = {
     state: 1,
     school: 1,
     classOf: 1,
+    profileImg: 1,
+    interests: 1,
+    amenities: 1,
+    address: 1,
+    profile: 1,
 }
+
+export const noShowFieldsForPlace = {
+    profileImg: 0,
+    interests: 0,
+    address: 0,
+    profile: 0,
+};
 
 export const intTypeParams = ['numOfGuests', 'bathrooms', 'bedrooms', 'beds'];
 export const doubleTypeParams = ['rent', 'lat', 'lng'];

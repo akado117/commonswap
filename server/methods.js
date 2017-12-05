@@ -62,9 +62,12 @@ function addOwnerIdAndDateStamp(obj, userId, extraProps) {// modifies original o
     if (obj._id) return; //only way possible is for record to not exist THIS RELYS ON CHECKING DB FOR RECORDS BASED UPON USEROWNERID FIRST
     obj.ownerUserId = userId;
     obj.added = new Date();
-    Object.keys(extraProps).forEach((key) => {
-        obj[key] = extraProps[key];
-    });
+    console.log(extraProps);
+    if (extraProps) {
+        Object.keys(extraProps).forEach((key) => {
+            obj[key] = extraProps[key];
+        });
+    }
 }
 
 function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceCheck, extraParams = {}) {

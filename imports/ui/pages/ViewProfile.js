@@ -68,6 +68,11 @@ class ViewProfile extends React.Component {
         this.updateArrival = this.updateArrival.bind(this);
         this.updateDeparture = this.updateDeparture.bind(this);
         this.updateNotes = this.updateNotes.bind(this);
+
+        const { placeId } = this.props.params;
+        if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
+            props.placeActions.getPlaceById(placeId);
+        }
     }
 
     updateGuests = (event, index, guests) => this.setState({ guests });

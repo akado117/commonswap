@@ -1,34 +1,25 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import PropTypes from 'prop-types';
+import addDays from 'date-fns/add_days'
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
-import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
-import { FormateDates, ParseDates } from '../../helpers/DateHelpers';
+import { FormateDates, ParseDates, PrettyDate } from '../../helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
+import Trip from '../components/PlaceHybridData/Trip';
+import { defaultImageUrls, tripStatus } from '../../lib/Constants';
 
 
 const styles = {
     button: {
         margin: 12,
-    }
-};
-
-const stateFields = {
-    fields: {
-        displayNames: ["N/A", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
-            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-        values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE",
-            "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"],
     },
 };
 
@@ -37,9 +28,24 @@ const CITIES = require('../../../node_modules/react-select/examples/src/data/sta
 
 
 const today = new Date();
+const minDate = addDays(today, -40);
 
-function logChange(val) {
-    console.log("Selected: " + JSON.stringify(val));
+const examplePastSwap = {
+    address: {
+        state: 'DC',
+        city: 'Washington',
+    },
+    profileImg: {
+        url: defaultImageUrls.kevin,
+    },
+    firstName: 'Kevin',
+    dates: {
+        departure: PrettyDate(addDays(minDate, 5)),
+        arrival: PrettyDate(minDate),
+    },
+    status: tripStatus.ACTIVE,
+    rating: 4,
+    message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
 }
 
 class Planner extends React.Component {
@@ -123,14 +129,9 @@ class Planner extends React.Component {
                                         <InfiniteCalendar
                                             Component={withMultipleRanges(Calendar)}
                                             height={350}
-                                            min={new Date(2017,8,1)}
+                                            min={minDate}
                                             selected={this.state.selectedDates}
                                             initialSelectedDate={this.state.initialSelectedDate}
-                                            // selected={[
-                                            //     new Date(2017, 11, 12),
-                                            //     new Date(2017, 11, 16),
-                                            //     new Date(2017, 11, 20),
-                                            // ]}
                                             layout={'portrait'}
                                             width={'100%'}
                                             onSelect={this.onCalendarSelect}
@@ -318,39 +319,7 @@ class Planner extends React.Component {
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: '0' }}
                             />
-                            <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                <div className="col s12 l3">
-                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                </div>
-                                <div className="col s12 l4">
-                                    <div className="col s12">
-                                        <h5>Alex</h5>
-                                    </div>
-                                    <div className="col s12">
-                                        <p>Pittsburgh, Pennsylvania</p>
-                                    </div>
-                                    <div className="col s12">
-                                        <p>November 12, 2017 - November 16, 2017</p>
-                                    </div>
-                                </div>
-                                <div className="col s12 l5">
-                                    <div className="col s12">
-                                        <Rater 
-                                            total={5} 
-                                            rating={2} 
-                                            interactive={true} 
-                                            />
-                                    </div>
-                                    <div className="col s12">
-                                        <TextField
-                                            hintText="Feedback"
-                                            floatingLabelText="Tell us about your experience"
-                                            multiLine={true}
-                                            rows={3}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                            <Trip swapObj={examplePastSwap} showRating />
                         </div>
                     </div>
                     <div className="row">

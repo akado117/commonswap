@@ -62,6 +62,11 @@ const PlaceActions = {
             };
         }
     },
+    getPlaceById(_id) {
+        return dispatch => Meteor.call('places.getPlaceById', { _id }, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_ID, dispatch);
+        });
+    },
     saveBrowseData: data => ({
         type: actionTypes.SAVE_BROWSE_DATES,
         ...data,

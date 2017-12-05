@@ -131,6 +131,7 @@ class Browse extends Component {
                         profile={place}
                         coords={this.state.coords}
                         onSetLocation={this.onSetLocation}
+                        externalMarkers={placesForBrowsing}
                     /> : ''}
                 </div>
                 <div className={`row ${this.state.searchMessage === '' ? 'hide' : ''}`}>

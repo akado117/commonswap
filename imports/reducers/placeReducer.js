@@ -1,4 +1,4 @@
-import { cloneDeep, merge } from 'lodash';
+import { cloneDeep, merge, isEmpty } from 'lodash';
 import { SUCCESS, actionTypes } from '../lib/Constants';
 
 const initialState = {
@@ -35,6 +35,12 @@ function placeReducer(state = initialState, action = {}) {
                 stateClone[key] = action[key];
             }
         });
+        return stateClone;
+    case `${actionTypes.GET_PLACE_BY_ID}_${SUCCESS}`:
+        stateClone = cloneDeep(state);
+        if (!isEmpty(action.data.placeForBrowse)) {
+            stateClone.placesForBrowsing.push(action.data.placeForBrowse);
+        }
         return stateClone;
     case actionTypes.LOGOUT:
         return initialState;

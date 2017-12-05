@@ -48,15 +48,12 @@ class Browse extends Component {
         return undefined;
     }
 
-    componentDidUpdate = (prevProps) => {
-        if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
-        }
+   componentDidUpdate = (prevProps) => {
         if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
             const coords = merge(this.state.coords, this.props.place.place.coords);
             this.setState({ coords });
         }
-    }
+   }
 
     componentWillUnmount = () => {
         const {
@@ -114,14 +111,6 @@ class Browse extends Component {
                                 textFieldStyle={{ width: '100%' }}
                                 defaultDate={this.state.departure}
                             />
-                        </div>
-                        <div className="col s6 m4 l3  input-field inline">
-                            <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
-                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true" /> Sleeps how many</label>
-                        </div>
-                        <div className="col s6 m4 l3  input-field inline">
-                            <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
-                            <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Range: Miles</label>
                         </div>
                         <div className="col s6 m4 l3 offset-s6 valign-wrapper">
                             <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >

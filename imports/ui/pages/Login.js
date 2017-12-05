@@ -84,7 +84,7 @@ class LoginPage extends React.Component {
             if (Meteor.userId()) this.forceUpdate();
         });
     }
-
+ 
     handleTouchTap = (event) => {
         // This prevents ghost click.
         event.preventDefault();

@@ -11,6 +11,7 @@ import Paper from 'material-ui/Paper';
 import ProfileComponent from '../components/profileComps/ProfileComponent.js';
 import PlaceComponent from '../components/placeComponents/PlaceComponent.js';
 import CreditCard from '../components/verificationComponent/CreditCard.js';
+import CardForm from '../components/verificationComponent/CardForm.js';
 
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
@@ -124,7 +125,7 @@ class Profile extends React.Component {
             internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
         }
         else if (this.state.selectedIndex === 2) {
-            internalComponent = <CreditCard />;
+            internalComponent = <CardForm/>;
         }
         const path = browserHistory.getCurrentLocation().pathname === '/profile';
         return (

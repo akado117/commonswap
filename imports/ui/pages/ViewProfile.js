@@ -88,20 +88,27 @@ class ViewProfile extends React.Component {
         });
     }
 
-    componentDidMount = () => {
-        $('.datepicker').pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year,
-            today: 'Today',
-            clear: 'Clear',
-            close: 'Ok',
-            closeOnSelect: false // Close upon selecting a date,
-        });
-    }
-    componentDidUpdate = (prevProps) => {
-        if (this.props.place.place._id && !this.props.images.placeImgs.length) { //get new images on login
-            this.props.fileActions.getImagesForPlace({ placeId: this.props.place.place._id });
+    getPlace = () => {
+        const { placeId } = this.props.params;
+        let placeForBrowse;
+        if (placeId) {
+            placeForBrowse = find(this.props.place.placesForBrowsing, place => place._id === placeId)
         }
+        if (placeForBrowse) return placeForBrowse;
+        const { place, amenities, address } = this.props.place;
+        const { profile, interests } = this.props.profile;
+        const { placeImgs } = this.props.images;
+
+        placeForBrowse = {
+            ...this.props.place.place,
+            amenities,
+            address,
+            interests,
+            profile,
+            placeImgs,
+        };
+        return placeForBrowse
+
     }
 
     getPlace = () => {
@@ -143,7 +150,7 @@ class ViewProfile extends React.Component {
                 return (
                     <div key={key} className="col s6 m4 checkbox-container">
                         <label>{amenitiesTextMap[key]}</label>
-                        <button type="button" style={{backgroundColor:'rgb(0, 188, 212)'}} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                        <button type="button" style={{ backgroundColor: 'rgb(0, 188, 212)' }} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
                     </div>
                 )
             }
@@ -154,7 +161,7 @@ class ViewProfile extends React.Component {
                 return (
                     <div key={key} className="col s6 m4 checkbox-container">
                         <label>{interestsTextMap[key]}</label>
-                        <button type="button" style={{backgroundColor:'rgb(0, 188, 212)'}} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
+                        <button type="button" style={{ backgroundColor: 'rgb(0, 188, 212)' }} className="checkbox btn btn-sm active"><i className="fa fa-check" aria-hidden="true" /></button>
                     </div>
                 )
             }
@@ -181,7 +188,7 @@ class ViewProfile extends React.Component {
                                 <div className="col s12">
                                     <div className="col s12 z-depth-2" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                                         <AppBar
-                                            title={<span>About John</span>}
+                                            title={<span>About {profile.firstName}</span>}
                                             showMenuIconButton={false}
                                             style={{ marginBottom: '10px', zIndex: 0 }}
                                         />
@@ -265,7 +272,7 @@ class ViewProfile extends React.Component {
                             <div className="row">
                                 <div className="col s12 l8 z-depth-2" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                                     <AppBar
-                                        title={<span>About John's Place</span>}
+                                        title={<span>About {profile.firstName}'s Place</span>}
                                         showMenuIconButton={false}
                                         style={{ marginBottom: '10px', zIndex: 0 }}
                                     />
@@ -316,16 +323,32 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <div className="col s12 z-depth-2 place-images">
+                        <div className="row">
+                            <div className="col s12 l8 main-image">
+                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
+                            </div>
+                            <div className="col l4 scroll-image">
+                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <Footer></Footer>
             </section>
         );
     }
     requestSwap = () => {
-        this.props.profileActions.requestEmail({
+        const { placeId } = this.props.params;
+        console.log('placeId');
+        console.log(placeId);
+        this.props.profileActions.requestSwap({
+            placeId: placeId,
             Arrival: this.state.arrival,
             Departure: this.state.departure,
             Notes: this.state.notes,
+            User: this.props.user,
         });
     }
 }

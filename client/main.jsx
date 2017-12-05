@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 
 import App from '../imports/ui/Layout.jsx';
 import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx';
+import CardForm from '../imports/ui/components/verificationComponent/CardForm';
 import Fuse from '../imports/ui/components/FuseTestContainer.jsx';
 import Profile from '../imports/ui/pages/Profile';
 import Login from '../imports/ui/pages/Login.js';
@@ -25,7 +26,6 @@ import Testimonials from '../imports/ui/components/Testimonials';
 import Trust from '../imports/ui/pages/Trust';
 import Community from '../imports/ui/pages/Community';
 
-
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 const client = new ApolloClient(meteorClientConfig());
@@ -33,7 +33,7 @@ const client = new ApolloClient(meteorClientConfig());
 
 Meteor.startup(() => {
   render(
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
      <Provider client={client} store={store} >
         <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory} >
             <Route path="/" component={App} >
@@ -53,6 +53,7 @@ Meteor.startup(() => {
                 <Route path="testimonials" component={Testimonials} />
                 <Route path="trust" component={Trust} />
                 <Route path="community" component={Community} />
+                <Route path="card" component={CardForm} />
             </Route>
         </Router>
      </Provider></ApolloProvider>,

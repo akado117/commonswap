@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import SelectBuilder from '../forms/SelectBuilder.js'
 import ButtonArrayComp from '../forms/ButtonArrayComp';
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import Address from './Address';
@@ -168,9 +168,21 @@ class PlaceComponent extends Component {
                             </label>
                         </div>
                     </div>
-                    <div className="col s12 input-field inline" style={{ paddingRight: '0px' }}>
+                    <div className="col s6 input-field inline" style={{ paddingRight: '0px' }}>
                         <label htmlFor="pet-type">What kind of pets are allowed?</label>
                         <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e))} defaultValue={place.typeOfPets} />
+                    </div>
+                    <div className="col s6 input-field inline" >
+                    {/* <SelectBuilder
+                        label={<span><i className="fa fa-home fa-1x" aria-hidden="true"></i>Home type</span>}
+                        onChange={value => getValueFunc('', value)}
+                        selectArrObj={}
+                        selectArrObj={genderFields.fields}
+                        defaultSelection={genderFields.defaultField}
+                        defaultValue={profile.gender}
+                        extraProps={{ floatingLabelFixed: true }}
+
+                    /> */}
                     </div>
                     <div className="amenities-container">
                         <ButtonArrayComp

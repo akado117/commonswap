@@ -12,6 +12,7 @@ import {
 import S3 from './s3';
 import { parseInts, parseFloats, checkIfCoordsAreValid } from '../imports/helpers/DataHelpers';
 import { merge, cloneDeep } from 'lodash';
+import handleSignup from '../imports/modules/server/stripe/handle-signup';
 import { HTTP } from 'meteor/http';
 import { Meteor } from 'meteor/meteor';
 
@@ -82,6 +83,14 @@ function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceChe
 }
 
 Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQUIRES REFACTOR TO USE SETTERS FOR UPSERT (prop: $set: data)
+    signup(customer) {
+        check(customer, Object);
+        return handleSignup(customer)
+        .then(customer => customer)
+        .catch((error) => {
+          throw new Meteor.Error('500', `${error}`);
+        });
+      },
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);

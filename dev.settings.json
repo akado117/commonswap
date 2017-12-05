@@ -18,6 +18,12 @@
   "ajaxUrls": {
     "emailUrl": "https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw=="
   },
+  "public": {
+    "stripe": "pk_test_YSCffEJB0CIc3DrqVBE56Hjl"
+  },
+  "private": {
+    "stripe": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc"
+  },
   "stripe": "pk_test_YSCffEJB0CIc3DrqVBE56Hjl",
   "stripe_customer": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc"
 }

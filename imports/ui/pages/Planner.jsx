@@ -5,6 +5,7 @@ import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import PropTypes from 'prop-types';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import TextField from 'material-ui/TextField';
@@ -15,7 +16,7 @@ import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
-
+import Dialog from 'material-ui/Dialog';
 
 const styles = {
     button: {
@@ -48,7 +49,7 @@ class Planner extends React.Component {
 
         this.state = {
             controlledDate: [new Date()],
-            testDates: [new Date(),new Date(), new Date()],
+            testDates: [new Date(), new Date(), new Date()],
             selectedDates: ParseDates(props.place.place.availableDates || []),
             imgsData: [
                 {
@@ -62,6 +63,7 @@ class Planner extends React.Component {
                 }
             ],
             cities: [],
+            open: false,
         };
         var options = CITIES[this.state.country];
     }
@@ -82,6 +84,14 @@ class Planner extends React.Component {
             rating: newRating,
         });
     }
+
+    handleOpen = () => {
+        this.setState({ open: true });
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
 
     displayDates() {
         console.log("SELECTED DATES");
@@ -107,6 +117,13 @@ class Planner extends React.Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+                label="OK"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
         return (
             <div className="planner-container">
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
@@ -123,7 +140,7 @@ class Planner extends React.Component {
                                         <InfiniteCalendar
                                             Component={withMultipleRanges(Calendar)}
                                             height={350}
-                                            min={new Date(2017,8,1)}
+                                            min={new Date(2017, 8, 1)}
                                             selected={this.state.selectedDates}
                                             initialSelectedDate={this.state.initialSelectedDate}
                                             // selected={[
@@ -270,6 +287,7 @@ class Planner extends React.Component {
                                                     primary={true}
                                                     style={styles.button}
                                                     icon={<FontIcon className="material-icons">check</FontIcon>}
+                                                    onClick={this.handleOpen}
                                                 />
                                                 <RaisedButton
                                                     className=""
@@ -282,7 +300,31 @@ class Planner extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <Dialog
+                                        title=""
+                                        actions={actions}
+                                        modal={true}
+                                        open={this.state.open}
+                                    >
+                                        <div className="row">
+                                            <div className="col s12 center-align">
+                                                <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png" alt="checkMark" style={{ height: '140px', width: '140px' }} />
+                                            </div>
+                                            <div className="col s12 center-align">
+                                                <h3>Swap Accepted</h3>
+                                            </div>
+                                            <div className="col s12">
+                                                <div className="col s6 center-align">
+                                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock2.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
+                                                </div>
+                                                <div className="col s6 center-align">
+                                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Dialog>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -335,11 +377,11 @@ class Planner extends React.Component {
                                 </div>
                                 <div className="col s12 l5">
                                     <div className="col s12">
-                                        <Rater 
-                                            total={5} 
-                                            rating={2} 
-                                            interactive={true} 
-                                            />
+                                        <Rater
+                                            total={5}
+                                            rating={2}
+                                            interactive={true}
+                                        />
                                     </div>
                                     <div className="col s12">
                                         <TextField

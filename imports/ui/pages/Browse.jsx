@@ -112,6 +112,14 @@ class Browse extends Component {
                                 defaultDate={this.state.departure}
                             />
                         </div>
+                        <div className="col s6 m4 l3  input-field inline">
+                            <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
+                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true" /> Sleeps how many</label>
+                        </div>
+                        <div className="col s6 m4 l3  input-field inline">
+                            <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
+                            <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Range: Miles</label>
+                        </div>
                         <div className="col s6 m4 l3 offset-s6 valign-wrapper">
                             <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >
                                 <i className="fa fa-search-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />
@@ -123,6 +131,7 @@ class Browse extends Component {
                         profile={place}
                         coords={this.state.coords}
                         onSetLocation={this.onSetLocation}
+                        externalMarkers={placesForBrowsing}
                     /> : ''}
                 </div>
                 <div className={`row ${this.state.searchMessage === '' ? 'hide' : ''}`}>

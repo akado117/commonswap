@@ -1,19 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SelectBuilder from '../forms/SelectBuilder';
+import { stateFields } from '../../../lib/Constants';
 
+const { values } = stateFields.fields;
+const dropObj = {
+    values,
+    displayNames: values,
+};
 function onChangeHelper(event) {
     return event.target.value;
 }
-
-const stateFields = {
-    fields: {
-        displayNames: ["N/A","Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
-            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-        values: ["N/A","AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MT","NE",
-            "NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","MD","MA","MI","MN","MS","MO","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
-    },
-};
 
 const AddressComponent = ({ getValueFunc = () => {}, defaultValues = {} }) => {
     return (
@@ -33,7 +30,7 @@ const AddressComponent = ({ getValueFunc = () => {}, defaultValues = {} }) => {
             <div className="col s3">
                 <SelectBuilder
                     onChange={value => getValueFunc('state', value)}
-                    selectArrObj={stateFields.fields}
+                    selectArrObj={dropObj}
                     label="State"
                     extraProps={{}}
                     defaultValue={defaultValues.state}

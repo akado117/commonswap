@@ -6,7 +6,7 @@ import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers } from '../imports/collections/mainCollection';
 import {
-    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper,
+    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
 } from '../imports/lib/Constants';
 import S3 from './s3';
@@ -69,9 +69,12 @@ function addOwnerIdAndDateStamp(obj, userId, extraProps) {// modifies original o
     if (obj._id) return; //only way possible is for record to not exist THIS RELYS ON CHECKING DB FOR RECORDS BASED UPON USEROWNERID FIRST
     obj.ownerUserId = userId;
     obj.added = new Date();
-    Object.keys(extraProps).forEach((key) => {
-        obj[key] = extraProps[key];
-    });
+    console.log(extraProps);
+    if (extraProps) {
+        Object.keys(extraProps).forEach((key) => {
+            obj[key] = extraProps[key];
+        });
+    }
 }
 
 function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceCheck, extraParams = {}) {
@@ -287,6 +290,23 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             console.log(err.stack);
             consoleErrorHelper('Place create or update failed', upsertFailedCode, userId, err);
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
+        }
+    },
+    'places.getPlaceById': function getPlaceById({ _id }) {
+        try {
+            const placeForBrowse = Places.findOne({ _id }, { fields: FieldsForBrowseProfile }) || {};
+            placeForBrowse.placeImgs = FileUrls.find({ placeId: _id, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
+            consoleLogHelper('Found one place', genericSuccessCode, Meteor.userId(), placeForBrowse._id);
+            return serviceSuccessBuilder({}, genericSuccessCode, {
+                serviceMessage: `Found one place via _id of ${_id}`,
+                data: {
+                    placeForBrowse,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Failed when attempting to find a place by Id', mongoFindOneError, Meteor.userId(), err);
+            return serviceErrorBuilder('Failed when attempting to find a place by Id', mongoFindOneError, err);
         }
     },
     'places.updateAvailability': function getByAvailability({ availableDates, _id }) {

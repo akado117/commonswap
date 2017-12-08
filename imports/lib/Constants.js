@@ -3,10 +3,11 @@ export const SUCCESS = 'SUCCESS';
 export const genericSuccessCode = 10;
 export const imageSuccessCode = 11;
 export const profileErrorCode = 21;
-export const placeErrorCode = 24;
 export const insufficentParamsCode = 22;
 export const upsertFailedCode = 23;
+export const placeErrorCode = 24;
 export const plannerErrorCode = 25;
+export const mongoFindOneError = 26;
 export const actionTypes = {
     SAVE_ROOMIES: 'SAVE_ROOMIES',
     LOGIN_: 'LOGIN_',
@@ -17,6 +18,7 @@ export const actionTypes = {
     SAVE_PLACE: 'SAVE_PLACE',
     SAVE_PLACE_AVAILABILITY: 'SAVE_PLACE_AVAILABILITY',
     GET_PLACE_BY_AVAILABILITY: 'GET_PLACE_BY_AVAILABILITY',
+    GET_PLACE_BY_ID: 'GET_PLACE_BY_ID',
     GET_PLACE_IMAGES: 'GET_PLACE_IMAGES',
     ADD_PLACE_IMAGE: 'ADD_PLACE_IMAGE',
     SAVE_BROWSE_DATES: 'SAVE_BROWSE_DATES',
@@ -29,6 +31,30 @@ export const actionTypes = {
 export const FileTypes = {
     PLACE: 'PLACE',
     PROFILE: 'PROFILE',
+};
+
+export const stateFields = {
+    fields: {
+        displayNames: ["N/A","Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
+            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+        values: ["N/A","AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MT","NE",
+            "NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","MD","MA","MI","MN","MS","MO","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+    },
+};
+
+export const defaultImageUrls = {
+    cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
+    kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
+    alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',
+    sassyChick: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/rsz_1profilestock2.jpg',
+    awesomePlace: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/rsz_apartment.jpg',
+};
+
+export const tripStatus = {
+    ACTIVE: 'ACTIVE', //accepted and paid
+    ACCEPTED: 'ACCEPTED',
+    COMPLETE: 'COMPLETE',
+    PENDING: 'PENDING',
 };
 
 export function standardResponseFunc(error, result, actionType, dispatch, cb) {
@@ -97,6 +123,7 @@ export const FieldsForBrowseProfile = {
     numOfGuests: 1,
     bedrooms: 1,
     bathrooms: 1,
+    coords: 1,
     url: 1,
     firstName: 1,
     city: 1,

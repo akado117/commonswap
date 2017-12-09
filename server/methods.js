@@ -182,8 +182,55 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             }
         });
     },
-    createCharge() {
+    createCharge(swapObj) {
+        try 
+        {
+            const { address, dates, firstName, rating, ratingMessage, profileImg, place, swapperMessage, status } = swapObj;
+            console.log("Place");
+            console.log(swapObj);
+            
+            const userId = Meteor.userId();
+    
+            const cust = Customers.findOne({ userId: userId }) || {};
+
+            const stripe = Stripe(Meteor.settings.private.stripe);
+    
+            stripe.charges.create({
+                amount: 1000,
+                currency: "usd",
+                customer: cust.customerId,
+              });
+        }
+        catch (err)
+        {
+            console.log("Create charge error");
+            console.log(err);
+        }
+        // export const getStripeToken = (card) =>
+        // new Promise((resolve, reject) => {
+        //   Stripe.card.createToken(card, (status, { error, id }) => {
+        //     if (error) {
+        //       reject(error.message);
+        //     } else {
+        //       resolve(id);
+        //     }
+        //   });
+        // });\
+        // var stripe = require("stripe")("sk_test_0V0ylJP59hHWfbBtUWFddocE");
         
+        // // Token is created using Checkout or Elements!
+        // // Get the payment token ID submitted by the form:
+        // var token = request.body.stripeToken; // Using Express
+        
+        // // Charge the user's card:
+        // stripe.charges.create({
+        //   amount: 1000,
+        //   currency: "usd",
+        //   description: "Example charge",
+        //   source: token,
+        // }, function(err, charge) {
+        //   // asynchronously called
+        // });
     },
     requestEmail(data) {
 

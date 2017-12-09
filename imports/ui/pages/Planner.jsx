@@ -16,6 +16,7 @@ import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
 import Trip from '../components/PlaceHybridData/Trip';
 import { defaultImageUrls, tripStatus } from '../../lib/Constants';
+import Dialog from 'material-ui/Dialog';
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
@@ -158,14 +159,14 @@ class Planner extends React.Component {
 
     }
 
-    handleOpen = () => {
+    // handleOpen = () => {
 
-        this.setState({ open: true });
-    };
+    //     this.setState({ open: true });
+    // };
 
-    handleClose = () => {
-        this.setState({ open: false });
-    };
+    // handleClose = () => {
+    //     this.setState({ open: false });
+    // };
 
     displayDates() {
         console.log("SELECTED DATES");

@@ -38,6 +38,10 @@ function getRater(rating, message, active) {
     )
 }
 
+function createCharge (swapObj) {
+    chargeCard(swapObj);
+}
+
 
 function getName(firstName, status) {
     if (status === tripStatus.PENDING) return `Your request to swap with ${firstName} is pending`;
@@ -49,7 +53,10 @@ const TripRequest = (swapObj) => {
     const { address, dates, firstName, profileImg, place, requesterMessage } = swapObj;
     let open = false;
 
-    function handleOpen () {
+    function handleOpen (data) {
+        Meteor.call('createCharge', data, (error, result) => {
+            //return standardResponseFunc(error, result, actionTypes.SAVE_PLACE_AVAILABILITY, dispatch);
+        });
         console.log("OPEN");
         open = true;
         console.log(open);
@@ -126,7 +133,7 @@ const TripRequest = (swapObj) => {
                         style={{ margin: '12px' }}
                         primary
                         icon={<FontIcon className="material-icons">check</FontIcon>}
-                        onClick={() => { handleOpen() }}
+                        onClick={() => { handleOpen(swapObj) }}
                     />
                     <RaisedButton
                         className=""

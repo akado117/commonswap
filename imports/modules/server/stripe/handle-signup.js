@@ -36,14 +36,11 @@ const handleSignup = (options, promise) => {
 
     const userId = Meteor.userId();
 
-
-
     createCustomerOnStripe({ ...options.user, userId }, options.source)
     .then(Meteor.bindEnvironment((customer) => {
         createCustomerInDatabase({
           userId,
           customerId: customer.id,
-          token: options.source,
           card: { brand: customer.card.brand, last4: customer.card.last4 }
         });
         action.resolve();

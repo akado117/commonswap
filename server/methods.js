@@ -58,8 +58,8 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     });
 }
 
-function setterOrInsert(obj) {
-    if (!obj._id) return obj;
+function setterOrInsert(obj, otherId) {
+    if (!obj._id || (otherId && !obj[otherId])) return obj;
     return {
         $set: obj,
     };
@@ -268,27 +268,54 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         }
     },
     'trips.saveTrip': function saveTrip(trip) {
+        const tripClone = cloneDeep(trip);
         const userId = Meteor.userId();
-        const { dates, _id } = trip;
+        const { dates, requesterUserId, requesteeUserId } = tripClone;
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', tripErrorCode);
         if (!dates || !dates.arrival || !dates.departure) return serviceErrorBuilder('Please select dates', tripErrorCode);
+        if (!requesterUserId || !requesteeUserId) return serviceErrorBuilder('Are you a ghost!? We don\'t know who you are', tripErrorCode);
         try {
-            const tripGUID = Trips.upsert({ _id, dates }, setterOrInsert(trip));
+            const { firstName, email } = Profiles.findOne({ ownerUserId: requesteeUserId }, { fields: { email: 1, firstName: 1 } }) || {};
+            tripClone.requesteeEmail = email;
+            tripClone.requesteeName = firstName;
+            if (!tripClone.status) tripClone.status = tripStatus.PENDING;
+            const tripGUID = Trips.upsert({ requesterUserId, dates, requesteeUserId }, setterOrInsert(tripClone));
             if (tripGUID.insertedId) {
-                trip._id = tripGUID.insertedId;
-                trip.status = tripStatus.PENDING;
+                tripClone._id = tripGUID.insertedId;
+                //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
-            consoleLogHelper(`Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || trip._id}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
-            return serviceSuccessBuilder({}, genericSuccessCode, {
-                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || trip._id}`,
+            delete tripClone.requesteeEmail;
+            delete tripClone.requesteeName;
+            consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
+            return serviceSuccessBuilder({ tripGUID }, genericSuccessCode, {
+                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`,
                 data: {
-                    trip,
+                    trip: tripClone,
                 },
             });
         } catch (err) {
             console.log(err.stack);
             consoleErrorHelper('Failed when attempting to find a place by Id', mongoFindOneError, Meteor.userId(), err);
             return serviceErrorBuilder('Failed when attempting to find a place by Id', mongoFindOneError, err);
+        }
+    },
+    'trips.getUserTrips': function getUserTrips({ id }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
+        if (!id) return serviceErrorBuilder('Please send the correct arguments', placeErrorCode);
+        try {
+            const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }).fetch();
+            consoleLogHelper(`Found ${trips.length} swaps`, genericSuccessCode, Meteor.userId(), '');
+            return serviceSuccessBuilder({}, genericSuccessCode, {
+                serviceMessage: `Found ${trips.length} swaps via _id of ${id}`,
+                data: {
+                    trips,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Failed when attempting to find trips for user', mongoFindOneError, Meteor.userId(), err);
+            return serviceErrorBuilder('Failed when attempting to find trips for user', mongoFindOneError, err);
         }
     },
     'places.getPlaceById': function getPlaceById({ _id }) {

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { merge } from 'lodash';
 import { actionTypes, SUCCESS} from '../lib/Constants';
 
 const initialState = {};
@@ -6,7 +6,9 @@ const initialState = {};
 export default function userReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.LOGIN_}${SUCCESS}`:
-        return _.merge({},state, { ...action.user });
+        const stateClone = merge({},state, { ...action.user });
+        stateClone.userId = Meteor.userId();
+        return stateClone;
     case actionTypes.LOGOUT:
         return initialState;
     default:

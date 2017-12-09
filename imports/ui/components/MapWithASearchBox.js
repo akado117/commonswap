@@ -1,6 +1,6 @@
 import React from "react";
 const _ = require("lodash");
-import {compose, withProps, lifecycle} from "recompose";
+import {compose, withProps, lifecycle, defaultProps} from "recompose";
 import {withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps";
 import PropTypes from 'prop-types';
 const {SearchBox} = require("react-google-maps/lib/components/places/SearchBox");
@@ -14,6 +14,9 @@ const MapSearchBox = compose(
         mapElement: <div style={{height: `100%`}}/>,
         ...props,
     })),
+    defaultProps({
+        externalMarkers: [],
+    }),
     lifecycle({
         componentWillMount() {
             const refs = {};
@@ -107,7 +110,10 @@ const MapSearchBox = compose(
             />
         </SearchBox>
         {props.markers.map((marker, index) =>
-            <Marker key={index} position={marker.position}/>
+            <Marker key={`map-marker-${index}`} position={marker.position} />
+        )}
+        {props.externalMarkers.map((marker, index) =>
+            <Marker key={`external-marker-${index}`} position={marker.coords} />
         )}
     </GoogleMap>
 )
@@ -148,10 +154,12 @@ MapComponent.propTypes = {
     className: PropTypes.string,
     latitude: PropTypes.string,
     longitude: PropTypes.string,
+    externalMarkers: PropTypes.array,
 };
 
 MapComponent.defaultProps = {
     className: '',
+    externalMarkers: [],
 };
 
 export default MapSearchBox;

@@ -68,6 +68,11 @@ class ViewProfile extends React.Component {
         this.updateArrival = this.updateArrival.bind(this);
         this.updateDeparture = this.updateDeparture.bind(this);
         this.updateNotes = this.updateNotes.bind(this);
+
+        const { placeId } = this.props.params;
+        if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
+            props.placeActions.getPlaceById(placeId);
+        }
     }
 
     updateGuests = (event, index, guests) => this.setState({ guests });
@@ -320,17 +325,6 @@ class ViewProfile extends React.Component {
                                         <p>{place.notesOnArea}</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col s12 z-depth-2 place-images">
-                        <div className="row">
-                            <div className="col s12 l8 main-image">
-                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
                             </div>
                         </div>
                     </div>

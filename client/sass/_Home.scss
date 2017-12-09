@@ -90,6 +90,12 @@
     margin-bottom: 25px;
   }
 
+  .header-title {
+    transition: opacity 500ms ease;
+    &.fade-out {
+      opacity: 0;
+    }
+  }
 
   .delivery-image {
     background-image: url('');

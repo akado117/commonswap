@@ -1,47 +1,115 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import PropTypes from 'prop-types';
+import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
-import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
-import { FormateDates, ParseDates } from '../../helpers/DateHelpers';
+import { FormateDate, ParseDates, PrettyDate } from '../../helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
-import Dialog from 'material-ui/Dialog';
-
-const styles = {
-    button: {
-        margin: 12,
-    }
-};
-
-const stateFields = {
-    fields: {
-        displayNames: ["N/A", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
-            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-        values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE",
-            "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"],
-    },
-};
+import Trip from '../components/PlaceHybridData/Trip';
+import { defaultImageUrls, tripStatus } from '../../lib/Constants';
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
 
 
 const today = new Date();
+const minDate = addDays(today, -40);
 
-function logChange(val) {
-    console.log("Selected: " + JSON.stringify(val));
-}
+const examplePastSwap = {
+    address: {
+        state: 'DC',
+        city: 'Washington',
+    },
+    profileImg: {
+        url: defaultImageUrls.kevin,
+    },
+    firstName: 'Michaelangelo',
+    dates: {
+        departure: PrettyDate(addDays(minDate, 5)),
+        arrival: PrettyDate(minDate),
+    },
+    status: tripStatus.ACTIVE,
+    rating: 4,
+    message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
+};
+
+const exampleActiveSwap = {
+    address: {
+        state: 'OH',
+        city: 'Columbus',
+    },
+    profileImg: {
+        url: defaultImageUrls.alex,
+    },
+    firstName: 'Leonardo (Example Active Swap)',
+    dates: {
+        departure: PrettyDate(addDays(today, 5)),
+        arrival: PrettyDate(today),
+    },
+    status: tripStatus.ACTIVE,
+};
+
+const pendingSwaps = [
+    {
+        address: {
+            state: 'HI',
+            city: 'Honolulu',
+        },
+        profileImg: {
+            url: defaultImageUrls.cameraDude,
+        },
+        firstName: 'Raphael (Example)',
+        dates: {
+            departure: PrettyDate(addDays(today, 5)),
+            arrival: PrettyDate(today),
+        },
+        status: tripStatus.PENDING,
+    }, {
+        address: {
+            state: 'HI',
+            city: 'Honolulu',
+        },
+        profileImg: {
+            url: defaultImageUrls.cameraDude,
+        },
+        firstName: 'Donatello (Example)',
+        dates: {
+            departure: PrettyDate(addDays(today, 5)),
+            arrival: PrettyDate(today),
+        },
+        status: tripStatus.ACCEPTED,
+    },{
+        address: {
+            state: 'NY',
+            city: 'New York',
+        },
+        profileImg: {
+            url: defaultImageUrls.sassyChick,
+        },
+        firstName: 'Shredder (Example)',
+        dates: {
+            departure: FormateDate(addDays(today, 5)),
+            arrival: FormateDate(today),
+        },
+        status: tripStatus.PENDING,
+        place: {
+            image: {
+                url: defaultImageUrls.awesomePlace
+            },
+            numOfGuests: 15,
+            bedrooms: 2,
+        },
+        requesterMessage: 'This is an example of what you will see when someone else requests to swap with you',
+        examplePlace: true,
+    }];
 
 class Planner extends React.Component {
     constructor(props) {
@@ -121,6 +189,8 @@ class Planner extends React.Component {
         }
     }
 
+    isAPlace = swapObj => (this.props.user.userId && swapObj.status === tripStatus.PENDING && this.props.user.userId === swapObj.requesteeId) || swapObj.examplePlace;
+
     render() {
         const actions = [
             <FlatButton
@@ -133,272 +203,66 @@ class Planner extends React.Component {
             <div className="planner-container">
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
                     <div className="row" >
-                        <div className="col s12 calendar-parent">
-                            <AppBar
-                                title={<span>{"My Swap's Availability"}</span>}
-                                showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex: '0' }}
-                            />
-                            <div className="z-depth-2">
-                                <div className="row">
-                                    <div className="col s12 calendar-container" >
-                                        <InfiniteCalendar
-                                            Component={withMultipleRanges(Calendar)}
-                                            height={350}
-                                            min={new Date(2017, 8, 1)}
-                                            selected={this.state.selectedDates}
-                                            initialSelectedDate={this.state.initialSelectedDate}
-                                            // selected={[
-                                            //     new Date(2017, 11, 12),
-                                            //     new Date(2017, 11, 16),
-                                            //     new Date(2017, 11, 20),
-                                            // ]}
-                                            layout={'portrait'}
-                                            width={'100%'}
-                                            onSelect={this.onCalendarSelect}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    {/* <Select
-                                    name="form-field-name"
-                                    value=""
-                                    options={options}
-                                    onChange={logChange}
-                                    multi={true}/> */}
-                                </div>
-                                <div className="row">
-                                    <div className="col s12 l6">
-                                        <RaisedButton
-                                            className=""
-                                            target="_blank"
-                                            label="Save"
-                                            primary={true}
-                                            style={styles.button}
-                                            icon={<FontIcon className="material-icons">check</FontIcon>}
-                                            onClick={this.saveDates}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col s12">
-                            <AppBar
-                                title={<span>Activity - UNDER CONSTRUCTION</span>}
-                                showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex: '0' }}
-                            />
+                        <AppBar
+                            title={<span>{"My Swap's Availability"}</span>}
+                            showMenuIconButton={false}
+                            style={{ marginBottom: '10px', zIndex: '0' }}
+                        />
+                        <div className="z-depth-2">
                             <div className="row">
-                                <div className="col s12">
-                                    <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                        <div className="col s12 l3">
-                                            <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                        </div>
-                                        <div className="col s12 l5">
-                                            <div className="col s12" id="message" style={{ top: '5px' }}>
-                                                <p><strong>Kevin accepted your request.</strong></p>
-                                            </div>
-                                        </div>
-                                        <div className="col l4">
-                                            <div className="col s12">
-                                                <p>Washington DC</p>
-                                            </div>
-                                            <div className="col s12">
-                                                <p>May 14, 2017 - May 16, 2017</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div className="col s12 calendar-container" >
+                                    <InfiniteCalendar
+                                        Component={withMultipleRanges(Calendar)}
+                                        height={350}
+                                        min={minDate}
+                                        selected={this.state.selectedDates}
+                                        initialSelectedDate={this.state.initialSelectedDate}
+                                        layout={'portrait'}
+                                        width={'100%'}
+                                        onSelect={this.onCalendarSelect}
+                                    />
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col s12">
-                                    <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                        <div className="col s12 l3">
-                                            <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                        </div>
-                                        <div className="col s12 l5">
-                                            <div className="col s12" id="message" style={{ top: '5px' }}>
-                                                <p><strong>Your request to swap with Mike is pending</strong></p>
-                                            </div>
-                                        </div>
-                                        <div className="col l4">
-                                            <div className="col s12">
-                                                <p>San Francisco</p>
-                                            </div>
-                                            <div className="col s12">
-                                                <p>June 14, 2017 - June 16, 2017</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col s12">
-                                    <div className="col s12 z-depth-2">
-                                        <div className="row">
-                                            <div className="col s12" style={{ textAlign: 'center' }}>
-                                                <h5><strong>Katherine wants to swap with you from July 14-16!</strong></h5>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col s12 l2">
-                                                <div className="col s12">
-                                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock2.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                                </div>
-                                                <div className="col s4 l12">
-                                                    <p>Katherine</p>
-                                                </div>
-                                                <div className="col s6 l12">
-                                                    <p className="location">Chicago, IL</p>
-                                                </div>
-                                            </div>
-                                            <div className="col s12 l4 img-cont" onClick={() => this.handleSlideshowOpen(0)}>
-                                                <img src="http://stretchflex.net/photos/apartment.jpeg" alt="" className="image" style={{ height: '250px', width: '100%' }} />
-                                                <div className="middle">
-                                                    <div className="text">View Place</div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col s12 l6">
-                                                <div className="row">
-                                                    <div className="col s4" style={{ textAlign: 'center' }}>
-                                                        <p>Entire Apt</p>
-                                                        <p><FontIcon className="material-icons large">home</FontIcon></p>
-                                                    </div>
-                                                    <div className="col s4" style={{ textAlign: 'center' }}>
-                                                        <p>4 guests</p>
-                                                        <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
-                                                    </div>
-                                                    <div className="col s4" style={{ textAlign: 'center' }}>
-                                                        <p>1 Bedroom</p>
-                                                        <p><FontIcon className="material-icons large">hotel</FontIcon></p>
-                                                    </div>
-                                                </div>
-                                                <div className="row col s12">
-                                                    <p><u>Message From James:</u><a href="/viewprofile">  (View Profile)</a></p>
-                                                    <p>Hello! My name is James and I am interested in swapping with you. Looking to go to NY for the weekend just to getaway.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="row">
-                                            <div className="col s12 l6">
-                                                <RaisedButton
-                                                    className=""
-                                                    target="_blank"
-                                                    label="Accept"
-                                                    primary={true}
-                                                    style={styles.button}
-                                                    icon={<FontIcon className="material-icons">check</FontIcon>}
-                                                    onClick={this.handleOpen}
-                                                />
-                                                <RaisedButton
-                                                    className=""
-                                                    target="_blank"
-                                                    label="Decline"
-                                                    secondary={true}
-                                                    style={styles.button}
-                                                    icon={<FontIcon className="material-icons">close</FontIcon>}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Dialog
-                                        title=""
-                                        actions={actions}
-                                        modal={true}
-                                        open={this.state.open}
-                                    >
-                                        <div className="row">
-                                            <div className="col s12 center-align">
-                                                <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png" alt="checkMark" style={{ height: '140px', width: '140px' }} />
-                                            </div>
-                                            <div className="col s12 center-align">
-                                                <h3>Swap Accepted</h3>
-                                            </div>
-                                            <div className="col s12">
-                                                <div className="col s6 center-align">
-                                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock2.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                                </div>
-                                                <div className="col s6 center-align">
-                                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Dialog>
+                                <div className="col s12 l6">
+                                    <RaisedButton
+                                        className=""
+                                        target="_blank"
+                                        label="Save"
+                                        style={{ margin: '15px'}}
+                                        primary
+                                        icon={<FontIcon className="material-icons">check</FontIcon>}
+                                        onClick={this.saveDates}
+                                    />
                                 </div>
 
                             </div>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col s12">
-                            <AppBar
-                                title={<span>Upcoming Trips</span>}
-                                showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex: '0' }}
-                            />
-                            <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                <div className="col s12 l3">
-                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                </div>
-                                <div className="col s12 l9">
-                                    <div className="col s12">
-                                        <h5>Tim</h5>
-                                    </div>
-                                    <div className="col s12">
-                                        <p>Columbus, Ohio</p>
-                                    </div>
-                                    <div className="col s12">
-                                        <p>May 14, 2017 - May 16, 2017</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <AppBar
+                            title={<span>Activity - UNDER CONSTRUCTION</span>}
+                            showMenuIconButton={false}
+                            style={{ marginBottom: '10px', zIndex: '0' }}
+                        />
+                        {pendingSwaps.map((swap, idx) => <Trip key={`trip-${idx}`} swapObj={swap} showPlace={!!this.isAPlace(swap)} />)}
+
                     </div>
                     <div className="row">
-                        <div className="col s12">
-                            <AppBar
-                                title={<span>Past Trips</span>}
-                                showMenuIconButton={false}
-                                style={{ marginBottom: '10px', zIndex: '0' }}
-                            />
-                            <div className="col s12 z-depth-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                                <div className="col s12 l3">
-                                    <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                </div>
-                                <div className="col s12 l4">
-                                    <div className="col s12">
-                                        <h5>Alex</h5>
-                                    </div>
-                                    <div className="col s12">
-                                        <p>Pittsburgh, Pennsylvania</p>
-                                    </div>
-                                    <div className="col s12">
-                                        <p>November 12, 2017 - November 16, 2017</p>
-                                    </div>
-                                </div>
-                                <div className="col s12 l5">
-                                    <div className="col s12">
-                                        <Rater
-                                            total={5}
-                                            rating={2}
-                                            interactive={true}
-                                        />
-                                    </div>
-                                    <div className="col s12">
-                                        <TextField
-                                            hintText="Feedback"
-                                            floatingLabelText="Tell us about your experience"
-                                            multiLine={true}
-                                            rows={3}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <AppBar
+                            title={<span>Upcoming Trips</span>}
+                            showMenuIconButton={false}
+                            style={{ marginBottom: '10px', zIndex: '0' }}
+                        />
+                        <Trip swapObj={exampleActiveSwap} />
+                    </div>
+                    <div className="row">
+                        <AppBar
+                            title={<span>Past Trips</span>}
+                            showMenuIconButton={false}
+                            style={{ marginBottom: '10px', zIndex: '0' }}
+                        />
+                        <Trip swapObj={examplePastSwap} showRating />
                     </div>
                     <div className="row">
                         <div className="col s12">
@@ -413,10 +277,11 @@ class Planner extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { profile, place } = state;
+    const { profile, place, user } = state;
     return {
         profile,
         place,
+        user,
     };
 }
 

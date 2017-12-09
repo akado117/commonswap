@@ -25,7 +25,7 @@ class Home extends Component {
                         <ReactPlayer url="https://www.youtube.com/embed/0gL-1YksKIE?ecver" playing loop muted={this.state.muted} width="100%" height="100%" />
                         <div className="col s12 center-align">
                             <div className="header-container overlay-desc">
-                                <h1 className="header-title"> CommonSwap <br />
+                                <h1 className={`header-title ${this.state.muted ? '' : 'fade-out'}`}> CommonSwap <br />
                                     <strong>Experience More</strong>
                                 </h1>
                             </div>

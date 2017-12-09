@@ -7,7 +7,7 @@ import { FormateDates, FormateDate } from '../helpers/DateHelpers';
 import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert } from '../helpers/DataHelpers'
 
 const PlaceActions = {
-    upsertPlace: (placeData) => {
+    upsertPlace: (placeData, cb) => {
         const currentPlaceData = buildPlaceForUpsert(placeData, Store.getState());
         const { place = {}, address = {}, amenities = {} } = currentPlaceData;
 
@@ -21,6 +21,7 @@ const PlaceActions = {
                 });
             } else {
                 if (result.data) {
+                    if (cb) cb({ placeId: result.data.place._id });
                     return dispatch({
                         type: `${actionTypes.SAVE_PLACE}_${SUCCESS}`,
                         place: result.data.place,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SelectBuilder from '../forms/SelectBuilder.js'
-import ButtonArray from '../forms/ButtonArrayComp.js'
+import ButtonArrayComp from '../forms/ButtonArrayComp.js'
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import DatePicker from 'material-ui/DatePicker';
 import ProfileImage from './ProfileImage';
@@ -186,7 +186,7 @@ class ProfileComponent extends Component {
                         <input type="range" id="personality" min="0" max="100" onChange={e => getValueFunc('personality', onChangeHelper(e))} defaultValue={profile.personality} />
                     </p>
                 </div>
-                <ButtonArray getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} defaultValues={interests} />
+                <ButtonArrayComp getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} defaultValues={interests} />
                 <div className="col s12">
                     <div className="row">
                         <div className="col s6 m4 l3 offset-m4 offset-l6">

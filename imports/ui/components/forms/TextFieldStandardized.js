@@ -9,7 +9,7 @@ function TextFieldStandardized({ floatingLabelText, onChange, extraProps }) {
         floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e' }}
         multiLine
         rows={1}
-        rowsMax={6}
+        rowsMax={9}
         fullWidth
         onChange={onChange}
         floatingLabelShrinkStyle={{ top: '33px', fontSize: '1.05rem', color: '#9e9e9e' }}

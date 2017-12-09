@@ -4,9 +4,9 @@ import Stripe from 'stripe';
 import FileUrls from '../imports/collections/FileUrls';
 import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
-import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers } from '../imports/collections/mainCollection';
+import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips } from '../imports/collections/mainCollection';
 import {
-    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError,
+    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
 } from '../imports/lib/Constants';
 import S3 from './s3';
@@ -97,7 +97,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
-        //if ((profileParams._id && profileParams.ownerUserId !== userId) || (interests._id && interests.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', profileErrorCode);
+        if ((profileParams.ownerUserId && profileParams.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', profileErrorCode);
         if (profileParams && typeof profileParams === 'object') {
             let profileClone = cloneDeep(profileParams);
             let interestsClone = cloneDeep(interests);
@@ -217,37 +217,12 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
               console.log( response );
             }
         });
-
-        // fetch("https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==", {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         User,
-        //         Arrival,
-        //         Departure,
-        //         Notes,
-        //         Profile,
-        //     }),
-        // }).then((res) => {
-        //     dispatch({
-        //         type: 'email_sent',
-        //         ...res,
-        //     });
-        // }).catch((err) => {
-        //     dispatch({
-        //         type: 'email_failed',
-        //         ...err,
-        //     });
-        // })
     },
 
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
-        //if ((place._id && place.ownerUserId !== userId) || (address._id && address.ownerUserId !== userId) || (amenities._id && amenities.userId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', placeErrorCode);
+        if ((place.ownerUserId && place.ownerUserId !== userId) || (address.ownerUserId && address.ownerUserId !== userId) || (amenities.ownerUserId && amenities.ownerUserId !== userId)) return serviceErrorBuilder('Please dont mess with other users data', placeErrorCode);
         let placeClone = cloneDeep(place);
         let addressClone = cloneDeep(address);
         let amenitiesClone = cloneDeep(amenities);
@@ -277,9 +252,9 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             delete amenitiesClone.ownerUserId;
             delete amenitiesClone.placeId;
 
-            consoleLogHelper(`Place ${placeClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Place Id ${JSON.stringify(placeClone._id)}`);
+            consoleLogHelper(`Place ${placeGUID.insertedId ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Place Id ${JSON.stringify(placeClone._id)}`);
             return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID }, genericSuccessCode, {
-                serviceMessage: `Place ${placeClone._id ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
+                serviceMessage: `Place ${placeGUID.insertedId ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
                 data: {
                     amenities: amenitiesClone,
                     address: addressClone,
@@ -290,6 +265,30 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             console.log(err.stack);
             consoleErrorHelper('Place create or update failed', upsertFailedCode, userId, err);
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
+        }
+    },
+    'trips.saveTrip': function saveTrip(trip) {
+        const userId = Meteor.userId();
+        const { dates, _id } = trip;
+        if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', tripErrorCode);
+        if (!dates || !dates.arrival || !dates.departure) return serviceErrorBuilder('Please select dates', tripErrorCode);
+        try {
+            const tripGUID = Trips.upsert({ _id, dates }, setterOrInsert(trip));
+            if (tripGUID.insertedId) {
+                trip._id = tripGUID.insertedId;
+                trip.status = tripStatus.PENDING;
+            }
+            consoleLogHelper(`Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || trip._id}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
+            return serviceSuccessBuilder({}, genericSuccessCode, {
+                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || trip._id}`,
+                data: {
+                    trip,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Failed when attempting to find a place by Id', mongoFindOneError, Meteor.userId(), err);
+            return serviceErrorBuilder('Failed when attempting to find a place by Id', mongoFindOneError, err);
         }
     },
     'places.getPlaceById': function getPlaceById({ _id }) {
@@ -340,7 +339,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
         if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
         try {
-            const searchObj = { availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }
+            const searchObj = { availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } }
             if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
             if (coords && checkIfCoordsAreValid(coords)) {
                 const { lat, lng, distance } = coords;

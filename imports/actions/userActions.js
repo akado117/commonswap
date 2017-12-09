@@ -30,7 +30,7 @@ const actions = {
     userLoggedIn: () => {
         Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
-        Store.dispatch(PlaceActions.upsertPlace({}));
+        Store.dispatch(PlaceActions.upsertPlace({}, data => Store.dispatch(FileActions.getImagesForPlace({ placeId: data.placeId }))));
         return {
             type: 'USER_LOGGING_IN',
         };

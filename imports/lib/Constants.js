@@ -8,6 +8,7 @@ export const upsertFailedCode = 23;
 export const placeErrorCode = 24;
 export const plannerErrorCode = 25;
 export const mongoFindOneError = 26;
+export const tripErrorCode = 27;
 export const actionTypes = {
     SAVE_ROOMIES: 'SAVE_ROOMIES',
     LOGIN_: 'LOGIN_',
@@ -135,6 +136,28 @@ export const FieldsForBrowseProfile = {
     amenities: 1,
     address: 1,
     profile: 1,
+    specialInst: 1,
+    notesOnArea: 1,
+    detailedDesc: 1,
+};
+
+export const FieldsForTrip = {
+    _id: 1,
+    placeImg: 1,
+    requesterName: 1,
+    requesteeName: 1,
+    'dates.arrival': 1,
+    'dates.departure': 1,
+    'address.city': 1,
+    'address.state': 1,
+    'place.bedrooms': 1,
+    'place.numOfGuests': 1,
+    'profile.school': 1,
+    profileImg: 1,
+    requesterMessage: 1,
+    rating: 1,
+    ratingMessage: 1,
+    status: 1,
 }
 
 export const noShowFieldsForPlace = {

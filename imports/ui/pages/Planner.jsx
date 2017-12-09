@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import addDays from 'date-fns/add_days'
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import AppBar from 'material-ui/AppBar';
-import { FormateDate, ParseDates, PrettyDate } from '../../helpers/DateHelpers';
+import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
@@ -116,9 +116,7 @@ class Planner extends React.Component {
         super(props);
 
         this.state = {
-            controlledDate: [new Date()],
-            testDates: [new Date(),new Date(), new Date()],
-            selectedDates: ParseDates(props.place.place.availableDates || []),
+            selectedDates: convertPlannerDates(ParseDates(props.place.place.availableDates || [])),
             imgsData: [
                 {
                     url: 'http://stretchflex.net/photos/apartment.jpeg'
@@ -137,7 +135,7 @@ class Planner extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
-            const selectedDates = ParseDates(this.props.place.place.availableDates || []);
+            const selectedDates = convertPlannerDates(ParseDates(this.props.place.place.availableDates || []));
             this.setState({ selectedDates });
         }
     }
@@ -162,7 +160,7 @@ class Planner extends React.Component {
     }
 
     saveDates = () => {
-        this.props.placeActions.updatePlaceDates(this.state.selectedDates || []);
+        this.props.placeActions.updatePlaceDates(convertPlannerDates(this.state.selectedDates));
     }
 
     onCalendarSelect = (selectedDates, eventData) => {

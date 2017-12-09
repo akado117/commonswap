@@ -41,7 +41,7 @@ function getName(firstName, status) {
 }
 
 const TripRequest = (swapObj) => {
-    const { address, dates, firstName, profileImg, place, requesterMessage } = swapObj;
+    const { address, dates, firstName, profileImg, place, requesterMessage, placeImg } = swapObj;
     return (
         <div className="col s12 z-depth-2">
             <div className="row">
@@ -62,7 +62,7 @@ const TripRequest = (swapObj) => {
                     </div>
                 </div>
                 <div className="col s12 l4 img-cont" onClick={() => this.handleSlideshowOpen(0)}>
-                    <img src={(place.image && place.image.url) || defaultImageUrls.awesomePlace} alt="" className="image" style={{ height: '250px', width: '100%' }} />
+                    <img src={(placeImg && placeImg.url) || defaultImageUrls.awesomePlace} alt="" className="image" style={{ height: '250px', width: '100%' }} />
                     <div className="middle">
                         <div className="text">View Place</div>
                     </div>

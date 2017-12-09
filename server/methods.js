@@ -84,6 +84,8 @@ function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceChe
 
 Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQUIRES REFACTOR TO USE SETTERS FOR UPSERT (prop: $set: data)
     signup(customer) {
+        console.log('Customer Other');
+        console.log(customer);
         check(customer, Object);
         return handleSignup(customer)
         .then(customer => customer)
@@ -176,6 +178,9 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
             }
         });
+    },
+    createCharge() {
+        
     },
     requestEmail(data) {
 

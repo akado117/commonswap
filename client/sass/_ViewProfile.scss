@@ -1,7 +1,10 @@
 .profile-view-container {
+    margin-right: 0;
+    margin-left: 0;
     .place-images {
         min-height: 400px;
         margin-top: 30px;
+        width: 100%;
     }
     
     .main-image {
@@ -27,5 +30,20 @@
         i {
           width: 18px;
         }
-      }
+    }
+    .profile-section {
+        padding: 0;
+    }
+    .place-section {
+        display: inline-block;
+        padding: 0;
+        p {
+            margin-top: 0;
+        }
+    }
+    .checkbox-container {
+        button {
+            background: $primary-accent-color;
+        }
+    }
 }

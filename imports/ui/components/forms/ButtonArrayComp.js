@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from './Checkbox';
 
-class InterestsComponent extends Component {
+class ButtonArrayComp extends Component {
     constructor(props){
         super(props);
 
@@ -29,16 +29,16 @@ class InterestsComponent extends Component {
     }
 }
 
-InterestsComponent.propTypes = {
+ButtonArrayComp.propTypes = {
     getValueFunc: PropTypes.func.isRequired,
     buttonData: PropTypes.array.isRequired,
     defaultValues: PropTypes.object,
 };
 
-InterestsComponent.defaultProps = {
+ButtonArrayComp.defaultProps = {
     getValueFunc: () => {},
     buttonData: [],
     defaultValues: {},
 };
 
-export default InterestsComponent;
+export default ButtonArrayComp;

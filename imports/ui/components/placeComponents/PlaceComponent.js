@@ -104,12 +104,20 @@ class PlaceComponent extends Component {
         this.getValueFunc('coords', cords);
     }
 
+    toggleDisclaimer = () => this.setState({ showDisclaimer: !this.state.showDisclaimer });
+
     render() {
         const getValFunc = this.getValueFunc;
         const { place, address, amenities } = this.props.place;
+        const dislaimerText = this.state.showDisclaimer
+            ? 'Your address will be kept private for security reasons until you have confirmed to swap. If you do not wish to disclose your full address, we recommend using the closest intersection using the interactive map below. (i.e.. 14th st and 6th ave, New York, NY)'
+            : 'Click to see security information about your address';
         return (
             <div className="place-container">
                 <Address getValueFunc={(key, value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
+                <div className="row">
+                    <div className="address-disclaimer center-align col s12 m8 offset-m2" onClick={this.toggleDisclaimer} >{dislaimerText}</div>
+                </div>
                 <div className="col s12">
                     <div className="card-panel teal">
                         <span className="white-text">
@@ -123,7 +131,14 @@ class PlaceComponent extends Component {
                 />
                 <div className="row">
                     <div className="col s12 input-field inline">
-                        <input type="text" className="" id="short-desc" onChange={e => getValFunc('shortDesc', onChangeHelper(e))} defaultValue={place.shortDesc} />
+                        <input
+                            placeholder="1 bedroom apartment in the heart of Washington D.C. 10 minute walk to the Washington Monument"
+                            type="text"
+                            className=""
+                            id="short-desc"
+                            onChange={e => getValFunc('shortDesc', onChangeHelper(e))}
+                            defaultValue={place.shortDesc}
+                        />
                         <label htmlFor="short-desc"><i className="fa fa-pencil" aria-hidden="true"></i> Short description about your place</label>
                     </div>
                     <div className="col s6 input-field inline">
@@ -146,7 +161,11 @@ class PlaceComponent extends Component {
                         <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms Available</label>
                         <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e))} defaultValue={place.bedrooms} />
                     </div>
-                    <div className="col s6 custom-switch" >
+                    <div className="col s6 input-field inline" style={{ paddingRight: '0px' }}>
+                        <label htmlFor="pet-type">What kind of pets are allowed?</label>
+                        <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e))} defaultValue={place.typeOfPets} />
+                    </div>
+                    <div className="col s12 m6 custom-switch" >
                         <div>Smoking Allowed?</div>
                         <div className="switch">
                             <label>
@@ -157,7 +176,7 @@ class PlaceComponent extends Component {
                             </label>
                         </div>
                     </div>
-                    <div className="col s6 custom-switch" >
+                    <div className="col s12 m6 custom-switch" >
                         <div>Allow Pets?</div>
                         <div className="switch">
                             <label>
@@ -167,10 +186,6 @@ class PlaceComponent extends Component {
                                 Yes
                             </label>
                         </div>
-                    </div>
-                    <div className="col s6 input-field inline" style={{ paddingRight: '0px' }}>
-                        <label htmlFor="pet-type">What kind of pets are allowed?</label>
-                        <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e))} defaultValue={place.typeOfPets} />
                     </div>
                     <div className="col s6 input-field inline" >
                     {/* <SelectBuilder
@@ -195,7 +210,11 @@ class PlaceComponent extends Component {
                         <TextFieldStandardized
                             floatingLabelText="Write a detailed description about your place"
                             onChange={(e, value) => getValFunc('detailedDesc', value)}
-                            extraProps={{ defaultValue: place.detailedDesc }}
+                            extraProps={{
+                                defaultValue: place.detailedDesc,
+                                hintText: place.detailedDesc ? undefined : 'My place is a 1bedroom/1bathroom with a full kitchen. I have a queen bed and also 2 sofas in the living room. My place can comfortably sleep 2-3 people.  Amenities include a gym and a lounge. I live in the “Dupont Circle” area of Washington D.C. All monuments and attractions are either walking distance or a short car ride away. I am two blocks from the closest metro stop. Feel free to reach out if you have any questions!',
+                                floatingLabelFixed: true,
+                            }}
                         />
                     </div>
                     <div className="col s12">

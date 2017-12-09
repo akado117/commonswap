@@ -7,8 +7,13 @@ import { Link } from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 import { stateFields, defaultImageUrls, tripStatus } from '../../../lib/Constants';
 import { GetSwapDateRange } from '../../../helpers/DateHelpers';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+
 
 const { values, displayNames } = stateFields.fields;
+
+//let open = false;
 
 function getRater(rating, message, active) {
     if (!active || rating === undefined) return '';
@@ -33,15 +38,37 @@ function getRater(rating, message, active) {
     )
 }
 
+
 function getName(firstName, status) {
     if (status === tripStatus.PENDING) return `Your request to swap with ${firstName} is pending`;
     if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) return firstName;
     if (status === tripStatus.ACCEPTED) return `Your request to swap with ${firstName} has been accepted`;
-
 }
 
 const TripRequest = (swapObj) => {
     const { address, dates, firstName, profileImg, place, requesterMessage } = swapObj;
+    let open = false;
+
+    function handleOpen () {
+        console.log("OPEN");
+        open = true;
+        console.log(open);
+    };
+    
+    function handleClose () {
+        console.log("CLOSE");
+        open = false;
+        console.log(open);
+    };
+    
+
+    const actions = [
+        <FlatButton
+            label="OK"
+            primary={true}
+            onClick={() => { handleClose() }}
+        />,
+    ];
     return (
         <div className="col s12 z-depth-2">
             <div className="row">
@@ -96,20 +123,44 @@ const TripRequest = (swapObj) => {
                         className=""
                         target="_blank"
                         label="Accept"
-                        style={{ margin: '12px'}}
+                        style={{ margin: '12px' }}
                         primary
                         icon={<FontIcon className="material-icons">check</FontIcon>}
+                        onClick={() => { handleOpen() }}
                     />
                     <RaisedButton
                         className=""
                         target="_blank"
                         label="Decline"
-                        style={{ margin: '12px'}}
+                        style={{ margin: '12px' }}
                         secondary
                         icon={<FontIcon className="material-icons">close</FontIcon>}
                     />
                 </div>
             </div>
+            <Dialog
+                title=""
+                actions={actions}
+                modal={true}
+                open={open}
+            >
+                <div className="row">
+                    <div className="col s12 center-align">
+                        <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png" alt="checkMark" style={{ height: '140px', width: '140px' }} />
+                    </div>
+                    <div className="col s12 center-align">
+                        <h3>Swap Accepted</h3>
+                    </div>
+                    <div className="col s12">
+                        <div className="col s6 center-align">
+                            <img className="circle responsive-img" src={profileImg.url || defaultImageUrls.cameraDude} alt="profDemo" style={{ height: '140px', width: '140px' }} />
+                        </div>
+                        <div className="col s6 center-align">
+                            <img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
         </div>
     );
 }

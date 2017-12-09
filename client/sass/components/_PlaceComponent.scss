@@ -5,6 +5,13 @@
       padding-top: 15px;
     }
   }
+  .address-disclaimer {
+    color: $label-grey;
+    margin: 0;
+    &:hover {
+      color: $link-hover;
+    }
+  }
   .image-section-container {
     .img-header {
       width: 100%;

@@ -1,6 +1,15 @@
 .checkbox-container {
   height: 50px;
+  position: relative;
+  .label-container {
+    width: 70%;
+    margin: 0;
+    float: left;
+  }
   button {
+    position: absolute;
+    right: 11px;
+    top: 5px;
     border-radius: 30px;
     padding: 0 9px;
     float: right;

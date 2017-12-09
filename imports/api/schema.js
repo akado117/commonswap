@@ -125,8 +125,8 @@ export default [
   }
   
   type PlaceDate {
-    end: Int
-    start: Int
+    arrival: Int
+    departure: Int
   }
   
   type Place {
@@ -175,6 +175,32 @@ export default [
     profileImg: Image
     address: Address
     profile: Profile
+  }
+  
+  type TravelDate {
+    arrival: String
+    departure: String
+  }
+  
+  type Trip {
+    _id: String
+    address: Address
+    dates: TravelDate
+    guests: Int
+    rating: Int
+    ratingMessage: String
+    profileImg: Image
+    place: Place
+    swapperMessage: String
+    status: String
+    requesterUserId: String
+    requesteeUserId: String
+    requesterPlaceId: String
+    requesteePlaceId: String
+    requesterName: String
+    requesteeName: String
+    requesterEmail: String
+    requesteeEmail: String
   }
 
   type RootMutation {

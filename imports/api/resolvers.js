@@ -35,7 +35,7 @@ export default {
         },
         getPlacesForBrowse(root, { userId, arrival, departure}, context) {
             const placesForBrowse = {};
-            const places = Places.find({ availableDates: { $elemMatch: { start: { $gte: arrival }, end: { $lte: departure } } } }).fetch()
+            const places = Places.find({ availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } }).fetch();
             const profile = []
             return Places.find({}).fetch();
         },

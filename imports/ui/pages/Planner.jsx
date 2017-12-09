@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import 'react-rater/lib/react-rater.css';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import AppBar from 'material-ui/AppBar';

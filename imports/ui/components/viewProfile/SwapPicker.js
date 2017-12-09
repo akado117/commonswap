@@ -58,7 +58,8 @@ class SwapPicker extends Component {
                     label="Request Swap"
                     primary
                     fullWidth
-                    onClick={() => this.props.requestSwap(this.state)} />
+                    onClick={() => this.props.requestSwap(this.state)}
+                />
             </div>
         );
     }

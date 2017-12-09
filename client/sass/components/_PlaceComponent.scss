@@ -1,9 +1,7 @@
 .place-container {
   .amenities-container {
+    display: inline-block;
     margin-bottom: 0;
-    div {
-      padding-top: 15px;
-    }
   }
   .address-disclaimer {
     color: $label-grey;

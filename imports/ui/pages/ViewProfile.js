@@ -87,13 +87,13 @@ class ViewProfile extends React.Component {
     saveSwap = (data, props, currentPlace) => {
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } =  props.place.address;
-        const { firstName } = props.profile.profile;
+        const { firstName, email } = props.profile.profile;
         const placeImg = props.images.placeImgs[0];
         const profileImg = props.images.profileImg;
         const userId = props.user._id;
         const requesteePlaceId = currentPlace._id;
         const requesteeUserId = currentPlace.ownerUserId;
-        console.log({
+        const swapObj = {
             place: {
                 numOfGuests,
                 bedrooms,
@@ -103,14 +103,16 @@ class ViewProfile extends React.Component {
                 city,
             },
             requesterName: firstName,
-            requesterPlaeId: _id,
+            requesterEmail: email,
+            requesterPlaceId: _id,
             requesterUserId: userId || Meteor.userId(),
             requesteeUserId,
             requesteePlaceId,
             placeImg,
             profileImg,
             ...data,
-        });
+        };
+        props.placeActions.saveSwap(swapObj);
     }
 
     render() {

@@ -99,6 +99,13 @@ const PlaceActions = {
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_AVAILABILITY, dispatch);
         });
     },
+    saveSwap: (swapObj) => {
+        const swapClone = cloneDeep(swapObj);
+        swapClone.dates = FormateDates([swapObj.dates])[0];
+        return dispatch => Meteor.call('trips.saveTrip', swapClone, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.SAVE_TRIP, dispatch);
+        });
+    },
 };
 
 export default PlaceActions;

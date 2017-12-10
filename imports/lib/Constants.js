@@ -27,6 +27,7 @@ export const actionTypes = {
     ADD_PROFILE_IMAGE: 'ADD_PROFILE_IMAGE',
     SAVE_DESIRED_DATES: 'SAVE_DESIRED_DATES',
     SAVE_CUSTOMER: 'SAVE_CUSTOMER',
+    SAVE_TRIP: 'SAVE_TRIP',
 };
 
 export const FileTypes = {
@@ -146,6 +147,10 @@ export const FieldsForTrip = {
     placeImg: 1,
     requesterName: 1,
     requesteeName: 1,
+    //requesterEmail: 1,
+    //requesteeEmail: 1,
+    requesterUserId: 1,
+    requesteeUserId: 1,
     'dates.arrival': 1,
     'dates.departure': 1,
     'address.city': 1,
@@ -153,6 +158,8 @@ export const FieldsForTrip = {
     'place.bedrooms': 1,
     'place.numOfGuests': 1,
     'profile.school': 1,
+    guests: 1,
+    swapperMessage: 1,
     profileImg: 1,
     requesterMessage: 1,
     rating: 1,

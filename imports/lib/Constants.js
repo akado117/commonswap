@@ -28,6 +28,7 @@ export const actionTypes = {
     SAVE_DESIRED_DATES: 'SAVE_DESIRED_DATES',
     SAVE_CUSTOMER: 'SAVE_CUSTOMER',
     SAVE_TRIP: 'SAVE_TRIP',
+    GET_TRIPS: 'GET_TRIPS',
 };
 
 export const FileTypes = {

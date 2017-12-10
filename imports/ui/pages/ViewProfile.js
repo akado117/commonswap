@@ -24,12 +24,9 @@ const amenitiesTextMap = {
     essentials: 'Essentials (towels, etc)',
     gym: 'Gym/ Fitness Center',
     dressers: 'Closet/ Drawer',
-    wiFi: 'Wifi',
     washerDryer: 'Washer/ Dryer',
     pool: 'Pool',
-    heat: 'Heat',
     kitchen: 'Kitchen Appliances',
-    parking: 'Parking'
 }
 
 const interestsTextMap = {
@@ -53,7 +50,7 @@ class ViewProfile extends React.Component {
             arrival: '',
             departure: '',
             notes: '',
-            guests: ''
+            guests: '',
         };
         const { placeId } = this.props.params;
         if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
@@ -86,13 +83,14 @@ class ViewProfile extends React.Component {
 
     saveSwap = (data, props, currentPlace) => {
         const { numOfGuests, bedrooms, _id } = props.place.place;
-        const { state, city } =  props.place.address;
+        const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;
         const placeImg = props.images.placeImgs[0];
-        const profileImg = props.images.profileImg;
+        const requesterProfileImg = props.images.profileImg;
         const userId = props.user._id;
         const requesteePlaceId = currentPlace._id;
         const requesteeUserId = currentPlace.ownerUserId;
+        const requesteeProfileImg = currentPlace.profileImg;
         const swapObj = {
             place: {
                 numOfGuests,
@@ -106,10 +104,11 @@ class ViewProfile extends React.Component {
             requesterEmail: email,
             requesterPlaceId: _id,
             requesterUserId: userId || Meteor.userId(),
+            requesterProfileImg,
             requesteeUserId,
             requesteePlaceId,
+            requesteeProfileImg,
             placeImg,
-            profileImg,
             ...data,
         };
         props.placeActions.saveSwap(swapObj);

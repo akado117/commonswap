@@ -28,10 +28,14 @@ const examplePastSwap = {
         state: 'DC',
         city: 'Washington',
     },
-    profileImg: {
+    requesterProfileImg: {
         url: defaultImageUrls.kevin,
     },
-    firstName: 'Michaelangelo',
+    requesteeProfileImg: {
+        url: defaultImageUrls.kevin,
+    },
+    requesterName: 'Michaelangelo',
+    requesteeName: 'Michaelangelo',
     dates: {
         departure: PrettyDate(addDays(minDate, 5)),
         arrival: PrettyDate(minDate),
@@ -46,10 +50,14 @@ const exampleActiveSwap = {
         state: 'OH',
         city: 'Columbus',
     },
-    profileImg: {
+    requesterProfileImg: {
         url: defaultImageUrls.alex,
     },
-    firstName: 'Leonardo (Example Active Swap)',
+    requesteeProfileImg: {
+        url: defaultImageUrls.alex,
+    },
+    requesterName: 'Leonardo (Example Active Swap)',
+    requesteeName: 'Leonardo (Example Active Swap)',
     dates: {
         departure: PrettyDate(addDays(today, 5)),
         arrival: PrettyDate(today),
@@ -63,10 +71,14 @@ const pendingSwaps = [
             state: 'HI',
             city: 'Honolulu',
         },
-        profileImg: {
+        requesterProfileImg: {
             url: defaultImageUrls.cameraDude,
         },
-        firstName: 'Raphael (Example)',
+        requesteeProfileImg: {
+            url: defaultImageUrls.cameraDude,
+        },
+        requesterName: 'Raphael (Example)',
+        requesteeName: 'Raphael (Example)',
         dates: {
             departure: PrettyDate(addDays(today, 5)),
             arrival: PrettyDate(today),
@@ -77,10 +89,14 @@ const pendingSwaps = [
             state: 'HI',
             city: 'Honolulu',
         },
-        profileImg: {
+        requesterProfileImg: {
             url: defaultImageUrls.cameraDude,
         },
-        firstName: 'Donatello (Example)',
+        requesteeProfileImg: {
+            url: defaultImageUrls.cameraDude,
+        },
+        requesterName: 'Donatello (Example)',
+        requesteeName: 'Donatello (Example)',
         dates: {
             departure: PrettyDate(addDays(today, 5)),
             arrival: PrettyDate(today),
@@ -91,10 +107,14 @@ const pendingSwaps = [
             state: 'NY',
             city: 'New York',
         },
-        profileImg: {
+        requesterProfileImg: {
             url: defaultImageUrls.sassyChick,
         },
-        firstName: 'Shredder (Example)',
+        requesteeProfileImg: {
+            url: defaultImageUrls.sassyChick,
+        },
+        requesterName: 'Shredder (Example)',
+        requesteeName: 'Shredder (Example)',
         dates: {
             departure: FormateDate(addDays(today, 5)),
             arrival: FormateDate(today),
@@ -137,6 +157,7 @@ class Planner extends React.Component {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
             const selectedDates = convertPlannerDates(ParseDates(this.props.place.place.availableDates || []));
             this.setState({ selectedDates });
+            this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId()});
         }
     }
 
@@ -176,6 +197,7 @@ class Planner extends React.Component {
     isAPlace = swapObj => (this.props.user.userId && swapObj.status === tripStatus.PENDING && this.props.user.userId === swapObj.requesteeId) || swapObj.examplePlace;
 
     render() {
+        const { userId } = this.props.user;
         return (
             <div className="planner-container">
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
@@ -221,7 +243,8 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        {pendingSwaps.map((swap, idx) => <Trip key={`trip-${idx}`} swapObj={swap} showPlace={!!this.isAPlace(swap)} />)}
+                        {this.props.trip.trips.map((swap, idx) => <Trip key={`trip-${idx}`} swapObj={swap} showPlace={!!this.isAPlace(swap)} currentUserId={userId} />)}
+                        {pendingSwaps.map((swap, idx) => <Trip key={`trip-${idx}`} swapObj={swap} showPlace={!!this.isAPlace(swap)} currentUserId={userId} />)}
 
                     </div>
                     <div className="row">
@@ -230,7 +253,7 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        <Trip swapObj={exampleActiveSwap} />
+                        <Trip swapObj={exampleActiveSwap} currentUserId={userId} />
                     </div>
                     <div className="row">
                         <AppBar
@@ -238,7 +261,7 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        <Trip swapObj={examplePastSwap} showRating />
+                        <Trip swapObj={examplePastSwap} showRating currentUserId={userId} />
                     </div>
                     <div className="row">
                         <div className="col s12">
@@ -246,6 +269,7 @@ class Planner extends React.Component {
                         </div>
                     </div>
                 </div>
+
                 <Footer></Footer>
             </div>
         );
@@ -253,11 +277,12 @@ class Planner extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { profile, place, user } = state;
+    const { profile, place, user, trip } = state;
     return {
         profile,
         place,
         user,
+        trip,
     };
 }
 

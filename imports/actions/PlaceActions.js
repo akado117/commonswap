@@ -106,6 +106,8 @@ const PlaceActions = {
             return standardResponseFunc(error, result, actionTypes.SAVE_TRIP, dispatch);
         });
     },
+    getSwaps: args => dispatch => Meteor.call('trips.getUserTrips', args, (error, result) =>
+        standardResponseFunc(error, result, actionTypes.GET_TRIPS, dispatch)),
 };
 
 export default PlaceActions;

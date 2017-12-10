@@ -33,29 +33,22 @@ function getRater(rating, message, active) {
     )
 }
 
-function getName(firstName, status) {
-    if (status === tripStatus.PENDING) return `Your request to swap with ${firstName} is pending`;
-    if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) return firstName;
-    if (status === tripStatus.ACCEPTED) return `Your request to swap with ${firstName} has been accepted`;
-
-}
-
 const TripRequest = (swapObj) => {
-    const { address, dates, firstName, profileImg, place, requesterMessage, placeImg } = swapObj;
+    const { address, dates, requesterName, requesterProfileImg, place, requesterMessage, placeImg } = swapObj;
     return (
         <div className="col s12 z-depth-2">
             <div className="row">
                 <div className="col s12 place-title" style={{ textAlign: 'center' }}>
-                    <h3><strong>{`${firstName} wants to swap with you from ${GetSwapDateRange(dates.arrival, dates.departure)}`}</strong></h3>
+                    <h3><strong>{`${requesterName} wants to swap with you from ${GetSwapDateRange(dates.arrival, dates.departure)}`}</strong></h3>
                 </div>
             </div>
             <div className="row">
                 <div className="col s12 l3">
                     <div className="trip-image">
-                        <img className="" src={profileImg.url || defaultImageUrls.cameraDude} alt="profDemo" />
+                        <img className="" src={requesterProfileImg.url || defaultImageUrls.cameraDude} alt="profDemo" />
                     </div>
                     <div className="col s4 l12">
-                        <h5>{firstName}</h5>
+                        <h5>{requesterName}</h5>
                     </div>
                     <div className="col s6 l12">
                         <h5 className="location">{`${address.city}, ${address.state}`}</h5>
@@ -84,7 +77,7 @@ const TripRequest = (swapObj) => {
                         </div>
                     </div>
                     <div className="row col s12">
-                        <p><u>{`Message From ${firstName}:`}</u><Link to="/viewProfile" > (View Profile)</Link></p>
+                        <p><u>{`Message From ${requesterName}:`}</u><Link to="/viewProfile" > (View Profile)</Link></p>
                         <p>{requesterMessage}</p>
                     </div>
                 </div>
@@ -114,11 +107,25 @@ const TripRequest = (swapObj) => {
     );
 }
 
-const TripCard = (swapObj, showRating) => {
-    const { address, dates, firstName, rating, ratingMessage, profileImg, place, swapperMessage, status } = swapObj;
+function getNameAndImage(swapObj, status, currentUserId) {
+    const isRequester = currentUserId === swapObj.requesterUseeId;
+    const firstName = isRequester ? swapObj.requesteeName : swapObj.requesterName;
+    let formattedName;
+    if (status === tripStatus.PENDING) formattedName = `Your request to swap with ${firstName} is pending`;
+    else if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) formattedName = firstName;
+    else if (status === tripStatus.ACCEPTED) formattedName = `Your request to swap with ${firstName} has been accepted`;
+    const profileImg = (isRequester ? swapObj.requesteeProfileImg : swapObj.requesterProfileImg);
+    return {
+        formattedName,
+        profileImg,
+    };
+}
+
+const TripCard = (swapObj, currentUserId, showRating) => {
+    const { address, dates, rating, ratingMessage, status } = swapObj;
     const displayState = displayNames[values.indexOf(address.state)];
     const showName = status === tripStatus.ACTIVE || status === tripStatus.COMPLETE;
-    const formattedFirstName = getName(firstName, status);
+    const { formattedName, profileImg } = getNameAndImage(swapObj, status, currentUserId);
     const rater = getRater(rating, ratingMessage, showRating);
     return (
         <div className="z-depth-2 trip-card">
@@ -127,9 +134,9 @@ const TripCard = (swapObj, showRating) => {
                     <img className="" src={profileImg.url || defaultImageUrls.cameraDude} alt="profDemo" />
                 </div>
             </div>
-            {!showName ? <div className="col s12 l5"><h5 className="pending-swap-text">{formattedFirstName}</h5></div> : ''}
+            {!showName ? <div className="col s12 l5"><h5 className="pending-swap-text">{formattedName}</h5></div> : ''}
             <div className="col s12 l4">
-                {showName ? <h4>{formattedFirstName}</h4> : ''}
+                {showName ? <h4>{formattedName}</h4> : ''}
                 <h5>{`${address.city}, ${displayState}`}</h5>
                 <h5>{`${dates.arrival} - ${dates.departure}`}</h5>
             </div>
@@ -139,10 +146,13 @@ const TripCard = (swapObj, showRating) => {
     );
 };
 
-const Trip = ({ swapObj, showRating, showPlace }) => {
+/*
+Pending && currentUsers => Trip Card with requestee profile Image and name
+*/
+const Trip = ({ swapObj, showRating, showPlace, currentUserId }) => {
     const content = showPlace
         ? TripRequest(swapObj)
-        : TripCard(swapObj, showRating);
+        : TripCard(swapObj, currentUserId, showRating);
     return (
         <div className="trip-container">
             {content}
@@ -154,6 +164,7 @@ Trip.propTypes = {
     swapObj: PropTypes.object.isRequired,
     showRating: PropTypes.bool,
     showPlace: PropTypes.bool,
+    currentUserId: PropTypes.string.isRequired,
 };
 
 Trip.defaultProps = {

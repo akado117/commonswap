@@ -206,31 +206,6 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             console.log("Create charge error");
             console.log(err);
         }
-        // export const getStripeToken = (card) =>
-        // new Promise((resolve, reject) => {
-        //   Stripe.card.createToken(card, (status, { error, id }) => {
-        //     if (error) {
-        //       reject(error.message);
-        //     } else {
-        //       resolve(id);
-        //     }
-        //   });
-        // });\
-        // var stripe = require("stripe")("sk_test_0V0ylJP59hHWfbBtUWFddocE");
-        
-        // // Token is created using Checkout or Elements!
-        // // Get the payment token ID submitted by the form:
-        // var token = request.body.stripeToken; // Using Express
-        
-        // // Charge the user's card:
-        // stripe.charges.create({
-        //   amount: 1000,
-        //   currency: "usd",
-        //   description: "Example charge",
-        //   source: token,
-        // }, function(err, charge) {
-        //   // asynchronously called
-        // });
     },
     requestEmail(data) {
 
@@ -238,18 +213,14 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         const ownerPlace = Places.findOne({ _id: placeId }) || {};
         const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
         const userId = Meteor.userId();
-        console.log("OWNER USER ID");
-        console.log(userId);
         const RequestorPlace = ownerPlace;
         const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
-        // console.log("methods requestEMAIL");
-        // console.log("REQUESTOR PLACE");
-        // console.log(RequestorPlace);
         console.log("REQUESTED PLACE");
         console.log(RequestedPlace);
 
-
+        console.log("Profile");
+        console.log(Profile);
         HTTP.call('POST',
         'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
             data:
@@ -264,9 +235,10 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 }
         }, function( error, response ) {
             if ( error ) {
+              console.log("POST CALL");
               console.log( error );
             } else {
-              console.log( response );
+                return response;
             }
         });
     },

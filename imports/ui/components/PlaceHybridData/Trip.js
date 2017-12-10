@@ -38,6 +38,7 @@ function getRater(rating, message, active) {
     )
 }
 
+
 function getName(firstName, status) {
     if (status === tripStatus.PENDING) return `Your request to swap with ${firstName} is pending`;
     if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) return firstName;
@@ -45,7 +46,7 @@ function getName(firstName, status) {
 }
 
 const TripRequest = (swapObj) => {
-    const { address, dates, firstName, profileImg, place, requesterMessage } = swapObj;
+    const { address, dates, firstName, profileImg, place, requesterMessage, placeImg } = swapObj;
     let open = false;
 
     function handleOpen (data) {

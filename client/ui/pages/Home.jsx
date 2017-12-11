@@ -32,25 +32,25 @@ class Home extends Component {
                         </div>
                     </div>
                 </header>
-                <div className="col s12" className="intro">
-                    <div className="row">
-                        <div className="col s12 center-align">
-                            <h2 className="why-title">WHY COMMONSWAP</h2>
-                        </div>
-                        <div className="col l4 s12 center-align home-icon">
-                            <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png" alt="moneyHome" />
-                            <h5>Money Saved</h5>
-                        </div>
-                        <div className="col l4 s12 center-align home-icon">
-                            <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png" alt="planeHome" />
-                            <h5>Experience More</h5>
-                        </div>
-                        <div className="col l4 s12 center-align home-icon">
-                            <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png" alt="connectHome" />
-                            <h5>Connect with Others</h5>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className="col s12 intro" >*/}
+                    {/*<div className="row">*/}
+                        {/*<div className="col s12 center-align">*/}
+                            {/*<h2 className="why-title">WHY COMMONSWAP</h2>*/}
+                        {/*</div>*/}
+                        {/*<div className="col l4 s12 center-align home-icon">*/}
+                            {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png" alt="moneyHome" />*/}
+                            {/*<h5>Money Saved</h5>*/}
+                        {/*</div>*/}
+                        {/*<div className="col l4 s12 center-align home-icon">*/}
+                            {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png" alt="planeHome" />*/}
+                            {/*<h5>Experience More</h5>*/}
+                        {/*</div>*/}
+                        {/*<div className="col l4 s12 center-align home-icon">*/}
+                            {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png" alt="connectHome" />*/}
+                            {/*<h5>Connect with Others</h5>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
                 <div className="col s12 purpose">
                     <div className="row">
                         <div className="col s12 l6 center-align">
@@ -60,6 +60,25 @@ class Home extends Component {
                         <div className="col s12 l6 how-video">
                             {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
                             <video poster="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png" src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" type="video/mp4" preload="auto" controls width="100%" height="100%"></video>
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12 register-image">
+                    <div className="row">
+                        <div className="col s6">
+                            <div className="row">
+                                <div className="col s6">
+                                    <img src="" alt="" />
+                                </div>
+                            </div>
+                            <div className="row center-align">
+                                <h2 className="how-desc-title">Register</h2>
+                                <p className="col s11 offset-s1 how-desc">Join our community by signing up and listing
+                                    your space! Include high quality photos and information about your interests.</p>
+                            </div>
+                        </div>
+                        <div className="col s6">
+                            <div className=""></div>
                         </div>
                     </div>
                 </div>
@@ -94,6 +113,18 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
+                <div className="col s12 book-image">
+                    <div className="row">
+                        <div className="offset-s4 offset-l6 col s8 l6">
+                            <div className="row center-align">
+                                <h2 className="col s12 how-desc-title">Book</h2>
+                                <p className="col l9 s12 offset-l1 offset-s0 how-desc">Enter your travel dates and desired location.
+                                    CommonSwap will automatically match you with another traveler looking to visit your
+                                    city during the same period, all for only $50.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className="testimonial-container">
                     <div className="container pad-top">
                         <div className="row">
@@ -112,37 +143,6 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
-                {/* <div className="col s12 register-image">
-                    <div className="row">
-                        <div className="col s6">
-                            <div className="row">
-                                <div className="col s6">
-                                    <img src="" alt="" />
-                                </div>
-                            </div>
-                            <div className="row center-align">
-                                <h2 className="how-desc-title">Register</h2>
-                                <p className="col s11 offset-s1 how-desc">Join our community by signing up and listing
-                                    your space! Include high quality photos and information about your interests.</p>
-                            </div>
-                        </div>
-                        <div className="col s6">
-                            <div className=""></div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col s12 book-image">
-                    <div className="row">
-                        <div className="offset-s4 offset-l6 col s8 l6">
-                            <div className="row center-align">
-                                <h2 className="col s12 how-desc-title">Book</h2>
-                                <p className="col l9 s12 offset-l1 offset-s0 how-desc">Enter your travel dates and desired location.
-                                    CommonSwap will automatically match you with another traveler looking to visit your
-                                    city during the same period, all for only $50.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div className="col s12 travel-image">
                     <div className="row">
                         <div className="col l6 s7">
@@ -154,7 +154,7 @@ class Home extends Component {
                             </div>
                         </div>
                     </div>
-                </div> */}
+                </div>
                 <Footer />
             </div>
         );

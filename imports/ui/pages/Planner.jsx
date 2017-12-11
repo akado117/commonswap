@@ -2,12 +2,14 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import 'react-rater/lib/react-rater.css';
+import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import addDays from 'date-fns/add_days'
+import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import AppBar from 'material-ui/AppBar';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../helpers/DateHelpers';
+import { MapTripsToCorrectCategories } from '../../helpers/DataHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
@@ -23,7 +25,7 @@ const CITIES = require('../../../node_modules/react-select/examples/src/data/sta
 const today = new Date();
 const minDate = addDays(today, -40);
 
-const examplePastSwap = {
+const examplePastSwap = [{
     address: {
         state: 'DC',
         city: 'Washington',
@@ -43,9 +45,9 @@ const examplePastSwap = {
     status: tripStatus.ACTIVE,
     rating: 4,
     message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
-};
+}];
 
-const exampleActiveSwap = {
+const exampleActiveSwap = [{
     address: {
         state: 'OH',
         city: 'Columbus',
@@ -63,9 +65,9 @@ const exampleActiveSwap = {
         arrival: PrettyDate(today),
     },
     status: tripStatus.ACTIVE,
-};
+}];
 
-const pendingSwaps = [
+const examplePendingSwaps = [
     {
         address: {
             state: 'HI',
@@ -194,10 +196,16 @@ class Planner extends React.Component {
         }
     }
 
-    isAPlace = swapObj => (this.props.user.userId && swapObj.status === tripStatus.PENDING && this.props.user.userId === swapObj.requesteeId) || swapObj.examplePlace;
+    tripBuilder= (trips, userId) => trips.map((trip, idx) => <Trip key={`trip-${idx}`} swapObj={trip} currentUserId={userId} />);
+
+    exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${idx}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
     render() {
         const { userId } = this.props.user;
+        const { pendingTrips, activeTrips, pastTrips } = this.props.trip;
+        const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : this.exampleTripBuilder(examplePendingSwaps, userId, 2);
+        const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : this.tripBuilder(exampleActiveSwap, userId);
+        const pastedTrips = pastTrips.length ? this.tripBuilder(pastTrips, userId) : this.tripBuilder(examplePastSwap, userId);
         return (
             <div className="planner-container">
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
@@ -243,9 +251,7 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        {this.props.trip.trips.map((swap, idx) => <Trip key={`trip-${idx}`} swapObj={swap} showPlace={!!this.isAPlace(swap)} currentUserId={userId} />)}
-                        {pendingSwaps.map((swap, idx) => <Trip key={`trip-${idx}`} swapObj={swap} showPlace={!!this.isAPlace(swap)} currentUserId={userId} />)}
-
+                        {pendTrips}
                     </div>
                     <div className="row">
                         <AppBar
@@ -253,7 +259,7 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        <Trip swapObj={exampleActiveSwap} currentUserId={userId} />
+                        {actTrips}
                     </div>
                     <div className="row">
                         <AppBar
@@ -261,7 +267,7 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        <Trip swapObj={examplePastSwap} showRating currentUserId={userId} />
+                        {pastedTrips}
                     </div>
                     <div className="row">
                         <div className="col s12">
@@ -294,6 +300,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 Planner.propTypes = {
+    profile: PropTypes.object,
+    place: PropTypes.object,
+    user: PropTypes.object,
+    trip: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);

@@ -13,7 +13,7 @@ class SwapPicker extends Component {
 
         this.state = {
             guests: 0,
-            swapperMessage: '',
+            requesterMessage: '',
             dates: {
                 arrival: Today,
                 departure: Today,
@@ -52,9 +52,10 @@ class SwapPicker extends Component {
                 <TextFieldStandardized
                     hintText="Description"
                     floatingLabelText={<span><i className="fa fa-envelope fa-1x" aria-hidden="true" /> Add a message</span>}
-                    onChange={(nul, swapperMessage) => this.setState({ swapperMessage })}
+                    onChange={(nul, requesterMessage) => this.setState({ requesterMessage })}
                 />
                 <RaisedButton
+                    disabled={this.props.disableButton}
                     label="Request Swap"
                     primary
                     fullWidth
@@ -67,6 +68,11 @@ class SwapPicker extends Component {
 
 SwapPicker.propTypes = {
     requestSwap: PropTypes.func.isRequired,
+    disableButton: PropTypes.bool,
 };
+
+SwapPicker.defaultProps = {
+    disableButton: false,
+}
 
 export default SwapPicker;

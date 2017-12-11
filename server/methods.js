@@ -6,7 +6,7 @@ import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips } from '../imports/collections/mainCollection';
 import {
-    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus,
+    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus, FieldsForTrip,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
 } from '../imports/lib/Constants';
 import S3 from './s3';
@@ -285,7 +285,6 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
             delete tripClone.requesteeEmail;
-            delete tripClone.requesteeName;
             consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
             return serviceSuccessBuilder({ tripGUID }, genericSuccessCode, {
                 serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`,
@@ -304,7 +303,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
         if (!id) return serviceErrorBuilder('Please send the correct arguments', placeErrorCode);
         try {
-            const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }).fetch();
+            const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }, { fields: FieldsForTrip }).fetch();
             consoleLogHelper(`Found ${trips.length} swaps`, genericSuccessCode, Meteor.userId(), '');
             return serviceSuccessBuilder({}, genericSuccessCode, {
                 serviceMessage: `Found ${trips.length} swaps via _id of ${id}`,
@@ -318,7 +317,11 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Failed when attempting to find trips for user', mongoFindOneError, err);
         }
     },
-    'places.getPlaceById': function getPlaceById({ _id }) {
+    'places.getPlaceById': function getPlaceById({ _id, ...args }) {
+        if (!_id) {
+            consoleErrorHelper('Failed when attempting to find a place, please send correct Args', mongoFindOneError, Meteor.userId(), args);
+            return serviceErrorBuilder('Failed when attempting to find a place, please send correct Args', mongoFindOneError, { ...args });
+        }
         try {
             const placeForBrowse = Places.findOne({ _id }, { fields: FieldsForBrowseProfile }) || {};
             placeForBrowse.placeImgs = FileUrls.find({ placeId: _id, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();

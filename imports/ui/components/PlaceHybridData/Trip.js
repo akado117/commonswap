@@ -34,12 +34,15 @@ function getRater(rating, message, active) {
 }
 
 const TripRequest = (swapObj) => {
-    const { address, dates, requesterName, requesterProfileImg, place, requesterMessage, placeImg } = swapObj;
+    const { address, dates, requesterName, requesterProfileImg, place, requesterMessage, placeImg, requesterPlaceId } = swapObj;
+    const profileLink = `/viewProfile/${requesterPlaceId || ''}`
     return (
         <div className="col s12 z-depth-2">
             <div className="row">
                 <div className="col s12 place-title" style={{ textAlign: 'center' }}>
-                    <h3><strong>{`${requesterName} wants to swap with you from ${GetSwapDateRange(dates.arrival, dates.departure)}`}</strong></h3>
+                    <h3>
+                        <strong>{`${requesterName} wants to swap with you from ${GetSwapDateRange(dates.arrival, dates.departure)}`}</strong>
+                    </h3>
                 </div>
             </div>
             <div className="row">
@@ -77,7 +80,7 @@ const TripRequest = (swapObj) => {
                         </div>
                     </div>
                     <div className="row col s12">
-                        <p><u>{`Message From ${requesterName}:`}</u><Link to="/viewProfile" > (View Profile)</Link></p>
+                        <p><u>{`Message From ${requesterName}:`}</u><Link to={profileLink} > (View Profile)</Link></p>
                         <p>{requesterMessage}</p>
                     </div>
                 </div>
@@ -108,7 +111,7 @@ const TripRequest = (swapObj) => {
 }
 
 function getNameAndImage(swapObj, status, currentUserId) {
-    const isRequester = currentUserId === swapObj.requesterUseeId;
+    const isRequester = currentUserId === swapObj.requesterUserId;
     const firstName = isRequester ? swapObj.requesteeName : swapObj.requesterName;
     let formattedName;
     if (status === tripStatus.PENDING) formattedName = `Your request to swap with ${firstName} is pending`;
@@ -146,11 +149,18 @@ const TripCard = (swapObj, currentUserId, showRating) => {
     );
 };
 
+function isPlace(swapObj, currentUserId) {
+    return swapObj.status === tripStatus.PENDING && currentUserId === swapObj.requesteeUserId;
+}
+
 /*
-Pending && currentUsers => Trip Card with requestee profile Image and name
+Pending && requester == currentUser => Trip Card with requestee profile Image and name
+Pending && requester != currentuser => Trip request
+(Accepted || Active || Completed) && requester == currentuser => Trip Card with requestee profile and name
+ (Accepted || Active || Completed) && requester != currentuser => Trip Card with requester profile and name
 */
 const Trip = ({ swapObj, showRating, showPlace, currentUserId }) => {
-    const content = showPlace
+    const content = isPlace(swapObj, currentUserId) || showPlace
         ? TripRequest(swapObj)
         : TripCard(swapObj, currentUserId, showRating);
     return (
@@ -164,12 +174,13 @@ Trip.propTypes = {
     swapObj: PropTypes.object.isRequired,
     showRating: PropTypes.bool,
     showPlace: PropTypes.bool,
-    currentUserId: PropTypes.string.isRequired,
+    currentUserId: PropTypes.string,
 };
 
 Trip.defaultProps = {
     showRating: false,
     showPlace: false,
+    currentUserId: '',//this is needed but can't always be had on load
 };
 
 export default Trip;

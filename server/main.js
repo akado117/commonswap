@@ -16,4 +16,4 @@ createApolloServer({
 });
 
 Places._ensureIndex({ location: '2dsphere'  });
-Trips._ensureIndex({ requesteeUserId: 1, requesterUserId: 1, dates: 1 }, { unique: true });
+Trips._ensureIndex({ requesteeUserId: 1, requesterUserId: 1, 'dates.departure': -1, 'dates.arrival': -1 }, { unique: true });

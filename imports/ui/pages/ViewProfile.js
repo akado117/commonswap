@@ -122,6 +122,7 @@ class ViewProfile extends React.Component {
             internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />
         }
 
+        const { placeId } = this.props.params;
         const place = this.getPlace();
         const { amenities, interests, profile, profileImg, placeImgs, address } = place;
 
@@ -192,6 +193,7 @@ class ViewProfile extends React.Component {
                         <div className="col s12 m4">
                             <SwapPicker
                                 requestSwap={data => this.saveSwap(data, this.props, place)}
+                                disableButton={!placeId || placeId === this.props.user.userId}
                             />
                         </div>
                     </div>

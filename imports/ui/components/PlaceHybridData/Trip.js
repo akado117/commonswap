@@ -92,20 +92,44 @@ const TripRequest = (swapObj) => {
                         className=""
                         target="_blank"
                         label="Accept"
-                        style={{ margin: '12px'}}
+                        style={{ margin: '12px' }}
                         primary
                         icon={<FontIcon className="material-icons">check</FontIcon>}
+                        onClick={() => { handleOpen(swapObj) }}
                     />
                     <RaisedButton
                         className=""
                         target="_blank"
                         label="Decline"
-                        style={{ margin: '12px'}}
+                        style={{ margin: '12px' }}
                         secondary
                         icon={<FontIcon className="material-icons">close</FontIcon>}
                     />
                 </div>
             </div>
+            {/*<Dialog*/}
+                {/*title=""*/}
+                {/*actions={actions}*/}
+                {/*modal={true}*/}
+                {/*open={open}*/}
+            {/*>*/}
+                {/*<div className="row">*/}
+                    {/*<div className="col s12 center-align">*/}
+                        {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png" alt="checkMark" style={{ height: '140px', width: '140px' }} />*/}
+                    {/*</div>*/}
+                    {/*<div className="col s12 center-align">*/}
+                        {/*<h3>Swap Accepted</h3>*/}
+                    {/*</div>*/}
+                    {/*<div className="col s12">*/}
+                        {/*<div className="col s6 center-align">*/}
+                            {/*<img className="circle responsive-img" src={profileImg.url || defaultImageUrls.cameraDude} alt="profDemo" style={{ height: '140px', width: '140px' }} />*/}
+                        {/*</div>*/}
+                        {/*<div className="col s6 center-align">*/}
+                            {/*<img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
+            {/*</Dialog>*/}
         </div>
     );
 }

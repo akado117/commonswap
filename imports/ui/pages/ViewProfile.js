@@ -81,7 +81,22 @@ class ViewProfile extends React.Component {
 
     };
 
+    requestSwap = (data) => {
+        const { placeId } = this.props.params;
+        console.log('data');
+        console.log(data);
+        this.props.profileActions.requestSwap({
+            placeId: placeId,
+            Arrival: data.dates.arrival,
+            Departure: data.dates.departure,
+            Notes: data.swapperMessage,
+            User: this.props.user,
+        });
+    }
+
     saveSwap = (data, props, currentPlace) => {
+
+        this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;
@@ -249,18 +264,6 @@ class ViewProfile extends React.Component {
                 <Footer></Footer>
             </section>
         );
-    }
-    requestSwap = () => {
-        const { placeId } = this.props.params;
-        console.log('placeId');
-        console.log(placeId);
-        this.props.profileActions.requestSwap({
-            placeId: placeId,
-            Arrival: this.state.arrival,
-            Departure: this.state.departure,
-            Notes: this.state.notes,
-            User: this.props.user,
-        });
     }
 }
 

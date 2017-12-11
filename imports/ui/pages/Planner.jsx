@@ -5,11 +5,11 @@ import 'react-rater/lib/react-rater.css';
 import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import AppBar from 'material-ui/AppBar';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../helpers/DateHelpers';
-import { MapTripsToCorrectCategories } from '../../helpers/DataHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
@@ -151,6 +151,7 @@ class Planner extends React.Component {
                 }
             ],
             cities: [],
+            open: false,
         };
         var options = CITIES[this.state.country];
     }
@@ -172,6 +173,19 @@ class Planner extends React.Component {
             rating: newRating,
         });
     }
+
+    createCharge = () => {
+
+    }
+
+    // handleOpen = () => {
+
+    //     this.setState({ open: true });
+    // };
+
+    // handleClose = () => {
+    //     this.setState({ open: false });
+    // };
 
     displayDates() {
         console.log("SELECTED DATES");
@@ -206,6 +220,13 @@ class Planner extends React.Component {
         const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : this.exampleTripBuilder(examplePendingSwaps, userId, 2);
         const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : this.tripBuilder(exampleActiveSwap, userId);
         const pastedTrips = pastTrips.length ? this.tripBuilder(pastTrips, userId) : this.tripBuilder(examplePastSwap, userId);
+        const actions = [
+            <FlatButton
+                label="OK"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
         return (
             <div className="planner-container">
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
@@ -242,6 +263,7 @@ class Planner extends React.Component {
                                         onClick={this.saveDates}
                                     />
                                 </div>
+
                             </div>
                         </div>
                     </div>

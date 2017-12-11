@@ -180,24 +180,45 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             }
         });
     },
+    createCharge(swapObj) {
+        try
+        {
+            const { address, dates, firstName, rating, ratingMessage, profileImg, place, swapperMessage, status } = swapObj;
+            console.log("Place");
+            console.log(swapObj);
+
+            const userId = Meteor.userId();
+
+            const cust = Customers.findOne({ userId: userId }) || {};
+
+            const stripe = Stripe(Meteor.settings.private.stripe);
+
+            stripe.charges.create({
+                amount: 1000,
+                currency: "usd",
+                customer: cust.customerId,
+              });
+        }
+        catch (err)
+        {
+            console.log("Create charge error");
+            console.log(err);
+        }
+    },
     requestEmail(data) {
 
         const { Arrival, Departure, Notes, User, placeId } = data;
         const ownerPlace = Places.findOne({ _id: placeId }) || {};
         const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
         const userId = Meteor.userId();
-        console.log("OWNER USER ID");
-        console.log(userId);
         const RequestorPlace = ownerPlace;
         const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
-        // console.log("methods requestEMAIL");
-        // console.log("REQUESTOR PLACE");
-        // console.log(RequestorPlace);
         console.log("REQUESTED PLACE");
         console.log(RequestedPlace);
 
-
+        console.log("Profile");
+        console.log(Profile);
         HTTP.call('POST',
         'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
             data:
@@ -212,9 +233,10 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 }
         }, function( error, response ) {
             if ( error ) {
+              console.log("POST CALL");
               console.log( error );
             } else {
-              console.log( response );
+                return response;
             }
         });
     },

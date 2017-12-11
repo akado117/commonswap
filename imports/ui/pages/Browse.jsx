@@ -48,12 +48,12 @@ class Browse extends Component {
         return undefined;
     }
 
-   componentDidUpdate = (prevProps) => {
-        if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
-            const coords = merge(this.state.coords, this.props.place.place.coords);
-            this.setState({ coords });
-        }
-   }
+//    componentDidUpdate = (prevProps) => {
+//         if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
+//             const coords = merge(this.state.coords, this.props.place.place.coords);
+//             this.setState({ coords });
+//         }
+//    }
 
     componentWillUnmount = () => {
         const {

@@ -7,16 +7,16 @@ import handleUpdatePayment from '../../../modules/server/stripe/handle-update-pa
 import { Profiles } from '../imports/collections/mainCollection';
 
 Meteor.methods({
-  signup(customer) {
-    console.log('Customer');
-    console.log(customer);
-    check(customer, Object);
-    return handleSignup(customer)
-    .then(customer => customer)
-    .catch((error) => {
-      throw new Meteor.Error('500', `${error}`);
-    });
-  },
+  // signup(customer) {
+  //   console.log('Customer HERE');
+  //   console.log(customer);
+  //   check(customer, Object);
+  //   return handleSignup(customer)
+  //   .then(customer => customer)
+  //   .catch((error) => {
+  //     throw new Meteor.Error('500', `${error}`);
+  //   });
+  // },
 //   updatePayment(source) {
 //     check(source, String);
 //     return handleUpdatePayment({ userId: Meteor.userId(), source })

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import 'react-rater/lib/react-rater.css';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import addDays from 'date-fns/add_days'
+import FlatButton from 'material-ui/FlatButton';
+import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import AppBar from 'material-ui/AppBar';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../helpers/DateHelpers';
@@ -15,6 +16,7 @@ import ProfileActions from '../../actions/ProfileActions';
 import PlaceActions from '../../actions/PlaceActions';
 import Trip from '../components/PlaceHybridData/Trip';
 import { defaultImageUrls, tripStatus } from '../../lib/Constants';
+import Dialog from 'material-ui/Dialog';
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
@@ -129,6 +131,7 @@ class Planner extends React.Component {
                 }
             ],
             cities: [],
+            open: false,
         };
         var options = CITIES[this.state.country];
     }
@@ -149,6 +152,19 @@ class Planner extends React.Component {
             rating: newRating,
         });
     }
+
+    createCharge = () => {
+
+    }
+
+    // handleOpen = () => {
+
+    //     this.setState({ open: true });
+    // };
+
+    // handleClose = () => {
+    //     this.setState({ open: false });
+    // };
 
     displayDates() {
         console.log("SELECTED DATES");
@@ -176,6 +192,13 @@ class Planner extends React.Component {
     isAPlace = swapObj => (this.props.user.userId && swapObj.status === tripStatus.PENDING && this.props.user.userId === swapObj.requesteeId) || swapObj.examplePlace;
 
     render() {
+        const actions = [
+            <FlatButton
+                label="OK"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
         return (
             <div className="planner-container">
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
@@ -212,6 +235,7 @@ class Planner extends React.Component {
                                         onClick={this.saveDates}
                                     />
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -253,11 +277,12 @@ class Planner extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { profile, place, user } = state;
+    const { profile, place, user, trip } = state;
     return {
         profile,
         place,
         user,
+        trip
     };
 }
 
@@ -269,6 +294,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 Planner.propTypes = {
+    
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);

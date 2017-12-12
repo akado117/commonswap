@@ -2,10 +2,10 @@
     margin-right: 0;
     margin-left: 0;
     .place-images {
-        min-height: 400px;
-        margin-top: 30px;
-        width: 100%;
-    }
+        .image-gallery-slide.img-gal {
+          height: 300px;
+        }
+      }
     
     .main-image {
         max-width: 100%;

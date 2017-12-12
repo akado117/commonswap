@@ -14,6 +14,7 @@ import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
+import ImageCarousel from '../components/ImageCarousel';
 
 import BetaWarning from '../components/BetaWarning';
 
@@ -86,7 +87,7 @@ class ViewProfile extends React.Component {
 
     saveSwap = (data, props, currentPlace) => {
         const { numOfGuests, bedrooms, _id } = props.place.place;
-        const { state, city } =  props.place.address;
+        const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;
         const placeImg = props.images.placeImgs[0];
         const profileImg = props.images.profileImg;
@@ -137,20 +138,23 @@ class ViewProfile extends React.Component {
                 return <Checkbox label={interestsTextMap[key]} active name={key} key={key} />;
             }
         });
-
+        const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
         return (
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
-                    <div className="z-depth-2 place-images">
+                    <div className="z-depth-2">
                         <div className="row">
-                            <div className="col s12 l8 main-image">
+                            <div className="place-images">
+                                <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />    
+                            </div>
+                            {/* <div className="col s12 l8 main-image">
                                 <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
                             </div>
                             <div className="col l4 scroll-image">
                                 <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
                                 <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="row">
@@ -289,6 +293,10 @@ ViewProfile.propTypes = {
     place: PropTypes.object.isRequired,
     images: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    placeImgs: PropTypes.array,
 }
+ViewProfile.defaultProps = {
+    placeImgs: [],
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProfile);

@@ -127,6 +127,9 @@ class ViewProfile extends React.Component {
         const place = this.getPlace();
         const { amenities, interests, profile, profileImg, placeImgs, address } = place;
 
+        console.log('Amenities');
+        console.log(place);
+
         const amenitiesElements = Object.keys(amenities).map((key) => {
             if (amenities[key] && amenitiesTextMap[key]) {
                 return <Checkbox label={amenitiesTextMap[key]} active name={key} key={key} />;
@@ -143,20 +146,6 @@ class ViewProfile extends React.Component {
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
-                    <div className="z-depth-2">
-                        <div className="row">
-                            <div className="place-images">
-                                <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />    
-                            </div>
-                            {/* <div className="col s12 l8 main-image">
-                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div> */}
-                        </div>
-                    </div>
                     <div className="row">
                         <div className="col s12 m8">
                             <div className="profile-section z-depth-2 " >
@@ -200,6 +189,22 @@ class ViewProfile extends React.Component {
                             />
                         </div>
                     </div>
+                    <div className="col s12 z-depth-2">
+                        <div className="row">
+                            <div className="place-images">
+                                <div className="col s12">
+                                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />    
+                                </div>
+                            </div>
+                            {/* <div className="col s12 l8 main-image">
+                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
+                            </div>
+                            <div className="col l4 scroll-image">
+                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            </div> */}
+                        </div>
+                    </div>
                     <div className="row">
                         <div className="col s12">
                             <div className="place-section z-depth-2">
@@ -228,9 +233,11 @@ class ViewProfile extends React.Component {
                                     <strong>Amenities: </strong>
                                 </div>
                                 <div className="col s12">
-                                    {amenitiesElements}
+                                    <div className="col s12">
+                                        {amenitiesElements} 
+                                    </div>
                                 </div>
-                                <div className="col s12">
+                                <div className="col s12"> 
                                     <strong>Description: </strong>
                                 </div>
                                 <div className="col s12">

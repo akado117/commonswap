@@ -52,7 +52,7 @@ const ProfileActions = {
                     dispatch({
                         type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
                     });
-                    return callBack ? callBack() : '';
+                    return result.data;
                 };
                 return dispatch({
                     type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
@@ -60,7 +60,30 @@ const ProfileActions = {
                 });
             }
         });
+    },
+    retrieveCardInfo: () => {
+        return dispatch => Meteor.call('cardInfo', (error, result) => {
+            if (error) {
+                console.log(error);
+                return dispatch({
+                    type: `Card info`,
+                    ...error,
+                });
+            } else {
+                if (result) {
+                    dispatch({
+                        type: `Card info`,
+                    });
+                    return result;
+                };
+                return dispatch({
+                    type: `card info`,
+                    ...error,
+                });
+            }
+        });
     }
+
 }
 
 export default ProfileActions

@@ -3,17 +3,18 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
-import FontIcon from 'material-ui/FontIcon';
-import MenuItem from 'material-ui/MenuItem';
-import AppBar from 'material-ui/AppBar';
 import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
-import Checkbox from '../components/forms/Checkbox';
-import ProfileComponent from '../components/profileComps/ProfileComponent';
-import PlaceComponent from '../components/placeComponents/PlaceComponent';
+import FontIcon from 'material-ui/FontIcon';
+import MenuItem from 'material-ui/MenuItem';
+import Checkbox from '../components/forms/Checkbox'
+import ProfileComponent from '../components/profileComps/ProfileComponent.js'
+import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Footer from '../components/Footer';
+import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
+import ImageCarousel from '../components/ImageCarousel';
 
 import BetaWarning from '../components/BetaWarning';
 
@@ -24,9 +25,12 @@ const amenitiesTextMap = {
     essentials: 'Essentials (towels, etc)',
     gym: 'Gym/ Fitness Center',
     dressers: 'Closet/ Drawer',
+    wiFi: 'Wifi',
     washerDryer: 'Washer/ Dryer',
     pool: 'Pool',
+    heat: 'Heat',
     kitchen: 'Kitchen Appliances',
+    parking: 'Parking'
 }
 
 const interestsTextMap = {
@@ -50,7 +54,7 @@ class ViewProfile extends React.Component {
             arrival: '',
             departure: '',
             notes: '',
-            guests: '',
+            guests: ''
         };
         const { placeId } = this.props.params;
         if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
@@ -94,18 +98,16 @@ class ViewProfile extends React.Component {
         });
     }
 
-    saveSwap = (data, props, currentPlace) => {
-
+    saveSwap = (data, props, currentPlace) => {        
         this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;
         const placeImg = props.images.placeImgs[0];
-        const requesterProfileImg = props.images.profileImg;
+        const profileImg = props.images.profileImg;
         const userId = props.user._id;
         const requesteePlaceId = currentPlace._id;
         const requesteeUserId = currentPlace.ownerUserId;
-        const requesteeProfileImg = currentPlace.profileImg;
         const swapObj = {
             place: {
                 numOfGuests,
@@ -119,11 +121,10 @@ class ViewProfile extends React.Component {
             requesterEmail: email,
             requesterPlaceId: _id,
             requesterUserId: userId || Meteor.userId(),
-            requesterProfileImg,
             requesteeUserId,
             requesteePlaceId,
-            requesteeProfileImg,
             placeImg,
+            profileImg,
             ...data,
         };
         props.placeActions.saveSwap(swapObj);
@@ -137,9 +138,11 @@ class ViewProfile extends React.Component {
             internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />
         }
 
-        const { placeId } = this.props.params;
         const place = this.getPlace();
         const { amenities, interests, profile, profileImg, placeImgs, address } = place;
+
+        console.log('Amenities');
+        console.log(place);
 
         const amenitiesElements = Object.keys(amenities).map((key) => {
             if (amenities[key] && amenitiesTextMap[key]) {
@@ -152,22 +155,11 @@ class ViewProfile extends React.Component {
                 return <Checkbox label={interestsTextMap[key]} active name={key} key={key} />;
             }
         });
-
+        const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
         return (
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
-                    <div className="z-depth-2 place-images">
-                        <div className="row">
-                            <div className="col s12 l8 main-image">
-                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div>
-                        </div>
-                    </div>
                     <div className="row">
                         <div className="col s12 m8">
                             <div className="profile-section z-depth-2 " >
@@ -208,8 +200,23 @@ class ViewProfile extends React.Component {
                         <div className="col s12 m4">
                             <SwapPicker
                                 requestSwap={data => this.saveSwap(data, this.props, place)}
-                                disableButton={!placeId || placeId === this.props.user.userId}
                             />
+                        </div>
+                    </div>
+                    <div className="col s12 z-depth-2">
+                        <div className="row">
+                            <div className="place-images">
+                                <div className="col s12">
+                                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />    
+                                </div>
+                            </div>
+                            {/* <div className="col s12 l8 main-image">
+                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
+                            </div>
+                            <div className="col l4 scroll-image">
+                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
+                            </div> */}
                         </div>
                     </div>
                     <div className="row">
@@ -240,9 +247,11 @@ class ViewProfile extends React.Component {
                                     <strong>Amenities: </strong>
                                 </div>
                                 <div className="col s12">
-                                    {amenitiesElements}
+                                    <div className="col s12">
+                                        {amenitiesElements} 
+                                    </div>
                                 </div>
-                                <div className="col s12">
+                                <div className="col s12"> 
                                     <strong>Description: </strong>
                                 </div>
                                 <div className="col s12">
@@ -293,6 +302,10 @@ ViewProfile.propTypes = {
     place: PropTypes.object.isRequired,
     images: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    placeImgs: PropTypes.array,
 }
+ViewProfile.defaultProps = {
+    placeImgs: [],
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProfile);

@@ -109,3 +109,19 @@ export function MapTripsToCorrectCategories(trips) {
     });
     return mappedObj;
 }
+
+export function determineImageDimensions(width, height, maxDimObj) {
+    const maxHeight = maxDimObj.height;
+    const maxWidth = maxDimObj.width;
+    if (!maxWidth || !maxHeight) return { width, height };
+    const widthRatio = width / maxWidth;
+    const heightRatio = height / maxHeight;
+    if (widthRatio < 1.01 && heightRatio < 1.01) return { width, height };
+    const greatestRatio = widthRatio > heightRatio ? widthRatio : heightRatio;
+    return {
+        width: parseInt(width / greatestRatio, 10),
+        height: parseInt(height / greatestRatio, 10),
+        resized: true,
+    };
+
+}

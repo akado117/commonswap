@@ -9,14 +9,22 @@ import { merge, cloneDeep } from 'lodash';
 import uploadToS3 from '../../../imports/helpers/upload-to-s3';
 import Progress from './Progress';
 import CloseButton from './forms/CloseButton';
+import { MaxImageUploadDim } from '../../../imports/lib/Constants';
+import { determineImageDimensions } from '../../../imports/helpers/DataHelpers';
+
+let pica;
 
 class Uploaders extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
+            resizing: false,
             isUploading: false,
             uploadProgress: 0,
+            picaOptions: props.picaOptions,
         };
+        this.picaResizeFunction.bind(this);
+        this.willNeedResize.bind(this);
     }
 
     calculateProgress() {
@@ -35,25 +43,64 @@ class Uploaders extends React.Component {
         }
     }
 
+    willNeedResize(file, maxDimensionProp) {
+        const image = new Image();
+        image.src = file.preview;
+        const dimensionsObject = determineImageDimensions(image.width, image.height, MaxImageUploadDim[maxDimensionProp]);
+        dimensionsObject.image = image;
+        return dimensionsObject;
+    }
+
+    picaResizeFunction(file, resizeDimensions) {
+        const { width, height, resized, image } = resizeDimensions;
+        if (!resized) {
+            return file;
+        };
+        pica = pica || Pica(['js', 'wasm', 'ww']);
+        const offPageCVS = document.createElement('canvas');
+        offPageCVS.width = width;
+        offPageCVS.height = height;
+        return pica.resize(image, offPageCVS, this.state.picaOptions)
+            .then(result => pica.toBlob(result, 'image/jpeg', 100))
+            .then(blob => {
+                console.log(blob);
+                blob.name = file.name;
+                blob.lastModified = file.lastModified;
+                blob.lastModifiedDate = file.lastModifiedDate;
+                console.log('pica ran', file);
+                return blob;
+            });
+    }
+
     uploadtoS3 = (file) => {
         this.upload = new Slingshot.Upload(this.props.uploaderInstance, this.props.metaContext);//THIS HAS TO BE AN AVAILABLE SLINGSHOT INSTANCE
         this.calculateProgress();
-        const pica = Pica();
-        uploadToS3(this, file).then((url) => {
-            this.uploadComputation.stop();
-            this.props.addToDbFunc({ url, name: file.name, ...this.props.metaContext }, (error, resp) => {
-                if (error) {
-                    this.setState({ isUploading: false, uploadProgress: 0 });
-                    return error;
-                }
-
-                if (!error && this.state.uploadProgress === 100) {
-                    setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0 }); }, 500);
-                    return resp;
-                }
-            });
+        const { maxPicaDimensionProp } = this.props;
+        const resizeDimensions = this.willNeedResize(file, maxPicaDimensionProp);
+        if (resizeDimensions.resized) this.setState({ resizing: true });
+        new Promise((resolve, reject) => {
+            if (maxPicaDimensionProp) {
+                console.log('about to pica', file);
+                resolve(this.picaResizeFunction(file, resizeDimensions));
+            }
+            console.log('pica skipped', file);
+            resolve(file);
         })
-            .catch((error) => {
+            .then(newFile => uploadToS3(this, newFile))
+            .then((url) => {
+                console.log('uploadComplete', file);
+                this.uploadComputation.stop();
+                this.props.addToDbFunc({ url, name: file.name, ...this.props.metaContext }, (error, resp) => {
+                    if (error) {
+                        this.setState({ isUploading: false, uploadProgress: 0 });
+                        return error;
+                    }
+                    if (!error && this.state.uploadProgress === 100) {
+                        setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0 }); }, 500);
+                        return resp;
+                    }
+                });
+            }).catch((error) => {
                 this.setState({ isUploading: false, uploadProgress: 0 });
                 console.log(error.message, 'danger');
             });
@@ -70,7 +117,7 @@ class Uploaders extends React.Component {
                 {this.props.deleteFunc && !this.state.isUploading ?  <button className="delete" onClick={this.deleteHandler}>&times;</button> : ''}
                 {this.state.isUploading ?
                     <div className="progress-container"><Progress bottom={ this.state.uploadProgress } top={ 100 } /></div>
-                    : <img src={this.props.file.preview} alt="preview" />}
+                    : <div className={this.state.resizing ? 'resizing' : ''}><div className="overlay" /><img src={this.props.file.preview} alt="preview" /></div>}
             </div>);
     }
 }
@@ -83,16 +130,27 @@ Uploaders.propTypes = {
     onUploadComplete: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func,
     metaContext: PropTypes.object,
+    picaOptions: PropTypes.object.isRequired,
+    maxPicaDimensionProp: PropTypes.string,
 }
 
 Uploaders.defaultProps = {
     metaContext: {},
+    maxPicaDimensionProp: '',
 }
 
 const initialState = {
     files: [],
     triggerUpload: false,
     uploadComplete: {},
+    picaOptions: {
+        quality: 3,
+        alpha: true,
+        unsharpAmount: 73,
+        unsharpRadius: 0.6,
+        unsharpThreshold: 8,
+        transferable: true,
+    },
 };
 
 class Uploader extends React.Component {
@@ -150,7 +208,7 @@ class Uploader extends React.Component {
         this.setState({ files, uploadComplete: this.buildUploadCompleteObj(files) });
     }
 
-    getUploaders = files => files.map((file, idx) => (
+    getUploaders = (files, picaOptions) => files.map((file, idx) => (
         <Uploaders
             key={`uploader-${idx}`}
             uploaderInstance={this.props.uploaderInstance}
@@ -160,6 +218,8 @@ class Uploader extends React.Component {
             deleteFunc={() => this.removeFile(idx)}
             addToDbFunc={this.props.addToDbFunc}
             metaContext={this.props.metaContext}
+            picaOptions={picaOptions}
+            maxPicaDimensionProp={this.props.maxPicaDimensionProp}
         />
     ));
 
@@ -174,7 +234,7 @@ class Uploader extends React.Component {
             <div className="uploader">
                 <Dropzone className="dropzone col s12" onDrop={this.onDrop} multiple={this.props.multiple} >
                     <CloseButton onClick={this.onCloseClick} />
-                    { this.state.files.length ? this.getUploaders(this.state.files) : 'Please drop files to upload into zone or click to open file picker'}
+                    { this.state.files.length ? this.getUploaders(this.state.files, this.state.picaOptions) : 'Please drop files to upload into zone or click to open file picker'}
                 </Dropzone>
                 <button className="waves-effect waves-light btn-large col s6 m4 l3 offset-s6 offset-m8 offset-l9" disabled={this.canUpload(this.state.uploadComplete)} onClick={this.triggerUpload}>Upload</button>
             </div>);
@@ -189,6 +249,8 @@ Uploader.propTypes = {
     multiple: PropTypes.bool,
     onCloseClick: PropTypes.func,
     onUploading: PropTypes.func,
+    maxPicaDimensionProp: PropTypes.string,
+
 };
 
 Uploader.defaultProps = {
@@ -197,6 +259,7 @@ Uploader.defaultProps = {
     multiple: true,
     onCloseClick: () => {},
     onUploading: () => {},
+    maxPicaDimensionProp: undefined,
 };
 
 export default Uploader;

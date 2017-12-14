@@ -36,7 +36,7 @@ class Uploaders extends React.Component {
 
     componentDidUpdate = (prevProps, prevState) => {
         if (!prevProps.uploadTrigger && this.props.uploadTrigger && this.props.file) {
-            this.uploadtoS3(this.props.file);
+            this.setState({ resizing: true }, () => setTimeout(() => this.uploadtoS3(this.props.file), 0));
         }
         if (prevState.isUploading && !this.state.isUploading) {
             this.props.onUploadComplete();
@@ -77,7 +77,6 @@ class Uploaders extends React.Component {
         this.calculateProgress();
         const { maxPicaDimensionProp } = this.props;
         const resizeDimensions = this.willNeedResize(file, maxPicaDimensionProp);
-        if (resizeDimensions.resized) this.setState({ resizing: true });
         new Promise((resolve, reject) => {
             if (maxPicaDimensionProp) {
                 console.log('about to pica', file);
@@ -92,16 +91,16 @@ class Uploaders extends React.Component {
                 this.uploadComputation.stop();
                 this.props.addToDbFunc({ url, name: file.name, ...this.props.metaContext }, (error, resp) => {
                     if (error) {
-                        this.setState({ isUploading: false, uploadProgress: 0 });
+                        this.setState({ isUploading: false, uploadProgress: 0, resizing: false });
                         return error;
                     }
                     if (!error && this.state.uploadProgress === 100) {
-                        setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0 }); }, 500);
+                        setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0, resizing: false }); }, 500);
                         return resp;
                     }
                 });
             }).catch((error) => {
-                this.setState({ isUploading: false, uploadProgress: 0 });
+                this.setState({ isUploading: false, uploadProgress: 0, resizing: false });
                 console.log(error.message, 'danger');
             });
     }

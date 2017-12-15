@@ -1,5 +1,5 @@
 import FileUrls from '../collections/FileUrls';
-import { FileTypes, consoleLogHelper, imageSuccessCode } from '../lib/Constants';
+import { FileTypes, consoleLogHelper, imageSuccessCode, MaxImageUploadDim } from '../lib/Constants';
 
 const keys = {
     users: 'customers',
@@ -10,7 +10,7 @@ const keys = {
 
 Slingshot.fileRestrictions('uploadPlaceToAmazonS3', {
     allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
-    maxSize: 2 * 1024 * 1024,
+    maxSize: MaxImageUploadDim.large.sizeMb * 1024 * 1024,
 });
 
 Slingshot.createDirective( 'uploadPlaceToAmazonS3', Slingshot.S3Storage, {
@@ -34,7 +34,7 @@ Slingshot.createDirective( 'uploadPlaceToAmazonS3', Slingshot.S3Storage, {
 
 Slingshot.fileRestrictions('uploadProfileToAmazonS3', {
     allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
-    maxSize: 0.75 * 1024 * 1024,
+    maxSize: MaxImageUploadDim.small.sizeMb * 1024 * 1024,
 });
 
 Slingshot.createDirective( 'uploadProfileToAmazonS3', Slingshot.S3Storage, {
@@ -58,7 +58,7 @@ Slingshot.createDirective( 'uploadProfileToAmazonS3', Slingshot.S3Storage, {
 
 Slingshot.fileRestrictions('uploadPlaceThumbnailToAmazonS3', {
     allowedFileTypes: [ 'image/png', 'image/jpeg', 'image/gif' ],
-    maxSize: 0.5 * 1024 * 1024,
+    maxSize: MaxImageUploadDim.small.sizeMb * 1024 * 1024,
 });
 
 Slingshot.createDirective( 'uploadPlaceThumbnailToAmazonS3', Slingshot.S3Storage, {

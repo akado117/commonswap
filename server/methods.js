@@ -6,7 +6,7 @@ import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips } from '../imports/collections/mainCollection';
 import {
-    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus,
+    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus, FieldsForTrip,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
 } from '../imports/lib/Constants';
 import S3 from './s3';
@@ -24,34 +24,36 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
     if (!fileObj[boundToProp]) return serviceErrorBuilder(`Please create and save a ${imgType} first`, placeErrorCode);
     if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
+    const searchObj = {
+        userId,
+        url: fileObj.url,
+    };
     const insertObj = {
         active: activeFlag,
         deleted: false,
-        userId,
+        ...searchObj,
         [boundToProp]: fileObj[boundToProp],
-        url: fileObj.url,
         fileName: fileObj.name,
         type: imgType,
         added: new Date(),
     };
-
-    const insertId = FileUrls.insert(insertObj);
     if (activeFlag) {
         const searchForObj = {
             active: true,
-            _id: { $ne: insertId },
+            userId,
         };
         if (boundToProp) searchForObj[boundToProp] = fileObj[boundToProp];
         const numberUpdated = FileUrls.update(searchForObj, { $set: { active: false } });
         consoleLogHelper(`${numberUpdated} Images changed to inactive`, genericSuccessCode, userId, '');
     }
+    const insertGUID = FileUrls.upsert(searchObj, insertObj);
 
-    consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
-    return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
-        serviceMessage: `Image added, with key ${insertId}`,
+    consoleLogHelper(`Image ${insertGUID.insertedId ? `added with key ${insertGUID.insertedId}` : `updated with name of ${insertObj.fileName}`}`, genericSuccessCode, userId, insertObj.fileName);
+    return serviceSuccessBuilder(insertGUID, genericSuccessCode, {
+        serviceMessage: `Image ${insertGUID.insertedId ? `added with key ${insertGUID.insertedId}` : `updated with name of ${insertObj.fileName}`}`,
         data: {
             image: {
-                _id: insertId,
+                _id: insertGUID.insertedId,
                 url: insertObj.url,
             },
         },
@@ -180,24 +182,45 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             }
         });
     },
+    createCharge(swapObj) {
+        try
+        {
+            const { address, dates, firstName, rating, ratingMessage, profileImg, place, swapperMessage, status } = swapObj;
+            console.log("Place");
+            console.log(swapObj);
+
+            const userId = Meteor.userId();
+
+            const cust = Customers.findOne({ userId: userId }) || {};
+
+            const stripe = Stripe(Meteor.settings.private.stripe);
+
+            stripe.charges.create({
+                amount: 1000,
+                currency: "usd",
+                customer: cust.customerId,
+              });
+        }
+        catch (err)
+        {
+            console.log("Create charge error");
+            console.log(err);
+        }
+    },
     requestEmail(data) {
 
         const { Arrival, Departure, Notes, User, placeId } = data;
         const ownerPlace = Places.findOne({ _id: placeId }) || {};
         const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
         const userId = Meteor.userId();
-        console.log("OWNER USER ID");
-        console.log(userId);
         const RequestorPlace = ownerPlace;
         const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
-        // console.log("methods requestEMAIL");
-        // console.log("REQUESTOR PLACE");
-        // console.log(RequestorPlace);
         console.log("REQUESTED PLACE");
         console.log(RequestedPlace);
 
-
+        console.log("Profile");
+        console.log(Profile);
         HTTP.call('POST',
         'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
             data:
@@ -212,9 +235,10 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 }
         }, function( error, response ) {
             if ( error ) {
+              console.log("POST CALL");
               console.log( error );
             } else {
-              console.log( response );
+                return response;
             }
         });
     },
@@ -285,7 +309,6 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
             delete tripClone.requesteeEmail;
-            delete tripClone.requesteeName;
             consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
             return serviceSuccessBuilder({ tripGUID }, genericSuccessCode, {
                 serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`,
@@ -304,7 +327,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
         if (!id) return serviceErrorBuilder('Please send the correct arguments', placeErrorCode);
         try {
-            const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }).fetch();
+            const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }, { fields: FieldsForTrip }).fetch();
             consoleLogHelper(`Found ${trips.length} swaps`, genericSuccessCode, Meteor.userId(), '');
             return serviceSuccessBuilder({}, genericSuccessCode, {
                 serviceMessage: `Found ${trips.length} swaps via _id of ${id}`,
@@ -318,7 +341,11 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceErrorBuilder('Failed when attempting to find trips for user', mongoFindOneError, err);
         }
     },
-    'places.getPlaceById': function getPlaceById({ _id }) {
+    'places.getPlaceById': function getPlaceById({ _id, ...args }) {
+        if (!_id) {
+            consoleErrorHelper('Failed when attempting to find a place, please send correct Args', mongoFindOneError, Meteor.userId(), args);
+            return serviceErrorBuilder('Failed when attempting to find a place, please send correct Args', mongoFindOneError, { ...args });
+        }
         try {
             const placeForBrowse = Places.findOne({ _id }, { fields: FieldsForBrowseProfile }) || {};
             placeForBrowse.placeImgs = FileUrls.find({ placeId: _id, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();

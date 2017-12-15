@@ -19,6 +19,52 @@
     font-style: sans-serif;
   }
 
+  .testimonial-container {
+    .grow { transition: all .2s ease-in-out; }
+    .grow:hover { transform: scale(1.7); }
+    .test-img {
+        max-height: 350px;
+        width:100%;
+    }
+    .pad-top {
+        padding-top: 1.0rem;
+    }
+
+    @media #{$medium-and-down} {
+        
+    }
+    @media #{$small-and-down} {
+       .test-img{
+           width:100%;
+           min-height: 400px;
+       } 
+    }
+  }
+
+  .intro, .purpose {
+    margin-top: 5.0rem !important;
+  }
+
+  .purpose-title, .why-title, .how-title {
+      font-size: 4.5rem;
+      font-weight: 500;
+  }
+
+  .purpose-desc {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+
+  .how-desc2 {
+    font-size: 2.5rem;
+    font-weight: 400;
+  }
+
+  .how-text {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+
   .video-parent {
     width: 100vw;
     overflow: hidden;
@@ -174,6 +220,43 @@
   }
 
   @media #{$small-and-down} {
+    .home-icon {
+      padding-top: 2.0rem !important;
+    }
+
+    .intro, .purpose {
+      margin-top: 3.0rem !important;
+    }
+  
+    .purpose-title, .why-title, .how-title {
+        font-size: 3.0rem;
+        font-weight: 500;
+    }
+    
+    video {
+      min-height: 400px;
+    }
+
+    .how-img {
+      width: 90%;
+    }
+
+    .purpose-desc {
+      font-size: 1.0rem;
+      font-weight: 300;
+    }
+  
+    .how-desc2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+  
+    .how-text {
+      font-size: 1.5rem;
+      font-weight: 300;
+    }
+
+
     .video-container {
       left: -50%;
       width: 200%;

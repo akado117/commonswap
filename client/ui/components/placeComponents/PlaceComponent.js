@@ -8,6 +8,7 @@ import Uploader from '../Uploader';
 import ImageCarousel from '../ImageCarousel';
 import AppBar from 'material-ui/AppBar';
 import MapWithASearchBox from '../MapWithASearchBox';
+import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
 
 const BUTTONS = [
     { label: 'Essentials (towels, etc)', name: 'essentials' },
@@ -73,6 +74,7 @@ class PlaceComponent extends Component {
             component = <span>Please create or update your profile to add pictures!</span>;
         } else if (!images.length || this.state.uploadActive) {
             component = (<Uploader
+                maxPicaDimensionProp={MaxImageDimTypes.LARGE}
                 addToDbFunc={this.props.savePlaceImage}
                 metaContext={{ placeId: this.props.place.place._id }}
                 onUploadComplete={() => this.toggleUploadActive(true)}

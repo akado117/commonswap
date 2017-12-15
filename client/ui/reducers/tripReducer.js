@@ -21,9 +21,9 @@ export default function tripReducer(state = initialState, action = {}) {
         const stateClone = cloneDeep(state);
         const { activeTrips, pastTrips, pendingTrips } = MapTripsToCorrectCategories(action.data.trips);
         stateClone.getTripsCalled = true;
-        stateClone.activeTrips.concat(activeTrips);
-        stateClone.pastTrips.concat(pastTrips);
-        stateClone.pendingTrips.concat(pendingTrips);
+        stateClone.activeTrips = stateClone.activeTrips.concat(activeTrips);
+        stateClone.pastTrips = stateClone.pastTrips.concat(pastTrips);
+        stateClone.pendingTrips = stateClone.pendingTrips.concat(pendingTrips);
         return stateClone;
     }
     case actionTypes.LOGOUT:

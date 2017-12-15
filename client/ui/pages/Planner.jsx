@@ -17,6 +17,7 @@ import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import Trip from '../components/PlaceHybridData/Trip';
 import { defaultImageUrls, tripStatus } from '../../../imports/lib/Constants';
+import Dialog from 'material-ui/Dialog';
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');

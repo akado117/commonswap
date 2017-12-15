@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Uploader from '../Uploader';
+import { MaxImageDimTypes, MaxImageUploadDim } from '../../../../imports/lib/Constants';
 
 
 class ProfileImage extends Component {
@@ -28,6 +29,8 @@ class ProfileImage extends Component {
                 onUploading={() => this.setState({ isUploading: true })}
                 onCloseClick={() => this.toggleUploader()}
                 multiple={false}
+                maxPicaDimensionProp={MaxImageDimTypes.SMALL}
+                uploaderText={`Please drop files to upload into zone or click to open file picker. (Supports .JIFs up to ${MaxImageUploadDim.small.sizeMb}Mb)`}
             /></div>);
     }
 

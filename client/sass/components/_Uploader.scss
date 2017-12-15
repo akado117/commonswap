@@ -40,10 +40,31 @@
         height: 100%;
         width: 100%;
       }
+      .resizing {
+        position: relative;
+        .overlay {
+          z-index: 2;
+          background-color: rgba(0,0,0,.45);
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          &:after {
+            content: 'Resizing';
+            display: block;
+            text-align: center;
+            padding-top: 25px;
+            color: white;
+          }
+        }
+        img {
+          z-index: -2;
+        }
+      }
       img {
         max-height: 100px;
         padding: 5px;
         border: black solid 1px;
+        border-radius: 3px;
       }
     }
   }

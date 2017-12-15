@@ -177,5 +177,22 @@ export const noShowFieldsForPlace = {
     profile: 0,
 };
 
+export const MaxImageUploadDim = {
+    small: {
+        sizeMb: 0.5,
+        width: 700,
+        height: 700,
+    },
+    large: {
+        sizeMb: 2,
+        width: 2048,
+        height: 2048,
+    },
+};
+export const MaxImageDimTypes = {
+    LARGE: 'large',
+    SMALL: 'small',
+};
+
 export const intTypeParams = ['numOfGuests', 'bathrooms', 'bedrooms', 'beds'];
 export const doubleTypeParams = ['rent', 'lat', 'lng'];

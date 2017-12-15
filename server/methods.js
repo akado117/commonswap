@@ -24,34 +24,36 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
     if (!fileObj[boundToProp]) return serviceErrorBuilder(`Please create and save a ${imgType} first`, placeErrorCode);
     if (!userId) return serviceErrorBuilder('Please Sign in before submitting images', placeErrorCode);
+    const searchObj = {
+        userId,
+        url: fileObj.url,
+    };
     const insertObj = {
         active: activeFlag,
         deleted: false,
-        userId,
+        ...searchObj,
         [boundToProp]: fileObj[boundToProp],
-        url: fileObj.url,
         fileName: fileObj.name,
         type: imgType,
         added: new Date(),
     };
-
-    const insertId = FileUrls.insert(insertObj);
     if (activeFlag) {
         const searchForObj = {
             active: true,
-            _id: { $ne: insertId },
+            userId,
         };
         if (boundToProp) searchForObj[boundToProp] = fileObj[boundToProp];
         const numberUpdated = FileUrls.update(searchForObj, { $set: { active: false } });
         consoleLogHelper(`${numberUpdated} Images changed to inactive`, genericSuccessCode, userId, '');
     }
+    const insertGUID = FileUrls.upsert(searchObj, insertObj);
 
-    consoleLogHelper(`Image added, with key ${insertId}`, genericSuccessCode, userId, JSON.stringify(insertObj));
-    return serviceSuccessBuilder({ insertId }, genericSuccessCode, {
-        serviceMessage: `Image added, with key ${insertId}`,
+    consoleLogHelper(`Image ${insertGUID.insertedId ? `added with key ${insertGUID.insertedId}` : `updated with name of ${insertObj.fileName}`}`, genericSuccessCode, userId, insertObj.fileName);
+    return serviceSuccessBuilder(insertGUID, genericSuccessCode, {
+        serviceMessage: `Image ${insertGUID.insertedId ? `added with key ${insertGUID.insertedId}` : `updated with name of ${insertObj.fileName}`}`,
         data: {
             image: {
-                _id: insertId,
+                _id: insertGUID.insertedId,
                 url: insertObj.url,
             },
         },

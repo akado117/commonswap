@@ -3,16 +3,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
-import FontIcon from 'material-ui/FontIcon';
-import MenuItem from 'material-ui/MenuItem';
-import AppBar from 'material-ui/AppBar';
 import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
-import Checkbox from '../components/forms/Checkbox';
-import ProfileComponent from '../components/profileComps/ProfileComponent';
-import PlaceComponent from '../components/placeComponents/PlaceComponent';
+import FontIcon from 'material-ui/FontIcon';
+import MenuItem from 'material-ui/MenuItem';
+import Checkbox from '../components/forms/Checkbox'
+import ProfileComponent from '../components/profileComps/ProfileComponent.js'
+import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Footer from '../components/Footer';
+import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
 import ImageCarousel from '../components/ImageCarousel';
 
@@ -25,9 +25,12 @@ const amenitiesTextMap = {
     essentials: 'Essentials (towels, etc)',
     gym: 'Gym/ Fitness Center',
     dressers: 'Closet/ Drawer',
+    wiFi: 'Wifi',
     washerDryer: 'Washer/ Dryer',
     pool: 'Pool',
+    heat: 'Heat',
     kitchen: 'Kitchen Appliances',
+    parking: 'Parking'
 }
 
 const interestsTextMap = {
@@ -51,7 +54,7 @@ class ViewProfile extends React.Component {
             arrival: '',
             departure: '',
             notes: '',
-            guests: '',
+            guests: ''
         };
         const { placeId } = this.props.params;
         if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
@@ -96,7 +99,6 @@ class ViewProfile extends React.Component {
     }
 
     saveSwap = (data, props, currentPlace) => {
-
         this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;

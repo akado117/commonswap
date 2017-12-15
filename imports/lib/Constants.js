@@ -28,6 +28,7 @@ export const actionTypes = {
     SAVE_DESIRED_DATES: 'SAVE_DESIRED_DATES',
     SAVE_CUSTOMER: 'SAVE_CUSTOMER',
     SAVE_TRIP: 'SAVE_TRIP',
+    GET_TRIPS: 'GET_TRIPS',
 };
 
 export const FileTypes = {
@@ -151,6 +152,8 @@ export const FieldsForTrip = {
     //requesteeEmail: 1,
     requesterUserId: 1,
     requesteeUserId: 1,
+    requesterPlaceId: 1,
+    requesteePlaceId: 1,
     'dates.arrival': 1,
     'dates.departure': 1,
     'address.city': 1,
@@ -159,8 +162,8 @@ export const FieldsForTrip = {
     'place.numOfGuests': 1,
     'profile.school': 1,
     guests: 1,
-    swapperMessage: 1,
-    profileImg: 1,
+    requesterProfileImg: 1,
+    requesteeProfileImg: 1,
     requesterMessage: 1,
     rating: 1,
     ratingMessage: 1,
@@ -172,6 +175,23 @@ export const noShowFieldsForPlace = {
     interests: 0,
     address: 0,
     profile: 0,
+};
+
+export const MaxImageUploadDim = {
+    small: {
+        sizeMb: 0.5,
+        width: 700,
+        height: 700,
+    },
+    large: {
+        sizeMb: 2,
+        width: 2048,
+        height: 2048,
+    },
+};
+export const MaxImageDimTypes = {
+    LARGE: 'large',
+    SMALL: 'small',
 };
 
 export const intTypeParams = ['numOfGuests', 'bathrooms', 'bedrooms', 'beds'];

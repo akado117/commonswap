@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
-import { intTypeParams, doubleTypeParams } from '../lib/Constants';
+import { intTypeParams, doubleTypeParams, tripStatus } from '../lib/Constants';
+import { Today, FormatDate } from './DateHelpers';
 //arr and indexArry need to match
 export const pullMatchingFromArray = (arr, indexArry, val) => {//arr is obj array, indexArr is array of key index to find, key is key to compare against, value is value to Match
     const idxToPull = [];
@@ -92,4 +93,35 @@ export function buildMarkerObj({ lat, lng }) {
 export function checkIfCoordsAreValid(coords) {
     const { lat, lng } = coords;
     return lat !== undefined && lng !== undefined;
+}
+
+export function MapTripsToCorrectCategories(trips) {
+    const mappedObj = {
+        pendingSwaps: [],
+        activeSwaps: [],
+        pastSwaps: [],
+    };
+    if (!trips || !trips.length) return mappedObj;
+    trips.forEach((trip) => {
+        if (trip.status === tripStatus.PENDING || trip.status === tripStatus.ACCEPTED) mappedObj.pendingSwaps.push(trip);
+        if (trip.status === tripStatus.COMPLETE) mappedObj.pastSwaps.push(trip);
+        if (trip.status === tripStatus.ACTIVE) mappedObj.activeSwaps.push(trip);
+    });
+    return mappedObj;
+}
+
+export function determineImageDimensions(width, height, maxDimObj) {
+    const maxHeight = maxDimObj.height;
+    const maxWidth = maxDimObj.width;
+    if (!maxWidth || !maxHeight) return { width, height };
+    const widthRatio = width / maxWidth;
+    const heightRatio = height / maxHeight;
+    if (widthRatio < 1.01 && heightRatio < 1.01) return { width, height };
+    const greatestRatio = widthRatio > heightRatio ? widthRatio : heightRatio;
+    return {
+        width: parseInt(width / greatestRatio, 10),
+        height: parseInt(height / greatestRatio, 10),
+        resized: true,
+    };
+
 }

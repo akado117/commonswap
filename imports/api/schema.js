@@ -189,7 +189,6 @@ export default [
     guests: Int
     rating: Int
     ratingMessage: String
-    profileImg: Image
     place: Place
     swapperMessage: String
     status: String
@@ -201,6 +200,8 @@ export default [
     requesteeName: String
     requesterEmail: String
     requesteeEmail: String
+    requesterProfileImg: Image
+    requesteeProfileImg: Image
   }
 
   type RootMutation {

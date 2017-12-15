@@ -8,7 +8,7 @@ require('../../DOMConfig')('<html><body></body></html>');
 
 chai.use(sinonChai);
 
-import FuseTestContainer from '../../../ui/components/FuseTestContainer.jsx'
+import FuseTestContainer from '../../../../client/ui/components/FuseTestContainer.jsx'
 
 describe('FuseTestContainer Component', function(){
     let FuseTestContainerComponent,

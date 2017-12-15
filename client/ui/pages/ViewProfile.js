@@ -98,16 +98,17 @@ class ViewProfile extends React.Component {
         });
     }
 
-    saveSwap = (data, props, currentPlace) => {        
+    saveSwap = (data, props, currentPlace) => {
         this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;
         const placeImg = props.images.placeImgs[0];
-        const profileImg = props.images.profileImg;
+        const requesterProfileImg = props.images.profileImg;
         const userId = props.user._id;
         const requesteePlaceId = currentPlace._id;
         const requesteeUserId = currentPlace.ownerUserId;
+        const requesteeProfileImg = currentPlace.profileImg;
         const swapObj = {
             place: {
                 numOfGuests,
@@ -121,10 +122,11 @@ class ViewProfile extends React.Component {
             requesterEmail: email,
             requesterPlaceId: _id,
             requesterUserId: userId || Meteor.userId(),
+            requesterProfileImg,
             requesteeUserId,
             requesteePlaceId,
+            requesteeProfileImg,
             placeImg,
-            profileImg,
             ...data,
         };
         props.placeActions.saveSwap(swapObj);
@@ -138,6 +140,7 @@ class ViewProfile extends React.Component {
             internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />
         }
 
+        const { placeId } = this.props.params;
         const place = this.getPlace();
         const { amenities, interests, profile, profileImg, placeImgs, address } = place;
 
@@ -200,6 +203,7 @@ class ViewProfile extends React.Component {
                         <div className="col s12 m4">
                             <SwapPicker
                                 requestSwap={data => this.saveSwap(data, this.props, place)}
+                                disableButton={!placeId || placeId === this.props.user.userId}
                             />
                         </div>
                     </div>

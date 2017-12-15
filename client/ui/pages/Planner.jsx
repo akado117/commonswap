@@ -157,6 +157,11 @@ class Planner extends React.Component {
         var options = CITIES[this.state.country];
     }
 
+    componentDidMount = () => {
+        if (!this.props.trip.getTripsCalled) {
+            this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId()});
+        }
+    }
     componentDidUpdate = (prevProps) => {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
             const selectedDates = convertPlannerDates(ParseDates(this.props.place.place.availableDates || []));
@@ -191,10 +196,6 @@ class Planner extends React.Component {
     displayDates() {
         console.log("SELECTED DATES");
         console.log(this.state.selectedDates);
-    }
-
-    componentDidMount = () => {
-        //this.handleSlideshowOpen(0);
     }
 
     saveDates = () => {

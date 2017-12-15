@@ -207,6 +207,30 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             console.log(err);
         }
     },
+    cardInfo(){
+        try
+        {
+            const usedId = Meteor.userId();
+            const cust = Customers.findOne({ userId: usedId }) || {};
+            console.log("card info");
+            console.log(cust);
+
+            //return null;
+            return serviceSuccessBuilder({ }, genericSuccessCode, {
+                serviceMessage: `Card info retrieved`,
+                data: {
+                    cardType: cust.card.brand,
+                    last4: cust.card.last4,
+                },
+            });
+
+        }
+        catch (err)
+        {
+            console.log("card info error");
+            console.log(err);
+        }
+    },
     requestEmail(data) {
 
         const { Arrival, Departure, Notes, User, placeId } = data;
@@ -216,11 +240,9 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
         const RequestorPlace = ownerPlace;
         const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
-        console.log("REQUESTED PLACE");
-        console.log(RequestedPlace);
+        console.log("USER");
+        console.log(User);
 
-        console.log("Profile");
-        console.log(Profile);
         HTTP.call('POST',
         'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
             data:

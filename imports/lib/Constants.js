@@ -179,10 +179,12 @@ export const noShowFieldsForPlace = {
 
 export const MaxImageUploadDim = {
     small: {
+        sizeMb: 0.5,
         width: 700,
         height: 700,
     },
     large: {
+        sizeMb: 2,
         width: 2048,
         height: 2048,
     },

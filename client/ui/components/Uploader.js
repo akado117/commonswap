@@ -63,11 +63,10 @@ class Uploaders extends React.Component {
         return pica.resize(image, offPageCVS, this.state.picaOptions)
             .then(result => pica.toBlob(result, 'image/jpeg', 100))
             .then(blob => {
-                console.log(blob);
                 blob.name = file.name;
                 blob.lastModified = file.lastModified;
                 blob.lastModifiedDate = file.lastModifiedDate;
-                console.log('pica ran', file);
+                console.log('resize ran');
                 return blob;
             });
     }
@@ -78,16 +77,16 @@ class Uploaders extends React.Component {
         const { maxPicaDimensionProp } = this.props;
         const resizeDimensions = this.willNeedResize(file, maxPicaDimensionProp);
         new Promise((resolve, reject) => {
-            if (maxPicaDimensionProp) {
-                console.log('about to pica', file);
-                resolve(this.picaResizeFunction(file, resizeDimensions));
+            if (maxPicaDimensionProp && resizeDimensions.resized) {
+                console.log('about to pica');
+                return resolve(this.picaResizeFunction(file, resizeDimensions));
             }
-            console.log('pica skipped', file);
-            resolve(file);
+            console.log('pica skipped');
+            return resolve(file);
         })
             .then(newFile => uploadToS3(this, newFile))
             .then((url) => {
-                console.log('uploadComplete', file);
+                console.log('uploadComplete');
                 this.uploadComputation.stop();
                 this.props.addToDbFunc({ url, name: file.name, ...this.props.metaContext }, (error, resp) => {
                     if (error) {
@@ -233,7 +232,7 @@ class Uploader extends React.Component {
             <div className="uploader">
                 <Dropzone className="dropzone col s12" onDrop={this.onDrop} multiple={this.props.multiple} >
                     <CloseButton onClick={this.onCloseClick} />
-                    { this.state.files.length ? this.getUploaders(this.state.files, this.state.picaOptions) : 'Please drop files to upload into zone or click to open file picker'}
+                    { this.state.files.length ? this.getUploaders(this.state.files, this.state.picaOptions) : this.props.uploaderText}
                 </Dropzone>
                 <button className="waves-effect waves-light btn-large col s6 m4 l3 offset-s6 offset-m8 offset-l9" disabled={this.canUpload(this.state.uploadComplete)} onClick={this.triggerUpload}>Upload</button>
             </div>);
@@ -249,7 +248,7 @@ Uploader.propTypes = {
     onCloseClick: PropTypes.func,
     onUploading: PropTypes.func,
     maxPicaDimensionProp: PropTypes.string,
-
+    uploaderText: PropTypes.string,
 };
 
 Uploader.defaultProps = {
@@ -259,6 +258,7 @@ Uploader.defaultProps = {
     onCloseClick: () => {},
     onUploading: () => {},
     maxPicaDimensionProp: undefined,
+    uploaderText: 'Please drop files to upload into zone or click to open file picker',
 };
 
 export default Uploader;

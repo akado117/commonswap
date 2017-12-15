@@ -97,15 +97,15 @@ export function checkIfCoordsAreValid(coords) {
 
 export function MapTripsToCorrectCategories(trips) {
     const mappedObj = {
-        pendingSwaps: [],
-        activeSwaps: [],
-        pastSwaps: [],
+        pendingTrips: [],
+        activeTrips: [],
+        pastTrips: [],
     };
     if (!trips || !trips.length) return mappedObj;
     trips.forEach((trip) => {
-        if (trip.status === tripStatus.PENDING || trip.status === tripStatus.ACCEPTED) mappedObj.pendingSwaps.push(trip);
-        if (trip.status === tripStatus.COMPLETE) mappedObj.pastSwaps.push(trip);
-        if (trip.status === tripStatus.ACTIVE) mappedObj.activeSwaps.push(trip);
+        if (trip.status === tripStatus.PENDING || trip.status === tripStatus.ACCEPTED) mappedObj.pendingTrips.push(trip);
+        if (trip.status === tripStatus.COMPLETE) mappedObj.pastTrips.push(trip);
+        if (trip.status === tripStatus.ACTIVE) mappedObj.activeTrips.push(trip);
     });
     return mappedObj;
 }

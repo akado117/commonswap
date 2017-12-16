@@ -33,9 +33,9 @@ function getRater(rating, message, active) {
     )
 }
 
-const TripRequest = (swapObj) => {
-    const { address, dates, requesterName, requesterProfileImg, place, requesterMessage, placeImg, requesterPlaceId } = swapObj;
-    const profileLink = `/viewProfile/${requesterPlaceId || ''}`
+const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
+    const { address, dates, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId, } = swapObj;
+    const profileLink = `/viewProfile/${requesterPlaceId || ''}`;
     return (
         <div className="col s12 z-depth-2">
             <div className="row">
@@ -95,7 +95,7 @@ const TripRequest = (swapObj) => {
                         style={{ margin: '12px' }}
                         primary
                         icon={<FontIcon className="material-icons">check</FontIcon>}
-                        onClick={() => { handleOpen(swapObj) }}
+                        onClick={() => handleAcceptSwap(requesterProfileImg, requesteeProfileImg) }
                     />
                     <RaisedButton
                         className=""
@@ -103,33 +103,11 @@ const TripRequest = (swapObj) => {
                         label="Decline"
                         style={{ margin: '12px' }}
                         secondary
+                        onClick={() => handleDeclineSwap(requesterProfileImg, requesteeProfileImg) }
                         icon={<FontIcon className="material-icons">close</FontIcon>}
                     />
                 </div>
             </div>
-            {/*<Dialog*/}
-                {/*title=""*/}
-                {/*actions={actions}*/}
-                {/*modal={true}*/}
-                {/*open={open}*/}
-            {/*>*/}
-                {/*<div className="row">*/}
-                    {/*<div className="col s12 center-align">*/}
-                        {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png" alt="checkMark" style={{ height: '140px', width: '140px' }} />*/}
-                    {/*</div>*/}
-                    {/*<div className="col s12 center-align">*/}
-                        {/*<h3>Swap Accepted</h3>*/}
-                    {/*</div>*/}
-                    {/*<div className="col s12">*/}
-                        {/*<div className="col s6 center-align">*/}
-                            {/*<img className="circle responsive-img" src={profileImg.url || defaultImageUrls.cameraDude} alt="profDemo" style={{ height: '140px', width: '140px' }} />*/}
-                        {/*</div>*/}
-                        {/*<div className="col s6 center-align">*/}
-                            {/*<img className="circle responsive-img" src="http://stretchflex.net/photos/profileStock.jpeg" alt="profDemo" style={{ height: '140px', width: '140px' }} />*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
-            {/*</Dialog>*/}
         </div>
     );
 }
@@ -183,9 +161,9 @@ Pending && requester != currentuser => Trip request
 (Accepted || Active || Completed) && requester == currentuser => Trip Card with requestee profile and name
  (Accepted || Active || Completed) && requester != currentuser => Trip Card with requester profile and name
 */
-const Trip = ({ swapObj, showRating, showPlace, currentUserId }) => {
+const Trip = ({ swapObj, showRating, showPlace, currentUserId, acceptSwapHandler, declineSwapHandler }) => {
     const content = isPlace(swapObj, currentUserId) || showPlace
-        ? TripRequest(swapObj)
+        ? TripRequest(swapObj, acceptSwapHandler, declineSwapHandler)
         : TripCard(swapObj, currentUserId, showRating);
     return (
         <div className="trip-container">
@@ -199,12 +177,16 @@ Trip.propTypes = {
     showRating: PropTypes.bool,
     showPlace: PropTypes.bool,
     currentUserId: PropTypes.string,
+    acceptSwapHandler: PropTypes.func,
+    declineSwapHandler: PropTypes.func,
 };
 
 Trip.defaultProps = {
     showRating: false,
     showPlace: false,
     currentUserId: '',//this is needed but can't always be had on load
+    acceptSwapHandler: () => {},
+    declineSwapHandler: () => {},
 };
 
 export default Trip;

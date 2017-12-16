@@ -1,11 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Navbar from './components/Navbar';
+import Dialog from './components/dialog/WrappedDialog';
+
 
 const test = gql;
 
@@ -22,6 +24,7 @@ class Layout extends React.Component {
                 <div>
                     <Navbar />
                     {this.props.children}
+                    <Dialog />
                 </div>
             </MuiThemeProvider>
         );

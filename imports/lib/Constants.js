@@ -29,6 +29,8 @@ export const actionTypes = {
     SAVE_CUSTOMER: 'SAVE_CUSTOMER',
     SAVE_TRIP: 'SAVE_TRIP',
     GET_TRIPS: 'GET_TRIPS',
+    OPEN_MODAL: 'OPEN_MODAL',
+    CLOSE_MODAL: 'CLOSE_MODAL',
 };
 
 export const FileTypes = {
@@ -46,6 +48,9 @@ export const stateFields = {
 };
 
 export const defaultImageUrls = {
+    assets: {
+        checkMark: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png',
+    },
     cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
     alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',

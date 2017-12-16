@@ -5,6 +5,7 @@ import profile from './profileReducer';
 import place from './placeReducer';
 import images from './imagesReducer';
 import trip from './tripReducer';
+import modal from './modalReducer';
 
 const rootReducer = combineReducers({
     pageSkip,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     place,
     images,
     trip,
+    modal,
 });
 
 export default rootReducer;

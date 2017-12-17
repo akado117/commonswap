@@ -52,7 +52,7 @@ const ProfileActions = {
                     dispatch({
                         type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
                     });
-                    return result.data;
+                    return callBack ? callBack() : '';
                 };
                 return dispatch({
                     type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
@@ -72,7 +72,8 @@ const ProfileActions = {
             } else {
                 if (result) {
                     dispatch({
-                        type: `Card info`,
+                        type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
+                        card: result.data.card
                     });
                     return result;
                 };

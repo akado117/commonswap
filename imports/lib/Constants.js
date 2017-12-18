@@ -29,6 +29,7 @@ export const actionTypes = {
     SAVE_CUSTOMER: 'SAVE_CUSTOMER',
     SAVE_TRIP: 'SAVE_TRIP',
     GET_TRIPS: 'GET_TRIPS',
+    GET_CARD_INFO: 'GET_CARD_INFO',
 };
 
 export const FileTypes = {

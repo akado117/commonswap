@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { actionTypes, SUCCESS, FAILURE } from '../../../imports/lib/Constants';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../../../imports/lib/Constants';
 import Store from '../../../imports/store/store';
 
 const ProfileActions = {
@@ -62,29 +62,10 @@ const ProfileActions = {
         });
     },
     retrieveCardInfo: () => {
-        return dispatch => Meteor.call('cardInfo', (error, result) => {
-            if (error) {
-                console.log(error);
-                return dispatch({
-                    type: `Card info`,
-                    ...error,
-                });
-            } else {
-                if (result) {
-                    dispatch({
-                        type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
-                        card: result.data.card
-                    });
-                    return result;
-                };
-                return dispatch({
-                    type: `card info`,
-                    ...error,
-                });
-            }
+        return dispatch => Meteor.call('getCardInfo', (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.GET_CARD_INFO, dispatch);
         });
-    }
-
+    },
 }
 
 export default ProfileActions

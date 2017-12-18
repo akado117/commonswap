@@ -1,4 +1,4 @@
-import { actionTypes, SUCCESS, FAILURE } from '../../../imports/lib/Constants';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/ConstantsRedux';
 
 export default {
     upsertProfile: ({ profile = {}, interests = {}, emergencyContacts = [] }, callBack) => {

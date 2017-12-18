@@ -1,7 +1,7 @@
 import { cloneDeep, merge } from 'lodash';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../../../imports/lib/Constants';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/ConstantsRedux';
 import Store from '../../../imports/store/store';
 import { FormateDates, FormateDate } from '../../../imports/helpers/DateHelpers';
 import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert } from '../../../imports/helpers/DataHelpers'

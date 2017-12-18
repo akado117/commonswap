@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { SUCCESS, actionTypes } from '../../../imports/lib/Constants';
+import { SUCCESS, actionTypes } from '../helpers/ConstantsRedux';
 
 const initialState = {
     placeImgs: [],

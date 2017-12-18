@@ -1,5 +1,5 @@
 import { merge, cloneDeep } from 'lodash';
-import { actionTypes, SUCCESS} from '../../../imports/lib/Constants';
+import { SUCCESS, actionTypes } from '../helpers/ConstantsRedux';
 import { MapTripsToCorrectCategories } from '../../../imports/helpers/DataHelpers';
 
 const initialState = {

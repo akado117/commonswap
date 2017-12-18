@@ -1,4 +1,4 @@
-import { actionTypes } from '../../../imports/lib/Constants';
+import { actionTypes } from '../helpers/ConstantsRedux';
 
 const modalActions = {
     openModal: (content, actions) => ({

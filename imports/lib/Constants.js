@@ -9,30 +9,6 @@ export const placeErrorCode = 24;
 export const plannerErrorCode = 25;
 export const mongoFindOneError = 26;
 export const tripErrorCode = 27;
-export const actionTypes = {
-    SAVE_ROOMIES: 'SAVE_ROOMIES',
-    LOGIN_: 'LOGIN_',
-    LOGOUT: 'LOGOUT',
-    GET_PROFILE: 'GET_PROFILE',
-    SAVE_PROFILE: 'SAVE_PROFILE',
-    GET_PLACE: 'GET_PLACE',
-    SAVE_PLACE: 'SAVE_PLACE',
-    SAVE_PLACE_AVAILABILITY: 'SAVE_PLACE_AVAILABILITY',
-    GET_PLACE_BY_AVAILABILITY: 'GET_PLACE_BY_AVAILABILITY',
-    GET_PLACE_BY_ID: 'GET_PLACE_BY_ID',
-    GET_PLACE_IMAGES: 'GET_PLACE_IMAGES',
-    ADD_PLACE_IMAGE: 'ADD_PLACE_IMAGE',
-    SAVE_BROWSE_DATES: 'SAVE_BROWSE_DATES',
-    GET_PROFILE_IMAGE: 'GET_PROFILE_IMAGE',
-    ADD_PROFILE_IMAGE: 'ADD_PROFILE_IMAGE',
-    SAVE_DESIRED_DATES: 'SAVE_DESIRED_DATES',
-    SAVE_CUSTOMER: 'SAVE_CUSTOMER',
-    SAVE_TRIP: 'SAVE_TRIP',
-    GET_TRIPS: 'GET_TRIPS',
-    GET_CARD_INFO: 'GET_CARD_INFO',
-    OPEN_MODAL: 'OPEN_MODAL',
-    CLOSE_MODAL: 'CLOSE_MODAL',
-};
 
 export const FileTypes = {
     PLACE: 'PLACE',
@@ -49,6 +25,9 @@ export const stateFields = {
 };
 
 export const defaultImageUrls = {
+    assets: {
+        checkMark: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png',
+    },
     cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
     alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',
@@ -61,35 +40,6 @@ export const tripStatus = {
     ACCEPTED: 'ACCEPTED',
     COMPLETE: 'COMPLETE',
     PENDING: 'PENDING',
-};
-
-export function standardResponseFunc(error, result, actionType, dispatch, cb) {
-    let callback = cb;
-    if (!cb) {
-        callback = () => {};
-    }
-    if (error) {
-        console.log(error);
-        callback(error);
-        return dispatch({
-            type: `${actionType}_${FAILURE}`,
-            ...error,
-        });
-    } else {
-        if (result.data) {
-            callback(undefined, result);
-            return dispatch({
-                type: `${actionType}_${SUCCESS}`,
-                data: result.data,
-            });
-        };
-        callback(result);
-        return dispatch({
-            type: `${actionType}_${FAILURE}`,
-            errorMessage: result.message,
-            ...result,
-        });
-    }
 };
 
 export const serviceErrorBuilder = (message, code, err = {}, extraParams = {}) => ({

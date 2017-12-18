@@ -30,6 +30,8 @@ export const actionTypes = {
     SAVE_TRIP: 'SAVE_TRIP',
     GET_TRIPS: 'GET_TRIPS',
     GET_CARD_INFO: 'GET_CARD_INFO',
+    OPEN_MODAL: 'OPEN_MODAL',
+    CLOSE_MODAL: 'CLOSE_MODAL',
 };
 
 export const FileTypes = {

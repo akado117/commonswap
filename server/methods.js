@@ -9,6 +9,7 @@ import {
     serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus, FieldsForTrip,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
 } from '../imports/lib/Constants';
+import { clientSideCustomerFields } from './helpers/ServerConstants';
 import S3 from './s3';
 import { parseInts, parseFloats, checkIfCoordsAreValid } from '../imports/helpers/DataHelpers';
 import { merge, cloneDeep } from 'lodash';
@@ -87,14 +88,14 @@ function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceChe
     return objClone;
 }
 
-Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQUIRES REFACTOR TO USE SETTERS FOR UPSERT (prop: $set: data)
+Meteor.methods({
     signup(customer) {
         check(customer, Object);
         return handleSignup(customer)
-        .then(customer => customer)
-        .catch((error) => {
-          throw new Meteor.Error('500', `${error}`);
-        });
+            .then(customers => customers)
+            .catch((error) => {
+              throw new Meteor.Error('500', `${error}`);
+            });
       },
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
@@ -207,27 +208,25 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             console.log(err);
         }
     },
-    cardInfo(){
-        try
-        {
-            const usedId = Meteor.userId();
-            const cust = Customers.findOne({ userId: usedId }) || {};
-            console.log("card info");
-            console.log(cust);
-
-            //return null;
-            return serviceSuccessBuilder({ }, genericSuccessCode, {
-                serviceMessage: `Card info retrieved`,
+    getCardInfo() {
+        const userId = Meteor.userId();
+        try {
+            const cust = Customers.findOne({ userId }, { fields: clientSideCustomerFields }) || {};
+            if (!cust.card) {
+                consoleErrorHelper('No card info found for user', upsertFailedCode, userId);
+                return serviceErrorBuilder('No card info found for user', upsertFailedCode, {});
+            }
+            consoleLogHelper(`Get card info called for ${userId}`, genericSuccessCode, userId, JSON.stringify(cust.card));
+            return serviceSuccessBuilder({}, genericSuccessCode, {
+                serviceMessage: `Get card info called for ${userId}`,
                 data: {
                     card: cust.card,
                 },
             });
-
-        }
-        catch (err)
-        {
-            console.log("card info error");
-            console.log(err);
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Get card info called for ${userId} but failed`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder(`Get card info called for ${userId} but failed`, upsertFailedCode, err);
         }
     },
     requestEmail(data) {

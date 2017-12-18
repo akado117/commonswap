@@ -10,24 +10,18 @@ import handleSignup from '../../../../imports/modules/signup';
 import ProfileActions from '../../actions/ProfileActions';
 
 class CardForm extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
-        //THIS IS PROBABLY NOT GOOD CONVENTION
-        //BUT IT FREAKS OUT HERE
-        const data = this.props.profileActions.retrieveCardInfo();
-        console.log("card info");
-        console.log(data);
+        if (Object.keys(this.props.profile.card).length < 1)
+            this.props.profileActions.retrieveCardInfo();
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        //handleSignup({ component: this });
+        handleSignup({ component: this });
     };
 
     render() {
+        const { card } = this.props.profile;
         return (
             <div>
                 <AppBar
@@ -39,21 +33,21 @@ class CardForm extends Component {
                     <div className="col s12">
                         <p></p>
                     </div>
-                    {/* <div className="col s12">
+                     <div className="col s12">
                         <div className="col s6">
-                            {oldType}
+                            {card.last4}
                         </div>
                         <div className="col s6">
-                            {lastNum}
+                            {card.brand}
                         </div>
-                    </div> */}
+                    </div>
                 </div>
                 <div className="row">
-                    <div className="col l8" style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
+                    <div className="col s8" style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
                         <Card ref={card => (this.card = card)} />
                     </div>
-                    <div className="col l12">
-                        <RaisedButton label="Update Card" primary={true} onClick={this.handleSubmit} />
+                    <div className="col s12">
+                        <RaisedButton label="Update Card" primary onClick={this.handleSubmit} />
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ const initialState = {
     profile: {},
     interests: {},
     emergencyContacts: [],
+    card: {},
 };
 let stateClone;
 //case is exactly the same as the type
@@ -15,7 +16,10 @@ function profileReducer(state = initialState, action = {}) {
         stateClone.profile = action.profile;
         stateClone.interests = action.interests;
         stateClone.emergencyContacts = action.emergencyContacts;
-        stateClone.card = action.card;
+        return stateClone;
+    case `${actionTypes.GET_CARD_INFO}_${SUCCESS}`:
+        stateClone = cloneDeep(state);
+        stateClone.card = action.data.card;
         return stateClone;
     case actionTypes.LOGOUT:
         return initialState;

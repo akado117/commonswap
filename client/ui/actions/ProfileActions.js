@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../../../imports/lib/Constants';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/ConstantsRedux';
 import Store from '../../../imports/store/store';
 
 const ProfileActions = {
@@ -12,27 +12,7 @@ const ProfileActions = {
         };
         const { profile, interests, emergencyContacts } = merge({}, mappedProfData, profileData);//technically more bandwidth but less sever load
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
-            if (error) {
-                console.log(error);
-                return dispatch({
-                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
-                    ...error,
-                });
-            } else {
-                if (result.data) {
-                    dispatch({
-                        type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
-                        profile: result.data.profile,
-                        interests: result.data.interests,
-                        emergencyContacts: result.data.emergencyContacts,
-                    });
-                    return callBack ? callBack() : '';
-                };
-                return dispatch({
-                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
-                    ...error,
-                });
-            }
+            return standardResponseFunc(error, result, actionTypes.SAVE_PROFILE, dispatch, callBack);
         });
     },
     requestSwap: (data) => {

@@ -1,4 +1,4 @@
-import { actionTypes, standardResponseFunc } from '../../../imports/lib/Constants';
+import { actionTypes, standardResponseFunc } from '../helpers/ConstantsRedux';
 
 
 export default {

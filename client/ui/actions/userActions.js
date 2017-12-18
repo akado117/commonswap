@@ -1,5 +1,5 @@
 import { graphql, gql } from 'react-apollo';
-import { actionTypes, SUCCESS, FAILURE } from '../../../imports/lib/Constants';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/ConstantsRedux';
 import ProfileActions from './ProfileActions';
 import PlaceActions from './PlaceActions';
 import FileActions from './FileActions';

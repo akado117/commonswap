@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { actionTypes, SUCCESS} from '../../../imports/lib/Constants';
+import { SUCCESS, actionTypes } from '../helpers/ConstantsRedux';
 
 const initialState = {};
 

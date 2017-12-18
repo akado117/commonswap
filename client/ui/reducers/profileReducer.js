@@ -15,6 +15,7 @@ function profileReducer(state = initialState, action = {}) {
         stateClone.profile = action.profile;
         stateClone.interests = action.interests;
         stateClone.emergencyContacts = action.emergencyContacts;
+        stateClone.card = action.card;
         return stateClone;
     case actionTypes.LOGOUT:
         return initialState;

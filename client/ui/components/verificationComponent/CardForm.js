@@ -15,14 +15,16 @@ class CardForm extends Component {
     }
 
     componentDidMount() {
-         const data = this.props.profileActions.retrieveCardInfo();
+        //THIS IS PROBABLY NOT GOOD CONVENTION
+        //BUT IT FREAKS OUT HERE
+        const data = this.props.profileActions.retrieveCardInfo();
         console.log("card info");
         console.log(data);
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        handleSignup({ component: this });
+        //handleSignup({ component: this });
     };
 
     render() {
@@ -63,7 +65,7 @@ function mapStateToProps(state) {
     const { profile, user } = state;
     return {
         profile,
-        user
+        user,
     };
   }
   

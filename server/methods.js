@@ -219,8 +219,7 @@ Meteor.methods({//DO NOT PASS ID UNLESS YOU WANT TO REPLACE WHOLE DOCUMENT - REQ
             return serviceSuccessBuilder({ }, genericSuccessCode, {
                 serviceMessage: `Card info retrieved`,
                 data: {
-                    cardType: cust.card.brand,
-                    last4: cust.card.last4,
+                    card: cust.card,
                 },
             });
 

@@ -6,15 +6,17 @@ import place from './placeReducer';
 import images from './imagesReducer';
 import trip from './tripReducer';
 import modal from './modalReducer';
+import service from './serviceReducer';
 
 const rootReducer = combineReducers({
     pageSkip,
-    user,
     profile,
     place,
+    user,
     images,
     trip,
     modal,
+    service,
 });
 
 export default rootReducer;

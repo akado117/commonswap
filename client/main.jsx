@@ -16,7 +16,7 @@ import ImagePOC from './ui/pages/ImagePOC';
 import Planner from './ui/pages/Planner';
 import Home from './ui/pages/Home';
 import ViewProfile from './ui/pages/ViewProfile';
-import store from '../imports/store/store';
+import store from './ui/store/store';
 import CreditCard from './ui/components/verificationComponent/CreditCard';
 import Browse from './ui/pages/Browse';
 import About from './ui/pages/About';

@@ -15,7 +15,9 @@ import FileActions from '../actions/FileActions';
 import Footer from '../components/Footer';
 import MapWithASearchBox from '../components/MapWithASearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
+import ConnectedButton from '../components/forms/ConnectButton';
 import { onChangeHelper } from '../../../imports/helpers/DataHelpers';
+import { actionTypes } from '../helpers/ConstantsRedux';
 
 const items = [
     <MenuItem key={1} value={1} primaryText="1" />,
@@ -121,10 +123,12 @@ class Browse extends Component {
                             <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Range: Miles</label>
                         </div>
                         <div className="col s6 m4 l3 offset-s6 valign-wrapper">
-                            <button onClick={this.searchForPlaces} className="waves-effect waves-light btn-large search-button" type="submit" >
-                                <i className="fa fa-search-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />
-                                Search
-                            </button>
+                            <ConnectedButton
+                                icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
+                                buttonText="Search"
+                                onClick={this.searchForPlaces}
+                            />
                         </div>
                     </div>
                     {this.state.coords && this.state.coords.distance > 0 ? <MapWithASearchBox

@@ -8,7 +8,9 @@ import Uploader from '../Uploader';
 import ImageCarousel from '../ImageCarousel';
 import AppBar from 'material-ui/AppBar';
 import MapWithASearchBox from '../MapWithASearchBox';
+import { actionTypes } from '../../helpers/ConstantsRedux';
 import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
+import ConnectedButton from '../forms/ConnectButton';
 
 const BUTTONS = [
     { label: 'Essentials (towels, etc)', name: 'essentials' },
@@ -237,14 +239,12 @@ class PlaceComponent extends Component {
                     <div className="col s12">
                         <div className="row">
                             <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">
-                                <button
-                                    className="waves-effect waves-light btn-large"
-                                    type="submit"
-                                    style={{ width: '100%' }}
+                                <ConnectedButton
+                                    icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                    actionType={actionTypes.SAVE_PLACE}
+                                    buttonText="Search"
                                     onClick={this.props.savePlace}
-                                >
-                                    <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />Save
-                                </button>
+                                />
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,8 @@
 import { cloneDeep, merge } from 'lodash';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/ConstantsRedux';
-import Store from '../../../imports/store/store';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc, servicePending, serviceResponded } from '../helpers/ConstantsRedux';
+import Store from '../store/store';
 import { FormateDates, FormateDate } from '../../../imports/helpers/DateHelpers';
 import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert } from '../../../imports/helpers/DataHelpers'
 
@@ -12,29 +12,10 @@ const PlaceActions = {
         const { place = {}, address = {}, amenities = {} } = currentPlaceData;
 
         mapMongoGeoSpatialCoords(place);
+        servicePending(actionTypes.SAVE_PLACE);
         return dispatch => Meteor.call('upsertPlace', place, address, amenities, (error, result) => {
-            if (error) {
-                console.log(error);
-                return dispatch({
-                    type: `${actionTypes.SAVE_PLACE}_${FAILURE}`,
-                    ...error,
-                });
-            } else {
-                if (result.data) {
-                    if (cb) cb({ placeId: result.data.place._id });
-                    return dispatch({
-                        type: `${actionTypes.SAVE_PLACE}_${SUCCESS}`,
-                        place: result.data.place,
-                        amenities: result.data.amenities,
-                        address: result.data.address,
-                    });
-                };
-                return dispatch({
-                    type: `${actionTypes.SAVE_PLACE}_${FAILURE}`,
-                    errorMessage: result.message,
-                    ...result,
-                });
-            }
+            serviceResponded(actionTypes.SAVE_PLACE);
+            return standardResponseFunc(error, result, actionTypes.SAVE_PLACE, dispatch, cb);
         });
     },
     updatePlaceDates: (datesToFormate = []) => dispatch => {
@@ -94,8 +75,10 @@ const PlaceActions = {
         const dateObj = cloneDeep(unFormattedDates);
         dateObj.arrival = FormateDate(unFormattedDates.arrival);
         dateObj.departure = FormateDate(unFormattedDates.departure);
+        servicePending(actionTypes.GET_PLACE_BY_AVAILABILITY);
         return dispatch => Meteor.call('places.getByAvailability', dateObj, (error, result) => {
             result.data = buildPlaceForBrowseObjs(result.data);
+            serviceResponded(actionTypes.GET_PLACE_BY_AVAILABILITY);
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_AVAILABILITY, dispatch);
         });
     },

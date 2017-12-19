@@ -16,9 +16,9 @@ function placeReducer(state = initialState, action = {}) {
     switch (action.type) {
     case `${actionTypes.SAVE_PLACE}_${SUCCESS}`:
         stateClone = cloneDeep(state);
-        merge(stateClone.place, action.place);
-        merge(stateClone.address, action.address);
-        merge(stateClone.amenities, action.amenities);
+        merge(stateClone.place, action.data.place);
+        merge(stateClone.address, action.data.address);
+        merge(stateClone.amenities, action.data.amenities);
         return stateClone;
     case `${actionTypes.SAVE_PLACE_AVAILABILITY}_${SUCCESS}`:
         stateClone = cloneDeep(state);

@@ -1,8 +1,16 @@
+import { Bert } from 'meteor/themeteorchef:bert';
+import serviceActions from '../actions/ServiceActions';
+
 export const FAILURE = 'FAILURE';
 export const SUCCESS = 'SUCCESS';
 
+let store;
+
+export function setStore(Store) {
+    store = Store;
+}
+
 export const actionTypes = {
-    SAVE_ROOMIES: 'SAVE_ROOMIES',
     LOGIN_: 'LOGIN_',
     LOGOUT: 'LOGOUT',
     GET_PROFILE: 'GET_PROFILE',
@@ -24,7 +32,18 @@ export const actionTypes = {
     GET_CARD_INFO: 'GET_CARD_INFO',
     OPEN_MODAL: 'OPEN_MODAL',
     CLOSE_MODAL: 'CLOSE_MODAL',
+    SERVICE_PENDING: 'SERVICE_PENDING',
+    SERVICE_RETURNED: 'SERVICE_RETURNED',
 };
+
+const serviceMessages = {
+    SUCCESS: 'succeeded',
+    FAILURE: 'failure',
+    [actionTypes.SAVE_PROFILE]: 'Saving your profile has ',
+    [actionTypes.SAVE_PLACE]: 'Saving your place has ',
+    [actionTypes.SAVE_PLACE_AVAILABILITY]: 'Saving your place\'s available dates has ',
+    [actionTypes.SAVE_TRIP]: 'Saving your interest in swapping with this person has ',
+}
 
 export function standardResponseFunc(error, result, actionType, dispatch, cb) {
     let callback = cb;
@@ -53,6 +72,18 @@ export function standardResponseFunc(error, result, actionType, dispatch, cb) {
             errorMessage: result.message,
             ...result,
         });
+        Bert.alert(result.message, 'danger');
         return callback(result);
     }
 };
+
+export function servicePending(actionType) {
+    store.dispatch(serviceActions.sendServiceIsPending(actionType));
+};
+
+export function serviceResponded(actionType) {
+    store.dispatch(serviceActions.sendServiceResponded(actionType));
+};
+
+
+export const pendingAlert = () => Bert.alert('Waiting on the interwebs', 'info', 'growl-top-left');

@@ -3,7 +3,7 @@ import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/
 import ProfileActions from './ProfileActions';
 import PlaceActions from './PlaceActions';
 import FileActions from './FileActions';
-import Store from '../../../imports/store/store';
+import Store from '../store/store';
 
 const actions = {
     loginWithOAuth: (loginType) => {
@@ -29,7 +29,9 @@ const actions = {
     userLoggedIn: () => {
         Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
-        Store.dispatch(PlaceActions.upsertPlace({}, data => Store.dispatch(FileActions.getImagesForPlace({ placeId: data.placeId }))));
+        Store.dispatch(PlaceActions.upsertPlace({}, (err, data) => {
+            Store.dispatch(FileActions.getImagesForPlace({ placeId: data.placeId }));
+        }));
         return {
             type: 'USER_LOGGING_IN',
         };

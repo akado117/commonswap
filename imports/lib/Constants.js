@@ -27,6 +27,7 @@ export const stateFields = {
 export const defaultImageUrls = {
     assets: {
         checkMark: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png',
+        loadingSpinner: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/fidget-spinner.gif',
     },
     cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',

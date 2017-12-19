@@ -1,7 +1,8 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import { createLogger } from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
-import rootReducer from '../../client/ui/reducers/rootReducer';
+import rootReducer from '../reducers/rootReducer';
+import { setStore } from '../helpers/ConstantsRedux';
 
 const logger = createLogger();
 const middleWare = [
@@ -17,6 +18,7 @@ const composeEnhancers = process.env.NODE_ENV !== 'production'
     : compose;
 const Store = createStore(rootReducer, {}, composeEnhancers(...enhancers));
 export default Store;
+setStore(Store);
 
 // import { createStore, applyMiddleware, compose } from 'redux';
 // import thunk from 'redux-thunk';

@@ -1,0 +1,16 @@
+.connected-button-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  .icon-container {
+    width: 35px;
+  }
+  .text-container{
+    width: 60%;
+  }
+  img {
+    width: 100%;
+    float: left;
+  }
+}

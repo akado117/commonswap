@@ -1,6 +1,6 @@
 import { merge } from 'lodash';
-import { actionTypes, SUCCESS, FAILURE, standardResponseFunc } from '../helpers/ConstantsRedux';
-import Store from '../../../imports/store/store';
+import { actionTypes, SUCCESS, FAILURE, standardResponseFunc, servicePending, serviceResponded } from '../helpers/ConstantsRedux';
+import Store from '../store/store';
 
 const ProfileActions = {
     upsertProfile: (profileData, callBack) => {
@@ -11,7 +11,9 @@ const ProfileActions = {
             emergencyContacts: curProfData.emergencyContacts || {},
         };
         const { profile, interests, emergencyContacts } = merge({}, mappedProfData, profileData);//technically more bandwidth but less sever load
+        servicePending(actionTypes.SAVE_PROFILE);
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
+            serviceResponded(actionTypes.SAVE_PROFILE);
             return standardResponseFunc(error, result, actionTypes.SAVE_PROFILE, dispatch, callBack);
         });
     },
@@ -19,7 +21,7 @@ const ProfileActions = {
         console.log("PA REQUEST SWAP DATA");
         console.log(data);
         const { Arrival, Departure, Notes, User, placeId } = data;
-        
+        pendingAlert();
         return dispatch => Meteor.call('requestEmail', data, (error, result) => {
             if (error) {
                 console.log(error);

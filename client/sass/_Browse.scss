@@ -3,8 +3,12 @@
       margin-top: 25px;
     }
     .search-button {
+      display: inline-flex;
       height: 45px;
       line-height: 0;
+      .search-button-text {
+        width: 80%;
+      }
     }
     .scroll-listing {
       min-height: 400px;

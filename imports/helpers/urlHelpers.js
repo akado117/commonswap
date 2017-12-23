@@ -1,4 +1,4 @@
-import FileUrls from '../collections/FileUrls';
+import { FileUrls } from '../collections/mainCollection';
 
 let _fileExistsInDatabase = ( url ) => {
     return FileUrls.findOne( { "url": url, "userId": Meteor.userId() }, { fields: { "_id": 1 } } );

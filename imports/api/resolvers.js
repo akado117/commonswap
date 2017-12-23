@@ -1,7 +1,6 @@
 import Urls from '../collections/urls';
 import Roomies from '../collections/Roomies';
-import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts} from '../collections/mainCollection';
-import FileUrls from '../collections/FileUrls';
+import { FileUrls, Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts} from '../collections/mainCollection';
 import { serviceErrorBuilder, consoleLogHelper, FileTypes } from '../lib/Constants';
 
 const publicImageFields = {

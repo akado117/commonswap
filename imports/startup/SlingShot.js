@@ -1,4 +1,4 @@
-import FileUrls from '../collections/FileUrls';
+import { FileUrls } from '../collections/mainCollection';
 import { FileTypes, consoleLogHelper, imageSuccessCode, MaxImageUploadDim } from '../lib/Constants';
 
 const keys = {

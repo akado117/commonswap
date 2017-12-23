@@ -9,3 +9,4 @@ export const Places = new Mongo.Collection('places');
 export const DesiredDate = new Mongo.Collection('desiredDate');
 export const Customers = new Mongo.Collection('customers');
 export const Trips = new Mongo.Collection('trips');
+export const FileUrls = new Mongo.Collection('fileUrls');

@@ -242,7 +242,7 @@ class PlaceComponent extends Component {
                                 <ConnectedButton
                                     icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                                     actionType={actionTypes.SAVE_PLACE}
-                                    buttonText="Search"
+                                    buttonText="Save"
                                     onClick={this.props.savePlace}
                                 />
                             </div>

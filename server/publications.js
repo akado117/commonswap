@@ -1,5 +1,4 @@
-import FileUrls from '../imports/collections/FileUrls';
-import { Places } from '../imports/collections/mainCollection';
+import { Places, FileUrls } from '../imports/collections/mainCollection';
 
 const filePubfields = {
     _id: 1,

@@ -1,10 +1,9 @@
 import s3PublicUrl from 'node-s3-public-url';
 import { check } from 'meteor/check';
 import Stripe from 'stripe';
-import FileUrls from '../imports/collections/FileUrls';
 import ApolloClient from 'apollo-client';
 import { meteorClientConfig } from 'meteor/apollo';
-import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips } from '../imports/collections/mainCollection';
+import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips, FileUrls } from '../imports/collections/mainCollection';
 import {
     serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus, FieldsForTrip,
     profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace

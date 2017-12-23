@@ -5,8 +5,7 @@ import React  from 'react';
 
 import Pagination from '../components/Pagination';
 import changePage from '../actions/ChangePage';
-import FileUrls from '../../../imports/collections/FileUrls';
-import { Places } from '../../../imports/collections/mainCollection';
+import { Places, FileUrls } from '../../../imports/collections/mainCollection';
 import Uploader from '../components/Uploader';
 
 import ImageList from '../components/ImageList';

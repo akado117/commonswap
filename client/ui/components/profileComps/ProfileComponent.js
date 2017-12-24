@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import DatePicker from 'material-ui/DatePicker';
 import SelectBuilder from '../forms/SelectBuilder.js'
 import ButtonArrayComp from '../forms/ButtonArrayComp.js'
 import TextFieldStandardized from '../forms/TextFieldStandardized';
-import DatePicker from 'material-ui/DatePicker';
 import ProfileImage from './ProfileImage';
+import { ParseDate } from '../../../../imports/helpers/DateHelpers';
+import ConnectedButton from '../forms/ConnectedButton';
+import { actionTypes } from '../../helpers/ConstantsRedux';
 
 function onChangeHelper(event) {
     return event.target.value;
@@ -123,7 +126,7 @@ class ProfileComponent extends Component {
                 <div className="col s6 m4 input-field inline">
                     <DatePicker
                         className="date-picker"
-                        defaultDate={typeof profile.birthday === 'object' ? profile.birthday : undefined}
+                        defaultDate={typeof profile.birthday !== 'undefined' ? ParseDate(profile.birthday) : undefined}
                         onChange={(nul, date) => getValueFunc('birthday', date)}
                         floatingLabelText={<span><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</span>}
                     />
@@ -190,16 +193,20 @@ class ProfileComponent extends Component {
                 <div className="col s12">
                     <div className="row">
                         <div className="col s6 m4 l3 offset-m4 offset-l6">
-                            <button onClick={() => this.props.saveProfile()} className="waves-effect waves-light btn-large" type="submit" style={{ width: '100%' }}>
-                                <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />
-                                Save
-                            </button>
+                            <ConnectedButton
+                                icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                actionType={actionTypes.SAVE_PROFILE}
+                                buttonText="Save"
+                                onClick={this.props.saveProfile}
+                            />
                         </div>
                         <div className="col s6 m4 l3">
-                            <button onClick={() => this.props.saveProfile(true)} className="waves-effect waves-light btn-large" type="submit" style={{ width: '100%' }}>
-                                <i className="fa fa-hand-o-right" aria-hidden="true" style={{ float: 'left' }} />
-                                Next
-                            </button>
+                            <ConnectedButton
+                                icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                actionType={actionTypes.SAVE_PROFILE}
+                                buttonText="Next"
+                                onClick={() => this.props.saveProfile(true)}
+                            />
                         </div>
                     </div>
                 </div>

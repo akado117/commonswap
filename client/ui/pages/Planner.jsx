@@ -18,7 +18,9 @@ import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import ModalActions from '../actions/ModalActions';
 import Trip from '../components/PlaceHybridData/Trip';
+import { actionTypes } from '../helpers/ConstantsRedux';
 import { defaultImageUrls, tripStatus } from '../../../imports/lib/Constants';
+import ConnectedButton from '../components/forms/ConnectedButton';
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
@@ -253,7 +255,7 @@ class Planner extends React.Component {
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
-                        <div className="z-depth-2">
+                        <div className="z-depth-2 calendar-wrapper" >
                             <div className="row">
                                 <div className="col s12 calendar-container" >
                                     <InfiniteCalendar
@@ -268,17 +270,16 @@ class Planner extends React.Component {
                                     />
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col s12 l6">
-                                    <RaisedButton
-                                        className=""
-                                        target="_blank"
-                                        label="Save"
-                                        style={{ margin: '15px'}}
-                                        primary
-                                        icon={<FontIcon className="material-icons">check</FontIcon>}
-                                        onClick={this.saveDates}
-                                    />
+                            <div className="col s12">
+                                <div className="row">
+                                    <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">
+                                        <ConnectedButton
+                                            icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                            actionType={actionTypes.SAVE_PLACE_AVAILABILITY}
+                                            buttonText="Save"
+                                            onClick={this.saveDates}
+                                        />
+                                    </div>
                                 </div>
 
                             </div>

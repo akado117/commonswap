@@ -15,7 +15,7 @@ import FileActions from '../actions/FileActions';
 import Footer from '../components/Footer';
 import MapWithASearchBox from '../components/MapWithASearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
-import ConnectedButton from '../components/forms/ConnectButton';
+import ConnectedButton from '../components/forms/ConnectedButton';
 import { onChangeHelper } from '../../../imports/helpers/DataHelpers';
 import { actionTypes } from '../helpers/ConstantsRedux';
 

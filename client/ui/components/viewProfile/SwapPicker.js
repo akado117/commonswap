@@ -6,6 +6,8 @@ import FontIcon from 'material-ui/FontIcon';
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import { onChangeHelper } from '../../../../imports/helpers/DataHelpers';
 import { Today } from '../../../../imports/helpers/DateHelpers';
+import ConnectedButton from '../forms/ConnectedButton';
+import { actionTypes } from '../../helpers/ConstantsRedux';
 
 class SwapPicker extends Component {
     constructor(props) {
@@ -54,12 +56,13 @@ class SwapPicker extends Component {
                     floatingLabelText={<span><i className="fa fa-envelope fa-1x" aria-hidden="true" /> Add a message</span>}
                     onChange={(nul, requesterMessage) => this.setState({ requesterMessage })}
                 />
-                <RaisedButton
+                <ConnectedButton
                     disabled={this.props.disableButton}
-                    label="Request Swap"
-                    primary
-                    fullWidth
+                    icon={undefined}
+                    actionType={actionTypes.SAVE_TRIP}
+                    buttonText="Request Swap"
                     onClick={() => this.props.requestSwap(this.state)}
+                    className="swap-button"
                 />
             </div>
         );

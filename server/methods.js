@@ -237,13 +237,10 @@ Meteor.methods({
         const RequestorPlace = ownerPlace;
         const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
-        console.log("USER");
-        console.log(User);
-
-        HTTP.call('POST',
-        'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
-            data:
-                {
+        const sync = Meteor.wrapAsync(HTTP.call);
+        try {
+            const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+                data: {
                     User,
                     Arrival,
                     Departure,
@@ -251,15 +248,18 @@ Meteor.methods({
                     Profile,
                     RequestorPlace,
                     RequestedPlace,
-                }
-        }, function( error, response ) {
-            if ( error ) {
-              console.log("POST CALL");
-              console.log( error );
-            } else {
-                return response;
-            }
-        });
+                },
+            });
+            consoleLogHelper(`Email for new swap from ${User} sent`, genericSuccessCode, userId, `Place Id of interest ${placeId}`);
+            return serviceSuccessBuilder(res.data, genericSuccessCode, {
+                serviceMessage: `Email for new swap from ${User} sent`,
+                data: res.data,
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Email for new swap from ${User} failed`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder(`Email for new swap from ${User} failed`, upsertFailedCode, err);
+        }
     },
 
     upsertPlace(place, address, amenities) {

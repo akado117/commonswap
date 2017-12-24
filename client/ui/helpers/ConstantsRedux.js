@@ -34,6 +34,7 @@ export const actionTypes = {
     CLOSE_MODAL: 'CLOSE_MODAL',
     SERVICE_PENDING: 'SERVICE_PENDING',
     SERVICE_RETURNED: 'SERVICE_RETURNED',
+    EMAIL_SENT: 'EMAIL_SENT',
 };
 
 const serviceMessages = {

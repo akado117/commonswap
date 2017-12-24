@@ -10,7 +10,7 @@ import AppBar from 'material-ui/AppBar';
 import MapWithASearchBox from '../MapWithASearchBox';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
-import ConnectedButton from '../forms/ConnectButton';
+import ConnectedButton from '../forms/ConnectedButton';
 
 const BUTTONS = [
     { label: 'Essentials (towels, etc)', name: 'essentials' },

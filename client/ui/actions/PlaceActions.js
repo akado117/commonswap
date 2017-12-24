@@ -26,7 +26,9 @@ const PlaceActions = {
                 _id: state.place.place._id,
                 availableDates,
             };
+            servicePending(actionTypes.SAVE_PLACE_AVAILABILITY);
             Meteor.call('places.updateAvailability', updatedDateObj, (error, result) => {
+                serviceResponded(actionTypes.SAVE_PLACE_AVAILABILITY);
                 return standardResponseFunc(error, result, actionTypes.SAVE_PLACE_AVAILABILITY, dispatch);
             });
         } else {
@@ -85,7 +87,9 @@ const PlaceActions = {
     saveSwap: (swapObj) => {
         const swapClone = cloneDeep(swapObj);
         swapClone.dates = FormateDates([swapObj.dates])[0];
+        servicePending(actionTypes.SAVE_TRIP);
         return dispatch => Meteor.call('trips.saveTrip', swapClone, (error, result) => {
+            serviceResponded(actionTypes.SAVE_TRIP);
             return standardResponseFunc(error, result, actionTypes.SAVE_TRIP, dispatch);
         });
     },

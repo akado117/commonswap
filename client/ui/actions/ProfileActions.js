@@ -1,5 +1,6 @@
 import { merge } from 'lodash';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc, servicePending, serviceResponded } from '../helpers/ConstantsRedux';
+import { FormateDate } from '../../../imports/helpers/DateHelpers';
 import Store from '../store/store';
 
 const ProfileActions = {
@@ -11,6 +12,7 @@ const ProfileActions = {
             emergencyContacts: curProfData.emergencyContacts || {},
         };
         const { profile, interests, emergencyContacts } = merge({}, mappedProfData, profileData);//technically more bandwidth but less sever load
+        if (profile.birthday) profile.birthday = FormateDate(profile.birthday);
         servicePending(actionTypes.SAVE_PROFILE);
         return dispatch => Meteor.call('upsertProfile', profile, interests, emergencyContacts, (error, result) => {
             serviceResponded(actionTypes.SAVE_PROFILE);
@@ -21,23 +23,23 @@ const ProfileActions = {
         console.log("PA REQUEST SWAP DATA");
         console.log(data);
         const { Arrival, Departure, Notes, User, placeId } = data;
-        pendingAlert();
         return dispatch => Meteor.call('requestEmail', data, (error, result) => {
             if (error) {
                 console.log(error);
                 return dispatch({
-                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
+                    type: `${actionTypes.EMAIL_SENT}_${FAILURE}`,
                     ...error,
                 });
             } else {
                 if (result.data) {
                     dispatch({
-                        type: `${actionTypes.SAVE_PROFILE}_${SUCCESS}`,
+                        type: `${actionTypes.EMAIL_SENT}_${SUCCESS}`,
+                        data: result.data,
                     });
-                    return callBack ? callBack() : '';
+                    return undefined;
                 };
                 return dispatch({
-                    type: `${actionTypes.SAVE_PROFILE}_${FAILURE}`,
+                    type: `${actionTypes.EMAIL_SENT}_${FAILURE}`,
                     ...error,
                 });
             }

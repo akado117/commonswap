@@ -409,7 +409,7 @@ Meteor.methods({
     },
     'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests, coords }) {
         const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
+        if (!userId) return serviceErrorBuilder('Please sign in or create an account before searching for swaps', placeErrorCode);
         if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
         try {
             const searchObj = { availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } }

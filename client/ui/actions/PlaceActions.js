@@ -1,6 +1,7 @@
 import { cloneDeep, merge } from 'lodash';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Bert } from 'meteor/themeteorchef:bert';
 import { actionTypes, SUCCESS, FAILURE, standardResponseFunc, servicePending, serviceResponded } from '../helpers/ConstantsRedux';
 import Store from '../store/store';
 import { FormateDates, FormateDate } from '../../../imports/helpers/DateHelpers';
@@ -79,7 +80,11 @@ const PlaceActions = {
         dateObj.departure = FormateDate(unFormattedDates.departure);
         servicePending(actionTypes.GET_PLACE_BY_AVAILABILITY);
         return dispatch => Meteor.call('places.getByAvailability', dateObj, (error, result) => {
-            result.data = buildPlaceForBrowseObjs(result.data);
+            if (result.data) {
+                result.data = buildPlaceForBrowseObjs(result.data);
+            } else {
+                Bert.alert(result.message, 'danger');
+            }
             serviceResponded(actionTypes.GET_PLACE_BY_AVAILABILITY);
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_AVAILABILITY, dispatch);
         });

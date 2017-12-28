@@ -29,113 +29,113 @@ const CITIES = require('../../../node_modules/react-select/examples/src/data/sta
 const today = new Date();
 const minDate = addDays(today, -40);
 
-const examplePastSwap = [{
-    address: {
-        state: 'DC',
-        city: 'Washington',
-    },
-    requesterProfileImg: {
-        url: defaultImageUrls.kevin,
-    },
-    requesteeProfileImg: {
-        url: defaultImageUrls.kevin,
-    },
-    requesterName: 'Michaelangelo',
-    requesteeName: 'Michaelangelo',
-    dates: {
-        departure: PrettyDate(addDays(minDate, 5)),
-        arrival: PrettyDate(minDate),
-    },
-    status: tripStatus.ACTIVE,
-    rating: 4,
-    message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
-}];
+// const examplePastSwap = [{
+//     address: {
+//         state: 'DC',
+//         city: 'Washington',
+//     },
+//     requesterProfileImg: {
+//         url: defaultImageUrls.kevin,
+//     },
+//     requesteeProfileImg: {
+//         url: defaultImageUrls.kevin,
+//     },
+//     requesterName: 'Michaelangelo',
+//     requesteeName: 'Michaelangelo',
+//     dates: {
+//         departure: PrettyDate(addDays(minDate, 5)),
+//         arrival: PrettyDate(minDate),
+//     },
+//     status: tripStatus.ACTIVE,
+//     rating: 4,
+//     message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
+// }];
 
-const exampleActiveSwap = [{
-    address: {
-        state: 'OH',
-        city: 'Columbus',
-    },
-    requesterProfileImg: {
-        url: defaultImageUrls.alex,
-    },
-    requesteeProfileImg: {
-        url: defaultImageUrls.alex,
-    },
-    requesterName: 'Leonardo (Example Active Swap)',
-    requesteeName: 'Leonardo (Example Active Swap)',
-    dates: {
-        departure: PrettyDate(addDays(today, 5)),
-        arrival: PrettyDate(today),
-    },
-    status: tripStatus.ACTIVE,
-}];
+// const exampleActiveSwap = [{
+//     address: {
+//         state: 'OH',
+//         city: 'Columbus',
+//     },
+//     requesterProfileImg: {
+//         url: defaultImageUrls.alex,
+//     },
+//     requesteeProfileImg: {
+//         url: defaultImageUrls.alex,
+//     },
+//     requesterName: 'Leonardo (Example Active Swap)',
+//     requesteeName: 'Leonardo (Example Active Swap)',
+//     dates: {
+//         departure: PrettyDate(addDays(today, 5)),
+//         arrival: PrettyDate(today),
+//     },
+//     status: tripStatus.ACTIVE,
+// }];
 
-const examplePendingSwaps = [
-    {
-        address: {
-            state: 'HI',
-            city: 'Honolulu',
-        },
-        requesterProfileImg: {
-            url: defaultImageUrls.cameraDude,
-        },
-        requesteeProfileImg: {
-            url: defaultImageUrls.cameraDude,
-        },
-        requesterName: 'Raphael (Example)',
-        requesteeName: 'Raphael (Example)',
-        dates: {
-            departure: PrettyDate(addDays(today, 5)),
-            arrival: PrettyDate(today),
-        },
-        status: tripStatus.PENDING,
-    }, {
-        address: {
-            state: 'HI',
-            city: 'Honolulu',
-        },
-        requesterProfileImg: {
-            url: defaultImageUrls.cameraDude,
-        },
-        requesteeProfileImg: {
-            url: defaultImageUrls.cameraDude,
-        },
-        requesterName: 'Donatello (Example)',
-        requesteeName: 'Donatello (Example)',
-        dates: {
-            departure: PrettyDate(addDays(today, 5)),
-            arrival: PrettyDate(today),
-        },
-        status: tripStatus.ACCEPTED,
-    },{
-        address: {
-            state: 'NY',
-            city: 'New York',
-        },
-        requesterProfileImg: {
-            url: defaultImageUrls.sassyChick,
-        },
-        requesteeProfileImg: {
-            url: defaultImageUrls.sassyChick,
-        },
-        requesterName: 'Shredder (Example)',
-        requesteeName: 'Shredder (Example)',
-        dates: {
-            departure: FormateDate(addDays(today, 5)),
-            arrival: FormateDate(today),
-        },
-        status: tripStatus.PENDING,
-        place: {
-            image: {
-                url: defaultImageUrls.awesomePlace
-            },
-            numOfGuests: 15,
-            bedrooms: 2,
-        },
-        requesterMessage: 'This is an example of what you will see when someone else requests to swap with you',
-        examplePlace: true,
-    }];
+// const examplePendingSwaps = [
+//     {
+//         address: {
+//             state: 'HI',
+//             city: 'Honolulu',
+//         },
+//         requesterProfileImg: {
+//             url: defaultImageUrls.cameraDude,
+//         },
+//         requesteeProfileImg: {
+//             url: defaultImageUrls.cameraDude,
+//         },
+//         requesterName: 'Raphael (Example)',
+//         requesteeName: 'Raphael (Example)',
+//         dates: {
+//             departure: PrettyDate(addDays(today, 5)),
+//             arrival: PrettyDate(today),
+//         },
+//         status: tripStatus.PENDING,
+//     }, {
+//         address: {
+//             state: 'HI',
+//             city: 'Honolulu',
+//         },
+//         requesterProfileImg: {
+//             url: defaultImageUrls.cameraDude,
+//         },
+//         requesteeProfileImg: {
+//             url: defaultImageUrls.cameraDude,
+//         },
+//         requesterName: 'Donatello (Example)',
+//         requesteeName: 'Donatello (Example)',
+//         dates: {
+//             departure: PrettyDate(addDays(today, 5)),
+//             arrival: PrettyDate(today),
+//         },
+//         status: tripStatus.ACCEPTED,
+//     },{
+//         address: {
+//             state: 'NY',
+//             city: 'New York',
+//         },
+//         requesterProfileImg: {
+//             url: defaultImageUrls.sassyChick,
+//         },
+//         requesteeProfileImg: {
+//             url: defaultImageUrls.sassyChick,
+//         },
+//         requesterName: 'Shredder (Example)',
+//         requesteeName: 'Shredder (Example)',
+//         dates: {
+//             departure: FormateDate(addDays(today, 5)),
+//             arrival: FormateDate(today),
+//         },
+//         status: tripStatus.PENDING,
+//         place: {
+//             image: {
+//                 url: defaultImageUrls.awesomePlace
+//             },
+//             numOfGuests: 15,
+//             bedrooms: 2,
+//         },
+//         requesterMessage: 'This is an example of what you will see when someone else requests to swap with you',
+//         examplePlace: true,
+//     }];
 
 class Planner extends React.Component {
     constructor(props) {
@@ -236,9 +236,9 @@ class Planner extends React.Component {
     render() {
         const { userId } = this.props.user;
         const { pendingTrips, activeTrips, pastTrips } = this.props.trip;
-        const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : this.exampleTripBuilder(examplePendingSwaps, userId, 2);
-        const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : this.tripBuilder(exampleActiveSwap, userId);
-        const pastedTrips = pastTrips.length ? this.tripBuilder(pastTrips, userId) : this.tripBuilder(examplePastSwap, userId);
+        const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : null;
+        const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : null;
+        const pastedTrips = pastTrips.length ? this.tripBuilder(pastTrips, userId) : null;
         const actions = [//you can add a param to trip builder and feed these into the open accept modal if you want. But you can also style the modal content to be however you want
             <FlatButton
                 label="OK"

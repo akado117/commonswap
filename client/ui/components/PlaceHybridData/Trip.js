@@ -34,7 +34,7 @@ function getRater(rating, message, active) {
 }
 
 const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
-    const { address, dates, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId, } = swapObj;
+    const { address, dates = {}, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId } = swapObj;
     const profileLink = `/viewProfile/${requesterPlaceId || ''}`;
     return (
         <div className="col s12 z-depth-2">
@@ -119,7 +119,7 @@ function getNameAndImage(swapObj, status, currentUserId) {
     if (status === tripStatus.PENDING) formattedName = `Your request to swap with ${firstName} is pending`;
     else if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) formattedName = firstName;
     else if (status === tripStatus.ACCEPTED) formattedName = `Your request to swap with ${firstName} has been accepted`;
-    const profileImg = (isRequester ? swapObj.requesteeProfileImg : swapObj.requesterProfileImg);
+    const profileImg = (isRequester ? swapObj.requesteeProfileImg : swapObj.requesterProfileImg) || {};
     return {
         formattedName,
         profileImg,

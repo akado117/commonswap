@@ -29,6 +29,12 @@ export const defaultImageUrls = {
         checkMark: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png',
         loadingSpinner: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/fidget-spinner.gif',
     },
+    videos: {
+        homeVideoPoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/introposter.png',
+        homeVideo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/commonswap-intro_WR.m4v',
+        whoAreWePoster: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png',
+        whoAreWe: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/CommonSwap+Demo+Video_WR.m4v',
+    },
     cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
     alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',

@@ -3,6 +3,7 @@ import FontIcon from 'material-ui/FontIcon';
 import ReactPlayer from 'react-player';
 import Footer from '../components/Footer';
 import { render } from 'react-dom';
+import { defaultImageUrls } from '../../../imports/lib/Constants';
 
 class Home extends Component {
     constructor(props) {
@@ -21,13 +22,8 @@ class Home extends Component {
                     <button className="mute-button" onClick={this.toggleMuted}>
                         <i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />
                     </button>
-                    <div className="video-container">
-                    {/* <video poster="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/introposter.png" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/commonswap-intro_WR.m4v" type="video/mp4" playing="true" loop width="100%" height="100%"></video> */}
-                        {/* <video url="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/commonswap-intro_WR.m4v" playing="true" loop width="100%" height="100%" ></video> */}
-                        <video poster="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/introposter.png" autoPlay loop muted playsInline width="100%" height="100%">
-                            <source src="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/commonswap-intro_WR.m4v" type="video/mp4" />
-                             <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/introposter.png" />
-                        </video>
+                    <div className="home-video-container">
+                        <ReactPlayer url={defaultImageUrls.videos.homeVideo} playing loop muted={this.state.muted} width="100%" height="auto" />
                         <div className="col s12 center-align">
                             <div className="header-container overlay-desc">
                                 <h1 className={`header-title ${this.state.muted ? '' : 'fade-out'}`}> CommonSwap <br />
@@ -45,7 +41,7 @@ class Home extends Component {
                         </div>
                         <div className="col s12 l6 how-video">
                             {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
-                            <video poster="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/CommonSwap+Demo+Video_WR.m4v" type="video/mp4" preload="auto" controls width="100%" height="100%"></video>
+                            <video poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
                         </div>
                     </div>
                 </div>

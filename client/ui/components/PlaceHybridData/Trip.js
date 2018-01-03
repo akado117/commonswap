@@ -123,7 +123,7 @@ function getNameAndImage(swapObj, status, currentUserId) {
     if (status === tripStatus.PENDING) formattedName = `Your request to swap with ${firstName} is pending`;
     else if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) formattedName = firstName;
     else if (status === tripStatus.ACCEPTED) formattedName = `Your request to swap with ${firstName} has been accepted`;
-    const profileImg = (isRequester ? swapObj.requesteeProfileImg : swapObj.requesterProfileImg);
+    const profileImg = (isRequester ? swapObj.requesteeProfileImg : swapObj.requesterProfileImg) || {};
     return {
         formattedName,
         profileImg,

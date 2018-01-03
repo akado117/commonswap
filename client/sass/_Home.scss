@@ -69,25 +69,44 @@
     width: 100vw;
     overflow: hidden;
     position: relative;
-    .mute-button {
+    height: 70vh;
+    margin-bottom: 25px;
+    .baseButton {
       position: absolute;
-      bottom: 25px;
-      right: 5px;
+      bottom: 15px;
       z-index: 20;
       background: none;
       border: none;
-      font-size: 30px;
       color: white;
+      margin: 0 10px;
+      padding: 0;
+      font-size: 20px;
+      @media #{$medium-and-up} {
+        font-size: 25px;
+      }
+    }
+    .play-button {
+      @extend .baseButton;
+      left: 5px;
+    }
+    .mute-button {
+      @extend .baseButton;
+      right: 5px;
+    }
+    video {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
-  .video-container {
-    left: -25%;
-    width: 150%;
+  .home-video-container {
+    width: 115%;
+    left: -7.5%;
+    height: 100%;
     top: 0px;
     z-index: 0;
     position: relative;
-    height: 70vh;
-    margin-bottom: 25px;
   }
 
   .header-title {
@@ -178,10 +197,8 @@
   }
   @media #{$medium-and-down} {
     // styles for medium screens and down
-    .video-container {
-      left: -25%;
-      width: 150%;
-      height: 50vh;
+    .video-parent {
+      height: 60vh;
     }
 
     .header-title {
@@ -216,6 +233,15 @@
     .delivery-image {
       background-image: url('');
       background-position: bottom-right;
+    }
+  }
+  @media only screen and (max-width: 800px) {
+    .video-parent {
+      height: 65vh;
+    }
+    .home-video-container {
+      left: -32.5%;
+      width: 165%;
     }
   }
 
@@ -256,11 +282,13 @@
       font-weight: 300;
     }
 
+    .video-parent {
+      height: 65vh;
+    }
 
-    .video-container {
-      left: -50%;
-      width: 200%;
-      height: 50vh;
+    .home-video-container {
+      left: -35%;
+      width: 170%;
     }
 
     .head-mobile {
@@ -304,5 +332,14 @@
       font-size: 1.2rem;
     }
 
+  }
+  @media (max-width: 525px) {
+    .video-parent {
+      height: 40vh;
+    }
+    .home-video-container {
+      width: 200%;
+      left: -50%
+    }
   }
 }

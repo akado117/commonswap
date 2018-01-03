@@ -3,26 +3,41 @@ import FontIcon from 'material-ui/FontIcon';
 import ReactPlayer from 'react-player';
 import Footer from '../components/Footer';
 import { render } from 'react-dom';
+import { defaultImageUrls } from '../../../imports/lib/Constants';
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
             muted: true,
+            playing: true,
         };
     }
 
     toggleMuted = () => this.setState({ muted: !this.state.muted });
 
+    togglePlaying = () => {
+        const video = document.getElementById('home-video');
+        if (video) {
+            const junk = this.state.playing ? video.pause() : video.play();
+        }
+        this.setState({ playing: !this.state.playing });
+    };
+
     render() {
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">
+                    <button className="play-button" onClick={this.togglePlaying}>
+                        <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />
+                    </button>
                     <button className="mute-button" onClick={this.toggleMuted}>
                         <i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />
                     </button>
-                    <div className="video-container">
-                        <ReactPlayer url="https://www.youtube.com/embed/0gL-1YksKIE?ecver" playing loop muted={this.state.muted} width="100%" height="100%" />
+                    <div className="home-video-container">
+                        <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
+                            <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
+                        </video>
                         <div className="col s12 center-align">
                             <div className="header-container overlay-desc">
                                 <h1 className={`header-title ${this.state.muted ? '' : 'fade-out'}`}> CommonSwap <br />
@@ -32,25 +47,6 @@ class Home extends Component {
                         </div>
                     </div>
                 </header>
-                {/*<div className="col s12 intro" >*/}
-                    {/*<div className="row">*/}
-                        {/*<div className="col s12 center-align">*/}
-                            {/*<h2 className="why-title">WHY COMMONSWAP</h2>*/}
-                        {/*</div>*/}
-                        {/*<div className="col l4 s12 center-align home-icon">*/}
-                            {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png" alt="moneyHome" />*/}
-                            {/*<h5>Money Saved</h5>*/}
-                        {/*</div>*/}
-                        {/*<div className="col l4 s12 center-align home-icon">*/}
-                            {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png" alt="planeHome" />*/}
-                            {/*<h5>Experience More</h5>*/}
-                        {/*</div>*/}
-                        {/*<div className="col l4 s12 center-align home-icon">*/}
-                            {/*<img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png" alt="connectHome" />*/}
-                            {/*<h5>Connect with Others</h5>*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
                 <div className="col s12 purpose">
                     <div className="row">
                         <div className="col s12 l6 center-align">
@@ -59,7 +55,7 @@ class Home extends Component {
                         </div>
                         <div className="col s12 l6 how-video">
                             {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
-                            <video poster="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png" src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" type="video/mp4" preload="auto" controls width="100%" height="100%"></video>
+                            <video playsInline autoPlay muted poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
                         </div>
                     </div>
                 </div>

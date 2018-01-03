@@ -34,7 +34,11 @@ function getRater(rating, message, active) {
 }
 
 const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
-    const { address, dates, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId, } = swapObj;
+    const { address, dates, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId } = swapObj;
+    function viewProfile () {
+        window.location = '/viewProfile/' + requesterPlaceId;
+    }
+
     const profileLink = `/viewProfile/${requesterPlaceId || ''}`;
     return (
         <div className="col s12 z-depth-2">
@@ -46,25 +50,25 @@ const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
                 </div>
             </div>
             <div className="row">
-                <div className="col s12 l3">
+                <div className="col s12 m3 l3">
                     <div className="trip-image">
-                        <img className="" src={requesterProfileImg.url || defaultImageUrls.cameraDude} alt="profDemo" />
+                        <img className="" src={requesterProfileImg != null ? requesterProfileImg.url : defaultImageUrls.cameraDude} alt="profDemo" />
                     </div>
-                    <div className="col s4 l12">
+                    <div className="col s4 m12 l12">
                         <h5>{requesterName}</h5>
                     </div>
-                    <div className="col s6 l12">
+                    <div className="col s6 m12 l12">
                         <h5 className="location">{`${address.city}, ${address.state}`}</h5>
                     </div>
                 </div>
-                <div className="col s12 l4 img-cont" onClick={() => this.handleSlideshowOpen(0)}>
+                <div className="col s12 m4 l4 img-cont" onClick={() => viewProfile()}>
                     <img src={(placeImg && placeImg.url) || defaultImageUrls.awesomePlace} alt="" className="image" style={{ height: '250px', width: '100%' }} />
                     <div className="middle">
                         <div className="text">View Place</div>
                     </div>
                 </div>
 
-                <div className="col s12 l5">
+                <div className="col s12 m5 l5">
                     <div className="row">
                         <div className="col s4" style={{ textAlign: 'center' }}>
                             <p>Entire Apt</p>
@@ -134,19 +138,19 @@ const TripCard = (swapObj, currentUserId, showRating) => {
     const rater = getRater(rating, ratingMessage, showRating);
     return (
         <div className="z-depth-2 trip-card">
-            <div className="col s12 l3">
+            <div className="col s12 m3 l3">
                 <div className="trip-image">
-                    <img className="" src={profileImg.url || defaultImageUrls.cameraDude} alt="profDemo" />
+                    <img className="" src={profileImg == null ? defaultImageUrls.cameraDude : profileImg.url} alt="profDemo" />
                 </div>
             </div>
-            {!showName ? <div className="col s12 l5"><h5 className="pending-swap-text">{formattedName}</h5></div> : ''}
-            <div className="col s12 l4">
+            {!showName ? <div className="col s12 m5 l5"><h5 className="pending-swap-text">{formattedName}</h5></div> : ''}
+            <div className="col s12 m4 l4">
                 {showName ? <h4>{formattedName}</h4> : ''}
                 <h5>{`${address.city}, ${displayState}`}</h5>
                 <h5>{`${dates.arrival} - ${dates.departure}`}</h5>
             </div>
             {rater}
-            {!rater && showName ? <div className="col s12 l5" > </div> : ''}
+            {!rater && showName ? <div className="col s12 m5 l5" > </div> : ''}
         </div>
     );
 };

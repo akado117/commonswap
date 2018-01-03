@@ -173,9 +173,9 @@ class Planner extends React.Component {
         }
     }
 
-    handleSlideshowOpen(index) {
-        //this.refs.SlideShow.handleModalOpen(index);
-    };
+    // handleSlideshowOpen(index) {
+    //     //this.refs.SlideShow.handleModalOpen(index);
+    // };
 
     changeRating(newRating) {
         this.setState({
@@ -349,5 +349,9 @@ Planner.propTypes = {
     placeActions: PropTypes.object,
     profileActions: PropTypes.object,
 };
+
+Planner.defaultProps = {
+    
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);

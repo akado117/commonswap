@@ -14,6 +14,7 @@ import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
 import AcceptSwapModal from '../components/dialog/AcceptSwapModal';
+import ChargeCardModal from '../components/dialog/ChargeCardModal';
 import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import ModalActions from '../actions/ModalActions';
@@ -21,6 +22,7 @@ import Trip from '../components/PlaceHybridData/Trip';
 import { actionTypes } from '../helpers/ConstantsRedux';
 import { defaultImageUrls, tripStatus } from '../../../imports/lib/Constants';
 import ConnectedButton from '../components/forms/ConnectedButton';
+
 
 // const STATES = require('../../../node_modules/react-select/examples/src/data/states');
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
@@ -226,6 +228,12 @@ class Planner extends React.Component {
     exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${idx}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
     openSwapModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted) {
+        modalActions.openModal(<ChargeCardModal
+            buttonAccept={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true)}
+            buttonDecline={this.props.modalActions.closeModal} />);
+    }
+
+    openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted) {
         modalActions.openModal(<AcceptSwapModal
             requesterProfileImg={requesterProfileImage}
             primaryText={accepted ? 'Swap Accepted' : 'Swap Declined'}

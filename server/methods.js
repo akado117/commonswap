@@ -191,15 +191,24 @@ Meteor.methods({
 
             const userId = Meteor.userId();
 
-            const cust = Customers.findOne({ userId: userId }) || {};
+            const requesterId = null;
+
+            const currentUserCustomer = Customers.findOne({ userId: userId }) || {};
+            const requesterCustomer = Customers.findOne({ userId: requesterId }) || {};
 
             const stripe = Stripe(Meteor.settings.private.stripe);
 
             stripe.charges.create({
-                amount: 1000,
+                amount: 5000,
                 currency: "usd",
-                customer: cust.customerId,
+                customer: currentUserCustomer.customerId,
               });
+            
+            stripe.charges.create({
+                amount: 5000,
+                currency: "usd",
+                customer: requesterCustomer.customerId,
+            });
         }
         catch (err)
         {

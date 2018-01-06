@@ -107,7 +107,7 @@ class ViewProfile extends React.Component {
     }
 
     continueSaving = (modalActions, data, props, currentPlace) => {
-        //this.props.modalActions.closeModal;
+        this.props.modalActions.closeModal;
         this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
@@ -141,7 +141,7 @@ class ViewProfile extends React.Component {
         props.placeActions.saveSwap(swapObj);
     }
 
-    saveSwap = (data, props, currentPlace) => {
+    saveSwap = (data, props, currentPlace, modalActions) => {
         this.chargeCardModal(modalActions, data, props, currentPlace);
     }
 
@@ -215,7 +215,7 @@ class ViewProfile extends React.Component {
                         </div>
                         <div className="col s12 m4">
                             <SwapPicker
-                                requestSwap={data => this.saveSwap(data, this.props, place, modalActions)}
+                                requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}
                                 disableButton={!placeId || placeId === this.props.user.userId}
                             />
                         </div>

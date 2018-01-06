@@ -43,7 +43,7 @@ Slingshot.createDirective( 'uploadProfileToAmazonS3', Slingshot.S3Storage, {
     region: Meteor.settings.AWSRegion,
     authorize(file, metaContext) {
         if (!this.userId) return false;
-        const findObj = { userId: this.userId, type: FileTypes.PROFILE, deleted: false };
+        const findObj = { userId: this.userId, type: FileTypes.PROFILE, deleted: false, active: true };
         findObj.profileId = metaContext.profileId;
         const userFileCount = FileUrls.find(findObj).count();
         consoleLogHelper(`Attempting to upload profile image with ${userFileCount} images already`, imageSuccessCode, this.userId);

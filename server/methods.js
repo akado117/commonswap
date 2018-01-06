@@ -478,7 +478,7 @@ Meteor.methods({
             url: 1,
             _id: 1,
         };
-        const file = FileUrls.findOne({ userId, type: FileTypes.PROFILE, deleted: false }, {
+        const file = FileUrls.findOne({ userId, type: FileTypes.PROFILE, deleted: false, active: true, }, {
             fields: fieldsToReturn,
             sort: { added: -1 },
         });

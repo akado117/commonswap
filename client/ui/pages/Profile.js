@@ -12,6 +12,7 @@ import ProfileComponent from '../components/profileComps/ProfileComponent';
 import PlaceComponent from '../components/placeComponents/PlaceComponent';
 import CreditCard from '../components/verificationComponent/CreditCard';
 import CardForm from '../components/verificationComponent/CardForm';
+import { obfiscateId } from '../../../imports/helpers/DataHelpers';
 
 import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
@@ -110,6 +111,14 @@ class Profile extends React.Component {
     };
 
     saveProfileFunction = (transitionOnSave) => {
+        if (!this.props.images.profileImg.url && this.props.user.picture) {
+            const profileImgObj = {
+                url: this.props.user.picture,
+                name: obfiscateId(this.props.user.userId),
+                profileId: this.props.user.userId,
+            };
+            this.props.fileActions.addProfileImageToDataBase(profileImgObj);
+        }
         this.props.profileActions.upsertProfile(this.getFormData(), transitionOnSave ? () => this.setState({ selectedIndex: 1 }) : () => {});
     }
 

@@ -189,15 +189,6 @@ class Planner extends React.Component {
 
     }
 
-    // handleOpen = () => {
-
-    //     this.setState({ open: true });
-    // };
-
-    // handleClose = () => {
-    //     this.setState({ open: false });
-    // };
-
     displayDates() {
         console.log("SELECTED DATES");
         console.log(this.state.selectedDates);
@@ -222,7 +213,7 @@ class Planner extends React.Component {
         swapObj={trip}
         currentUserId={userId}
         acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openSwapModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true)}
-        declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openSwapModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false)}
+        declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false)}
     />);
 
     exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${idx}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
@@ -239,6 +230,10 @@ class Planner extends React.Component {
             primaryText={accepted ? 'Swap Accepted' : 'Swap Declined'}
             requesteeProfileImg={requesteeProfileImage}
             buttonHandler={this.props.modalActions.closeModal} />);
+        if(accepted)
+        {
+
+        }
     }
 
     render() {

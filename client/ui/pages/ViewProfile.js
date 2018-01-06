@@ -100,14 +100,14 @@ class ViewProfile extends React.Component {
         });
     }
 
-    chargeCardModal(modalActions, data, props, currentPlace) {
+    chargeCardModal(data, props, currentPlace, modalActions) {
         modalActions.openModal(<ChargeCardModal
-            buttonAccept={() => this.continueSaving(data, props, currentPlace)}
+            buttonAccept={() => this.continueSaving(data, props, currentPlace, modalActions)}
             buttonDecline={this.props.modalActions.closeModal} />);
     }
 
-    continueSaving = (modalActions, data, props, currentPlace) => {
-        this.props.modalActions.closeModal;
+    continueSaving = (data, props, currentPlace, modalActions) => {
+        this.props.modalActions.closeModal();
         this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
@@ -142,7 +142,9 @@ class ViewProfile extends React.Component {
     }
 
     saveSwap = (data, props, currentPlace, modalActions) => {
-        this.chargeCardModal(modalActions, data, props, currentPlace);
+        console.log('Save swap data');
+        console.log(data);
+        this.chargeCardModal(data, props, currentPlace, modalActions);
     }
 
     render() {

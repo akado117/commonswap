@@ -251,10 +251,11 @@ class Planner extends React.Component {
                 <div className="container" id="planner" style={{ marginTop: '20px' }}>
                     <div className="row" >
                         <AppBar
-                            title={<span>{"My Swap's Availability"}</span>}
+                            title={<span>My Availability</span>}
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
+                        <p className="planner-helper-text">Select the date range(s) that you are able to travel</p>
                         <div className="z-depth-2 calendar-wrapper" >
                             <div className="row">
                                 <div className="col s12 calendar-container" >

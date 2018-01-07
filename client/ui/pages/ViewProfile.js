@@ -15,6 +15,8 @@ import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
 import ImageCarousel from '../components/ImageCarousel';
+import ModalActions from '../actions/ModalActions';
+import ChargeCardModal from '../components/dialog/ChargeCardModal';
 
 import BetaWarning from '../components/BetaWarning';
 
@@ -98,7 +100,14 @@ class ViewProfile extends React.Component {
         });
     }
 
-    saveSwap = (data, props, currentPlace) => {
+    chargeCardModal(data, props, currentPlace, modalActions) {
+        modalActions.openModal(<ChargeCardModal
+            buttonAccept={() => this.continueSaving(data, props, currentPlace, modalActions)}
+            buttonDecline={this.props.modalActions.closeModal} />);
+    }
+
+    continueSaving = (data, props, currentPlace, modalActions) => {
+        this.props.modalActions.closeModal();
         this.requestSwap(data);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
@@ -130,6 +139,12 @@ class ViewProfile extends React.Component {
             ...data,
         };
         props.placeActions.saveSwap(swapObj);
+    }
+
+    saveSwap = (data, props, currentPlace, modalActions) => {
+        console.log('Save swap data');
+        console.log(data);
+        this.chargeCardModal(data, props, currentPlace, modalActions);
     }
 
     render() {
@@ -202,7 +217,7 @@ class ViewProfile extends React.Component {
                         </div>
                         <div className="col s12 m4">
                             <SwapPicker
-                                requestSwap={data => this.saveSwap(data, this.props, place)}
+                                requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}
                                 disableButton={!placeId || placeId === this.props.user.userId}
                             />
                         </div>
@@ -295,6 +310,7 @@ function mapDispatchToProps(dispatch) {
         profileActions: bindActionCreators(ProfileActions, dispatch),
         placeActions: bindActionCreators(PlaceActions, dispatch),
         fileActions: bindActionCreators(FileActions, dispatch),
+        modalActions: bindActionCreators(ModalActions, dispatch),
     };
 }
 
@@ -307,6 +323,7 @@ ViewProfile.propTypes = {
     images: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     placeImgs: PropTypes.array,
+    modalActions: PropTypes.object,
 }
 ViewProfile.defaultProps = {
     placeImgs: [],

@@ -89,38 +89,11 @@ function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceChe
 
 function sendAcceptEmail(swapObj) {
     const { _id, place, address, requesterName, requesterEmail, requesterPlaceId, requesterUserId, requesterProfileImg, requesteeUserId, requesteePlaceId, requesteeProfileImg, guests, requesterMessage, dates, requesteeEmail, requesteeName, status } = swapObj;
-
-    console.log('Send Accept Email Entered');
-    console.log('REQUESTEE ID');
-    console.log(requesteeUserId);
-    console.log('REQUESTER ID');
-    console.log(requesterUserId);
-
     const Requester = Profiles.findOne({ ownerUserId: requesterUserId }) || {};
     const Requestee = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
-
-    console.log('REQUESTER');
-    console.log(Requester);
-    console.log('REQUESTEE');
-    console.log(Requestee);
-    
     const RequesterPlace = Places.findOne({ ownerUserId: requesterUserId }) || {};
     const RequesteePlace = Places.findOne({ ownerUserId: requesteeUserId }) || {};
-
-    console.log('REQUESTER PLACE');
-    console.log(RequesterPlace);
-    console.log('REQUESTEE PLACE');
-    console.log(RequesteePlace);
-
-    console.log();
-    console.log();
-    console.log(); 
-    console.log();
-    console.log('DATES');
-    console.log(dates);
-
     const Dates = dates;
-
     const sync = Meteor.wrapAsync(HTTP.call);
     try {
         const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA==', {

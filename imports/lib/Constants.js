@@ -28,6 +28,7 @@ export const defaultImageUrls = {
     assets: {
         checkMark: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png',
         loadingSpinner: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/fidget-spinner.gif',
+        mainLogo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/cSwapLogo2.JPG',
     },
     videos: {
         homeVideoPoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/introposter.png',

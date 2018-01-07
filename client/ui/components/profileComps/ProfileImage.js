@@ -34,26 +34,26 @@ class ProfileImage extends Component {
             /></div>);
     }
 
-    toggleUploader = () => this.setState({ uploaderActive: !this.state.uploaderActive });
-
     render() {
         let content;
         if (this.state.uploaderActive) {
             content = this.getUploader();
         } else {
             const fillerText = this.props.profile._id
-                ?  <p><i className="fa fa-plus-square-o fa-2x" aria-hidden="true"/> Add Photo</p>
+                ? <p><button id="add-prof-image" onClick={this.toggleUploader}><i className="fa fa-plus-square-o fa-2x" aria-hidden="true" /></button> Add Photo</p>
                 : <p>Please Sign In</p>;
 
             content = this.props.imageSrc ? (
-                <button onClick={this.toggleUploader} style={{ border: 'none', background: 'transparent' }}>
+                <button className="profile-image-button" onClick={this.toggleUploader} style={{ border: 'none', background: 'transparent' }}>
                     <img src={this.props.imageSrc} alt="" />
+                    <i className="fa fa-plus-circle add-prof-image-button" />
+                    <div className="add-prof-image-button"> </div>
                 </button>)
                 : (
                     <div>
                         <h4>Profile Page</h4>
                         <div className="col s12">
-                            <i className="fa fa-user-circle fa-4x" aria-hidden="true"/>
+                            <i className="fa fa-user-circle fa-4x" aria-hidden="true" />
                         </div>
                         <div className="col s12">
                             {fillerText}

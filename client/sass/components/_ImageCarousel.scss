@@ -21,4 +21,10 @@
   .image-gallery-bullets {
     transform: scale(0.75);
   }
+  .image-carousel-delete-button {
+    position: absolute;
+    z-index: 5;
+    right: 1.5vw;
+    top: 1.5vw;
+  }
 }

@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player';
 import Footer from '../components/Footer';
 import { render } from 'react-dom';
 import { defaultImageUrls } from '../../../imports/lib/Constants';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class Home extends Component {
     constructor(props) {
@@ -40,9 +41,9 @@ class Home extends Component {
                         </video>
                         <div className="col s12 center-align">
                             <div className="header-container overlay-desc">
-                                {/* <h1 className={`header-title ${this.state.muted ? '' : 'fade-out'}`}> CommonSwap <br />
+                                <h1 className={`header-title ${this.state.muted ? '' : 'fade-out'}`}> <br />
                                     <strong>Experience More</strong>
-                                </h1> */}
+                                </h1>
                             </div>
                         </div>
                     </div>
@@ -73,8 +74,8 @@ class Home extends Component {
                             </div>
                             <p className="how-text col s12">
                                 <strong>Join Our Community of Adventure Seekers</strong>
-                                    <br />
-                                    Create your profile, list your space, and tell us a little bit about yourself. Each user will go through a background check and verification process to ensure the safety of our community.
+                                <br />
+                                Create your profile, list your space, and tell us a little bit about yourself. Each user will go through a background check and verification process to ensure the safety of our community.
                             </p>
                         </div>
                         <div className="col s12 l4 center-align">
@@ -91,33 +92,105 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="testimonial-container">
-                    <div className="container pad-top">
-                        <div className="row">
-                            <div className="col s12 center-align">
-                                <h2 className="how-title">TESTIMONIALS</h2>
+                <div className="col s12 how-title">
+                    <div className="row">
+                        <div className="col s12 center-align">
+                            <h2 className="how-title">WHY COMMONSWAP?</h2>
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12">
+                    <div className="row">
+                        <div className="col l4 s12 center-align home-icon">
+                            <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png" alt="moneyHome" />
+                            <h5>Money Saved</h5>
+                        </div>
+                        <div className="col l4 s12 center-align home-icon">
+                            <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png" alt="planeHome" />
+                            <h5>Experience More</h5>
+                        </div>
+                        <div className="col l4 s12 center-align home-icon">
+                            <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png" alt="connectHome" />
+                            <h5>Connect with Others</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12">
+                    <div className="row">
+                        <div className="col s12 center-align">
+                            <div className="col s4">
+                                <div className="s12">
+                                    <img className="test-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/alyssa.png" alt="testimonial" />
+                                </div>
+                                <p className="how-text col s12">
+                                    <strong>Perry and Alyssa</strong>
+                                    <br />
+                                    <strong>(Washington D.C.)</strong>
+                                    <br />
+                                    We recently used CommonSwap for our weekend trip to New York. Using CommonSwap made it easy and affordable to travel to NYC without the expenses of overpriced hotels and Airbnbs. We were able to spend the money saved on other things during our trip.
+                                    </p>
                             </div>
-                            <div className="col s12 l4">
-                                <img className="grow test-img" src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/Testimonials/Testimonial2.JPG" alt="" />
+                            <div className="col s4">
+                                <div className="s12">
+                                    <img className="test-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/amjed.png" alt="testimonial" />
+                                </div>
+                                <p className="how-text col s12">
+                                    <strong>Amjed</strong>
+                                    <br />
+                                    <strong>(New York, NY)</strong>
+                                    <br />
+                                    I really enjoyed my experience with CommonSwap. The opportunity to meet people who shared the same living space with the person I was swapping with was a huge positive about my experience. I would be more than happy to use it again and recommend it to a friend.
+                            </p>
                             </div>
-                            <div className="col s12 l4">
-                                <img className="grow test-img" src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/Testimonials/Testimonial1.JPG" alt="" />
+                            <div className="col s4">
+                                <div className="s12">
+                                    <img className="test-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bolaji.png" alt="testimonial" />
+                                </div>
+                                <p className="how-text col s12">
+                                    <strong>Bolaji</strong>
+                                    <br />
+                                    <strong>(Columbus, OH)</strong>
+                                    <br />
+                                    My experience with CommonSwap was great. My swap’s room was tidy and the apartment had everything I needed for my trip. My swap was very helpful in directing me to the best attractions and sites based on my interests. CommonSwap allows me to take more trips during the year than normal with the money saved.
+                            </p>
                             </div>
-                            <div className="col s12 l4">
-                                <img className="grow test-img" src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/Testimonials/Testimonial3.JPG" alt="" />
+                            <div className="col s4">
+                                <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                            </div>
+                            <div className="col s4">
+                                <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                            </div>
+                            <div className="col s4">
+                                <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="col s12 travel-image">
+                <div className="col s12 how-title">
                     <div className="row">
-                        <div className="col l6 s7">
-                            <div className="row center-align">
-                                <h2 className="col s12 how-desc-title">Travel</h2>
-                                <p className="col s12 l9 offset-l1 offset-s0 how-desc">You're all set! Enjoy your getaway and
-                                    experience everything the city has to offer. Feel free to communicate with your Swap
-                                    to exchange recommendations.</p>
-                            </div>
+                        <div className="col s12 center-align">
+                            <h2 className="how-title">JOIN OUR COMMUNITY</h2>
+                            <p className="how-desc">We are currently accepting beta users for the 2018 calendar year.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12 signin">
+                    <div className="row">
+                        <div className="col s6 center-align">
+                            <RaisedButton
+                                href="https://github.com/callemall/material-ui"
+                                target="_blank"
+                                label="Sign up with Facebook"
+                                primary={true}
+                                icon={<FontIcon className="fa fa-facebook" />}
+                            />
+                        </div>
+                        <div className="col s6 center-align">
+                            <RaisedButton
+                                label="Sign up with Email"
+                                containerElement="label"
+                                icon={<FontIcon className="fa fa-envelope-open-o" />}
+                            />
                         </div>
                     </div>
                 </div>

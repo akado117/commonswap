@@ -162,6 +162,10 @@
     font-size: 5.5rem;
   }
 
+  .test-img {
+    width: 90%;
+  }
+
   .how-desc-title {
     font-size: 4.5rem;
     font-weight: 500;
@@ -171,7 +175,10 @@
     font-size: 2.5rem;
     font-weight: 500;
     color: white;
-    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .signin {
+    min-height: 200px;
   }
 
   @media #{$large-and-up} {

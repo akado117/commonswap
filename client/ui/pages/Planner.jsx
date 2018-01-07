@@ -212,19 +212,19 @@ class Planner extends React.Component {
         key={`trip-${idx}`}
         swapObj={trip}
         currentUserId={userId}
-        acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openSwapModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true)}
-        declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false)}
+        acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openSwapModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
+        declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false, trip)}
     />);
 
     exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${idx}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
-    openSwapModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted) {
+    openSwapModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
         modalActions.openModal(<ChargeCardModal
-            buttonAccept={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true)}
+            buttonAccept={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
             buttonDecline={this.props.modalActions.closeModal} />);
     }
 
-    openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted) {
+    openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
         modalActions.openModal(<AcceptSwapModal
             requesterProfileImg={requesterProfileImage}
             primaryText={accepted ? 'Swap Accepted' : 'Swap Declined'}
@@ -232,7 +232,7 @@ class Planner extends React.Component {
             buttonHandler={this.props.modalActions.closeModal} />);
         if(accepted)
         {
-
+            this.props.profileActions.chargeCards(trip);
         }
     }
 

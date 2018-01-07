@@ -12,6 +12,7 @@ import ProfileComponent from '../components/profileComps/ProfileComponent';
 import PlaceComponent from '../components/placeComponents/PlaceComponent';
 import CreditCard from '../components/verificationComponent/CreditCard';
 import CardForm from '../components/verificationComponent/CardForm';
+import { obfiscateId } from '../../../imports/helpers/DataHelpers';
 
 import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
@@ -110,6 +111,14 @@ class Profile extends React.Component {
     };
 
     saveProfileFunction = (transitionOnSave) => {
+        if (!this.props.images.profileImg.url && this.props.user.picture) {
+            const profileImgObj = {
+                url: this.props.user.picture,
+                name: obfiscateId(this.props.user.userId),
+                profileId: this.props.user.userId,
+            };
+            this.props.fileActions.addProfileImageToDataBase(profileImgObj);
+        }
         this.props.profileActions.upsertProfile(this.getFormData(), transitionOnSave ? () => this.setState({ selectedIndex: 1 }) : () => {});
     }
 
@@ -122,7 +131,15 @@ class Profile extends React.Component {
         if (this.state.selectedIndex === 0){
             internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} user={this.props.user} saveProfile={this.saveProfileFunction} saveProfileImage={this.props.fileActions.addProfileImageToDataBase} profileImg={this.props.images.profileImg} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
+            internalComponent = (
+                <PlaceComponent
+                    placeImages={this.props.images.placeImgs}
+                    savePlaceImage={this.props.fileActions.addPlaceImageToDataBase}
+                    getValueFunc={this.addValueOnChangePlace}
+                    place={this.props.place}
+                    savePlace={this.savePlaceFunction}
+                    fileActions={this.props.fileActions}
+                />);
         }
         else if (this.state.selectedIndex === 2) {
             internalComponent = <CardForm/>;

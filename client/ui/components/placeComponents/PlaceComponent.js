@@ -86,7 +86,7 @@ class PlaceComponent extends Component {
             />);
         } else {
             const remappedImages = images.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
-            component = <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />;
+            component = <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} deleteImageHandler={this.deletePlaceImage} />;
         }
         const toggleText = !this.state.uploadActive ? '- Click to Add Photos' : '- Click to See Photos'
         return (
@@ -102,6 +102,14 @@ class PlaceComponent extends Component {
                 {component}
             </div>
         );
+    }
+
+    deletePlaceImage = (index) => {
+        if (index > -1) {
+            const { _id } = this.props.placeImages[index];
+            const placeId = this.props.place.place._id;
+            this.props.fileActions.deletePlaceImage({ _id, placeId });
+        }
     }
 
     onSetLocation = cords => {
@@ -260,6 +268,7 @@ PlaceComponent.propTypes = {
     savePlace: PropTypes.func.isRequired,
     savePlaceImage: PropTypes.func.isRequired,
     placeImages: PropTypes.array.isRequired,
+    fileActions: PropTypes.object.isRequired,
 };
 
 export default PlaceComponent;

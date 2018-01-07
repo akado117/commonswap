@@ -527,23 +527,40 @@ Meteor.methods({
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());
     },
     'images.place.get': function placeImageGet({ placeId }) {
-        if (counter < stopLoop) {
-            const userId = Meteor.userId();
-            if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
-            const fieldsToReturn = {
-                _id: 1,
-                url: 1,
-            };
-            const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn }).fetch();
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
+        const fieldsToReturn = {
+            _id: 1,
+            url: 1,
+        };
+        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn }).fetch();
 
-            consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
-            return serviceSuccessBuilder({}, genericSuccessCode, {
-                serviceMessage: `Get place images success with ${files.length} found`,
+        consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
+        return serviceSuccessBuilder({}, genericSuccessCode, {
+            serviceMessage: `Get place images success with ${files.length} found`,
+            data: {
+                images: files,
+            },
+        });
+    },
+    'images.place.delete': function placeImageDelete({ _id, placeId }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
+        try {
+            const filesGUID = FileUrls.update({ _id, type: FileTypes.PLACE, deleted: false, placeId }, { $set: { deleted: true } });
+
+            consoleLogHelper(`Successfully deleted ${filesGUID} place Images with id: ${_id}`, genericSuccessCode, userId);
+            return serviceSuccessBuilder({ guidReturn: filesGUID }, genericSuccessCode, {
+                serviceMessage: `Successfully deleted ${filesGUID} place Images`,
                 data: {
-                    images: files,
+                    _id,
+                    placeId,
                 },
             });
-            counter++;
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Delete Place image for image id: ${_id} unsuccessful`, placeErrorCode, userId, err);
+            return serviceErrorBuilder(`Delete Place image for image id: ${_id} unsuccessful`, placeErrorCode, err);
         }
     },
     'images.profile.store': function placeImageStore(fileObj) {
@@ -556,7 +573,7 @@ Meteor.methods({
             url: 1,
             _id: 1,
         };
-        const file = FileUrls.findOne({ userId, type: FileTypes.PROFILE, deleted: false }, {
+        const file = FileUrls.findOne({ userId, type: FileTypes.PROFILE, deleted: false, active: true, }, {
             fields: fieldsToReturn,
             sort: { added: -1 },
         });

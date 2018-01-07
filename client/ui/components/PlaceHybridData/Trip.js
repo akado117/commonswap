@@ -34,11 +34,7 @@ function getRater(rating, message, active) {
 }
 
 const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
-    const { address, dates, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId } = swapObj;
-    function viewProfile () {
-        window.location = '/viewProfile/' + requesterPlaceId;
-    }
-
+    const { address, dates = {}, requesterName, requesterProfileImg, requesteeProfileImg, place, requesterMessage, placeImg, requesterPlaceId } = swapObj;
     const profileLink = `/viewProfile/${requesterPlaceId || ''}`;
     return (
         <div className="col s12 z-depth-2">
@@ -61,12 +57,12 @@ const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
                         <h5 className="location">{`${address.city}, ${address.state}`}</h5>
                     </div>
                 </div>
-                <div className="col s12 m4 l4 img-cont" onClick={() => viewProfile()}>
+                <Link className="col s12 m4 l4 img-cont" to={profileLink}>
                     <img src={(placeImg && placeImg.url) || defaultImageUrls.awesomePlace} alt="" className="image" style={{ height: '250px', width: '100%' }} />
                     <div className="middle">
                         <div className="text">View Place</div>
                     </div>
-                </div>
+                </Link>
 
                 <div className="col s12 m5 l5">
                     <div className="row">

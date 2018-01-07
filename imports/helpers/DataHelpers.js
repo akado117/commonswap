@@ -125,3 +125,7 @@ export function determineImageDimensions(width, height, maxDimObj) {
     };
 
 }
+
+export function obfiscateId(id) {
+    return id.substr(4,6) + id.substr(7) + id.substr(0,3);
+}

@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 import Login from '../pages/Login';
+import { defaultImageUrls } from '../../../imports/lib/Constants';
 
 const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px' };
 
@@ -52,7 +53,7 @@ class Navbar extends React.Component {
             <div className={`navbar-fixed ${className} ${invisToggle ? 'invis-toggle-true ' : ' '}${this.state.isTop ? 'invisible' : 'visible'}`} >
                 <nav className="nav-wrapper">
                     <div>
-                        <div onClick={this.travelHome} className="brand-logo"><img src="http://stretchflex.net/photos/CommonSwapNew2.png" alt="" style={{ maxHeight: '64px', paddingLeft:'15px',paddingBottom:'5px'}} /></div>
+                        <div onClick={this.travelHome} className="brand-logo"><img src={defaultImageUrls.assets.mainLogo} alt="" style={{ maxHeight: '64px', paddingLeft:'15px',paddingBottom:'5px'}} /></div>
                         <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
                         <Login className="nav-login" />
                         <ul className="right hide-on-med-and-down">

@@ -87,7 +87,35 @@ function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceChe
     return objClone;
 }
 
+function sendAcceptEmail(swapObj) {
+    const { _id, place, address, requesterName, requesterEmail, requesterPlaceId, requesterUserId, requesterProfileImg, requesteeUserId, requesteePlaceId, requesteeProfileImg, guests, requesterMessage, dates, requesteeEmail, requesteeName, status } = swapObj;
+    const Requester = Profiles.findOne({ ownerUserId: requesterUserId }) || {};
+    const Requestee = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
+    const RequesterPlace = Places.findOne({ ownerUserId: requesterUserId }) || {};
+    const RequesteePlace = Places.findOne({ ownerUserId: requesteeUserId }) || {};
+    const Dates = dates;
+    const sync = Meteor.wrapAsync(HTTP.call);
+    try {
+        const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA==', {
+            data: {
+                Requester,
+                Requestee,
+                RequesterPlace,
+                RequesteePlace,
+                Dates,
+            },
+        });
+    } 
+    catch (err) {
+        console.log(err.stack);
+        consoleErrorHelper(`Email for accept swap between ${Requester.firstName} and ${Requestee.firstName} failed`, upsertFailedCode, requesterUserId, err);
+        return serviceErrorBuilder(`Email for accept swap between ${Requester.firstName} and ${Requestee.firstName} failed`, upsertFailedCode, err);
+    }
+
+}
+
 Meteor.methods({
+    sendAcceptEmail,
     signup(customer) {
         check(customer, Object);
         return handleSignup(customer)
@@ -185,21 +213,44 @@ Meteor.methods({
     createCharge(swapObj) {
         try
         {
-            const { address, dates, firstName, rating, ratingMessage, profileImg, place, swapperMessage, status } = swapObj;
+            const { _id, place, address, requesterName, requesterEmail, requesterPlaceId, requesterUserId, requesterProfileImg, requesteeUserId, requesteePlaceId, requesteeProfileImg, guests, requesterMessage, dates, requesteeEmail, requesteeName, status } = swapObj;
             console.log("Place");
             console.log(swapObj);
 
+            let swapClone = cloneDeep(swapObj);
+
             const userId = Meteor.userId();
 
-            const cust = Customers.findOne({ userId: userId }) || {};
+            const currentUserCustomer = Customers.findOne({ userId: userId }) || {};
+            const requesterCustomer = Customers.findOne({ userId: requesterUserId }) || {};
 
             const stripe = Stripe(Meteor.settings.private.stripe);
 
             stripe.charges.create({
-                amount: 1000,
+                amount: 5000,
                 currency: "usd",
-                customer: cust.customerId,
+                customer: currentUserCustomer.customerId,
               });
+            
+            stripe.charges.create({
+                amount: 5000,
+                currency: "usd",
+                customer: requesterCustomer.customerId,
+            });
+            swapClone.status = tripStatus.ACTIVE;
+
+            const swapGUID = Trips.upsert({ _id: swapClone._id }, swapClone);
+
+            sendAcceptEmail(swapObj);
+
+            consoleLogHelper(`Swap Accecpted and Charded for ${requesterName} and ${requesteeName}.`, genericSuccessCode, userId, `Swap Id ${JSON.stringify(swapClone._id)}`);
+            return serviceSuccessBuilder({ requesterName, requesteeName }, genericSuccessCode, {
+                serviceMessage: `Swap updated', with key ${swapClone._id}`,
+                data: {
+                    requesterName: requesterName,
+                    requesteeName: requesteeName,
+                },
+            });
         }
         catch (err)
         {

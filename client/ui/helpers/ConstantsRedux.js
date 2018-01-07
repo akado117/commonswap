@@ -36,6 +36,7 @@ export const actionTypes = {
     SERVICE_PENDING: 'SERVICE_PENDING',
     SERVICE_RETURNED: 'SERVICE_RETURNED',
     EMAIL_SENT: 'EMAIL_SENT',
+    CARDS_CHARGED: 'CARDS_CHARGED',
 };
 
 const serviceMessages = {

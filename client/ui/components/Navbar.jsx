@@ -52,7 +52,7 @@ class Navbar extends React.Component {
             <div className={`navbar-fixed ${className} ${invisToggle ? 'invis-toggle-true ' : ' '}${this.state.isTop ? 'invisible' : 'visible'}`} >
                 <nav className="nav-wrapper">
                     <div>
-                        <div onClick={this.travelHome} className="brand-logo"><img src="http://stretchflex.net/photos/CommonSwapNew2.png" alt="" style={{ maxHeight: '64px', paddingLeft:'15px',paddingBottom:'5px'}} /></div>
+                        <div onClick={this.travelHome} className="brand-logo"><img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/cSwapLogo2.JPG" alt="" style={{ maxHeight: '64px', paddingLeft:'15px',paddingBottom:'5px'}} /></div>
                         <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
                         <Login className="nav-login" />
                         <ul className="right hide-on-med-and-down">

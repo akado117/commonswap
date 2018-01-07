@@ -114,7 +114,7 @@ function sendAcceptEmail(swapObj) {
 
     console.log();
     console.log();
-    console.log();
+    console.log(); 
     console.log();
     console.log('DATES');
     console.log(dates);

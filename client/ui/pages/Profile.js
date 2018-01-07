@@ -131,7 +131,15 @@ class Profile extends React.Component {
         if (this.state.selectedIndex === 0){
             internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} profile={this.props.profile} user={this.props.user} saveProfile={this.saveProfileFunction} saveProfileImage={this.props.fileActions.addProfileImageToDataBase} profileImg={this.props.images.profileImg} />;
         } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent placeImages={this.props.images.placeImgs} savePlaceImage={this.props.fileActions.addPlaceImageToDataBase} getValueFunc={this.addValueOnChangePlace} place={this.props.place} savePlace={this.savePlaceFunction} />;
+            internalComponent = (
+                <PlaceComponent
+                    placeImages={this.props.images.placeImgs}
+                    savePlaceImage={this.props.fileActions.addPlaceImageToDataBase}
+                    getValueFunc={this.addValueOnChangePlace}
+                    place={this.props.place}
+                    savePlace={this.savePlaceFunction}
+                    fileActions={this.props.fileActions}
+                />);
         }
         else if (this.state.selectedIndex === 2) {
             internalComponent = <CardForm/>;

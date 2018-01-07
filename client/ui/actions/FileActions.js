@@ -12,6 +12,11 @@ export default {
             return standardResponseFunc(error, result, actionTypes.ADD_PLACE_IMAGE, dispatch, callback);
         });
     },
+    deletePlaceImage: ({ _id, placeId }) => {
+        return dispatch => Meteor.call('images.place.delete', { _id, placeId }, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.DELETE_PLACE_IMAGE, dispatch);
+        });
+    },
     getImageForProfile: () => {
         return dispatch => Meteor.call('images.profile.getOne', (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_PROFILE_IMAGE, dispatch);

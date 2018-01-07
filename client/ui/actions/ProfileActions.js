@@ -50,8 +50,8 @@ const ProfileActions = {
             return standardResponseFunc(error, result, actionTypes.GET_CARD_INFO, dispatch);
         });
     },
-    chargeCards: () => {
-        return dispatch => Meteor.call('createCharge', (error, result) => {
+    chargeCards: (trip) => {
+        return dispatch => Meteor.call('createCharge', trip, (error, result) => {
             return standardResponseFunc(error, result, actionTypes.CARDS_CHARGED, dispatch);
         });
     },

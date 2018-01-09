@@ -1,7 +1,9 @@
 import { merge } from 'lodash';
 import { SUCCESS, actionTypes } from '../helpers/ConstantsRedux';
 
-const initialState = {};
+const initialState = {
+    userId: null,
+};
 
 export default function userReducer(state = initialState, action = {}) {
     switch (action.type) {

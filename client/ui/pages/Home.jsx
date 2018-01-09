@@ -5,6 +5,16 @@ import Footer from '../components/Footer';
 import { render } from 'react-dom';
 import { defaultImageUrls } from '../../../imports/lib/Constants';
 import RaisedButton from 'material-ui/RaisedButton';
+// import SelectBuilder from '../forms/SelectBuilder.js';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+
+const styles = {
+    customWidth: {
+        width: 300,
+    },
+};
+
 
 class Home extends Component {
     constructor(props) {
@@ -25,7 +35,14 @@ class Home extends Component {
         this.setState({ playing: !this.state.playing });
     };
 
+    // getValueFunc = (key, value) => {
+    //     if (this.props.getValueFunc) {
+    //         this.props.getValueFunc('profile', key, value);
+    //     }
+    // }
+
     render() {
+        // const getValueFunc = this.getValueFunc;
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">
@@ -55,7 +72,7 @@ class Home extends Component {
                         </div>
                         <div className="col s12 l6 how-video">
                             {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
-                            <video playsInline muted poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
+                            <video playsInline poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
                         </div>
                     </div>
                 </div>
@@ -99,7 +116,7 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="col s12">
+                {/* <div className="col s12">
                     <div className="row">
                         <div className="col l4 s12 center-align home-icon">
                             <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png" alt="moneyHome" />
@@ -114,11 +131,20 @@ class Home extends Component {
                             <h5>Connect with Others</h5>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="col s12">
                     <div className="row">
                         <div className="col s12 center-align">
-                            <div className="col s4">
+                            <div className="col s12 l4">
+                                <div className="col s12 center-align home-icon">
+                                    <div className="col s12">
+                                        <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png" alt="moneyHome" />
+                                    </div>
+                                    <br />
+                                    <div className="col s12">
+                                        <h5>Money Saved</h5>
+                                    </div>
+                                </div>
                                 <div className="s12">
                                     <img className="test-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/alyssa.png" alt="testimonial" />
                                 </div>
@@ -128,9 +154,18 @@ class Home extends Component {
                                     <strong>(Washington D.C.)</strong>
                                     <br />
                                     We recently used CommonSwap for our weekend trip to New York. Using CommonSwap made it easy and affordable to travel to NYC without the expenses of overpriced hotels and Airbnbs. We were able to spend the money saved on other things during our trip.
-                                    </p>
+                                </p>
+                                <div className="col s12 center-align quote-icon">
+                                    <div className="col s12">
+                                        <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col s4">
+                            <div className="col s12 l4">
+                                <div className="col s12 center-align home-icon">
+                                    <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png" alt="planeHome" />
+                                    <h5>Experience More</h5>
+                                </div>
                                 <div className="s12">
                                     <img className="test-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/amjed.png" alt="testimonial" />
                                 </div>
@@ -140,9 +175,18 @@ class Home extends Component {
                                     <strong>(New York, NY)</strong>
                                     <br />
                                     I really enjoyed my experience with CommonSwap. The opportunity to meet people who shared the same living space with the person I was swapping with was a huge positive about my experience. I would be more than happy to use it again and recommend it to a friend.
-                            </p>
+                                </p>
+                                <div className="col s12 center-align quote-icon">
+                                    <div className="col s12">
+                                        <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col s4">
+                            <div className="col s12 l4">
+                                <div className="col s12 center-align home-icon">
+                                    <img src="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png" alt="connectHome" />
+                                    <h5>Connect with Others</h5>
+                                </div>
                                 <div className="s12">
                                     <img className="test-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bolaji.png" alt="testimonial" />
                                 </div>
@@ -152,9 +196,14 @@ class Home extends Component {
                                     <strong>(Columbus, OH)</strong>
                                     <br />
                                     My experience with CommonSwap was great. My swap’s room was tidy and the apartment had everything I needed for my trip. My swap was very helpful in directing me to the best attractions and sites based on my interests. CommonSwap allows me to take more trips during the year than normal with the money saved.
-                            </p>
+                                </p>
+                                <div className="col s12 center-align">
+                                    <div className="col s12">
+                                        <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col s4">
+                            {/* <div className="col s4">
                                 <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
                             </div>
                             <div className="col s4">
@@ -162,7 +211,7 @@ class Home extends Component {
                             </div>
                             <div className="col s4">
                                 <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -176,22 +225,126 @@ class Home extends Component {
                 </div>
                 <div className="col s12 signin">
                     <div className="row">
-                        <div className="col s6 center-align">
+                        <div className="col s12 l6 center-align sign-up">
                             <RaisedButton
                                 href="https://github.com/callemall/material-ui"
                                 target="_blank"
                                 label="Sign up with Facebook"
-                                primary={true}
+                                backgroundColor="#3B5998"
+                                labelColor="white"
+                                className="sign-button"
                                 icon={<FontIcon className="fa fa-facebook" />}
                             />
                         </div>
-                        <div className="col s6 center-align">
+                        <div className="col s12 l6 center-align sign-up-mail">
                             <RaisedButton
                                 label="Sign up with Email"
                                 containerElement="label"
                                 icon={<FontIcon className="fa fa-envelope-open-o" />}
+                                className="sign-button"
                             />
                         </div>
+                    </div>
+                </div>
+                <div className="col s12 how-title get-rid-of-this-container-ALEX">
+                    <div className="row">
+                        <div className="col s12 center-align">
+                            <h2 className="how-title">LOGGED IN</h2>
+                            <p className="how-desc">Alex this should only appear when user logged in.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12">
+                    <div className="row">
+                        <div className="col s12 l6 cities-select">
+                            <div className="col s12 center-align">
+                                <h5>Select Desired Cities</h5>
+                                <DropDownMenu className="cities-selector" autoWidth={false} style={styles.customWidth}>
+                                    <MenuItem value={1} primaryText="Columbus" />
+                                    <MenuItem value={2} primaryText="New York" />
+                                    <MenuItem value={3} primaryText="San Francisco" />
+                                    <MenuItem value={4} primaryText="Washington DC" />
+                                    <MenuItem value={5} primaryText="Los Angelos" />
+                                </DropDownMenu>
+                                {/* <SelectBuilder
+                            label={<span>Select Desired Cities</span>}
+                            onChange={value => getValueFunc('gender', value)}
+                            selectArrObj={genderFields.fields}
+                            defaultSelection={genderFields.defaultField}
+                            defaultValue={profile.gender}
+                            extraProps={{ floatingLabelFixed: true }}
+                            /> */}
+                            </div>
+                            <div className="col s12 center-align">
+                                <RaisedButton
+                                    label="Search"
+                                    containerElement="label"
+                                    icon={<FontIcon className="fa fa-search" />}
+                                    className="sign-button"
+                                    primary={true}
+                                />
+                            </div>
+                        </div>
+                        <div className="col s12 l6 center-align mobile-holiday">
+                            <img className="holiday-img" src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/holidayHome.png" alt="holidayDates" />
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12 how-title">
+                    <div className="row">
+                        <div className="col s12 center-align">
+                            <h2 className="how-title">OUR COMMUNITY</h2>
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12">
+                    <div className="row">
+                        <div className="col s12">
+                            <h5 className="community-city">
+                                New York
+                            </h5>
+                        </div>
+                        <div className="col s12 l4">
+                            <div className="trip-image">
+                                <img src="https://com-swap-images-dev.s3-us-east-2.amazonaws.com/customers/-619357/profile/Profile Pic.JPG" alt="" />
+                            </div>
+                            <div className="name center-align">
+                                <p>Kevin</p>
+                            </div>
+                            <div className="person-desc center-align">
+                                <p>Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite sports team is the Lakers and my favorite music artist is Drake.  Feel free to reach out to learn more!</p>
+                            </div>
+                        </div>
+                        <div className="col s12 l4">
+                            <div className="trip-image">
+                                <img src="https://com-swap-images-dev.s3-us-east-2.amazonaws.com/customers/-619357/profile/Profile Pic.JPG" alt="" />
+                            </div>
+                            <div className="name center-align">
+                                <p>Kevin</p>
+                            </div>
+                            <div className="person-desc center-align">
+                                <p>Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite sports team is the Lakers and my favorite music artist is Drake.  Feel free to reach out to learn more!</p>
+                            </div>
+                        </div>
+                        <div className="col s12 l4">
+                            <div className="trip-image">
+                                <img src="https://com-swap-images-dev.s3-us-east-2.amazonaws.com/customers/-619357/profile/Profile Pic.JPG" alt="" />
+                            </div>
+                            <div className="name center-align">
+                                <p>Kevin</p>
+                            </div>
+                            <div className="person-desc center-align">
+                                <p>Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite sports team is the Lakers and my favorite music artist is Drake.  Feel free to reach out to learn more!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col s12 center-align">
+                        <RaisedButton
+                            label="Browse More"
+                            containerElement="label"
+                            className="sign-button"
+                            primary={true}
+                        />
                     </div>
                 </div>
                 <Footer />

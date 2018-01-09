@@ -19,6 +19,59 @@
     font-style: sans-serif;
   }
 
+  .trip-image {
+    @extend .true-circle;
+    height: 460px;
+    width: 100%;
+    margin: 0;
+    img {
+      height: 420px !important;
+      width: 390px !important;
+    }
+  }
+
+  .name {
+    p {
+      font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+      font-size: 1.5rem;
+  
+    }
+  }
+  
+  .person-desc {
+    padding: 0.3rem !important;
+    p {
+      font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+      font-size: 1.0rem;
+    }
+  }
+
+  .sign-button {
+    width: 50%;
+  }
+  .cities-select {
+    padding-top: 5.0rem !important;
+  }
+
+  .holiday-img {
+    width: 90%;
+  }
+
+  .cities-selector {
+    width: 90%;
+  }
+  .sign-up-mail, .sign-up {
+    padding-top: 4.5rem !important;
+  }
+
+  .home-icon {
+    padding-bottom: 1.5rem !important;
+  }
+
+  .quote-icon {
+    padding-top: 3.5rem !important;
+  }
+
   .testimonial-container {
     .grow { transition: all .2s ease-in-out; }
     .grow:hover { transform: scale(1.7); }
@@ -50,6 +103,11 @@
       font-weight: 500;
       background-color: rgb(0, 188, 212);
       color: white;
+  }
+
+  .community-city {
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 2.5rem;
   }
 
   .purpose-desc {
@@ -256,8 +314,24 @@
   }
 
   @media #{$small-and-down} {
+    .sign-up {
+      padding-top: 3.0rem !important;
+    }
+    .sign-up-mail {
+      padding-top: 2.0rem !important;
+    }
+    .quote-icon {
+      padding-top: 0px !important;
+    }
+    .sign-button {
+      width: 80%;
+    }
     .home-icon {
       padding-top: 2.0rem !important;
+    }
+
+    .mobile-holiday {
+      padding-top: 4.0rem !important;
     }
 
     .intro, .purpose {
@@ -278,7 +352,7 @@
     }
 
     .purpose-desc {
-      font-size: 1.0rem;
+      font-size: 1.3rem;
       font-weight: 300;
     }
   

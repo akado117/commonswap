@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ProfileActions from '../../actions/ProfileActions';
 import { CardForm } from '../../components/verificationComponent/CardForm';
-import { Emergency } from '../../components/trust/Emergency';
+import { Emergency } from '../../components/trust/emergency';
 
 class Verify extends Component {
     componentDidMount() {

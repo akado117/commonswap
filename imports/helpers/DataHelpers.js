@@ -68,8 +68,8 @@ export function buildPlaceForUpsert(placeData, appState) {
         }
     });
     dataClone.place.profileImg = appState.images.profileImg || { url: appState.user.picture };
-    const { firstName, personalSummary, classOf, school } = appState.profile.profile;
-    dataClone.place.profile = { firstName, personalSummary, classOf, school };
+    const { firstName, personalSummary, classOf, school, occupation } = appState.profile.profile;
+    dataClone.place.profile = { firstName, personalSummary, classOf, school, occupation };
     dataClone.place.interests = appState.profile.interests;
     const { zip, state, city } = placeData.address;
     dataClone.place.address = { zip, city, state };

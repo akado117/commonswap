@@ -16,15 +16,15 @@ function onChangeHelper(event) {
 class ProfileComponent extends Component {
 
     BUTTONS = [
-        {label: 'Beach Bum', name: 'beachBum'},
-        {label: 'Photography', name: 'photography'},
-        {label: 'Wineries', name: 'wineries'},
-        {label: 'Film Buff', name: 'film'},
-        {label: 'Hiker', name: 'hiking'},
-        {label: 'Clubbing & Nightlife', name: 'clubber'},
-        {label: 'Live Music & Concerts', name: 'liveMusic'},
-        {label: 'Food & Restaurants', name: 'foodie'},
-        {label: 'Organized Tours', name: 'orgTour'},
+        { label: 'Beach Bum', name: 'beachBum' },
+        { label: 'Photography', name: 'photography' },
+        { label: 'Wineries', name: 'wineries' },
+        { label: 'Film Buff', name: 'film' },
+        { label: 'Hiker', name: 'hiking' },
+        { label: 'Clubbing & Nightlife', name: 'clubber' },
+        { label: 'Live Music & Concerts', name: 'liveMusic' },
+        { label: 'Food & Restaurants', name: 'foodie' },
+        { label: 'Organized Tours', name: 'orgTour' },
     ];
 
     constructor() {
@@ -33,25 +33,26 @@ class ProfileComponent extends Component {
         this.state = {
             firstName: '',
             lastName: '',
-            gender:'',
-            birthday:'',
-            email:'',
-            phone:'',
-            language:'',
-            descPersonal:'',
-            school:'',
-            classOf:'',
-            cleanliness:45,
-            personality:65,
+            gender: '',
+            birthday: '',
+            email: '',
+            phone: '',
+            language: '',
+            descPersonal: '',
+            school: '',
+            classOf: '',
+            occupation: '',
+            cleanliness: 45,
+            personality: 65,
             beachBum: true,
             wineries: true,
-            photography:false,
+            photography: false,
             film: true,
-            hiking:false,
-            clubbing:true,
-            concerts:true,
-            food:true,
-            tours:false,
+            hiking: false,
+            clubbing: true,
+            concerts: true,
+            food: true,
+            tours: false,
         }
     }
 
@@ -154,7 +155,10 @@ class ProfileComponent extends Component {
                 <div className="col s12">
                     <div className="card-panel teal">
                         <span className="white-text">
-                            CommonSwap relies on the trust and respect of our community! Tell us a little about yourself to get to know you. What's your favorite food? What's your ideal Friday night activity? Have a fun fact?
+                            CommonSwap relies on the trust and respect of our
+                            community. Tell us a little bit about yourself to get to know you. What’s
+                            your favorite music genre or sports team? What’s your ideal Friday
+                            night activity? Have a fun fact?
                         </span>
                     </div>
                 </div>
@@ -162,18 +166,23 @@ class ProfileComponent extends Component {
                     <TextFieldStandardized
                         floatingLabelText={<span><i className="fa fa-pencil" aria-hidden="true"></i> Describe Yourself</span>}
                         onChange={(e, value) => getValueFunc('personalSummary', value)}
+                        hintText={"Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite team is the Lakers and my favorite music artist is Drake. Feel free to reach out to learn more!"}
                         extraProps={{
                             defaultValue: profile.personalSummary,
                         }}
                     />
                 </div>
-                <div className="col s6 input-field inline">
-                    <label htmlFor="school"><i className="fa fa-university fa-1x" aria-hidden="true"></i> School</label>
+                <div className="col s4 input-field inline">
+                    <label htmlFor="school"><i className="fa fa-university fa-1x" aria-hidden="true"></i> School/Alma Mater</label>
                     <input type="text" className="validate" id="school" onChange={e => getValueFunc('school', onChangeHelper(e))} defaultValue={profile.school} />
                 </div>
-                <div className="col s6 input-field inline">
+                <div className="col s2 input-field inline">
                     <label htmlFor="class">Class of: </label>
                     <input id="class" type="number" min="1950" max="2035" className="validate" onChange={e => getValueFunc('classOf', onChangeHelper(e))} defaultValue={profile.classOf} />
+                </div>
+                <div className="col s6 input-field inline">
+                    <label htmlFor="occupation"><i className="fa fa-industry fa-1x" aria-hidden="true"></i> Occupation/Industry</label>
+                    <input type="text" className="validate" id="school" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
                 </div>
                 <div className="col s12">
                     <p className="range-field">
@@ -188,6 +197,15 @@ class ProfileComponent extends Component {
                         <label htmlFor="amount" style={{ float: 'right' }} >A Party Animal</label>
                         <input type="range" id="personality" min="0" max="100" onChange={e => getValueFunc('personality', onChangeHelper(e))} defaultValue={profile.personality} />
                     </p>
+                </div>
+                <div className="col s12">
+                    <div className="card-panel teal">
+                        <span className="white-text">
+                            For a more compatible swap, check off your interests below. If
+                            you can’t find an interest you would like to include, list it in the “Describe
+                            Yourself” section.
+                        </span>
+                    </div>
                 </div>
                 <ButtonArrayComp getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} defaultValues={interests} />
                 <div className="col s12">

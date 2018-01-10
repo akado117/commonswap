@@ -12,6 +12,7 @@ import ProfileComponent from '../components/profileComps/ProfileComponent';
 import PlaceComponent from '../components/placeComponents/PlaceComponent';
 import CreditCard from '../components/verificationComponent/CreditCard';
 import CardForm from '../components/verificationComponent/CardForm';
+import Verify from '../components/trust/Verify';
 import { obfiscateId } from '../../../imports/helpers/DataHelpers';
 
 import ProfileActions from '../actions/ProfileActions';
@@ -142,7 +143,7 @@ class Profile extends React.Component {
                 />);
         }
         else if (this.state.selectedIndex === 2) {
-            internalComponent = <CardForm/>;
+            internalComponent = <Verify/>;
         }
         const path = browserHistory.getCurrentLocation().pathname === '/profile';
         return (

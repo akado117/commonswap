@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
-import Card from './Card';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import handleSignup from '../../../../imports/modules/signup';
 import ProfileActions from '../../actions/ProfileActions';
-import {grey50} from 'material-ui/styles/colors';
 
-class CardForm extends Component {
+class Emergency extends Component {
     componentDidMount() {
         if (Object.keys(this.props.profile.card).length < 1)
             this.props.profileActions.retrieveCardInfo();
@@ -18,37 +16,34 @@ class CardForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        handleSignup({ component: this });
+
     };
 
     render() {
-        const { card } = this.props.profile;
         return (
             <div>
                 <AppBar
-                    title={<span><FontIcon className="material-icons" color={grey50}>lock</FontIcon> Billing Information</span>}
+                    title={<span>Emergency Contacts</span>}
                     showMenuIconButton={false}
                     style={{ marginBottom: '10px', zIndex: '0' }}
                 />
                 <div className="row">
-                    <div className="col s12">
-                        <p></p>
+                    <div className="col s6 input-field inline">
+                        <label htmlFor="school">Name</label>
+                        <input type="text" className="validate" id="school" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
                     </div>
-                     <div className="col s12">
-                        <div className="col s6">
-                            {card.last4}
-                        </div>
-                        <div className="col s6">
-                            {card.brand}
-                        </div>
+                    <div className="col s6 input-field inline">
+                        <label htmlFor="school">Relationship</label>
+                        <input type="text" className="validate" id="school" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
+                    </div>
+                    <div className="col s6 input-field inline">
+                        <label htmlFor="school"><i className="fa fa-phone fa-1x" aria-hidden="true"></i>Phone Number</label>
+                        <input placeholder="This information will be kept private" type="text" className="validate" id="emergencyPhone" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col s8" style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
-                        <Card ref={card => (this.card = card)} />
-                    </div>
                     <div className="col s12">
-                        <RaisedButton label="Update Card" primary onClick={this.handleSubmit} />
+                        <RaisedButton label="Save Contacts" primary onClick={this.handleSubmit} />
                     </div>
                 </div>
             </div>
@@ -70,10 +65,10 @@ function mapStateToProps(state) {
     };
   }
   
-  CardForm.propTypes = {
+  Emergency.propTypes = {
     user: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     profileActions: PropTypes.object.isRequired,
   };
 
-  export default connect(mapStateToProps, mapDispatchToProps)(CardForm);
+  export default connect(mapStateToProps, mapDispatchToProps)(Emergency);

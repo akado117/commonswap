@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 
-function TextFieldStandardized({ floatingLabelText, onChange, extraProps }) {
+function TextFieldStandardized({ floatingLabelText, onChange, extraProps, hintText }) {
     return (<TextField
         floatingLabelText={floatingLabelText}
         underlineStyle={{ borderBottomColor: '#9e9e9e' }}
@@ -10,6 +10,7 @@ function TextFieldStandardized({ floatingLabelText, onChange, extraProps }) {
         multiLine
         rows={1}
         rowsMax={9}
+        hintText={hintText}
         fullWidth
         onChange={onChange}
         floatingLabelShrinkStyle={{ top: '33px', fontSize: '1.05rem', color: '#9e9e9e' }}

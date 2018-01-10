@@ -13,29 +13,24 @@ class Footer extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div className="col l4 s12">
-                            <h5 className="white-text">CommonSwap, LLC</h5>
+                            <h5 className="white-text">CommonSwap, Inc.</h5>
                             <div className="grey-text text-lighten-4">
-                                <div className="col s2">
+                                {/* <div className="col s2">
                                     <i className="fa fa-twitter fa-2x" aria-hidden="true"></i>
+                                </div> */}
+                                <div className="col s2">
+                                    <a href="https://www.instagram.com/CommonSwap/" className="grey-text text-lighten-3"><i className="fa fa-instagram fa-2x" aria-hidden="true"></i></a>
                                 </div>
                                 <div className="col s2">
-                                    <i className="fa fa-instagram fa-2x" aria-hidden="true"></i>
-                                </div>
-                                <div className="col s2">
-                                    <i className="fa fa-facebook fa-2x" aria-hidden="true"></i>
-                                </div>
-                                <div className="col s2">
-                                    <i className="fa fa-pinterest-p fa-2x" aria-hidden="true"></i>
+                                    <a href="https://www.facebook.com/CommonSwap" className="grey-text text-lighten-3"><i className="fa fa-facebook fa-2x" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
                         <div className="col l2 s12">
                             <h5 className="white-text">About</h5>
                             <ul>
-                                <li><Link to="/about" className="grey-text text-lighten-3">About us</Link></li>
+                                <li><Link to="/about" className="grey-text text-lighten-3">Our purpose</Link></li>
                                 <li><Link to="/testimonials" className="grey-text text-lighten-3">Testimonials</Link></li>
-                                <li><Link to="/about/1" className="grey-text text-lighten-3" href="#!">Team</Link></li>
-                                <li><a className="grey-text text-lighten-3" href="#!">Press</a></li>
                             </ul>
                         </div>
                         <div className="col l3 s12">

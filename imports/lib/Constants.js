@@ -31,8 +31,8 @@ export const defaultImageUrls = {
         mainLogo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/cSwapLogo2.JPG',
     },
     videos: {
-        homeVideoPoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/introposter.png',
-        homeVideo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/commonswap-intro_WR.m4v',
+        homeVideoPoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/dreamPoster.png',
+        homeVideo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/Following+my+Dreams+Changed+my+Life+WR.m4v',
         whoAreWePoster: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png',
         whoAreWe: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/CommonSwap+Demo+Video_WR.m4v',
     },
@@ -106,6 +106,7 @@ export const FieldsForBrowseProfile = {
     state: 1,
     school: 1,
     classOf: 1,
+    occupation:1,
     profileImg: 1,
     interests: 1,
     amenities: 1,

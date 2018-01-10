@@ -71,7 +71,7 @@ export default [
     emergencyContacts: [EmergencyContact]
     school: String
     classOf: String
-    work: String
+    occupation: String
     timeZone: String
     cleanliness: Int
     extroversion: Int

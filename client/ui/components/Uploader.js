@@ -43,6 +43,111 @@ class Uploaders extends React.Component {
         }
     }
 
+    getFilePart(file) {
+        let filePart;
+        if (file.slice) {
+            filePart = file.slice(0, 131072);
+        } else if (file.webkitSlice) {
+            filePart = file.webkitSlice(0, 131072);
+        } else if (file.mozSlice) {
+            filePart = file.mozSlice(0, 131072);
+        } else {
+            filePart = file;
+        }
+        return filePart;
+    }
+
+    getOrientation(file, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+
+            var view = new DataView(e.target.result);
+            if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
+            var length = view.byteLength, offset = 2;
+            while (offset < length) {
+                var marker = view.getUint16(offset, false);
+                offset += 2;
+                if (marker == 0xFFE1) {
+                    if (view.getUint32(offset += 2, false) != 0x45786966) return callback(-1);
+                    var little = view.getUint16(offset += 6, false) == 0x4949;
+                    offset += view.getUint32(offset + 4, little);
+                    var tags = view.getUint16(offset, little);
+                    offset += 2;
+                    for (var i = 0; i < tags; i++)
+                        if (view.getUint16(offset + (i * 12), little) == 0x0112)
+                            return callback(view.getUint16(offset + (i * 12) + 8, little));
+                }
+                else if ((marker & 0xFF00) != 0xFF00) break;
+                else offset += view.getUint16(offset, false);
+            }
+            return callback(-1);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    rotateImageBasedOnOrientation(orientation, ctx, canvas) {
+        const { height, width } = canvas;
+        ctx.save();
+        if (orientation > 4) {
+            canvas.width = height;
+            canvas.height = width;
+        }
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        switch (orientation) {
+        case 2:
+            // horizontal flip
+            //ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            break;
+        case 3:
+            // 180° rotate left
+            //ctx.translate(canvas.width, canvas.height);
+            ctx.rotate(Math.PI);
+            break;
+        case 4:
+            // vertical flip
+            //ctx.translate(0, canvas.height);
+            ctx.scale(1, -1);
+            break;
+        case 5:
+            // vertical flip + 90 rotate right
+            ctx.rotate(0.5 * Math.PI);
+            ctx.scale(1, -1);
+            break;
+        case 6:
+            // 90° rotate right
+            ctx.rotate(0.5 * Math.PI);
+            //ctx.translate(0, -canvas.height);
+            break;
+        case 7:
+            // horizontal flip + 90 rotate right
+            ctx.rotate(0.5 * Math.PI);
+            //ctx.translate(canvas.width, -canvas.height);
+            ctx.scale(-1, 1);
+            break;
+        case 8:
+            // 90° rotate left
+            ctx.rotate(-0.5 * Math.PI);
+            //ctx.translate(-canvas.width, 0);
+            break;
+        }
+    }
+    drawtoCanvasFromBlob(ctx, blob, redrawnCanvas, imgDim) {
+        return new Promise((res, rej) => {
+            var img = new Image();
+
+            img.onload = function() {
+                ctx.drawImage(img, - imgDim.width / 2, - imgDim.height / 2);
+                //window.image = img;
+                //window.cvs = redrawnCanvas;
+                //window.ctx = ctx;
+                res({blob, redrawnCanvas});
+            };
+
+            img.src = URL.createObjectURL(blob);
+        });
+    }
+
     willNeedResize(file, maxDimensionProp) {
         const image = new Image();
         image.src = file.preview;
@@ -60,15 +165,27 @@ class Uploaders extends React.Component {
         const offPageCVS = document.createElement('canvas');
         offPageCVS.width = width;
         offPageCVS.height = height;
-        return pica.resize(image, offPageCVS, this.state.picaOptions)
-            .then(result => pica.toBlob(result, 'image/jpeg', 100))
-            .then(blob => {
-                blob.name = file.name;
-                blob.lastModified = file.lastModified;
-                blob.lastModifiedDate = file.lastModifiedDate;
-                console.log('resize ran');
-                return blob;
-            });
+        let orientation;
+        return new Promise((res, rej) => {
+            this.getOrientation(file, res);
+        }).then((orient) => {
+            orientation = orient;
+            return pica.resize(image, offPageCVS, this.state.picaOptions);
+        }).then((result) => {
+            return pica.toBlob(result, 'image/jpeg', 100);
+        }).then(blob => {
+            const ctx = offPageCVS.getContext('2d');
+            this.rotateImageBasedOnOrientation(orientation, ctx, offPageCVS);
+            return this.drawtoCanvasFromBlob(ctx, blob, offPageCVS, { width, height });
+        }).then(({blob, redrawnCanvas}) => {
+            return pica.toBlob(redrawnCanvas, 'image/jpeg', 100);
+        }).then((blob) => {
+            blob.name = file.name;
+            blob.lastModified = file.lastModified;
+            blob.lastModifiedDate = file.lastModifiedDate;
+            console.log('resize ran');
+            return blob;
+        });
     }
 
     uploadtoS3 = (file) => {
@@ -119,6 +236,8 @@ class Uploaders extends React.Component {
             </div>);
     }
 }
+
+//window.setOrientation = Uploaders.rotateImageBasedOnOrientation;
 
 Uploaders.propTypes = {
     file: PropTypes.object.isRequired,
@@ -260,5 +379,6 @@ Uploader.defaultProps = {
     maxPicaDimensionProp: undefined,
     uploaderText: 'Please drop files to upload into zone or click to open file picker',
 };
+
 
 export default Uploader;

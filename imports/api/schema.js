@@ -161,6 +161,7 @@ export default [
     fileName: String
     type: String
     added: Int
+    position: Int
   }
   
   type PlaceForBrowse {

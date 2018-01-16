@@ -46,6 +46,9 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
         const numberUpdated = FileUrls.update(searchForObj, { $set: { active: false } });
         consoleLogHelper(`${numberUpdated} Images changed to inactive`, genericSuccessCode, userId, '');
     }
+    if (typeof fileObj.position === 'number') { //could be built to have the server auto Increment but why spend the comput and db calls to do it
+        insertObj.position = fileObj.position;
+    }
     const insertGUID = FileUrls.upsert(searchObj, insertObj);
 
     consoleLogHelper(`Image ${insertGUID.insertedId ? `added with key ${insertGUID.insertedId}` : `updated with name of ${insertObj.fileName}`}`, genericSuccessCode, userId, insertObj.fileName);
@@ -418,7 +421,7 @@ Meteor.methods({
         }
         try {
             const placeForBrowse = Places.findOne({ _id }, { fields: FieldsForBrowseProfile }) || {};
-            placeForBrowse.placeImgs = FileUrls.find({ placeId: _id, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
+            placeForBrowse.placeImgs = FileUrls.find({ placeId: _id, deleted: false }, { fields: FieldsForBrowseProfile, sort: { position: 1 } }).fetch();
             consoleLogHelper('Found one place', genericSuccessCode, Meteor.userId(), placeForBrowse._id);
             return serviceSuccessBuilder({}, genericSuccessCode, {
                 serviceMessage: `Found one place via _id of ${_id}`,
@@ -481,7 +484,7 @@ Meteor.methods({
                 placeIds.push(place._id);
                 ownerUserIds.push(place.ownerUserId);
             });
-            const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile }).fetch();
+            const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile, sort: { position: 1 } }).fetch();
             consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId, JSON.stringify(searchObj));
             return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
                 serviceMessage: `We found ${places.length} places within date range`,
@@ -506,7 +509,7 @@ Meteor.methods({
             _id: 1,
             url: 1,
         };
-        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn }).fetch();
+        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn, sort: { position: 1 } }).fetch();
 
         consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
         return serviceSuccessBuilder({}, genericSuccessCode, {
@@ -534,6 +537,35 @@ Meteor.methods({
             console.log(err.stack);
             consoleErrorHelper(`Delete Place image for image id: ${_id} unsuccessful`, placeErrorCode, userId, err);
             return serviceErrorBuilder(`Delete Place image for image id: ${_id} unsuccessful`, placeErrorCode, err);
+        }
+    },
+    'images.place.saveOrder': function saveImageOrder({ placeImgs }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
+        try {
+            const bulkUpdates = placeImgs.map((img, idx) => {
+                return {
+                    updateOne: {
+                        filter: { _id: img._id },
+                        update: { $set: { position: img.position || idx } },
+                    },
+                };
+            });
+
+
+            const filesGUID = FileUrls.rawCollection().bulkWrite(bulkUpdates);
+
+            consoleLogHelper(`Successfully updated ${filesGUID.updated} place Images' positions`, genericSuccessCode, userId);
+            return serviceSuccessBuilder({ guidReturn: filesGUID }, genericSuccessCode, {
+                serviceMessage: `Successfully updated ${filesGUID.updated} place Images`,
+                data: {
+                    placeImgs,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Update Place Image Order was unsuccessful for ${userId}`, placeErrorCode, userId, err);
+            return serviceErrorBuilder(`Update Place Image Order was unsuccessful ${userId}`, placeErrorCode, err);
         }
     },
     'images.profile.store': function placeImageStore(fileObj) {

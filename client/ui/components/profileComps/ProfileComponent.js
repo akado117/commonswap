@@ -182,7 +182,7 @@ class ProfileComponent extends Component {
                 </div>
                 <div className="col s6 input-field inline">
                     <label htmlFor="occupation"><i className="fa fa-industry fa-1x" aria-hidden="true"></i> Occupation/Industry</label>
-                    <input type="text" className="validate" id="school" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
+                    <input type="text" className="validate" id="occupation" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
                 </div>
                 <div className="col s12">
                     <p className="range-field">

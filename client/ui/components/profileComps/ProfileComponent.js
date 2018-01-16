@@ -215,7 +215,7 @@ class ProfileComponent extends Component {
                                 icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                                 actionType={actionTypes.SAVE_PROFILE}
                                 buttonText="Save"
-                                onClick={this.props.saveProfile}
+                                onClick={() => this.props.saveProfile()}
                             />
                         </div>
                         <div className="col s6 m4 l3">

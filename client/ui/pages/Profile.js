@@ -65,7 +65,7 @@ class Profile extends React.Component {
     didUserChange = (prevProps, props) => {
         const oldUser = prevProps.user;
         const newUser = props.user;
-        return (Object.keys(oldUser).length === 0 && Object.keys(newUser).length) || (Object.keys(oldUser).length && Object.keys(newUser).length === 0);
+        return (Object.keys(oldUser).length !== Object.keys(newUser).length);
     }
 
     addValueOnChange = (section, key, value) => {

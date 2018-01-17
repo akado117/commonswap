@@ -61,7 +61,7 @@ class CardForm extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col m4 s12">
+                    <div className="col m4 s9">
                         <ConnectedButton
                             icon={<i className="fa fa-floppy-o" aria-hidden="true"></i>}
                             buttonText="Update Card"

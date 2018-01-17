@@ -160,15 +160,15 @@ class ProfileComponent extends Component {
                         }}
                     />
                 </div>
-                <div className="col s4 input-field inline">
+                <div className="col s9 m4 input-field inline">
                     <label htmlFor="school"><i className="fa fa-university fa-1x" aria-hidden="true"></i> School/Alma Mater</label>
                     <input type="text" className="validate" id="school" onChange={e => getValueFunc('school', onChangeHelper(e))} defaultValue={profile.school} />
                 </div>
-                <div className="col s2 input-field inline">
+                <div className="col s3 m2 input-field inline">
                     <label htmlFor="class">Class of: </label>
                     <input id="class" type="number" min="1950" max="2035" className="validate" onChange={e => getValueFunc('classOf', onChangeHelper(e))} defaultValue={profile.classOf} />
                 </div>
-                <div className="col s6 input-field inline">
+                <div className="col s12 m6 input-field inline">
                     <label htmlFor="occupation"><i className="fa fa-industry fa-1x" aria-hidden="true"></i> Occupation/Industry</label>
                     <input type="text" className="validate" id="occupation" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
                 </div>

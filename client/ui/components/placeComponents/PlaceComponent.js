@@ -184,7 +184,7 @@ class PlaceComponent extends Component {
                         <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms Available</label>
                         <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e))} defaultValue={place.bedrooms} />
                     </div>
-                    <div className="col s6 input-field inline">
+                    <div className="col m6 s12 input-field inline">
                         <SelectBuilder
                             label={<span><i className="fa fa-handshake-o fa-1x" aria-hidden="true"></i> What will your swap have access to?</span>}
                             onChange={value => this.props.getValueFunc('access', value)}
@@ -221,7 +221,7 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12">
                         <TextFieldStandardized
-                            floatingLabelText="What are some of your top recommendations for visitors in your city?  (Ex: Restaurants, museums, bars, etc.)"
+                            floatingLabelText="What are some of your top recommendations for visitors in your city?"
                             onChange={(e, value) => getValFunc('recommendations', value)}
                             hintText={"I would recommend checking out the famous DC landmarks – the Monument, Jefferson Memorial, Lincoln Memorial, etc. if you haven’t done so. U St is a lively area with several bars and restaurants."}
                             extraProps={{ defaultValue: place.recommendations }}

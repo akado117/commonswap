@@ -44,7 +44,7 @@ class Emergency extends Component {
                 />
                 <div className="row">
 
-                    <div className="col s6 input-field inline">
+                    <div className="col s12 m6 input-field inline">
                         <label htmlFor="firstName">First Name</label>
                         <input 
                             type="text" 
@@ -54,7 +54,7 @@ class Emergency extends Component {
                             defaultValue={this.state.firstName} />
                     </div>
 
-                    <div className="col s6 input-field inline">
+                    <div className="col s12 m6 input-field inline">
                         <label htmlFor="lastName">Last Name</label>
                         <input 
                             type="text" 
@@ -64,7 +64,7 @@ class Emergency extends Component {
                             defaultValue={this.state.lastName} />
                     </div>
 
-                    <div className="col s6 input-field inline">
+                    <div className="col s12 m6 input-field inline">
                         <label htmlFor="realtionship">Relationship</label>
                         <input 
                             type="text" 
@@ -74,7 +74,7 @@ class Emergency extends Component {
                             defaultValue={this.state.relationship} />
                     </div>
 
-                    <div className="col s6 input-field inline">
+                    <div className="col s12 m6 input-field inline">
                         <label htmlFor="phone">Phone</label>
                         <input 
                             type="text" 
@@ -86,7 +86,7 @@ class Emergency extends Component {
                 
                 </div>
                 <div className="row">
-                    <div className="col m4 s12">
+                    <div className="col m4 s9">
                         <ConnectedButton
                             icon={<i className="fa fa-floppy-o" aria-hidden="true"></i>}
                             actionType={actionTypes.SAVE_CONTACT}

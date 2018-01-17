@@ -282,8 +282,8 @@ class ViewProfile extends React.Component {
                                     </p>
                                 </div>
                                 <div className="col s12">
-                                    <strong>About the area and neighborhood: </strong>
-                                    <p>{place.notesOnArea}</p>
+                                    <strong>Top recommendations for visitors: </strong>
+                                    <p>{place.recommendations}</p>
                                 </div>
                             </div>
                         </div>

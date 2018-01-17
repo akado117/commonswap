@@ -37,6 +37,8 @@ export const actionTypes = {
     SERVICE_RETURNED: 'SERVICE_RETURNED',
     EMAIL_SENT: 'EMAIL_SENT',
     CARDS_CHARGED: 'CARDS_CHARGED',
+    SAVE_CONTACT: 'SAVE_CONTACT',
+    SAVE_CARD: 'SAVE_CARD',
 };
 
 const serviceMessages = {

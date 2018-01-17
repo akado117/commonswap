@@ -13,15 +13,14 @@ import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
 import ConnectedButton from '../forms/ConnectedButton';
 
 const BUTTONS = [
-    { label: 'Essentials (towels, etc)', name: 'essentials' },
-    { label: 'Wifi', name: 'wiFi' },
-    { label: 'Heat', name: 'heat' },
-    { label: 'Gym/ fitness center', name: 'gym' },
-    { label: 'Washer/ dryer', name: 'washerDryer' },
-    { label: 'Kitchen Appliances', name: 'kitchen' },
-    { label: 'Closet/ drawers', name: 'dressers' },
-    { label: 'Pool', name: 'pool' },
+    { label: 'Gym/Fitness Center', name: 'gym' },
     { label: 'Parking', name: 'parking' },
+    { label: 'Handicap Friendly', name: 'handicap' },
+    { label: 'Heat/Air Conditioning', name: 'heat' },
+    { label: 'WiFi', name: 'wiFi' },
+    { label: 'Kitchen Appliances', name: 'kitchen' },
+    { label: 'Pool', name: 'pool' },
+    { label: 'Washer/Dryer', name: 'washer' },
 ];
 
 function onChangeHelper(event) {
@@ -124,6 +123,13 @@ class PlaceComponent extends Component {
         const dislaimerText = this.state.showDisclaimer
             ? 'Your address will be kept private for security reasons until you have confirmed to swap. If you do not wish to disclose your full address, we recommend using the closest intersection using the interactive map below. (i.e.. 14th st and 6th ave, New York, NY)'
             : 'Click to see security information about your address';
+        const accessFields = {
+            defaultField: <span><i className="fa fa-handshake-o fa-1x" aria-hidden="true"></i> Access to: </span>,
+            fields: {
+                displayNames: ['Entire Place', 'Private Room', 'Shared Room'],
+                values: ['entire', 'private', 'shared'],
+            },
+        };
         return (
             <div className="place-container">
                 <Address getValueFunc={(key, value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
@@ -153,10 +159,10 @@ class PlaceComponent extends Component {
                         />
                         <label htmlFor="short-desc"><i className="fa fa-pencil" aria-hidden="true"></i> Short description about your place</label>
                     </div>
-                    <div className="col s6 input-field inline">
+                    {/* <div className="col s6 input-field inline">
                         <label htmlFor="rent"><i className="fa fa-usd" aria-hidden="true"></i> Current Monthly Rent</label>
                         <input type="number" min="0" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e))} defaultValue={place.rent} />
-                    </div>
+                    </div> */}
                     <div className="col s6 input-field inline">
                         <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e))} defaultValue={place.beds} />
                         <label htmlFor="beds"><i className="fa fa-bed" aria-hidden="true"></i> Guest beds Available</label>
@@ -173,45 +179,17 @@ class PlaceComponent extends Component {
                         <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms Available</label>
                         <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e))} defaultValue={place.bedrooms} />
                     </div>
-                    <div className="col s6 input-field inline" style={{ paddingRight: '0px' }}>
-                        <label htmlFor="pet-type">What kind of pets are allowed?</label>
-                        <input type="text" className="" id="pet-type" onChange={e => getValFunc('typeOfPets', onChangeHelper(e))} defaultValue={place.typeOfPets} />
+                    <div className="col s6 input-field inline">
+                        <SelectBuilder
+                            label={<span><i className="fa fa-handshake-o fa-1x" aria-hidden="true"></i> What will your swap have access to?</span>}
+                            onChange={value => this.props.getValueFunc('access', value)}
+                            selectArrObj={accessFields.fields}
+                            defaultSelection={accessFields.defaultField}
+                            defaultValue={place.access}
+                            extraProps={{ floatingLabelFixed: true }}
+                        />
                     </div>
-                    <div className="col s12 m6 custom-switch" >
-                        <div>Smoking Allowed?</div>
-                        <div className="switch">
-                            <label>
-                                No
-                                <input type="checkbox" onChange={e => this.checkBoxHelper(e, 'smoking')} checked={this.state.smoking || false} />
-                                <span className="lever"></span>
-                                Yes
-                            </label>
-                        </div>
-                    </div>
-                    <div className="col s12 m6 custom-switch" >
-                        <div>Allow Pets?</div>
-                        <div className="switch">
-                            <label>
-                                No
-                                <input type="checkbox" onChange={e => this.checkBoxHelper(e, 'pets')} checked={this.state.pets || false} />
-                                <span className="lever"></span>
-                                Yes
-                            </label>
-                        </div>
-                    </div>
-                    <div className="col s6 input-field inline" >
-                    {/* <SelectBuilder
-                        label={<span><i className="fa fa-home fa-1x" aria-hidden="true"></i>Home type</span>}
-                        onChange={value => getValueFunc('', value)}
-                        selectArrObj={}
-                        selectArrObj={genderFields.fields}
-                        defaultSelection={genderFields.defaultField}
-                        defaultValue={profile.gender}
-                        extraProps={{ floatingLabelFixed: true }}
-
-                    /> */}
-                    </div>
-                    <div className="amenities-container">
+                    <div className="col s12">
                         <ButtonArrayComp
                             getValueFunc={(key, value) => this.props.getValueFunc('amenities', key, value)}
                             defaultValues={amenities}
@@ -238,20 +216,37 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12">
                         <TextFieldStandardized
-                            floatingLabelText="About the Area (Transportation, What's Near, etc.)"
-                            onChange={(e, value) => getValFunc('notesOnArea', value)}
-                            extraProps={{ defaultValue: place.notesOnArea }}
+                            floatingLabelText="What are some of your top recommendations for visitors in your city?  (Ex: Restaurants, museums, bars, etc.)"
+                            onChange={(e, value) => getValFunc('recommendations', value)}
+                            hintText={"I would recommend checking out the famous DC landmarks – the Monument, Jefferson Memorial, Lincoln Memorial, etc. if you haven’t done so. U St is a lively area with several bars and restaurants."}
+                            extraProps={{ defaultValue: place.recommendations }}
+                        />
+                    </div>
+                    <div className="col s12">
+                        <TextFieldStandardized
+                            floatingLabelText="Include any general guidelines you would like to inform your swap:"
+                            onChange={(e, value) => getValFunc('generalNotes', value)}
+                            hintText={"Please take your shoes off when entering my place. In addition, smoking is not allowed in my place. Don’t forget to lock the door anytime you leave!"}
+                            extraProps={{ defaultValue: place.generalNotes }}
                         />
                     </div>
                     {this.getImageSection(this.props.placeImages)}
                     <div className="col s12">
                         <div className="row">
-                            <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">
+                            <div className="col s6 m4 l3 offset-m4 offset-l6">
                                 <ConnectedButton
                                     icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                                     actionType={actionTypes.SAVE_PLACE}
                                     buttonText="Save"
                                     onClick={this.props.savePlace}
+                                />
+                            </div>
+                            <div className="col s6 m4 l3">
+                                <ConnectedButton
+                                    icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                    actionType={actionTypes.SAVE_PROFILE}
+                                    buttonText="Next"
+                                    onClick={() => this.props.savePlace(true)}
                                 />
                             </div>
                         </div>

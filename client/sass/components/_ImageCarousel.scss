@@ -21,10 +21,59 @@
   .image-gallery-bullets {
     transform: scale(0.75);
   }
-  .image-carousel-delete-button {
+  .custom-control-wrapper {
     position: absolute;
-    z-index: 5;
-    right: 1.5vw;
+    width: 100%;
+    height: 100%;
     top: 1.5vw;
+    @media #{$large-and-up} {
+      top: 1vw;
+    }
+    .move-button-wrapper {
+      position: absolute;
+      z-index: 5;
+      left: 1.5vw;
+
+      display: inline-flex;
+      i {
+        color: $primary-accent-color ;
+      }
+      .move-right {
+        margin-left: 1.5vw;
+      }
+    }
+    .inverse {
+      margin-left: 1px;
+      margin-top: -1px;
+      .background-div {
+        background-color: $primary-accent-color;
+        width: 30px;
+        height: 30px;
+        @media #{$small-and-down} {
+          .background-div {
+            width: 25px;
+            height: 25px;
+
+          }
+        }
+      }
+      i {
+        font-weight: bold;
+        font-size: 1.1em;
+        top: 9px;
+        left: -6px;
+        color: white;
+        @media #{$small-and-down} {
+          top: 8px;
+          left: -2px;
+        }
+      }
+    }
+    .image-carousel-delete-button {
+      position: absolute;
+      z-index: 5;
+      right: 1.5vw;
+    }
+
   }
 }

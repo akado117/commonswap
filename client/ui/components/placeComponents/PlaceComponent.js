@@ -85,7 +85,12 @@ class PlaceComponent extends Component {
             />);
         } else {
             const remappedImages = images.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
-            component = <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} deleteImageHandler={this.deletePlaceImage} />;
+            component = <ImageCarousel
+                images={remappedImages}
+                extraProps={{ showBullets: true, slideDuration: 300 }}
+                deleteImageHandler={this.deletePlaceImage}
+                placeImgs={images}
+            />;
         }
         const toggleText = !this.state.uploadActive ? '- Click to Add Photos' : '- Click to See Photos'
         return (

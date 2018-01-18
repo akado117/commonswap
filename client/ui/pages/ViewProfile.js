@@ -14,6 +14,7 @@ import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
+import SendMessage from '../components/viewProfile/SendMessage';
 import ImageCarousel from '../components/ImageCarousel';
 import ModalActions from '../actions/ModalActions';
 import ChargeCardModal from '../components/dialog/ChargeCardModal';
@@ -146,6 +147,17 @@ class ViewProfile extends React.Component {
         console.log(data);
         this.chargeCardModal(data, props, currentPlace, modalActions);
     }
+    
+    sendMessage = (data) => {
+        const { placeId } = this.props.params;
+        console.log('Send message data');
+        console.log(data);
+        this.props.profileActions.sendMessage({
+            placeId: placeId,
+            Question: data.question,
+            User: this.props.user,
+        });
+    }
 
     render() {
         let internalComponent;
@@ -221,6 +233,12 @@ class ViewProfile extends React.Component {
                                 disableButton={!placeId || placeId === this.props.user.userId}
                             />
                         </div>
+                        <div className="col s12 m4 marg-top">
+                            <SendMessage 
+                                sendMessage={data => this.sendMessage(data)}
+                                disableButton={!placeId || placeId === this.props.user.userId}
+                            />
+                        </div>
                     </div>
                     <div className="col s12 z-depth-2">
                         <div className="row">
@@ -229,13 +247,6 @@ class ViewProfile extends React.Component {
                                     <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />    
                                 </div>
                             </div>
-                            {/* <div className="col s12 l8 main-image">
-                                <img src={placeImgs[0] ? placeImgs[0].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '450px', width: '100%' }} />
-                            </div>
-                            <div className="col l4 scroll-image">
-                                <img src={placeImgs[1] ? placeImgs[1].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                                <img src={placeImgs[2] ? placeImgs[2].url : 'http://stretchflex.net/photos/apartment.jpeg'} alt="" style={{ height: '225px', width: '100%' }} />
-                            </div> */}
                         </div>
                     </div>
                     <div className="row">

@@ -45,6 +45,30 @@ const ProfileActions = {
             }
         });
     },
+    sendMessage: (data) => {
+        const { Question, User, placeId } = data;
+        return dispatch => Meteor.call('sendMessage', data, (error, result) => {
+            if (error) {
+                console.log(error);
+                return dispatch({
+                    type: `${actionTypes.MESSAGE_SENT}_${FAILURE}`,
+                    ...error,
+                });
+            } else {
+                if (result.data) {
+                    dispatch({
+                        type: `${actionTypes.MESSAGE_SENT}_${SUCCESS}`,
+                        data: result.data,
+                    });
+                    return undefined;
+                };
+                return dispatch({
+                    type: `${actionTypes.MESSAGE_SENT}_${FAILURE}`,
+                    ...error,
+                });
+            }
+        })
+    },
     retrieveCardInfo: () => {
         return dispatch => Meteor.call('getCardInfo', (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_CARD_INFO, dispatch);

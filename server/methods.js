@@ -315,6 +315,37 @@ Meteor.methods({
             return serviceErrorBuilder(`Email for new swap from ${User} failed`, upsertFailedCode, err);
         }
     },
+    sendMessage(data) {
+
+        const { Question, User, placeId } = data;
+        const ownerPlace = Places.findOne({ _id: placeId }) || {};
+        const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
+        const userId = Meteor.userId();
+        const RequestorPlace = ownerPlace;
+        const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
+
+        const sync = Meteor.wrapAsync(HTTP.call);
+        try {
+            const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SendMessage?code=qTYrMobecKFQrzZCv9OajHgGSD5BmHl9r6P2onSyBoovwzFo7du2LA==', {
+                data: {
+                    User,
+                    Question,
+                    Profile,
+                    RequestorPlace,
+                    RequestedPlace,
+                },
+            });
+            consoleLogHelper(`Email message from ${User} sent`, genericSuccessCode, userId, `Place Id of interest ${placeId}`);
+            return serviceSuccessBuilder(res.data, genericSuccessCode, {
+                serviceMessage: `Email message from ${User} sent`,
+                data: res.data,
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Email message from ${User} failed`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder(`Email message from ${User} failed`, upsertFailedCode, err);
+        }
+    },
 
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();

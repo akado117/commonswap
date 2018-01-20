@@ -99,7 +99,7 @@ function sendAcceptEmail(swapObj) {
     const Dates = dates;
     const sync = Meteor.wrapAsync(HTTP.call);
     try {
-        const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA==', {
+        const res = sync('POST', Meteor.settings.azureLambdaURLS.sendAcceptEmail, {
             data: {
                 Requester,
                 Requestee,
@@ -291,7 +291,7 @@ Meteor.methods({
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
-            const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+            const res = sync('POST', Meteor.settings.azureLambdaURLS.requestEmail, {
                 data: {
                     User,
                     Arrival,
@@ -324,7 +324,7 @@ Meteor.methods({
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
-            const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SendMessage?code=qTYrMobecKFQrzZCv9OajHgGSD5BmHl9r6P2onSyBoovwzFo7du2LA==', {
+            const res = sync('POST', Meteor.settings.azureLambdaURLS.sendMessage, {
                 data: {
                     User,
                     Question,

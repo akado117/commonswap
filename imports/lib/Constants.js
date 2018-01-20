@@ -98,6 +98,7 @@ export const FieldsForBrowseProfile = {
     shortDesc: 1,
     numOfGuests: 1,
     bedrooms: 1,
+    access: 1,
     bathrooms: 1,
     coords: 1,
     url: 1,
@@ -113,7 +114,8 @@ export const FieldsForBrowseProfile = {
     address: 1,
     profile: 1,
     specialInst: 1,
-    notesOnArea: 1,
+    recommendations: 1,
+    generalNotes: 1,
     detailedDesc: 1,
 };
 

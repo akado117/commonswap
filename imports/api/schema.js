@@ -36,25 +36,34 @@ export default [
     _id: String!
     ownerUserId: String
     profile: Profile
-    name: String!
+    firstName: String!
+    lastName: String!
     phone: String!
-    email: String!
-    relation: String
+    relationship: String
   }
   
   type Interests {
     _id: String!
     ownerUserId: String
     profile: Profile
-    photography: Boolean
-    wineries: Boolean
-    beachBum: Boolean
-    film: Boolean
-    hiking: Boolean
+    books: Boolean
+    breweries: Boolean
+    cars: Boolean
     clubber: Boolean
-    liveMusic: Boolean
+    environment: Boolean
+    fashion: Boolean
+    film: Boolean
+    arts: Boolean
     foodie: Boolean
+    gaming: Boolean
+    fitness: Boolean
+    hiking: Boolean
+    liveMusic: Boolean
     orgTour: Boolean
+    animals: Boolean
+    photography: Boolean
+    politics: Boolean
+    wineries: Boolean
   }
   
   type Profile {
@@ -113,15 +122,14 @@ export default [
     profileId: String
     place: Place
     placeId: String
-    essentials: Boolean
-    wiFi: Boolean
-    heat: Boolean
     gym: Boolean
-    washerDryer: Boolean
-    kitchen: Boolean
-    dressers: Boolean
-    pool: Boolean
     parking: Boolean
+    handicap: Boolean
+    heat: Boolean
+    wiFi: Boolean
+    kitchen: Boolean
+    pool: Boolean
+    washer: Boolean
   }
   
   type PlaceDate {
@@ -145,10 +153,12 @@ export default [
     bathrooms: Int
     smoking: Boolean
     bedrooms: Int
+    access: String
     pets: Boolean
     typeOfPets: String
     specialInst: String
-    notesOnArea: String
+    recommendations: String
+    generalNotes: String
     placeImages: [Image]
   }
   

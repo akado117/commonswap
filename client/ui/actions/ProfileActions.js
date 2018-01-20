@@ -20,30 +20,21 @@ const ProfileActions = {
         });
     },
     requestSwap: (data) => {
-        console.log("PA REQUEST SWAP DATA");
-        console.log(data);
         const { Arrival, Departure, Notes, User, placeId } = data;
         return dispatch => Meteor.call('requestEmail', data, (error, result) => {
-            if (error) {
-                console.log(error);
-                return dispatch({
-                    type: `${actionTypes.EMAIL_SENT}_${FAILURE}`,
-                    ...error,
-                });
-            } else {
-                if (result.data) {
-                    dispatch({
-                        type: `${actionTypes.EMAIL_SENT}_${SUCCESS}`,
-                        data: result.data,
-                    });
-                    return undefined;
-                };
-                return dispatch({
-                    type: `${actionTypes.EMAIL_SENT}_${FAILURE}`,
-                    ...error,
-                });
-            }
+            return standardResponseFunc(error, result, actionTypes.EMAIL_SENT, dispatch);
         });
+    },
+    sendMessage: (data) => {
+        const { Question, User, placeId } = data;
+        return dispatch => Meteor.call('sendMessage', data, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.MESSAGE_SENT, dispatch);
+        })
+    },
+    saveContact: (data) => {
+        return dispatch => Meteor.call('saveContact', data, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.SAVE_CONTACT, dispatch);
+        })
     },
     retrieveCardInfo: () => {
         return dispatch => Meteor.call('getCardInfo', (error, result) => {

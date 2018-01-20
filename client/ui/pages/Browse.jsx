@@ -50,13 +50,6 @@ class Browse extends Component {
         return undefined;
     }
 
-//    componentDidUpdate = (prevProps) => {
-//         if (!prevProps.place.place._id && this.props.place.place._id && this.state.coords.lat === undefined) { //if refreshed
-//             const coords = merge(this.state.coords, this.props.place.place.coords);
-//             this.setState({ coords });
-//         }
-//    }
-
     componentWillUnmount = () => {
         const {
             arrival,
@@ -91,6 +84,7 @@ class Browse extends Component {
 
     render() {
         const { placesForBrowsing, place } = this.props.place;
+        const { profile } = this.props.profile;
         return (
             <div className="browse-container">
                 <div className="container">
@@ -143,18 +137,22 @@ class Browse extends Component {
                         {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
                     </div>
                 </div>
-                <div className="scroll-listing col s12 l6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
-                    {placesForBrowsing.map((placeFB, idx) => (
-                        <PlaceForBrowse
-                            key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}
-                            placeForBrowse={placeFB}
-                            address={placeFB.address}
-                            profile={placeFB.profile}
-                            placeImgs={placeFB.placeImgs}
-                            profileImg={placeFB.profileImg}
-                            goToProfile={() => this.goToProfile(placeFB._id)}
-                        />
-                    ))}
+                <div className="row">
+                    <div className="scroll-listing col s12 m6" style={{ overflowY: 'scroll', maxHeight: '750px' }}>
+                        {placesForBrowsing.map((placeFB, idx) => (
+                            <div className="col s6">
+                                <PlaceForBrowse
+                                    key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}
+                                    placeForBrowse={placeFB}
+                                    address={placeFB.address}
+                                    profile={profile}
+                                    placeImgs={placeFB.placeImgs}
+                                    profileImg={placeFB.profileImg}
+                                    goToProfile={() => this.goToProfile(placeFB._id)}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <Footer />
             </div>

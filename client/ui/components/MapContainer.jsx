@@ -21,5 +21,5 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-    apiKey: (Meteor.settings.googleMapsApiKey),
+    apiKey: (Meteor.settings.public.googleKeys.googleMapsApiKey),
 })(MapContainer);

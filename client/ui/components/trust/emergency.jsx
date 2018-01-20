@@ -38,7 +38,7 @@ class Emergency extends Component {
         return (
             <div>
                 <AppBar
-                    title={<span>Emergency Contacts</span>}
+                    title={<span><i className="fa fa-ambulance" aria-hidden="true"></i> Emergency Contact</span>}
                     showMenuIconButton={false}
                     style={{ marginBottom: '10px', zIndex: '0' }}
                 />

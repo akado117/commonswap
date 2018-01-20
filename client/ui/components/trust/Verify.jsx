@@ -10,8 +10,7 @@ import CardForm from '../../components/verificationComponent/CardForm';
 import Emergency from '../../components/trust/emergency';
 
 class Verify extends Component {
-    componentDidMount() {
-    }
+    componentDidMount() { }
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -19,25 +18,21 @@ class Verify extends Component {
     };
 
     saveContact = (data) => {
-        // const { placeId } = this.props.params;
-        // console.log('data');
-        // console.log(data);
-        // this.props.profileActions.saveContact({
-        //     Arrival: data.firstName,
-        //     Departure: data.lastName,
-        //     Notes: data.relationship,
-        //     Phone: data.phone,
-        //     User: this.props.user,
-        // });
+        this.props.profileActions.saveContact({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            relationship: data.relationship,
+            phone: data.phone,
+            profile: this.props.profile,
+        });
     }
 
     render() {
         return (
             <div>
                 <CardForm></CardForm>
-                    <Emergency
-                        saveContact={data => this.saveContact(data)}
-                    >
+                <Emergency
+                    saveContact={data => this.saveContact(data)}>
                 </Emergency>
             </div>
         );

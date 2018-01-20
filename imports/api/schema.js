@@ -36,10 +36,10 @@ export default [
     _id: String!
     ownerUserId: String
     profile: Profile
-    name: String!
+    firstName: String!
+    lastName: String!
     phone: String!
-    email: String!
-    relation: String
+    relationship: String
   }
   
   type Interests {

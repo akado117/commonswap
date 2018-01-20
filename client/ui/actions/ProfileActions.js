@@ -69,6 +69,29 @@ const ProfileActions = {
             }
         })
     },
+    saveContact: (data) => {
+        return dispatch => Meteor.call('saveContact', data, (error, result) => {
+            if (error) {
+                console.log(error);
+                return dispatch({
+                    type: `${actionTypes.SAVE_CONTACT}_${FAILURE}`,
+                    ...error,
+                });
+            } else {
+                if (result.data) {
+                    dispatch({
+                        type: `${actionTypes.SAVE_CONTACT}_${SUCCESS}`,
+                        data: result.data,
+                    });
+                    return undefined;
+                };
+                return dispatch({
+                    type: `${actionTypes.SAVE_CONTACT}_${FAILURE}`,
+                    ...error,
+                });
+            }
+        })
+    },
     retrieveCardInfo: () => {
         return dispatch => Meteor.call('getCardInfo', (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_CARD_INFO, dispatch);

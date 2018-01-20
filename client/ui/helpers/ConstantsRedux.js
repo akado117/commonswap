@@ -43,6 +43,7 @@ export const actionTypes = {
     SAVE_PLACE_IMAGE_ORDER: 'SAVE_PLACE_IMAGE_ORDER',
     SEND_MESSAGE:'SEND_MESSAGE',
     MESSAGE_SENT:'MESSAGE_SENT',
+    SAVE_CONTACT:'SAVE_CONTACT',
 };
 
 const serviceMessages = {

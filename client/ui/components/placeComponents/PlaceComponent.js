@@ -246,14 +246,6 @@ class PlaceComponent extends Component {
                                     successText="Your Place Saved"
                                 />
                             </div>
-                            <div className="col s6 m4 l3">
-                                <ConnectedButton
-                                    icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
-                                    actionType={actionTypes.SAVE_PROFILE}
-                                    buttonText="Next"
-                                    onClick={() => this.props.savePlace(true)}
-                                />
-                            </div>
                         </div>
                     </div>
                 </div>

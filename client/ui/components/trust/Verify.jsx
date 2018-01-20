@@ -18,12 +18,13 @@ class Verify extends Component {
     };
 
     saveContact = (data) => {
+        const { firstName, lastName, relationship, phone, profile } = data;
         this.props.profileActions.saveContact({
-            firstName: data.firstName,
-            lastName: data.lastName,
-            relationship: data.relationship,
-            phone: data.phone,
-            profile: this.props.profile,
+            firstName,
+            lastName,
+            relationship,
+            phone,
+            profile,
         });
     }
 

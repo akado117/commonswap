@@ -89,15 +89,13 @@ class ViewProfile extends React.Component {
     };
 
     requestSwap = (data) => {
-        const { placeId } = this.props.params;
-        console.log('data');
-        console.log(data);
+        const { placeId, user } = this.props.params;
         this.props.profileActions.requestSwap({
-            placeId: placeId,
+            placeId,
             Arrival: data.dates.arrival,
             Departure: data.dates.departure,
             Notes: data.swapperMessage,
-            User: this.props.user,
+            User: user,
         });
     }
 
@@ -143,19 +141,15 @@ class ViewProfile extends React.Component {
     }
 
     saveSwap = (data, props, currentPlace, modalActions) => {
-        console.log('Save swap data');
-        console.log(data);
         this.chargeCardModal(data, props, currentPlace, modalActions);
     }
     
     sendMessage = (data) => {
-        const { placeId } = this.props.params;
-        console.log('Send message data');
-        console.log(data);
+        const { placeId, question, user } = this.props.params;
         this.props.profileActions.sendMessage({
-            placeId: placeId,
-            Question: data.question,
-            User: this.props.user,
+            placeId,
+            Question: question,
+            User: user,
         });
     }
 
@@ -170,9 +164,6 @@ class ViewProfile extends React.Component {
         const { placeId } = this.props.params;
         const place = this.getPlace();
         const { amenities, interests, profile, profileImg, placeImgs, address } = place;
-
-        console.log('Amenities');
-        console.log(place);
 
         const amenitiesElements = Object.keys(amenities).map((key) => {
             if (amenities[key] && amenitiesTextMap[key]) {

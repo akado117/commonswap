@@ -9,11 +9,6 @@ import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert 
 
 const PlaceActions = {
     upsertPlace: (placeData, cb) => {
-
-        console.log("PLACE DATA");
-        console.log(placeData);
-
-
         const currentPlaceData = buildPlaceForUpsert(placeData, Store.getState());
         const { place = {}, address = {}, amenities = {} } = currentPlaceData;
 

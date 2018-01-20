@@ -6,23 +6,35 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ProfileActions from '../../actions/ProfileActions';
-import { CardForm } from '../../components/verificationComponent/CardForm';
-import { Emergency } from '../../components/trust/emergency';
+import CardForm from '../../components/verificationComponent/CardForm';
+import Emergency from '../../components/trust/emergency';
 
 class Verify extends Component {
-    componentDidMount() {
-    }
+    componentDidMount() { }
 
     handleSubmit = (event) => {
         event.preventDefault();
 
     };
 
+    saveContact = (data) => {
+        const { firstName, lastName, relationship, phone, profile } = data;
+        this.props.profileActions.saveContact({
+            firstName,
+            lastName,
+            relationship,
+            phone,
+            profile,
+        });
+    }
+
     render() {
         return (
             <div>
-                {/* <CardForm></CardForm> */}
-                <Emergency></Emergency>
+                <CardForm></CardForm>
+                <Emergency
+                    saveContact={data => this.saveContact(data)}>
+                </Emergency>
             </div>
         );
     }

@@ -99,7 +99,7 @@ function sendAcceptEmail(swapObj) {
     const Dates = dates;
     const sync = Meteor.wrapAsync(HTTP.call);
     try {
-        const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA==', {
+        const res = sync('POST', Meteor.settings.azureLambdaURLS.sendAcceptEmail, {
             data: {
                 Requester,
                 Requestee,
@@ -108,7 +108,7 @@ function sendAcceptEmail(swapObj) {
                 Dates,
             },
         });
-    } 
+    }
     catch (err) {
         console.log(err.stack);
         consoleErrorHelper(`Email for accept swap between ${Requester.firstName} and ${Requestee.firstName} failed`, upsertFailedCode, requesterUserId, err);
@@ -124,9 +124,9 @@ Meteor.methods({
         return handleSignup(customer)
             .then(customers => customers)
             .catch((error) => {
-              throw new Meteor.Error('500', `${error}`);
+                throw new Meteor.Error('500', `${error}`);
             });
-      },
+    },
     upsertProfile(profileParams, interests, emergencyContacts) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', profileErrorCode);
@@ -214,8 +214,7 @@ Meteor.methods({
         });
     },
     createCharge(swapObj) {
-        try
-        {
+        try {
             const { _id, place, address, requesterName, requesterEmail, requesterPlaceId, requesterUserId, requesterProfileImg, requesteeUserId, requesteePlaceId, requesteeProfileImg, guests, requesterMessage, dates, requesteeEmail, requesteeName, status } = swapObj;
             console.log("Place");
             console.log(swapObj);
@@ -233,8 +232,8 @@ Meteor.methods({
                 amount: 5000,
                 currency: "usd",
                 customer: currentUserCustomer.customerId,
-              });
-            
+            });
+
             stripe.charges.create({
                 amount: 5000,
                 currency: "usd",
@@ -255,8 +254,7 @@ Meteor.methods({
                 },
             });
         }
-        catch (err)
-        {
+        catch (err) {
             console.log("Create charge error");
             console.log(err);
         }
@@ -293,7 +291,7 @@ Meteor.methods({
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
-            const res = sync('POST', 'https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==', {
+            const res = sync('POST', Meteor.settings.azureLambdaURLS.requestEmail, {
                 data: {
                     User,
                     Arrival,
@@ -315,7 +313,57 @@ Meteor.methods({
             return serviceErrorBuilder(`Email for new swap from ${User} failed`, upsertFailedCode, err);
         }
     },
+    sendMessage(data) {
 
+        const { Question, User, placeId } = data;
+        const ownerPlace = Places.findOne({ _id: placeId }) || {};
+        const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
+        const userId = Meteor.userId();
+        const RequestorPlace = ownerPlace;
+        const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
+
+        const sync = Meteor.wrapAsync(HTTP.call);
+        try {
+            const res = sync('POST', Meteor.settings.azureLambdaURLS.sendMessage, {
+                data: {
+                    User,
+                    Question,
+                    Profile,
+                    RequestorPlace,
+                    RequestedPlace,
+                },
+            });
+            consoleLogHelper(`Email message from ${User} sent`, genericSuccessCode, userId, `Place Id of interest ${placeId}`);
+            return serviceSuccessBuilder(res.data, genericSuccessCode, {
+                serviceMessage: `Email message from ${User} sent`,
+                data: res.data,
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Email message from ${User} failed`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder(`Email message from ${User} failed`, upsertFailedCode, err);
+        }
+    },
+    saveContact(data) {
+        try {
+            const userId = Meteor.userId();
+            if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
+            let contactClone = cloneDeep(data);
+            contactClone.ownerUserId = contactClone.ownerUserId || userId;
+            const contactGUID = EmergencyContacts.upsert({ _id: contactClone._id, }, setterOrInsert(contactClone));
+            consoleLogHelper(`Place ${contactGUID ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Contact Id ${JSON.stringify(contactClone._id)}`);
+            return serviceSuccessBuilder({ contactGUID }, genericSuccessCode, {
+                serviceMessage: `Place ${contactGUID ? 'updated' : 'added'}, with key ${contactGUID || contactClone._id}`,
+                data: {
+                    contact: contactClone,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper('Contact create or update failed', upsertFailedCode, userId, err);
+            return serviceErrorBuilder('Contact create or update failed', upsertFailedCode, err);
+        }
+    },
     upsertPlace(place, address, amenities) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);

@@ -29,5 +29,10 @@
     "stripe": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc"
   },
   "stripe": "pk_test_YSCffEJB0CIc3DrqVBE56Hjl",
-  "stripe_customer": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc"
+  "stripe_customer": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc",
+  "azureLambdaURLS": {
+    "sendMessage": "https://commonswap.azurewebsites.net/api/SendMessage?code=qTYrMobecKFQrzZCv9OajHgGSD5BmHl9r6P2onSyBoovwzFo7du2LA==",
+    "requestEmail": "https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==",
+    "sendAcceptEmail": "https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA=="
+  }
 }

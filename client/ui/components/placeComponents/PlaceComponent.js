@@ -187,7 +187,7 @@ class PlaceComponent extends Component {
                     <div className="col m6 s12 input-field inline">
                         <SelectBuilder
                             label={<span><i className="fa fa-handshake-o fa-1x" aria-hidden="true"></i> What will your swap have access to?</span>}
-                            onChange={value => this.props.getValueFunc('access', value)}
+                            onChange={value => getValFunc('access', value)}
                             selectArrObj={accessFields.fields}
                             defaultSelection={accessFields.defaultField}
                             defaultValue={place.access}
@@ -214,25 +214,24 @@ class PlaceComponent extends Component {
                     </div>
                     <div className="col s12">
                         <TextFieldStandardized
-                            floatingLabelText="Special Instructions?"
-                            onChange={(e, value) => getValFunc('specialInst', value)}
-                            extraProps={{ defaultValue: place.specialInst }}
-                        />
-                    </div>
-                    <div className="col s12">
-                        <TextFieldStandardized
                             floatingLabelText="What are some of your top recommendations for visitors in your city?"
                             onChange={(e, value) => getValFunc('recommendations', value)}
-                            hintText={"I would recommend checking out the famous DC landmarks – the Monument, Jefferson Memorial, Lincoln Memorial, etc. if you haven’t done so. U St is a lively area with several bars and restaurants."}
-                            extraProps={{ defaultValue: place.recommendations }}
+                            extraProps={{
+                                defaultValue: place.recommendations,
+                                hintText: place.recommendations ? undefined : 'I would recommend checking out the famous DC landmarks – the Monument, Jefferson Memorial, Lincoln Memorial, etc. if you haven’t done so. U St is a lively area with several bars and restaurants.',
+                                floatingLabelFixed: true,
+                            }}
                         />
                     </div>
                     <div className="col s12">
                         <TextFieldStandardized
                             floatingLabelText="Include any general guidelines you would like to inform your swap:"
                             onChange={(e, value) => getValFunc('generalNotes', value)}
-                            hintText={"Please take your shoes off when entering my place. In addition, smoking is not allowed in my place. Don’t forget to lock the door anytime you leave!"}
-                            extraProps={{ defaultValue: place.generalNotes }}
+                            extraProps={{
+                                defaultValue: place.generalNotes,
+                                hintText: place.generalNotes ? undefined : 'Please take your shoes off when entering my place. In addition, smoking is not allowed in my place. Don’t forget to lock the door anytime you leave!',
+                                floatingLabelFixed: true,
+                            }}
                         />
                     </div>
                     {this.getImageSection(this.props.placeImages)}

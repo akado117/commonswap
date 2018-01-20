@@ -154,9 +154,10 @@ class ProfileComponent extends Component {
                     <TextFieldStandardized
                         floatingLabelText={<span><i className="fa fa-pencil" aria-hidden="true"></i> Describe Yourself</span>}
                         onChange={(e, value) => getValueFunc('personalSummary', value)}
-                        hintText={"Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite team is the Lakers and my favorite music artist is Drake. Feel free to reach out to learn more!"}
                         extraProps={{
                             defaultValue: profile.personalSummary,
+                            hintText: profile.personalSummary ? undefined : "Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite team is the Lakers and my favorite music artist is Drake. Feel free to reach out to learn more!",
+                            floatingLabelFixed: true,
                         }}
                     />
                 </div>

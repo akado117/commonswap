@@ -16,15 +16,24 @@ function onChangeHelper(event) {
 class ProfileComponent extends Component {
 
     BUTTONS = [
-        { label: 'Beach Bum', name: 'beachBum' },
-        { label: 'Photography', name: 'photography' },
-        { label: 'Wineries', name: 'wineries' },
-        { label: 'Film Buff', name: 'film' },
-        { label: 'Hiker', name: 'hiking' },
-        { label: 'Clubbing & Nightlife', name: 'clubber' },
-        { label: 'Live Music & Concerts', name: 'liveMusic' },
-        { label: 'Food & Restaurants', name: 'foodie' },
+        { label: 'Books/Reading', name: 'books' },
+        { label: 'Breweries', name: 'breweries' },
+        { label: 'Cars/Automobiles', name: 'cars' },
+        { label: 'Clubbing/Nightlife', name: 'clubber' },
+        { label: 'Environmental Issues', name: 'environment' },
+        { label: 'Fashion', name: 'fashion' },
+        { label: 'Movies', name: 'film' },
+        { label: 'Fine Arts', name: 'arts' },
+        { label: 'Food/Restaurants', name: 'foodie' },
+        { label: 'Gaming', name: 'gaming' },
+        { label: 'Health/Fitness', name: 'fitness' },
+        { label: 'Hiking/Nature', name: 'hiking' },
+        { label: 'Live Music/Concerts', name: 'liveMusic' },
         { label: 'Organized Tours', name: 'orgTour' },
+        { label: 'Pets/Animals', name: 'animals' },
+        { label: 'Photography', name: 'photography' },
+        { label: 'Politics', name: 'politics' },
+        { label: 'Wineries', name: 'wineries' },
     ];
 
     constructor() {
@@ -37,13 +46,10 @@ class ProfileComponent extends Component {
             birthday: '',
             email: '',
             phone: '',
-            language: '',
             descPersonal: '',
             school: '',
             classOf: '',
             occupation: '',
-            cleanliness: 45,
-            personality: 65,
             beachBum: true,
             wineries: true,
             photography: false,
@@ -91,14 +97,6 @@ class ProfileComponent extends Component {
             },
         };
 
-        const langFields = {
-            defaultField: 'Preferred Language',
-            fields: {
-                displayNames: ['English', 'Spanish', 'Chinese', 'French'],
-                values: ['english', 'spansih', 'chinese', 'french'],
-            },
-        };
-
         return (
             <div className="row">
                 <div className="col s6 m4 ">
@@ -142,16 +140,6 @@ class ProfileComponent extends Component {
                         extraProps={{ floatingLabelFixed: true }}
                     />
                 </div>
-                <div className="col s6 m4">
-                    <SelectBuilder
-                        label="Language"
-                        onChange={value => getValueFunc('lang', value)}
-                        selectArrObj={langFields.fields}
-                        defaultSelection={langFields.defaultField}
-                        defaultValue={profile.lang}
-                        extraProps={{ floatingLabelFixed: true }}
-                    />
-                </div>
                 <div className="col s12">
                     <div className="card-panel teal">
                         <span className="white-text">
@@ -166,37 +154,24 @@ class ProfileComponent extends Component {
                     <TextFieldStandardized
                         floatingLabelText={<span><i className="fa fa-pencil" aria-hidden="true"></i> Describe Yourself</span>}
                         onChange={(e, value) => getValueFunc('personalSummary', value)}
-                        hintText={"Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite team is the Lakers and my favorite music artist is Drake. Feel free to reach out to learn more!"}
                         extraProps={{
                             defaultValue: profile.personalSummary,
+                            hintText: profile.personalSummary ? undefined : "Hello! My name is Mike and I work in marketing. I am a big fan of traveling, trying out new restaurants, and attending music festivals. My favorite team is the Lakers and my favorite music artist is Drake. Feel free to reach out to learn more!",
+                            floatingLabelFixed: true,
                         }}
                     />
                 </div>
-                <div className="col s4 input-field inline">
+                <div className="col s9 m4 input-field inline">
                     <label htmlFor="school"><i className="fa fa-university fa-1x" aria-hidden="true"></i> School/Alma Mater</label>
                     <input type="text" className="validate" id="school" onChange={e => getValueFunc('school', onChangeHelper(e))} defaultValue={profile.school} />
                 </div>
-                <div className="col s2 input-field inline">
+                <div className="col s3 m2 input-field inline">
                     <label htmlFor="class">Class of: </label>
                     <input id="class" type="number" min="1950" max="2035" className="validate" onChange={e => getValueFunc('classOf', onChangeHelper(e))} defaultValue={profile.classOf} />
                 </div>
-                <div className="col s6 input-field inline">
+                <div className="col s12 m6 input-field inline">
                     <label htmlFor="occupation"><i className="fa fa-industry fa-1x" aria-hidden="true"></i> Occupation/Industry</label>
                     <input type="text" className="validate" id="occupation" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
-                </div>
-                <div className="col s12">
-                    <p className="range-field">
-                        <label htmlFor="amount">Somewhat clean</label>
-                        <label htmlFor="amount" style={{ float: 'right' }}>Clean</label>
-                        <input type="range" id="cleanliness" min="0" max="100" onChange={e => getValueFunc('cleanliness', onChangeHelper(e))} defaultValue={profile.cleanliness} />
-                    </p>
-                </div>
-                <div className="col s12">
-                    <p className="range-field">
-                        <label htmlFor="amount">A Homebody</label>
-                        <label htmlFor="amount" style={{ float: 'right' }} >A Party Animal</label>
-                        <input type="range" id="personality" min="0" max="100" onChange={e => getValueFunc('personality', onChangeHelper(e))} defaultValue={profile.personality} />
-                    </p>
                 </div>
                 <div className="col s12">
                     <div className="card-panel teal">
@@ -221,7 +196,7 @@ class ProfileComponent extends Component {
                         </div>
                         <div className="col s6 m4 l3">
                             <ConnectedButton
-                                icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                                 actionType={actionTypes.SAVE_PROFILE}
                                 buttonText="Next"
                                 onClick={() => this.props.saveProfile(true)}

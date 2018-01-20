@@ -8,7 +8,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import handleSignup from '../../../../imports/modules/signup';
 import ProfileActions from '../../actions/ProfileActions';
-import {grey50} from 'material-ui/styles/colors';
+import { grey50 } from 'material-ui/styles/colors';
+import ConnectedButton from '../forms/ConnectedButton';
+import { actionTypes } from '../../helpers/ConstantsRedux';
 
 class CardForm extends Component {
     componentDidMount() {
@@ -24,7 +26,7 @@ class CardForm extends Component {
     render() {
         const { card } = this.props.profile;
         return (
-            <div>
+            <div className="card-form">
                 <AppBar
                     title={<span><FontIcon className="material-icons" color={grey50}>lock</FontIcon> Billing Information</span>}
                     showMenuIconButton={false}
@@ -32,13 +34,23 @@ class CardForm extends Component {
                 />
                 <div className="row">
                     <div className="col s12">
-                        <p></p>
+                        <div className="col s12">
+                            <p>The credit card information you enter will be used for payment. This information will be secured and kept private.</p>
+                        </div>
                     </div>
-                     <div className="col s12">
-                        <div className="col s6">
+                    <div className="col s12">
+                        <div className="col s7 saved-card">
+                            <p>Last 4 digits of saved card</p>
+                        </div>
+                        <div className="col s5 saved-card">
+                            <p>Card Type</p>
+                        </div>
+                    </div>
+                    <div className="col s12">
+                        <div className="col s7">
                             {card.last4}
                         </div>
-                        <div className="col s6">
+                        <div className="col s5">
                             {card.brand}
                         </div>
                     </div>
@@ -47,8 +59,16 @@ class CardForm extends Component {
                     <div className="col s8" style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
                         <Card ref={card => (this.card = card)} />
                     </div>
-                    <div className="col s12">
-                        <RaisedButton label="Update Card" primary onClick={this.handleSubmit} />
+                </div>
+                <div className="row">
+                    <div className="col m4 s9">
+                        <ConnectedButton
+                            icon={<i className="fa fa-floppy-o" aria-hidden="true"></i>}
+                            buttonText="Update Card"
+                            onClick={this.handleSubmit}
+                            className=""
+                            actionType={actionTypes.SAVE_CARD}
+                        />
                     </div>
                 </div>
             </div>
@@ -62,18 +82,18 @@ function mapStateToProps(state) {
         profile,
         user,
     };
-  }
-  
-  function mapDispatchToProps(dispatch) {
+}
+
+function mapDispatchToProps(dispatch) {
     return {
         profileActions: bindActionCreators(ProfileActions, dispatch),
     };
-  }
-  
-  CardForm.propTypes = {
+}
+
+CardForm.propTypes = {
     user: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     profileActions: PropTypes.object.isRequired,
-  };
+};
 
-  export default connect(mapStateToProps, mapDispatchToProps)(CardForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CardForm);

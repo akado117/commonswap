@@ -24,6 +24,7 @@ import FAQ from './ui/pages/FAQ';
 import Testimonials from './ui/components/Testimonials';
 import Trust from './ui/pages/Trust';
 import Community from './ui/pages/Community';
+import Analytics from './ui/Analytics/Analytics';
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
@@ -31,6 +32,7 @@ const client = new ApolloClient(meteorClientConfig());
 
 
 Meteor.startup(() => {
+    Analytics();
     render(
         <ApolloProvider client={client}>
             <Provider client={client} store={store}>

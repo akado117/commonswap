@@ -216,6 +216,7 @@ class ProfileComponent extends Component {
                                 actionType={actionTypes.SAVE_PROFILE}
                                 buttonText="Save"
                                 onClick={() => this.props.saveProfile()}
+                                successText="Profile Saved"
                             />
                         </div>
                         <div className="col s6 m4 l3">
@@ -224,6 +225,7 @@ class ProfileComponent extends Component {
                                 actionType={actionTypes.SAVE_PROFILE}
                                 buttonText="Next"
                                 onClick={() => this.props.saveProfile(true)}
+                                successText="Your Profile Saved"
                             />
                         </div>
                     </div>

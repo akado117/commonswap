@@ -257,6 +257,7 @@ class PlaceComponent extends Component {
                                     actionType={actionTypes.SAVE_PLACE}
                                     buttonText="Save"
                                     onClick={this.props.savePlace}
+                                    successText="Your Place Saved"
                                 />
                             </div>
                         </div>

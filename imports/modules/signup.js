@@ -5,7 +5,7 @@ import { Bert } from 'meteor/themeteorchef:bert';
 
 const signup = (component) => {
     console.log("Handle signup");
-    Bert.alert('Hitting up the nearest beach... and processing your card information', 'info', 'growl-top-left');
+    Bert.alert('Processing your card information', 'info', 'growl-top-left');
     window.stripe.createToken(component.card.card)
         .then(({error, token}) => {
             if (error) {

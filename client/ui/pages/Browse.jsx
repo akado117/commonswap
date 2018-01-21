@@ -34,7 +34,7 @@ class Browse extends Component {
         super(props);
         this.state = {
             numOfGuests: props.place.numOfGuests,
-            arrival: props.place.arrival || addDays(new Date(), -20),
+            arrival: props.place.arrival || addDays(new Date(), -50),
             departure: props.place.departure || addDays(new Date(), 20),
             coords: props.place.coords || props.place.place.coords || {},//if place has location or use has already selected a location
         };
@@ -45,8 +45,9 @@ class Browse extends Component {
         if (!arrival || !departure) return this.setState({ searchMessage: 'Please select your dates to travel' });
         this.setState({ searchMessage: SEARCHED });
         const searchObj = { arrival, departure, numOfGuests, coords };
-        if (!coords.distance || coords.distance < 1) delete searchObj.coords;
+        //if (!coords.distance || coords.distance < 1) delete searchObj.coords;
         this.props.placeActions.getPlaceBasedUponAvailability(searchObj);
+        this.updateCordsDistance(this.props.place.place.coords);
         return undefined;
     }
 
@@ -84,53 +85,50 @@ class Browse extends Component {
 
     render() {
         const { placesForBrowsing, place } = this.props.place;
-        const { profile } = this.props.profile;
         return (
             <div className="browse-container">
                 <div className="container">
                     <div className="row">
-                        <div className="col s6 m4 l3">
-                            <DatePicker
-                                className="material-date-picker"
-                                onChange={(nul, date) => this.setState({ arrival: date })}
-                                floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
-                                textFieldStyle={{ width: '100%' }}
-                                defaultDate={this.state.arrival}
-                            //disableYearSelection={this.state.disableYearSelection}
-                            />
-                        </div>
-                        <div className="col s6 m4 l3">
-                            <DatePicker
-                                className="material-date-picker"
-                                onChange={(nul, date) => this.setState({ departure: date })}
-                                floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
-                                textFieldStyle={{ width: '100%' }}
-                                defaultDate={this.state.departure}
-                            />
-                        </div>
-                        <div className="col s6 m4 l3  input-field inline">
+                        <div className="row">
+                            <div className="col s6 m4 l3">
+                                <DatePicker
+                                    className="material-date-picker"
+                                    onChange={(nul, date) => this.setState({ arrival: date })}
+                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
+                                    textFieldStyle={{ width: '100%' }}
+                                    defaultDate={this.state.arrival}
+                                //disableYearSelection={this.state.disableYearSelection}
+                                />
+                            </div>
+                            <div className="col s6 m4 l3">
+                                <DatePicker
+                                    className="material-date-picker"
+                                    onChange={(nul, date) => this.setState({ departure: date })}
+                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
+                                    textFieldStyle={{ width: '100%' }}
+                                    defaultDate={this.state.departure}
+                                />
+                            </div>
+                            {/* <div className="col s6 m4 l3  input-field inline">
                             <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
                             <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true" /> Sleeps how many</label>
+                        </div> */}
+                            <div className="col s6 m4 l3  input-field inline">
+                                <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
+                                <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Range: Miles</label>
+                            </div>
                         </div>
-                        <div className="col s6 m4 l3  input-field inline">
-                            <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
-                            <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Range: Miles</label>
-                        </div>
-                        <div className="col s6 m4 l3 offset-s6 valign-wrapper">
-                            <ConnectedButton
-                                icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
-                                actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
-                                buttonText="Search"
-                                onClick={this.searchForPlaces}
-                            />
+                        <div className="row">
+                            <div className="col s6 m4 l3 offset-s6 valign-wrapper">
+                                <ConnectedButton
+                                    icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                    actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
+                                    buttonText="Search"
+                                    onClick={this.searchForPlaces}
+                                />
+                            </div>
                         </div>
                     </div>
-                    {this.state.coords && this.state.coords.distance > 0 ? <MapWithASearchBox
-                        profile={place}
-                        coords={this.state.coords}
-                        onSetLocation={this.onSetLocation}
-                        externalMarkers={placesForBrowsing}
-                    /> : ''}
                 </div>
                 <div className={`row ${this.state.searchMessage === '' ? 'hide' : ''}`}>
                     <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
@@ -145,13 +143,22 @@ class Browse extends Component {
                                     key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}
                                     placeForBrowse={placeFB}
                                     address={placeFB.address}
-                                    profile={profile}
+                                    profile={placeFB.profile}
                                     placeImgs={placeFB.placeImgs}
                                     profileImg={placeFB.profileImg}
                                     goToProfile={() => this.goToProfile(placeFB._id)}
                                 />
                             </div>
                         ))}
+                    </div>
+                    <div className="col s12 m6 no-pad">
+                        {this.state.coords && this.state.coords.distance > 0 ? 
+                            <MapWithASearchBox
+                                profile={place}
+                                coords={this.state.coords}
+                                onSetLocation={this.onSetLocation}
+                                externalMarkers={placesForBrowsing}
+                            /> : ''}
                     </div>
                 </div>
                 <Footer />

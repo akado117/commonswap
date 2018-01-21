@@ -1,9 +1,10 @@
+/* global google */
 import React from 'react';
 import { get } from 'lodash';
-import {compose, withProps, lifecycle, defaultProps} from 'recompose';
-import {withScriptjs, withGoogleMap, GoogleMap, Marker} from 'react-google-maps';
+import { compose, withProps, lifecycle, defaultProps } from 'recompose';
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 import PropTypes from 'prop-types';
-const {SearchBox} = require('react-google-maps/lib/components/places/SearchBox');
+const { SearchBox } = require('react-google-maps/lib/components/places/SearchBox');
 import { buildMarkerObj } from '../../../imports/helpers/DataHelpers';
 
 const MapSearchBox = compose(
@@ -22,6 +23,10 @@ const MapSearchBox = compose(
             const refs = {};
             const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || {};
             const initialMarker = lat !== undefined && lng !== undefined ? [buildMarkerObj({ lat, lng })] : [];
+            console.log('THIS PROPS');
+            console.log(this.props.coords);
+            console.log('PROPS');
+
             this.setState({
                 bounds: null,
                 center: {
@@ -34,33 +39,21 @@ const MapSearchBox = compose(
                     refs.map = ref;
                 },
                 onBoundsChanged: () => {
-                    this.setState({
-                        bounds: refs.map.getBounds(),
-                        center: refs.map.getCenter(),
-                    })
+
                 },
                 onSearchBoxMounted: ref => {
                     refs.searchBox = ref;
                 },
                 onPlacesChanged: () => {
                     const places = refs.searchBox.getPlaces();
-                    const bounds = new google.maps.LatLngBounds();
 
-                    places.map(({address_components, geometry: {location}}) => {
-                        console.log(location);
+                    places.map(({ address_components, geometry: { location } }) => {
                         this.props.onSetLocation({
                             lat: location.lat(),
                             lng: location.lng(),
                         });
                     });
 
-                    places.forEach(place => {
-                        if (place.geometry.viewport) {
-                            bounds.union(place.geometry.viewport)
-                        } else {
-                            bounds.extend(place.geometry.location)
-                        }
-                    });
                     const nextMarkers = places.map(place => ({
                         position: place.geometry.location,
                     }));
@@ -73,6 +66,19 @@ const MapSearchBox = compose(
                     // refs.map.fitBounds(bounds);
                 },
             })
+            console.log('this.props');
+            // conole.log(this.props);
+            //ERROR HERE
+            //const bounds = new google.maps.LatLngBounds();
+            // this.props.markers.map((marker, index) => {
+            //     bounds.extend(new google.maps.LatLng(
+            //         marker.coords.lat,
+            //         marker.coords.lng
+            //     ));
+            // })
+
+            // refs.map.fitBounds(bounds);
+            // refs.map.panToBounds(bounds);
         },
     }),
     withScriptjs,
@@ -116,7 +122,7 @@ const MapSearchBox = compose(
             <Marker key={`external-marker-${index}`} position={marker.coords} />
         )}
     </GoogleMap>
-)
+    )
 
 class MapComponent extends React.PureComponent {
 
@@ -127,6 +133,19 @@ class MapComponent extends React.PureComponent {
 
     componentDidMount() {
         this.delayedShowMarker();
+    }
+
+    componentDidUpdate() {
+        console.log('COMPONENT DID UPDATE');
+        const bounds = new window.google.maps.LatLngBounds();
+        // this.props.markers.map((marker, index) => {
+        //     bounds.extend(new window.google.maps.LatLng(
+        //         marker.coords.lat,
+        //         marker.coords.lng
+        //     ));
+        // })
+        // refs.map.fitBounds(bounds);
+        // refs.map.panToBounds(bounds);
     }
 
     delayedShowMarker = () => {

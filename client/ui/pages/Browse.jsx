@@ -35,7 +35,7 @@ class Browse extends Component {
         this.state = {
             numOfGuests: props.place.numOfGuests,
             arrival: props.place.arrival || addDays(new Date(), -50),
-            departure: props.place.departure || addDays(new Date(), 20),
+            departure: props.place.departure || addDays(new Date(), 100),
             coords: props.place.coords || props.place.place.coords || {},//if place has location or use has already selected a location
         };
     }
@@ -152,13 +152,13 @@ class Browse extends Component {
                         ))}
                     </div>
                     <div className="col s12 m6 no-pad">
-                        {this.state.coords && this.state.coords.distance > 0 ? 
+                    {
                             <MapWithASearchBox
                                 profile={place}
                                 coords={this.state.coords}
                                 onSetLocation={this.onSetLocation}
                                 externalMarkers={placesForBrowsing}
-                            /> : ''}
+                            />}
                     </div>
                 </div>
                 <Footer />

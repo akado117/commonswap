@@ -10,11 +10,12 @@ import { buildMarkerObj } from '../../../imports/helpers/DataHelpers';
 const MapSearchBox = compose(
     withProps(props => ({
         googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1VkVvNXQUiKRzjVJoWfsyrusO5pkAWE&v=3.exp&libraries=geometry,drawing,places',
-        loadingElement: <div style={{height: `100%`}}/>,
-        containerElement: <div style={{height: `450px`}}/>,
-        mapElement: <div style={{height: `100%`}}/>,
-        ...props,
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `750px` }} />,
+        mapElement: <div style={{ height: `100%` }} id="map-canvas" />,
     })),
+    withScriptjs,
+    withGoogleMap,
     defaultProps({
         externalMarkers: [],
     }),
@@ -23,9 +24,6 @@ const MapSearchBox = compose(
             const refs = {};
             const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || {};
             const initialMarker = lat !== undefined && lng !== undefined ? [buildMarkerObj({ lat, lng })] : [];
-            console.log('THIS PROPS');
-            console.log(this.props.coords);
-            console.log('PROPS');
 
             this.setState({
                 bounds: null,
@@ -66,24 +64,13 @@ const MapSearchBox = compose(
                     // refs.map.fitBounds(bounds);
                 },
             })
-            console.log('this.props');
-            // conole.log(this.props);
-            //ERROR HERE
-            //const bounds = new google.maps.LatLngBounds();
-            // this.props.markers.map((marker, index) => {
-            //     bounds.extend(new google.maps.LatLng(
-            //         marker.coords.lat,
-            //         marker.coords.lng
-            //     ));
-            // })
-
-            // refs.map.fitBounds(bounds);
-            // refs.map.panToBounds(bounds);
+        },
+        componentDidUpdate() {
+            console.log('COMPONENT DID UPDATE NOW CALLING');
         },
     }),
-    withScriptjs,
-    withGoogleMap
-)((props) =>
+)
+((props) =>
     <GoogleMap
         ref={props.onMapMounted}
         defaultZoom={15}
@@ -115,12 +102,35 @@ const MapSearchBox = compose(
                 }}
             />
         </SearchBox>
-        {props.markers.map((marker, index) =>
-            <Marker key={`map-marker-${index}`} position={marker.position} />
-        )}
-        {props.externalMarkers.map((marker, index) =>
-            <Marker key={`external-marker-${index}`} position={marker.coords} />
-        )}
+        {props.markers.map((marker, index) => {
+            const bounds = new window.google.maps.LatLngBounds();
+            if(marker.position){
+                bounds.extend(new window.google.maps.LatLng(
+                    marker.coords.lat,
+                    marker.coords.lng
+                ));
+                <Marker key={`external-marker-${index}`} position={marker.position} />
+            }
+        })}
+        {
+            //const bounds = new window.google.maps.LatLngBounds();
+            props.externalMarkers.map((marker, index) => {
+            // if(marker.coords){
+            //     if(marker.coords.lat){
+            //         bounds.extend(new window.google.maps.LatLng(
+            //             marker.coords.lat,
+            //             marker.coords.lng
+            //         ));
+            //         console.log('marker coords lat');
+            //         console.log(marker.coords.lat);
+            //     }
+                <Marker key={`external-marker-${index}`} position={marker.coords} />
+            
+        })
+            // let map = new window.google.maps.Map(document.getElementById('map-canvas'));
+            // map.fitBounds(bounds);
+            // map.panToBounds(bounds);
+        }
     </GoogleMap>
     )
 
@@ -132,20 +142,8 @@ class MapComponent extends React.PureComponent {
     }
 
     componentDidMount() {
+        console.log('THIS SHIT IS NEVER CALLED');
         this.delayedShowMarker();
-    }
-
-    componentDidUpdate() {
-        console.log('COMPONENT DID UPDATE');
-        const bounds = new window.google.maps.LatLngBounds();
-        // this.props.markers.map((marker, index) => {
-        //     bounds.extend(new window.google.maps.LatLng(
-        //         marker.coords.lat,
-        //         marker.coords.lng
-        //     ));
-        // })
-        // refs.map.fitBounds(bounds);
-        // refs.map.panToBounds(bounds);
     }
 
     delayedShowMarker = () => {

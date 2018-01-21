@@ -140,6 +140,7 @@ class Profile extends React.Component {
                     place={this.props.place}
                     savePlace={this.savePlaceFunction}
                     fileActions={this.props.fileActions}
+                    router={this.props.router}
                 />);
         }
         else if (this.state.selectedIndex === 2) {
@@ -201,6 +202,7 @@ Profile.propTypes = {
     place: PropTypes.object.isRequired,
     images: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

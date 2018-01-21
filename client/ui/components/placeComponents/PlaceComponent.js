@@ -122,6 +122,12 @@ class PlaceComponent extends Component {
 
     toggleDisclaimer = () => this.setState({ showDisclaimer: !this.state.showDisclaimer });
 
+    nextButtonHandler = () => {
+        const { router, savePlace, place } = this.props;
+        savePlace();
+        router.push(`/viewProfile/${place.place._id}`);
+    }
+
     render() {
         const getValFunc = this.getValueFunc;
         const { place, address, amenities } = this.props.place;
@@ -246,6 +252,14 @@ class PlaceComponent extends Component {
                                     successText="Your Place Saved"
                                 />
                             </div>
+                            <div className="col s6 m4 l3">
+                                <ConnectedButton
+                                    icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                    actionType={actionTypes.SAVE_PROFILE}
+                                    buttonText="Next"
+                                    onClick={this.nextButtonHandler}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -261,6 +275,7 @@ PlaceComponent.propTypes = {
     savePlaceImage: PropTypes.func.isRequired,
     placeImages: PropTypes.array.isRequired,
     fileActions: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
 };
 
 export default PlaceComponent;

@@ -1,12 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { bindActionCreators } from 'redux';
+import { connect }  from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { defaultImageUrls } from '../../../../imports/lib/Constants';
+import { loginTypes } from "../../../../imports/lib/Constants";
+import UserActions from '../../actions/userActions';
 
-function HomeDefaultContent() {
+function HomeDefaultContent({ userActions }) {
     return (
         <div>
             <div className="col s12 purpose">
@@ -175,17 +176,21 @@ function HomeDefaultContent() {
                             target="_blank"
                             label="Sign up with Facebook"
                             backgroundColor="#3B5998"
-                            labelColor="white"
+                            labelColor="#ffffff"
                             className="sign-button"
                             icon={<FontIcon className="fa fa-facebook" />}
+                            onClick={() => userActions.loginWithOAuth(loginTypes.facebook)}
                         />
                     </div>
                     <div className="col s12 l6 center-align sign-up-mail">
                         <RaisedButton
-                            label="Sign up with Email"
+                            label="Sign up with Google"
                             containerElement="label"
-                            icon={<FontIcon className="fa fa-envelope-open-o" />}
+                            backgroundColor="#e14441"
+                            labelColor="#ffffff"
+                            icon={<FontIcon className="fa fa-google" />}
                             className="sign-button"
+                            onClick={() => userActions.loginWithOAuth(loginTypes.google)}
                         />
                     </div>
                 </div>
@@ -194,4 +199,14 @@ function HomeDefaultContent() {
     );
 }
 
-export default HomeDefaultContent;
+function mapStateToProps() {
+    return {}
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        userActions: bindActionCreators(UserActions, dispatch),
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeDefaultContent);

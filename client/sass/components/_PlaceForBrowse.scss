@@ -1,4 +1,9 @@
 .browse-place-container {
+  padding-top: 25px;
+  padding-bottom: 5px;
+  p {
+    margin: 5px 0;
+  }
   .profile-info {
     p {
       margin: 5px 0;
@@ -13,6 +18,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 15px;
+    @media #{$small-and-down} {
+      padding: 0 0 0 10px;
+    }
   }
   .profile-image {
     @extend .true-circle;
@@ -22,6 +31,9 @@
       height: 150px !important;
       width: 150px !important;
     }
+  }
+  .user-text {
+    text-align: center;
   }
   .marg-top {
     margin-top: 0px;

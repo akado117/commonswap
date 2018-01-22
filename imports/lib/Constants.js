@@ -24,6 +24,12 @@ export const stateFields = {
     },
 };
 
+export const loginTypes = {
+    google: 'google',
+    facebook: 'facebook',
+    twitter: 'twitter',
+}
+
 export const defaultImageUrls = {
     assets: {
         checkMark: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/checkMark.png',

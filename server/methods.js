@@ -512,21 +512,21 @@ Meteor.methods({
     'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests, coords }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please sign in or create an account before searching for swaps', placeErrorCode);
-        if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
+        if (!coords || !checkIfCoordsAreValid(coords)) return serviceErrorBuilder("We need to know where you're looking to swap!", placeErrorCode);
         try {
+            const { lat, lng, distance } = coords;
+            const maxDistance = parseFloat((distance || 50) / 3959);
             const searchObj = {
-                $or: [{ availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
-                    { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }],
-            };
-            if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
-            if (coords && checkIfCoordsAreValid(coords)) {
-                const { lat, lng, distance } = coords;
-                const maxDistance = parseFloat((distance || 50) / 3959);
-                searchObj.location = {
+                location: {
                     $geoWithin: {
                         $centerSphere: [[lng, lat], maxDistance],
                     },
-                };
+                },
+            };
+            if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
+            if (arrival && departure) {
+                searchObj.$or = [{ availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
+                    { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }];
             }
             const places = Places.find(searchObj, { fields: FieldsForBrowseProfile }).fetch();
             const placeIds = [];

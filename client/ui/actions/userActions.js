@@ -23,7 +23,7 @@ const actions = {
             google: dispatch => Meteor.loginWithGoogle((error,res) => callBack(error, res, dispatch)),
             twitter: dispatch => Meteor.loginWithTwitter((error,res) => callBack(error, res, dispatch)),
         };
-        if (!loginType[loginType]) console.error(`${loginType} is not a defined loginType`);
+        if (!loginFunctions[loginType]) console.error(`${loginType} is not a defined loginType`);
         return loginFunctions[loginType];
     },
     userLoggedIn: () => {

@@ -27,4 +27,13 @@
     margin-top: 0px;
     margin-bottom:5px;
   }
+  .no-pad {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .summary-container {
+    min-height: 6.5rem;
+    max-height: 6.5rem;
+    overflow-y: scroll;
+  }
 }

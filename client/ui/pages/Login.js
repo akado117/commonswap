@@ -8,6 +8,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import { grey500, white } from 'material-ui/styles/colors';
 import UserActions from '../actions/userActions';
+import { loginTypes } from "../../../imports/lib/Constants";
 
 const styles = {
     loginContainer: {
@@ -130,13 +131,13 @@ class LoginPage extends React.Component {
     getLoginButtons = userId => (!userId ?
         <div>
             <MenuItem innerDivStyle={styles.menuItem}>
-                <button className="login-button" href="" onClick={() => this.loginHandler('facebook')} style={{...styles.btnFacebook }}>
+                <button className="login-button" href="" onClick={() => this.loginHandler(loginTypes.facebook)} style={{...styles.btnFacebook }}>
                     <i className="fa fa-facebook fa-lg" />
                     <span style={styles.btnSpan}>Log in with Facebook</span>
                 </button>
             </MenuItem>
             <MenuItem innerDivStyle={styles.menuItem}>
-                <button className="login-button" href="" onClick={() => this.loginHandler('google')} style={{...styles.btnGoogle }}>
+                <button className="login-button" href="" onClick={() => this.loginHandler(loginTypes.google)} style={{...styles.btnGoogle }}>
                     <i className="fa fa-google-plus fa-lg" />
                     <span style={styles.btnSpan}>Log in with Google</span>
                 </button>

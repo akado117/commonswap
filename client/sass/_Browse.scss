@@ -1,39 +1,45 @@
-  .browse-container {
-    .container {
-      margin-top: 25px;
-    }
-    .search-button {
-      display: inline-flex;
-      height: 45px;
-      line-height: 0;
-      .search-button-text {
-        width: 80%;
-      }
-    }
-    .scroll-listing {
-      min-height: 400px;
-    }
-    @media #{$medium-and-up} {
-        // styles for medium screens and larger
-      }
-      @media #{$medium-and-down} {
-        // styles for medium screens and down
-        .scroll-listing {
-          min-height: 300px;
-        }
-      }
-      @media #{$large-and-up} {
-        // styles for large screens and up
-      }
-    
-    @media #{$small-and-down} {
-        // styles for small screens and down
-        .scroll-listing {
-            padding-top: 10px;
-        }
-    }
-    .no-pad {
-      padding-right: 0px;
-      padding-left: 0px;
+.browse-container {
+  $scrollAndMapPadding: 15px;
+  .container {
+    margin-top: 25px;
+  }
+  .search-button {
+    display: inline-flex;
+    height: 80px;
+    line-height: 0;
+    .search-button-text {
+      width: 80%;
     }
   }
+  .scroll-listing {
+    padding-top: $scrollAndMapPadding;
+    max-height: 715px;
+    overflow-y: scroll;
+  }
+  .map-container {
+    padding-top: $scrollAndMapPadding;
+  }
+  @media #{$medium-and-up} {
+      // styles for medium screens and larger
+    }
+    @media #{$medium-and-down} {
+      // styles for medium screens and down
+      .scroll-listing {
+        min-height: 300px;
+      }
+    }
+    @media #{$large-and-up} {
+      // styles for large screens and up
+    }
+
+  @media #{$small-and-down} {
+      // styles for small screens and down
+      .scroll-listing {
+          padding-top: 10px;
+      }
+  }
+  .no-pad {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}

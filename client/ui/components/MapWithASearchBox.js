@@ -1,19 +1,21 @@
+/* global google */
 import React from 'react';
 import { get } from 'lodash';
-import {compose, withProps, lifecycle, defaultProps} from 'recompose';
-import {withScriptjs, withGoogleMap, GoogleMap, Marker} from 'react-google-maps';
+import { compose, withProps, lifecycle, defaultProps } from 'recompose';
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 import PropTypes from 'prop-types';
-const {SearchBox} = require('react-google-maps/lib/components/places/SearchBox');
+const { SearchBox } = require('react-google-maps/lib/components/places/SearchBox');
 import { buildMarkerObj } from '../../../imports/helpers/DataHelpers';
 
 const MapSearchBox = compose(
     withProps(props => ({
         googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1VkVvNXQUiKRzjVJoWfsyrusO5pkAWE&v=3.exp&libraries=geometry,drawing,places',
-        loadingElement: <div style={{height: `100%`}}/>,
-        containerElement: <div style={{height: `450px`}}/>,
-        mapElement: <div style={{height: `100%`}}/>,
-        ...props,
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `750px` }} />,
+        mapElement: <div style={{ height: `100%` }} id="map-canvas" />,
     })),
+    withScriptjs,
+    withGoogleMap,
     defaultProps({
         externalMarkers: [],
     }),
@@ -22,6 +24,7 @@ const MapSearchBox = compose(
             const refs = {};
             const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || {};
             const initialMarker = lat !== undefined && lng !== undefined ? [buildMarkerObj({ lat, lng })] : [];
+
             this.setState({
                 bounds: null,
                 center: {
@@ -34,33 +37,27 @@ const MapSearchBox = compose(
                     refs.map = ref;
                 },
                 onBoundsChanged: () => {
-                    this.setState({
-                        bounds: refs.map.getBounds(),
-                        center: refs.map.getCenter(),
-                    })
+
+                },
+                getRefs: () => {
+                    return refs;
+                },
+                getMapRef: () => {
+                    if (refs.map) return refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
                 },
                 onSearchBoxMounted: ref => {
                     refs.searchBox = ref;
                 },
                 onPlacesChanged: () => {
                     const places = refs.searchBox.getPlaces();
-                    const bounds = new google.maps.LatLngBounds();
 
-                    places.map(({address_components, geometry: {location}}) => {
-                        console.log(location);
+                    places.map(({ address_components, geometry: { location } }) => {
                         this.props.onSetLocation({
                             lat: location.lat(),
                             lng: location.lng(),
                         });
                     });
 
-                    places.forEach(place => {
-                        if (place.geometry.viewport) {
-                            bounds.union(place.geometry.viewport)
-                        } else {
-                            bounds.extend(place.geometry.location)
-                        }
-                    });
                     const nextMarkers = places.map(place => ({
                         position: place.geometry.location,
                     }));
@@ -74,11 +71,41 @@ const MapSearchBox = compose(
                 },
             })
         },
+        componentDidUpdate() {
+            console.log('COMPONENT DID UPDATE NOW CALLING');
+        },
     }),
-    withScriptjs,
-    withGoogleMap
-)((props) =>
-    <GoogleMap
+)((props) => {
+    const bounds = new window.google.maps.LatLngBounds();
+    const map = props.getMapRef();
+    const markers = props.markers.map((marker, index) => {
+        if (marker.position) {
+            if (props.resizeBounds && marker.position.lat) {
+                bounds.extend(new window.google.maps.LatLng(
+                    typeof marker.position.lat === 'function' ? marker.position.lat() : marker.position.lat,
+                    typeof marker.position.lng === 'function' ? marker.position.lng() : marker.position.lng,
+                ));
+            }
+            return <Marker key={`internal-marker-${index}`} position={marker.position} />;
+        }
+    });
+    const externalMarks = props.externalMarkers.map((marker, index) => {
+        if (marker.coords) {
+            if (props.resizeBounds && marker.coords.lat) {
+                bounds.extend(new window.google.maps.LatLng(
+                    marker.coords.lat,
+                    marker.coords.lng,
+                ));
+            }
+            return <Marker key={`external-marker-${index}`} position={marker.coords} />;
+        }
+    });
+    const fullMarkerArr = markers.concat(externalMarks);
+    if (map && externalMarks.length) {
+        map.fitBounds(bounds);
+        map.panToBounds(bounds);
+    }
+    return <GoogleMap
         ref={props.onMapMounted}
         defaultZoom={15}
         center={props.center}
@@ -109,14 +136,9 @@ const MapSearchBox = compose(
                 }}
             />
         </SearchBox>
-        {props.markers.map((marker, index) =>
-            <Marker key={`map-marker-${index}`} position={marker.position} />
-        )}
-        {props.externalMarkers.map((marker, index) =>
-            <Marker key={`external-marker-${index}`} position={marker.coords} />
-        )}
+        {fullMarkerArr}
     </GoogleMap>
-)
+});
 
 class MapComponent extends React.PureComponent {
 
@@ -126,6 +148,7 @@ class MapComponent extends React.PureComponent {
     }
 
     componentDidMount() {
+        console.log('THIS SHIT IS NEVER CALLED');
         this.delayedShowMarker();
     }
 
@@ -155,11 +178,13 @@ MapComponent.propTypes = {
     latitude: PropTypes.string,
     longitude: PropTypes.string,
     externalMarkers: PropTypes.array,
+    resizeBounds: PropTypes.bool,
 };
 
 MapComponent.defaultProps = {
     className: '',
     externalMarkers: [],
+    resizeBounds: false,
 };
 
 export default MapSearchBox;

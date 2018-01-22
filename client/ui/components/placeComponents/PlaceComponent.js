@@ -138,7 +138,7 @@ class PlaceComponent extends Component {
             defaultField: <span><i className="fa fa-handshake-o fa-1x" aria-hidden="true"></i> Access to: </span>,
             fields: {
                 displayNames: ['Entire Place', 'Private Room', 'Shared Room'],
-                values: ['entire', 'private', 'shared'],
+                values: ['Entire Place', 'Private Room', 'Shared Room'],
             },
         };
         return (

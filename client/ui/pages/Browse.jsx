@@ -158,6 +158,7 @@ class Browse extends Component {
                                 coords={this.state.coords}
                                 onSetLocation={this.onSetLocation}
                                 externalMarkers={placesForBrowsing}
+                                resizeBounds
                             />}
                     </div>
                 </div>

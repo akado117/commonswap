@@ -514,7 +514,10 @@ Meteor.methods({
         if (!userId) return serviceErrorBuilder('Please sign in or create an account before searching for swaps', placeErrorCode);
         if (!arrival || !departure) return serviceErrorBuilder("We need to know when you're looking to swap!", placeErrorCode);
         try {
-            const searchObj = { availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } }
+            const searchObj = {
+                $or: [{ availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
+                    { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }],
+            };
             if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
             if (coords && checkIfCoordsAreValid(coords)) {
                 const { lat, lng, distance } = coords;

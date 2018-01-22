@@ -31,10 +31,8 @@ class Verify extends Component {
     render() {
         return (
             <div>
-                <CardForm></CardForm>
-                <Emergency
-                    saveContact={data => this.saveContact(data)}>
-                </Emergency>
+                <CardForm />
+                <Emergency saveContact={data => this.saveContact(data)} />
             </div>
         );
     }

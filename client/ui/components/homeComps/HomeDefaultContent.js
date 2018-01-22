@@ -200,7 +200,7 @@ function HomeDefaultContent({ userActions }) {
 }
 
 function mapStateToProps() {
-    return {}
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {

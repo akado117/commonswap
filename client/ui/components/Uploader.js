@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone';
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Slingshot } from 'meteor/edgee:slingshot';
+import LoadImage from 'blueimp-load-image';
 import Pica from 'pica';
 import { merge, cloneDeep } from 'lodash';
 import uploadToS3 from '../../../imports/helpers/upload-to-s3';
@@ -11,6 +12,7 @@ import Progress from './Progress';
 import CloseButton from './forms/CloseButton';
 import { MaxImageUploadDim } from '../../../imports/lib/Constants';
 import { determineImageDimensions } from '../../../imports/helpers/DataHelpers';
+import { picaResizeFunction, willNeedResize } from '../helpers/ImageHelpers';
 
 let pica;
 
@@ -23,8 +25,6 @@ class Uploaders extends React.Component {
             uploadProgress: 0,
             picaOptions: props.picaOptions,
         };
-        this.picaResizeFunction.bind(this);
-        this.willNeedResize.bind(this);
     }
 
     calculateProgress() {
@@ -43,163 +43,31 @@ class Uploaders extends React.Component {
         }
     }
 
-    getFilePart(file) {
-        let filePart;
-        if (file.slice) {
-            filePart = file.slice(0, 131072);
-        } else if (file.webkitSlice) {
-            filePart = file.webkitSlice(0, 131072);
-        } else if (file.mozSlice) {
-            filePart = file.mozSlice(0, 131072);
-        } else {
-            filePart = file;
-        }
-        return filePart;
-    }
-
-    getOrientation(file, callback) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-
-            var view = new DataView(e.target.result);
-            if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
-            var length = view.byteLength, offset = 2;
-            while (offset < length) {
-                var marker = view.getUint16(offset, false);
-                offset += 2;
-                if (marker == 0xFFE1) {
-                    if (view.getUint32(offset += 2, false) != 0x45786966) return callback(-1);
-                    var little = view.getUint16(offset += 6, false) == 0x4949;
-                    offset += view.getUint32(offset + 4, little);
-                    var tags = view.getUint16(offset, little);
-                    offset += 2;
-                    for (var i = 0; i < tags; i++)
-                        if (view.getUint16(offset + (i * 12), little) == 0x0112)
-                            return callback(view.getUint16(offset + (i * 12) + 8, little));
-                }
-                else if ((marker & 0xFF00) != 0xFF00) break;
-                else offset += view.getUint16(offset, false);
-            }
-            return callback(-1);
-        };
-        reader.readAsArrayBuffer(file);
-    }
-
-    rotateImageBasedOnOrientation(orientation, ctx, canvas) {
-        const { height, width } = canvas;
-        ctx.save();
-        if (orientation > 4) {
-            canvas.width = height;
-            canvas.height = width;
-        }
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        switch (orientation) {
-        case 2:
-            // horizontal flip
-            //ctx.translate(canvas.width, 0);
-            ctx.scale(-1, 1);
-            break;
-        case 3:
-            // 180° rotate left
-            //ctx.translate(canvas.width, canvas.height);
-            ctx.rotate(Math.PI);
-            break;
-        case 4:
-            // vertical flip
-            //ctx.translate(0, canvas.height);
-            ctx.scale(1, -1);
-            break;
-        case 5:
-            // vertical flip + 90 rotate right
-            ctx.rotate(0.5 * Math.PI);
-            ctx.scale(1, -1);
-            break;
-        case 6:
-            // 90° rotate right
-            ctx.rotate(0.5 * Math.PI);
-            //ctx.translate(0, -canvas.height);
-            break;
-        case 7:
-            // horizontal flip + 90 rotate right
-            ctx.rotate(0.5 * Math.PI);
-            //ctx.translate(canvas.width, -canvas.height);
-            ctx.scale(-1, 1);
-            break;
-        case 8:
-            // 90° rotate left
-            ctx.rotate(-0.5 * Math.PI);
-            //ctx.translate(-canvas.width, 0);
-            break;
-        }
-    }
-    drawtoCanvasFromBlob(ctx, blob, redrawnCanvas, imgDim) {
-        return new Promise((res, rej) => {
-            var img = new Image();
-
-            img.onload = function() {
-                ctx.drawImage(img, - imgDim.width / 2, - imgDim.height / 2);
-                //window.image = img;
-                //window.cvs = redrawnCanvas;
-                //window.ctx = ctx;
-                res({blob, redrawnCanvas});
-            };
-
-            img.src = URL.createObjectURL(blob);
-        });
-    }
-
-    willNeedResize(file, maxDimensionProp) {
-        const image = new Image();
-        image.src = file.preview;
-        const dimensionsObject = determineImageDimensions(image.width, image.height, MaxImageUploadDim[maxDimensionProp]);
-        dimensionsObject.image = image;
-        return dimensionsObject;
-    }
-
-    picaResizeFunction(file, resizeDimensions) {
-        const { width, height, resized, image } = resizeDimensions;
-        if (!resized) {
-            return file;
-        };
-        pica = pica || Pica(['js', 'wasm', 'ww']);
-        const offPageCVS = document.createElement('canvas');
-        offPageCVS.width = width;
-        offPageCVS.height = height;
-        let orientation;
-        return new Promise((res, rej) => {
-            this.getOrientation(file, res);
-        }).then((orient) => {
-            orientation = orient;
-            return pica.resize(image, offPageCVS, this.state.picaOptions);
-        }).then((result) => {
-            return pica.toBlob(result, 'image/jpeg', 100);
-        }).then(blob => {
-            const ctx = offPageCVS.getContext('2d');
-            this.rotateImageBasedOnOrientation(orientation, ctx, offPageCVS);
-            return this.drawtoCanvasFromBlob(ctx, blob, offPageCVS, { width, height });
-        }).then(({blob, redrawnCanvas}) => {
-            return pica.toBlob(redrawnCanvas, 'image/jpeg', 100);
-        }).then((blob) => {
-            blob.name = file.name;
-            blob.lastModified = file.lastModified;
-            blob.lastModifiedDate = file.lastModifiedDate;
-            console.log('resize ran');
-            return blob;
-        });
-    }
-
     uploadtoS3 = (file) => {
         this.upload = new Slingshot.Upload(this.props.uploaderInstance, this.props.metaContext);//THIS HAS TO BE AN AVAILABLE SLINGSHOT INSTANCE
         this.calculateProgress();
         const { maxPicaDimensionProp } = this.props;
-        const resizeDimensions = this.willNeedResize(file, maxPicaDimensionProp);
+        const resizeDimensions = willNeedResize(file, maxPicaDimensionProp);
+        const resizeDims = MaxImageUploadDim[maxPicaDimensionProp] || {};
+        const scaleParams = {
+            maxWidth: resizeDims.width,
+            maxHeight: resizeDims.height,
+            orientation: true,
+            canvas: true,
+        }
         new Promise((resolve, reject) => {
             if (maxPicaDimensionProp && resizeDimensions.resized) {
-                console.log('about to pica');
-                return resolve(this.picaResizeFunction(file, resizeDimensions));
+                console.log('about to pica');//two different returns, one for pica and another for loadImageResize
+                return resolve(picaResizeFunction(file, resizeDimensions, this.state.picaOptions));
+                //return LoadImage(file, (cvs) => {
+                //     cvs.toBlob((blob) => {
+                //         resolve(blob);
+                //     }, 'image/jpeg', 0.95);
+                // }, scaleParams);
+            } else {
+                console.log('pica skipped');
+                return resolve(file);
             }
-            console.log('pica skipped');
-            return resolve(file);
         })
             .then(newFile => uploadToS3(this, newFile))
             .then((url) => {

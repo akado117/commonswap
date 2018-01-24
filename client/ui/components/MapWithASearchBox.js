@@ -72,7 +72,6 @@ const MapSearchBox = compose(
             })
         },
         componentDidUpdate() {
-            console.log('COMPONENT DID UPDATE NOW CALLING');
         },
     }),
 )((props) => {

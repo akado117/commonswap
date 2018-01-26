@@ -8,7 +8,8 @@ import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
 import FontIcon from 'material-ui/FontIcon';
 import MenuItem from 'material-ui/MenuItem';
-import Checkbox from '../components/forms/Checkbox'
+import Checkbox from '../components/forms/Checkbox';
+import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../../imports/helpers/DateHelpers';
 import ProfileComponent from '../components/profileComps/ProfileComponent.js'
 import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Footer from '../components/Footer';
@@ -18,35 +19,53 @@ import SendMessage from '../components/viewProfile/SendMessage';
 import ImageCarousel from '../components/ImageCarousel';
 import ModalActions from '../actions/ModalActions';
 import ChargeCardModal from '../components/dialog/ChargeCardModal';
-
+import { Tabs, Tab } from 'material-ui/Tabs';
+import SwipeableViews from '../../../node_modules/react-swipeable-views';
+import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import BetaWarning from '../components/BetaWarning';
 
 const amenitiesTextMap = {
-    wiFi: 'WiFi',
-    heat: 'Heat',
+    gym: 'Gym/Fitness Center',
     parking: 'Parking',
-    essentials: 'Essentials (towels, etc)',
-    gym: 'Gym/ Fitness Center',
-    dressers: 'Closet/ Drawer',
-    wiFi: 'Wifi',
-    washerDryer: 'Washer/ Dryer',
-    pool: 'Pool',
-    heat: 'Heat',
+    handicap: 'Handicap Friendly',
+    heat :'Heat/Air Conditioning',
+    wiFi: 'WiFi',
     kitchen: 'Kitchen Appliances',
-    parking: 'Parking'
+    washer: 'Washer/Dryer',
 }
 
 const interestsTextMap = {
-    photography: 'Photography',
-    wineries: 'Wineries',
-    beachBum: 'Beach Bum',
-    film: 'Film',
+    books: 'Reading',
+    breweries: 'Breweries',
+    cars: 'Cars',
+    clubber: 'Clubbing/Nightlife',
+    environment: 'Environmental Issues',
+    fashion: 'Fashion',
+    film: 'Movies',
+    arts: 'Fine Arts',
+    foodie: 'Restaurants',
+    gaming: 'Gaming',
+    fitness: 'Health/Fitness',
     hiking: 'Hiking',
-    clubber: 'Clubbing & Nightlife',
-    liveMusic: 'Live Music',
-    foodie: 'Food and Restaurants',
-    orgTour: 'Organized Tours'
+    liveMusic: 'Live Music/Concerts',
+    orgTour: 'Organized Tours',
+    animals: 'Pets/Animals',
+    photography: 'Photography',
+    politics: 'Politics',
+    wineries: 'Wineries',
 }
+
+const styles = {
+    headline: {
+        fontSize: 24,
+        paddingTop: 16,
+        marginBottom: 12,
+        fontWeight: 400,
+    },
+    slide: {
+        padding: 10,
+    },
+};
 
 const profile = <FontIcon className="material-icons">person</FontIcon>;
 
@@ -57,13 +76,21 @@ class ViewProfile extends React.Component {
             arrival: '',
             departure: '',
             notes: '',
-            guests: ''
+            guests: '',
+            slideIndex: 0,
+            selectedDates: convertPlannerDates(ParseDates(props.place.place.availableDates || [])),
         };
         const { placeId } = this.props.params;
         if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
             props.placeActions.getPlaceById(placeId);
         }
     }
+
+    handleChange = (value) => {
+        this.setState({
+            slideIndex: value,
+        });
+    };
 
     getPlace = () => {
         const { placeId } = this.props.params;
@@ -143,7 +170,7 @@ class ViewProfile extends React.Component {
     saveSwap = (data, props, currentPlace, modalActions) => {
         this.chargeCardModal(data, props, currentPlace, modalActions);
     }
-    
+
     sendMessage = (data) => {
         const { placeId, question, user } = this.props.params;
         this.props.profileActions.sendMessage({
@@ -177,116 +204,147 @@ class ViewProfile extends React.Component {
             }
         });
         const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
+
+        // onCalendarSelect = (selectedDates, eventData) => {
+        // if (eventData && eventData.eventType === EVENT_TYPES.END) {
+        //     const dateObj = selectedDates[eventData.modifiedDateIndex] || {};
+        //     this.setState({
+        //         selectedDates,
+        //         initialSelectedDate: dateObj.start,
+        //     });
+        // }
+        // }
         return (
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
                     <div className="row">
-                        <div className="col s12 m8">
-                            <div className="profile-section z-depth-2 " >
-                                <AppBar
-                                    title={<span>About {profile.firstName}</span>}
-                                    showMenuIconButton={false}
-                                    style={{ marginBottom: '10px', zIndex: 0 }}
-                                />
-                                <div className="col s6 l6">
-                                    <img className="circle responsive-img" src={profileImg ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
-                                </div>
-                                <div className="col s6" id="message" style={{ top: '5px' }}>
-                                    <div className="row">
-                                        <div className="col s12">
-                                            <h5><strong>{profile.firstName}</strong></h5>
-                                        </div>
-                                        <div className="col s12">
-                                            <h5><strong>{address.city} {address.state}</strong></h5>
-                                        </div>
-                                        <div className="col s12">
-                                            <p>{profile.school} {profile.classOf}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col s12">
-                                    <p>{profile.personalSummary}</p>
-                                </div>
-                                <div className="col s12">
-                                    <strong>Interests: </strong>
-                                </div>
-                                <div className="row">
-                                    <div className="col s12">
-                                        {interestsElements}
-                                    </div>
-                                </div>
+                        <div className="col s4 center-align">
+                            <img className="circle responsive-img" src={profileImg ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '15.0rem', width: '15.0rem' }} />
+                        </div>
+                        <div className="col s8">
+                            <div className="col s12">
+                                <h4 className="header"><strong>{profile.firstName}, ({address.city} {address.state})</strong></h4>
+                            </div>
+                            <div className="col s12">
+                                <h5>{profile.occupation}</h5>
+                            </div>
+                            <div className="col s12">
+                                <p className="school">{profile.school} {profile.classOf}</p>
+                            </div>
+                            <div className="col s12">
+                                <p><strong>About Me</strong></p>
+                                <p>{profile.personalSummary}</p>
+                            </div>
+                            <div className="col s12">
+                                <p><strong>Interests</strong></p>
+                                <p>{interestsElements}</p>
                             </div>
                         </div>
-                        <div className="col s12 m4">
-                            <SwapPicker
-                                requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}
-                                disableButton={!placeId || placeId === this.props.user.userId}
-                            />
-                        </div>
-                        <div className="col s12 m4 marg-top">
-                            <SendMessage 
-                                sendMessage={data => this.sendMessage(data)}
-                                disableButton={!placeId || placeId === this.props.user.userId}
-                            />
-                        </div>
-                    </div>
-                    <div className="col s12 z-depth-2">
                         <div className="row">
-                            <div className="place-images">
-                                <div className="col s12">
-                                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col s12">
-                            <div className="place-section z-depth-2">
-                                <AppBar
-                                    title={<span>About {profile.firstName}'s Place</span>}
-                                    showMenuIconButton={false}
-                                    style={{ marginBottom: '10px', zIndex: 0 }}
-                                />
-                                <div className="col s12">
-                                    <div className="row">
-                                        <div className="col s4" style={{ textAlign: 'center' }}>
-                                            <p>Entire Apt</p>
-                                            <p><FontIcon className="material-icons large">home</FontIcon></p>
-                                        </div>
-                                        <div className="col s4" style={{ textAlign: 'center' }}>
-                                            <p>{place.numOfGuests} guests</p>
-                                            <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
-                                        </div>
-                                        <div className="col s4" style={{ textAlign: 'center' }}>
-                                            <p>{place.bedrooms} Bedroom</p>
-                                            <p><FontIcon className="material-icons large">hotel</FontIcon></p>
+                            <div className="col s12">
+                                <Tabs
+                                    onChange={this.handleChange}
+                                    value={this.state.slideIndex}
+                                    initialSelectedIndex={0}
+                                    style={{ backgroundColor:'transparent' }}
+                                >
+                                    <Tab label="My Place" value={0} icon={<i class="fa fa-home" aria-hidden="true"></i>} />
+                                    <Tab label="My Calendar" value={1} icon={<i class="fa fa-calendar-o" aria-hidden="true"></i>} />
+                                    <Tab label="Send a Message" value={2} icon={<i class="fa fa-envelope-o" aria-hidden="true"></i>}/>
+                                    <Tab label="Request a Swap" value={3} icon={<i class="fa fa-plane" aria-hidden="true"></i>} />
+                                </Tabs>
+                                <SwipeableViews
+                                    index={this.state.slideIndex}
+                                    onChangeIndex={this.handleChange}
+                                >
+                                    <div>
+                                        <div className="col s12 z-depth-2">
+                                            <div className="row">
+                                                <div className="place-images">
+                                                    <div className="col s12">
+                                                        <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                                                        <div className="col s12">
+                                                            <div className="place-section z-depth-2">
+                                                                <AppBar
+                                                                    title={<span>About {profile.firstName}'s Place</span>}
+                                                                    showMenuIconButton={false}
+                                                                    style={{ marginBottom: '10px', zIndex: 0 }}
+                                                                />
+                                                                <div className="col s12">
+                                                                    <div className="row">
+                                                                        <div className="col s4" style={{ textAlign: 'center' }}>
+                                                                            <p>Entire Apt</p>
+                                                                            <p><FontIcon className="material-icons large">home</FontIcon></p>
+                                                                        </div>
+                                                                        <div className="col s4" style={{ textAlign: 'center' }}>
+                                                                            <p>{place.numOfGuests} guests</p>
+                                                                            <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
+                                                                        </div>
+                                                                        <div className="col s4" style={{ textAlign: 'center' }}>
+                                                                            <p>{place.bedrooms} Bedroom</p>
+                                                                            <p><FontIcon className="material-icons large">hotel</FontIcon></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col s12">
+                                                                    <strong>Amenities: </strong>
+                                                                </div>
+                                                                <div className="col s12">
+                                                                    <div className="col s12">
+                                                                        {amenitiesElements}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col s12">
+                                                                    <strong>Description: </strong>
+                                                                </div>
+                                                                <div className="col s12">
+                                                                    <p>{place.detailedDesc}</p>
+                                                                </div>
+                                                                <div className="col s12">
+                                                                    <strong>Special Instructions: </strong>
+                                                                    <p>{place.specialInst}
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col s12">
+                                                                    <strong>Top recommendations for visitors: </strong>
+                                                                    <p>{place.recommendations}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="col s12">
-                                    <strong>Amenities: </strong>
-                                </div>
-                                <div className="col s12">
-                                    <div className="col s12">
-                                        {amenitiesElements} 
+                                    <div style={styles.slide}>
+                                        <div className="z-depth-2 calendar-wrapper" >
+                                            <div className="row">
+                                                <div className="col s12 calendar-container" >
+                                                    <InfiniteCalendar
+                                                        width={'100%'}
+                                                        selected={new Date(2016, 5, 2)} />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col s12"> 
-                                    <strong>Description: </strong>
-                                </div>
-                                <div className="col s12">
-                                    <p>{place.detailedDesc}</p>
-                                </div>
-                                <div className="col s12">
-                                    <strong>Special Instructions: </strong>
-                                    <p>{place.specialInst}
-                                    </p>
-                                </div>
-                                <div className="col s12">
-                                    <strong>Top recommendations for visitors: </strong>
-                                    <p>{place.recommendations}</p>
-                                </div>
+                                    <div style={styles.slide}>
+                                        <div className="col s12">
+                                            <SendMessage
+                                                sendMessage={data => this.sendMessage(data)}
+                                                disableButton={!placeId || placeId === this.props.user.userId}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div style={styles.slide}>
+                                        <div className="col s12 center-align">
+                                            <SwapPicker
+                                                requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}
+                                                disableButton={!placeId || placeId === this.props.user.userId}
+                                            />
+                                        </div>
+                                    </div>
+                                </SwipeableViews>
                             </div>
                         </div>
                     </div>

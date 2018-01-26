@@ -10,6 +10,7 @@ import ProfileActions from '../../actions/ProfileActions';
 import { onChangeHelper } from '../../../../imports/helpers/DataHelpers';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 import ConnectedButton from '../forms/ConnectedButton';
+import TextFieldStandardized from '../forms/TextFieldStandardized';
 
 class Emergency extends Component {
     constructor(props) {
@@ -22,10 +23,6 @@ class Emergency extends Component {
             phone:'',
         };
     }
-
-    // function onChangeHelper(event) {
-    //     return event.target.value;
-    // }
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -120,6 +117,7 @@ function mapStateToProps(state) {
     user: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     profileActions: PropTypes.object.isRequired,
+    emergencyContact: PropTypes.object,
   };
 
   export default connect(mapStateToProps, mapDispatchToProps)(Emergency);

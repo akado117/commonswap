@@ -53,7 +53,9 @@ class SwapPicker extends Component {
                 </div>
                 <TextFieldStandardized
                     hintText="Description"
+                    className="label-left"
                     floatingLabelText={<span><i className="fa fa-envelope fa-1x" aria-hidden="true" /> Add a message</span>}
+                    style={{ textAlign: 'left' }}
                     onChange={(nul, requesterMessage) => this.setState({ requesterMessage })}
                 />
                 <ConnectedButton

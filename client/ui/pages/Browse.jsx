@@ -92,10 +92,10 @@ class Browse extends Component {
                 <div className="container">
                     <div className="row reduced-row-margin">
                         <div className="row">
-                            <div className="col s6 m3 input-field inline">
+                            {/* <div className="col s6 m3 input-field inline">
                                 <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
                                 <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
-                            </div>
+                            </div> */}
                             <div className="col s6 m3 search-button">
                                 <ConnectedButton
                                     icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}

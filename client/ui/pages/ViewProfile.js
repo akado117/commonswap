@@ -28,7 +28,7 @@ const amenitiesTextMap = {
     gym: 'Gym/Fitness Center',
     parking: 'Parking',
     handicap: 'Handicap Friendly',
-    heat :'Heat/Air Conditioning',
+    heat: 'Heat/Air Conditioning',
     wiFi: 'WiFi',
     kitchen: 'Kitchen Appliances',
     washer: 'Washer/Dryer',
@@ -247,19 +247,19 @@ class ViewProfile extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.slideIndex}
                                     initialSelectedIndex={0}
-                                    style={{ backgroundColor:'transparent' }}
+                                    style={{ backgroundColor: 'transparent' }}
                                 >
-                                    <Tab label="My Place" value={0} icon={<i class="fa fa-home" aria-hidden="true"></i>} />
-                                    <Tab label="My Calendar" value={1} icon={<i class="fa fa-calendar-o" aria-hidden="true"></i>} />
-                                    <Tab label="Send a Message" value={2} icon={<i class="fa fa-envelope-o" aria-hidden="true"></i>}/>
-                                    <Tab label="Request a Swap" value={3} icon={<i class="fa fa-plane" aria-hidden="true"></i>} />
+                                    <Tab label="My Place" value={0} icon={<i className="fa fa-home" aria-hidden="true"></i>} />
+                                    <Tab label="My Calendar" value={1} icon={<i className="fa fa-calendar-o" aria-hidden="true"></i>} />
+                                    <Tab label="Send a Message" value={2} icon={<i className="fa fa-envelope-o" aria-hidden="true"></i>} />
+                                    <Tab label="Request a Swap" value={3} icon={<i className="fa fa-plane" aria-hidden="true"></i>} />
                                 </Tabs>
                                 <SwipeableViews
                                     index={this.state.slideIndex}
                                     onChangeIndex={this.handleChange}
                                 >
                                     <div>
-                                        <div className="col s12 z-depth-2">
+                                        <div className="col s12">
                                             <div className="row">
                                                 <div className="place-images">
                                                     <div className="col s12">
@@ -267,7 +267,7 @@ class ViewProfile extends React.Component {
                                                         <div className="col s12">
                                                             <div className="place-section z-depth-2">
                                                                 <AppBar
-                                                                    title={<span>About {profile.firstName}'s Place</span>}
+                                                                    title={<span>Basic Information</span>}
                                                                     showMenuIconButton={false}
                                                                     style={{ marginBottom: '10px', zIndex: 0 }}
                                                                 />
@@ -289,26 +289,43 @@ class ViewProfile extends React.Component {
                                                                 </div>
                                                                 <div className="col s12">
                                                                     <strong>Amenities: </strong>
+                                                                    <p>{amenitiesElements}</p>
                                                                 </div>
-                                                                <div className="col s12">
+                                                            </div>
+                                                            <div className="space-top">
+                                                                <div className="place-section z-depth-2 ">
+                                                                    <AppBar
+                                                                        title={<span>Description</span>}
+                                                                        showMenuIconButton={false}
+                                                                        style={{ marginBottom: '10px', zIndex: 0 }}
+                                                                    />
                                                                     <div className="col s12">
-                                                                        {amenitiesElements}
+                                                                        <p>{place.detailedDesc}</p>
                                                                     </div>
                                                                 </div>
-                                                                <div className="col s12">
-                                                                    <strong>Description: </strong>
+                                                            </div>
+                                                            <div className="space-top">
+                                                                <div className="place-section z-depth-2">
+                                                                    <AppBar
+                                                                        title={<span>Recommendations</span>}
+                                                                        showMenuIconButton={false}
+                                                                        style={{ marginBottom: '10px', zIndex: 0 }}
+                                                                    />
+                                                                    <div className="col s12">
+                                                                        <p>{place.recommendations}</p>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="col s12">
-                                                                    <p>{place.detailedDesc}</p>
-                                                                </div>
-                                                                <div className="col s12">
-                                                                    <strong>Special Instructions: </strong>
-                                                                    <p>{place.specialInst}
-                                                                    </p>
-                                                                </div>
-                                                                <div className="col s12">
-                                                                    <strong>Top recommendations for visitors: </strong>
-                                                                    <p>{place.recommendations}</p>
+                                                            </div>
+                                                            <div className="space-top">
+                                                                <div className="place-section z-depth-2">
+                                                                    <AppBar
+                                                                        title={<span>General Courtesy Guidelines</span>}
+                                                                        showMenuIconButton={false}
+                                                                        style={{ marginBottom: '10px', zIndex: 0 }}
+                                                                    />
+                                                                    <div className="col s12">
+                                                                        <p>{place.generalNotes}</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

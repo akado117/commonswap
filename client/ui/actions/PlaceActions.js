@@ -76,10 +76,8 @@ const PlaceActions = {
         // `}).then(console.log);
         // debugger
         const dateObj = cloneDeep(unFormattedDates);
-        if (unFormattedDates.arrival && unFormattedDates.departure) {
-            dateObj.arrival = FormateDate(unFormattedDates.arrival);
-            dateObj.departure = FormateDate(unFormattedDates.departure);
-        }
+        dateObj.arrival = FormateDate(unFormattedDates.arrival);
+        dateObj.departure = FormateDate(unFormattedDates.departure);
         servicePending(actionTypes.GET_PLACE_BY_AVAILABILITY);
         return dispatch => Meteor.call('places.getByAvailability', dateObj, (error, result) => {
             if (result.data) {

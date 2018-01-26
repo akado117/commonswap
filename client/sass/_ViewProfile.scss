@@ -5,6 +5,11 @@
         .image-gallery-slide.img-gal {
           height: 300px;
         }
+        margin-top:1.0rem;
+      }
+
+      .send-message {
+          min-width: 100%;
       }
     
       .marg-top {
@@ -20,10 +25,18 @@
     .scroll-image {
         max-width: 100%;
     }
-    
+    .school {
+        font-size: 1.2rem;
+    }
     .no-pad {
         padding-left: 0px;
         padding-right:0px;
+    }
+    .first-row {
+        display: flex;
+    }
+    .header {
+        display: inline;
     }
     
     .checkbox {

@@ -44,6 +44,7 @@ export const actionTypes = {
     SEND_MESSAGE:'SEND_MESSAGE',
     MESSAGE_SENT:'MESSAGE_SENT',
     SAVE_CONTACT:'SAVE_CONTACT',
+    GET_CONTACT:'GET_CONTACT',
 };
 
 const serviceMessages = {

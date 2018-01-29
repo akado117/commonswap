@@ -19,6 +19,14 @@ import ConnectedButton from '../components/forms/ConnectedButton';
 import { onChangeHelper } from '../../../imports/helpers/DataHelpers';
 import { Today } from '../../../imports/helpers/DateHelpers';
 import { actionTypes } from '../helpers/ConstantsRedux';
+import { stateFields } from '../../../imports/lib/Constants';
+import SelectBuilder from '../components/forms/SelectBuilder';
+
+const { values } = stateFields.fields;
+const dropObj = {
+    values,
+    displayNames: values,
+};
 
 const items = [
     <MenuItem key={1} value={1} primaryText="1" />,
@@ -85,6 +93,8 @@ class Browse extends Component {
         this.props.router.push('/viewProfile');
     }
 
+    handleChange = (event, index, value) => this.setState({value});
+
     render() {
         const { placesForBrowsing, place } = this.props.place;
         return (
@@ -96,14 +106,6 @@ class Browse extends Component {
                                 <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
                                 <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
                             </div> */}
-                            <div className="col s6 m3 search-button">
-                                <ConnectedButton
-                                    icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
-                                    actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
-                                    buttonText="Search"
-                                    onClick={this.searchForPlaces}
-                                />
-                            </div>
                             <div className="col s6 m3">
                                 <DatePicker
                                     className="material-date-picker"
@@ -121,6 +123,23 @@ class Browse extends Component {
                                     floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
                                     textFieldStyle={{ width: '100%' }}
                                     defaultDate={this.state.departure || Today}
+                                />
+                            </div>
+                            <div className="col s6 m3">
+                                <SelectBuilder
+                                    onChange={this.handleChange}
+                                    selectArrObj={dropObj}
+                                    label="State"
+                                    extraProps={{}}
+                                    multiple={true}
+                                />
+                            </div>
+                            <div className="col s6 m3 search-button">
+                                <ConnectedButton
+                                    icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                                    actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
+                                    buttonText="Search"
+                                    onClick={this.searchForPlaces}
                                 />
                             </div>
                             {/* <div className="col s6 m4 l3  input-field inline">

@@ -34,6 +34,7 @@ class SelectBuilder extends Component {
                 iconStyle={{marginTop: '-20px' }}
                 onChange={this.onChangeHandler}
                 value={this.state.value}
+                multiple={this.props.multiple}
             >
                 {defaultSelection ? <MenuItem disabled value={undefined} primaryText={defaultSelection}/> : ''}
                 {selectArrObj.values.map((value, idx) => <MenuItem key={`${label}-${idx}`} value={value}
@@ -55,6 +56,7 @@ SelectBuilder.propTypes = {
     onChange: PropTypes.func,
     extraProps: PropTypes.object,
     defaultValue: PropTypes.string,
+    multiple: PropTypes.bool,
 };
 
 export default SelectBuilder

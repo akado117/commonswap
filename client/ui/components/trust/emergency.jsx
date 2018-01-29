@@ -12,6 +12,7 @@ import { actionTypes } from '../../helpers/ConstantsRedux';
 import ConnectedButton from '../forms/ConnectedButton';
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 
+let contact;
 class Emergency extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +24,11 @@ class Emergency extends Component {
             phone:'',
         };
     }
+    componentDidMount() {
+        //contact = this.props.profileActions.retrieveEmergencyContact();
+        // console.log('contact');
+        // console.log(contact);
+    }
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -32,6 +38,7 @@ class Emergency extends Component {
         const getValueFunc = this.getValueFunc;
         const { profile } = this.props.profile;
         const user = this.props.user;
+        const { emergencyContacts } = this.props.profile;
         return (
             <div>
                 <AppBar

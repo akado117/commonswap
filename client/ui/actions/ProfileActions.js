@@ -43,6 +43,11 @@ const ProfileActions = {
             return standardResponseFunc(error, result, actionTypes.GET_CARD_INFO, dispatch);
         });
     },
+    retrieveEmergencyContact: () => {
+        return dispatch => Meteor.call('getContact', (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.GET_CONTACT, dispatch);
+        });
+    },
     chargeCards: (trip) => {
         return dispatch => Meteor.call('createCharge', trip, (error, result) => {
             return standardResponseFunc(error, result, actionTypes.CARDS_CHARGED, dispatch);

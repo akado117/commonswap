@@ -61,7 +61,7 @@ const interestsTextMap = {
     breweries: 'Breweries',
     cars: 'Cars',
     clubber: 'Clubbing/Nightlife',
-    environment: 'Environmental Issues',
+    environment: 'Nature Lover',
     fashion: 'Fashion',
     film: 'Movies',
     arts: 'Fine Arts',
@@ -69,7 +69,7 @@ const interestsTextMap = {
     gaming: 'Gaming',
     fitness: 'Health/Fitness',
     hiking: 'Hiking',
-    liveMusic: 'Live Music/Concerts',
+    liveMusic: 'Music/Concerts',
     orgTour: 'Organized Tours',
     animals: 'Pets/Animals',
     photography: 'Photography',
@@ -85,7 +85,7 @@ const styles = {
         fontWeight: 400,
     },
     slide: {
-        padding: 10,
+        padding: "15px 10px",
     },
 };
 
@@ -108,10 +108,12 @@ class ViewProfile extends React.Component {
         }
     }
 
-    handleChange = (value) => {
-        this.setState({
-            slideIndex: value,
-        });
+    handleChange = (newValue, oldVal, { reason }) => {
+        if (reason !== 'focus') {
+            this.setState({
+                slideIndex: newValue,
+            });
+        }
     };
 
     getPlace = () => {
@@ -201,24 +203,105 @@ class ViewProfile extends React.Component {
             User: user,
         });
     }
+    getTabs = profile => (
+        <Tabs
+            onChange={this.handleChange}
+            value={this.state.slideIndex}
+            initialSelectedIndex={0}
+            style={{ backgroundColor: 'transparent' }}
+        >
+            <Tab className="nav-label" label={<span className="tab-text">{`${profile.firstName}'s Place`}</span>} value={0} icon={<i className="fa fa-home" aria-hidden="true" />} />
+            <Tab className="nav-label" label={<span className="tab-text">{`${profile.firstName}'s Calendar`}</span>} value={1} icon={<i className="fa fa-calendar-o" aria-hidden="true" />} />
+            <Tab className="nav-label" label={<span className="tab-text">Send a Message</span>} value={2} icon={<i className="fa fa-envelope-o" aria-hidden="true" />} />
+            <Tab className="nav-label" label={<span className="tab-text">Request a Swap</span>} value={3} icon={<i className="fa fa-plane" aria-hidden="true" />} />
+        </Tabs>
+    )
 
-    render() {
-        let internalComponent;
-        if (this.state.selectedIndex === 0) {
-            internalComponent = <ProfileComponent getValueFunc={this.addValueOnChange} />
-        } else if (this.state.selectedIndex === 1) {
-            internalComponent = <PlaceComponent getValueFunc={this.addValueOnChange} />
-        }
-
-        const { placeId } = this.props.params;
-        const place = this.getPlace();
-        const { amenities, interests, profile, profileImg, placeImgs, address } = place;
-
+    getProfile = (place) => {
+        const { amenities, numOfGuests, placeImgs, bedrooms, detailedDesc, recommendations, generalNotes } = place;
+        const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
         const amenitiesElements = Object.keys(amenities).map((key) => {
             if (amenities[key] && amenitiesTextMap[key]) {
                 return <Checkbox label={amenitiesTextMap[key]} active name={key} key={key} />;
             }
         });
+        return (
+            <div className="place-images">
+                <div className="col s12">
+                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                    <div className="col s12">
+                        <div className="place-section z-depth-2">
+                            <AppBar
+                                title={<span>Basic Information</span>}
+                                showMenuIconButton={false}
+                                style={{ marginBottom: '10px', zIndex: 0 }}
+                            />
+                            <div className="col s12">
+                                <div className="row">
+                                    <div className="col s4" style={{ textAlign: 'center' }}>
+                                        <p>Entire Apt</p>
+                                        <p><FontIcon className="material-icons large">home</FontIcon></p>
+                                    </div>
+                                    <div className="col s4" style={{ textAlign: 'center' }}>
+                                        <p>{numOfGuests} guests</p>
+                                        <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
+                                    </div>
+                                    <div className="col s4" style={{ textAlign: 'center' }}>
+                                        <p>{bedrooms} Bedroom</p>
+                                        <p><FontIcon className="material-icons large">hotel</FontIcon></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col s12">
+                                <strong>Amenities: </strong>
+                                {amenitiesElements}
+                            </div>
+                        </div>
+                        <div className="space-top">
+                            <div className="place-section z-depth-2 ">
+                                <AppBar
+                                    title={<span>Description</span>}
+                                    showMenuIconButton={false}
+                                    style={{ marginBottom: '10px', zIndex: 0 }}
+                                />
+                                <div className="col s12">
+                                    <p>{detailedDesc}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-top">
+                            <div className="place-section z-depth-2">
+                                <AppBar
+                                    title={<span>Recommendations</span>}
+                                    showMenuIconButton={false}
+                                    style={{ marginBottom: '10px', zIndex: 0 }}
+                                />
+                                <div className="col s12">
+                                    <p>{recommendations}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-top">
+                            <div className="place-section z-depth-2">
+                                <AppBar
+                                    title={<span>General Courtesy Guidelines</span>}
+                                    showMenuIconButton={false}
+                                    style={{ marginBottom: '10px', zIndex: 0 }}
+                                />
+                                <div className="col s12">
+                                    <p>{generalNotes}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    render() {
+        const { placeId } = this.props.params;
+        const place = this.getPlace();
+        const { interests, profile, profileImg, address } = place;
 
         const interestsElements = Object.keys(interests).map((key) => {
             if (interests[key] && interestsTextMap[key]) {
@@ -226,14 +309,11 @@ class ViewProfile extends React.Component {
             }
         });
 
-        const interestIconLabels = Object.keys(interests).map((key) => {
+        const interestIconLabels = Object.keys(interests).map((key, idx) => {
             if(interests[key] && interestIcons[key]) {
-                console.log('icon label');
-                console.log();
-                return <InterestElements iconName={interestIcons[key]} name={interestsTextMap[key]} />;
+                return <div className="col s4 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
             }
         })
-        const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
 
         // onCalendarSelect = (selectedDates, eventData) => {
         // if (eventData && eventData.eventType === EVENT_TYPES.END) {
@@ -248,152 +328,57 @@ class ViewProfile extends React.Component {
             <section className="profile-view-container">
                 <div className="container">
                     <BetaWarning></BetaWarning>
-                    <div className="row">
-                        <div className="col s4 center-align">
-                            <img className="circle responsive-img" src={profileImg ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '15.0rem', width: '15.0rem' }} />
+                    <div className="row" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <div className="col s12 m4" >
+                            <div className="profile-img" >
+                                <img className="circle responsive-img" src={profileImg ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" />
+                            </div>
                         </div>
-                        <div className="col s8">
-                            <div className="col s12">
-                                <h4 className="header"><strong>{profile.firstName}, ({address.city} {address.state})</strong></h4>
-                            </div>
-                            <div className="col s12">
-                                <h5>{profile.occupation}</h5>
-                            </div>
-                            <div className="col s12">
-                                <p className="school">{profile.school} {profile.classOf}</p>
-                            </div>
-                            <div className="col s12">
-                                <p><strong>About Me</strong></p>
-                                <p>{profile.personalSummary}</p>
-                            </div>
-                            <div className="col s12">
-                                <p><strong>Interests</strong></p>
+                        <div className="col s12 m8 profile-info">
+                            <h4 className="header"><strong>{profile.firstName}, ({address.city} {address.state})</strong></h4>
+                            <h5>{profile.occupation}</h5>
+                            <p className="school">{profile.school} {profile.classOf}</p>
+                            <h6><strong>About Me</strong></h6>
+                            <p>{profile.personalSummary}</p>
+                            <h6><strong>Interests</strong></h6>
+                            <div className="interests-section row">
                                 {interestIconLabels}
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col s12">
-                                <Tabs
-                                    onChange={this.handleChange}
-                                    value={this.state.slideIndex}
-                                    initialSelectedIndex={0}
-                                    style={{ backgroundColor: 'transparent' }}
-                                >
-                                    <Tab label={`${profile.firstName}'s Place`} value={0} icon={<i className="fa fa-home" aria-hidden="true"></i>} />
-                                    <Tab label={`${profile.firstName}'s Calendar`} value={1} icon={<i className="fa fa-calendar-o" aria-hidden="true"></i>} />
-                                    <Tab label="Send a Message" value={2} icon={<i className="fa fa-envelope-o" aria-hidden="true"></i>} />
-                                    <Tab label="Request a Swap" value={3} icon={<i className="fa fa-plane" aria-hidden="true"></i>} />
-                                </Tabs>
-                                <SwipeableViews
-                                    index={this.state.slideIndex}
-                                    onChangeIndex={this.handleChange}
-                                >
-                                    <div>
-                                        <div className="col s12">
-                                            <div className="row">
-                                                <div className="place-images">
-                                                    <div className="col s12">
-                                                        <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
-                                                        <div className="col s12">
-                                                            <div className="place-section z-depth-2">
-                                                                <AppBar
-                                                                    title={<span>Basic Information</span>}
-                                                                    showMenuIconButton={false}
-                                                                    style={{ marginBottom: '10px', zIndex: 0 }}
-                                                                />
-                                                                <div className="col s12">
-                                                                    <div className="row">
-                                                                        <div className="col s4" style={{ textAlign: 'center' }}>
-                                                                            <p>Entire Apt</p>
-                                                                            <p><FontIcon className="material-icons large">home</FontIcon></p>
-                                                                        </div>
-                                                                        <div className="col s4" style={{ textAlign: 'center' }}>
-                                                                            <p>{place.numOfGuests} guests</p>
-                                                                            <p><FontIcon className="material-icons large">people_outline</FontIcon></p>
-                                                                        </div>
-                                                                        <div className="col s4" style={{ textAlign: 'center' }}>
-                                                                            <p>{place.bedrooms} Bedroom</p>
-                                                                            <p><FontIcon className="material-icons large">hotel</FontIcon></p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col s12">
-                                                                    <strong>Amenities: </strong>
-                                                                    <p>{amenitiesElements}</p>
-                                                                </div>
-                                                            </div>
-                                                            <div className="space-top">
-                                                                <div className="place-section z-depth-2 ">
-                                                                    <AppBar
-                                                                        title={<span>Description</span>}
-                                                                        showMenuIconButton={false}
-                                                                        style={{ marginBottom: '10px', zIndex: 0 }}
-                                                                    />
-                                                                    <div className="col s12">
-                                                                        <p>{place.detailedDesc}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="space-top">
-                                                                <div className="place-section z-depth-2">
-                                                                    <AppBar
-                                                                        title={<span>Recommendations</span>}
-                                                                        showMenuIconButton={false}
-                                                                        style={{ marginBottom: '10px', zIndex: 0 }}
-                                                                    />
-                                                                    <div className="col s12">
-                                                                        <p>{place.recommendations}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="space-top">
-                                                                <div className="place-section z-depth-2">
-                                                                    <AppBar
-                                                                        title={<span>General Courtesy Guidelines</span>}
-                                                                        showMenuIconButton={false}
-                                                                        style={{ marginBottom: '10px', zIndex: 0 }}
-                                                                    />
-                                                                    <div className="col s12">
-                                                                        <p>{place.generalNotes}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style={styles.slide}>
-                                        <div className="z-depth-2 calendar-wrapper" >
-                                            <div className="row">
-                                                <div className="col s12 calendar-container" >
-                                                    <InfiniteCalendar
-                                                        width={'100%'}
-                                                        selected={new Date(2016, 5, 2)} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style={styles.slide}>
-                                        <div className="col s12">
-                                            <SendMessage
-                                                sendMessage={data => this.sendMessage(data)}
-                                                disableButton={!placeId || placeId === this.props.user.userId}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div style={styles.slide}>
-                                        <div className="col s12 center-align">
-                                            <SwapPicker
-                                                requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}
-                                                disableButton={!placeId || placeId === this.props.user.userId}
-                                            />
-                                        </div>
-                                    </div>
-                                </SwipeableViews>
+                    </div>
+                    <div className="row">
+                        {this.getTabs(profile)}
+                        <SwipeableViews
+                            index={this.state.slideIndex}
+                            onChangeIndex={this.handleChange}
+                        >
+                            <div className="row">
+                                {this.getProfile(place)}
                             </div>
-                        </div>
+                            <div style={styles.slide}>
+                                <div className="z-depth-2 calendar-wrapper" >
+                                    <div className="calendar-container" >
+                                        <InfiniteCalendar
+                                            width={'100%'}
+                                            selected={new Date(2016, 5, 2)} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={styles.slide}>
+                                <SendMessage
+                                    sendMessage={data => this.sendMessage(data)}
+                                    disableButton={!placeId || placeId === this.props.user.userId}
+                                />
+                            </div>
+                            <div style={styles.slide}>
+                                <div className="center-align">
+                                    <SwapPicker
+                                        requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}
+                                        disableButton={!placeId || placeId === this.props.user.userId}
+                                    />
+                                </div>
+                            </div>
+                        </SwipeableViews>
                     </div>
                 </div>
                 <Footer></Footer>

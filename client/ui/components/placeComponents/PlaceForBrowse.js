@@ -15,8 +15,8 @@ const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profil
                     </div>
                 </div>
                 <div className="user-text col s6 m12">
-                    <p className="marg-top"><strong>{placeForBrowse.profile.firstName}</strong></p>
-                    <p className="marg-top">{placeForBrowse.address.city}, {placeForBrowse.address.state}</p>
+                    <p className="marg-top"><strong>{profile.firstName}</strong></p>
+                    <p className="marg-top">{address.city}, {address.state}</p>
                     <p className="marg-top">{profile.occupation}</p>
                     <p className="marg-top">{profile.school}</p>
                 </div>
@@ -37,7 +37,7 @@ const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profil
             </div>
             <div className="row reduced-row-margin">
                 <div className="col s12">
-                    <p>About {placeForBrowse.profile.firstName}:</p>
+                    <p>About {profile.firstName}:</p>
                 </div>
                 <div className="col s12 summary-container">
                     {profile.personalSummary}
@@ -73,6 +73,8 @@ PlaceForBrowse.propTypes = {
 PlaceForBrowse.defaultProps = {
     profileImg: {},
     placeImgs: [],
+    profile: {},
+    address: {},
 };
 
 export default PlaceForBrowse;

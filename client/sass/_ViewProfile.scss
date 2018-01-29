@@ -1,21 +1,54 @@
 .profile-view-container {
     margin-right: 0;
     margin-left: 0;
+    .profile-img {
+        margin: 15px 0;
+        @extend .true-circle;
+        height: 100%;
+        width: 100%;
+        img {
+            width: 100%;
+            @media #{$small-and-down} {
+                width: 60%;
+            }
+        }
+    }
+    .profile-info {
+        p {
+            margin-top: 0;
+        }
+        .interests-section {
+            p {
+                margin-bottom: 5px;
+            }
+        }
+    }
+    .tab-text {
+        @media #{$small-and-down} {
+            display: none !important;
+        }
+    }
     .place-images {
         .image-gallery-slide.img-gal {
           height: 300px;
+
         }
         margin-top:1.0rem;
-      }
+        @media #{$medium-and-up} {
+            .image-gallery-slide.img-gal {
+                height: 450px;
+            }
+        }
+    }
 
-      .send-message {
-          min-width: 100%;
-      }
-    
-      .marg-top {
+    .send-message {
+        min-width: 100%;
+    }
+
+    .marg-top {
         margin-top: 1.0rem !important;
-      }
-    
+    }
+
     .main-image {
         max-width: 100%;
         padding-right:0px;

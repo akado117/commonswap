@@ -21,6 +21,10 @@ function profileReducer(state = initialState, action = {}) {
         stateClone = cloneDeep(state);
         stateClone.card = action.data.card;
         return stateClone;
+    case `${actionTypes.GET_CONTACT}_${SUCCESS}`:
+        stateClone = cloneDeep(state);
+        stateClone.card = action.data.card;
+        return stateClone;
     case actionTypes.LOGOUT:
         return initialState;
     default:

@@ -9,6 +9,7 @@ import FileActions from '../actions/FileActions';
 import FontIcon from 'material-ui/FontIcon';
 import MenuItem from 'material-ui/MenuItem';
 import Checkbox from '../components/forms/Checkbox';
+import InterestElements from '../components/forms/InterestElements';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../../imports/helpers/DateHelpers';
 import ProfileComponent from '../components/profileComps/ProfileComponent.js'
 import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
@@ -32,6 +33,27 @@ const amenitiesTextMap = {
     wiFi: 'WiFi',
     kitchen: 'Kitchen Appliances',
     washer: 'Washer/Dryer',
+}
+
+const interestIcons = {
+    books: 'book',
+    breweries: 'beer',
+    cars: 'car',
+    clubber: 'clubbing',
+    environment: 'tree',
+    fashion: 'film',
+    film: 'film',
+    arts: 'paint-brush',
+    foodie: 'cutlery',
+    gaming: 'gamepad',
+    fitness: 'heartbeat',
+    hiking: 'heartbeat',
+    liveMusic: 'music',
+    orgTour: 'music',
+    animals: 'paw',
+    photography: 'camera-retro',
+    politics: 'flag',
+    wineries: 'glass',
 }
 
 const interestsTextMap = {
@@ -203,6 +225,14 @@ class ViewProfile extends React.Component {
                 return <Checkbox label={interestsTextMap[key]} active name={key} key={key} />;
             }
         });
+
+        const interestIconLabels = Object.keys(interests).map((key) => {
+            if(interests[key] && interestIcons[key]) {
+                console.log('icon label');
+                console.log();
+                return <InterestElements iconName={interestIcons[key]} name={interestsTextMap[key]} />;
+            }
+        })
         const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
 
         // onCalendarSelect = (selectedDates, eventData) => {
@@ -238,7 +268,7 @@ class ViewProfile extends React.Component {
                             </div>
                             <div className="col s12">
                                 <p><strong>Interests</strong></p>
-                                <p>{interestsElements}</p>
+                                {interestIconLabels}
                             </div>
                         </div>
                         <div className="row">
@@ -249,8 +279,8 @@ class ViewProfile extends React.Component {
                                     initialSelectedIndex={0}
                                     style={{ backgroundColor: 'transparent' }}
                                 >
-                                    <Tab label="My Place" value={0} icon={<i className="fa fa-home" aria-hidden="true"></i>} />
-                                    <Tab label="My Calendar" value={1} icon={<i className="fa fa-calendar-o" aria-hidden="true"></i>} />
+                                    <Tab label={`${profile.firstName}'s Place`} value={0} icon={<i className="fa fa-home" aria-hidden="true"></i>} />
+                                    <Tab label={`${profile.firstName}'s Calendar`} value={1} icon={<i className="fa fa-calendar-o" aria-hidden="true"></i>} />
                                     <Tab label="Send a Message" value={2} icon={<i className="fa fa-envelope-o" aria-hidden="true"></i>} />
                                     <Tab label="Request a Swap" value={3} icon={<i className="fa fa-plane" aria-hidden="true"></i>} />
                                 </Tabs>

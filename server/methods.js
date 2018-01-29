@@ -280,6 +280,32 @@ Meteor.methods({
             return serviceErrorBuilder(`Get card info called for ${userId} but failed`, upsertFailedCode, err);
         }
     },
+    getContact() {
+        const userId = Meteor.userId;
+        try {
+            const contact = EmergencyContacts.findOne({ ownerUserId: userId }) || {};
+            console.log('CONTACT');
+            console.log(contact);
+            if (!contact.firstName) {
+                consoleErrorHelper('No contact info found for user', upsertFailedCode, userId);
+                return serviceErrorBuilder('No contact info found for user', upsertFailedCode, {});
+            }
+            consoleLogHelper(`Get contact info called for ${userId}`, genericSuccessCode, userId, JSON.stringify(contact.firstName));
+            return serviceSuccessBuilder({}, genericSuccessCode, {
+                serviceMessage: `Get contact info called for ${userId}`,
+                data: {
+                    firstName: contact.firstName,
+                    lastName: contact.lastName,
+                    relationship: contact.relationship,
+                    phone: contact.phone,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Get contact info called for ${userId} but failed`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder(`Get contact info called for ${userId} but failed`, upsertFailedCode, err);
+        }
+    },
     requestEmail(data) {
 
         const { Arrival, Departure, Notes, User, placeId } = data;

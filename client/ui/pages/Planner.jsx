@@ -238,6 +238,8 @@ class Planner extends React.Component {
 
     render() {
         const { userId } = this.props.user;
+        let today = new Date();
+        today = today.getDate();
         const { pendingTrips, activeTrips, pastTrips } = this.props.trip;
         const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : this.exampleTripBuilder(examplePendingSwaps, userId, 2);
         const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : this.tripBuilder(exampleActiveSwap, userId);
@@ -271,6 +273,7 @@ class Planner extends React.Component {
                                         layout={'portrait'}
                                         width={'100%'}
                                         onSelect={this.onCalendarSelect}
+                                        minDate={today}
                                     />
                                 </div>
                             </div>

@@ -166,9 +166,8 @@ class Browse extends Component {
                     </div>
                     <div className="scroll-listing col s12 m5 l6 no-pad" >
                         {placesForBrowsing.map((placeFB, idx) => (
-                            <div className="col s12 l6 ">
+                            <div className="col s12 l6 " key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}>
                                 <PlaceForBrowse
-                                    key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}
                                     placeForBrowse={placeFB}
                                     address={placeFB.address}
                                     profile={placeFB.profile}

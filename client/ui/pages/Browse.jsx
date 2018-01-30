@@ -41,23 +41,30 @@ const SEARCHED = 'SEACHED';
 class Browse extends Component {
     constructor(props) {
         super(props);
+        const coords = props.place.coords || props.place.place.coords || {};
+        coords.distance = 50;
         this.state = {
             numOfGuests: props.place.numOfGuests,
             arrival: props.place.arrival,
             departure: props.place.departure,
-            coords: props.place.coords || props.place.place.coords || {},//if place has location or use has already selected a location
+            coords,//if place has location or use has already selected a location
         };
+    }
+
+    componentDidMount = () => {
+        if (Materialize.updateTextFields) {
+            Materialize.updateTextFields();
+        }
     }
 
     searchForPlaces = () => {
         const { arrival, departure, numOfGuests, coords } = this.state;
-        if (!coords || !coords.lat) return this.setState({ searchMessage: 'Please select your location to search near' });
+        if (!coords || !coords.lat) return this.setState({ searchMessage: 'Please enter a location to search near' });
         if ((arrival && !departure) || (departure && !arrival)) return this.setState({ searchMessage: 'Please select your arrival AND departure dates' });
         this.setState({ searchMessage: SEARCHED });
         const searchObj = { arrival, departure, numOfGuests, coords };
         //if (!coords.distance || coords.distance < 1) delete searchObj.coords;
         this.props.placeActions.getPlaceBasedUponAvailability(searchObj);
-        this.updateCordsDistance(this.props.place.place.coords);
         return undefined;
     }
 
@@ -97,42 +104,20 @@ class Browse extends Component {
 
     render() {
         const { placesForBrowsing, place } = this.props.place;
+        let defArrDate = {};
+        let defDepDate = {};
+        if (this.state.departure || this.state.arrival) {
+            defArrDate = { defaultDate: this.state.arrival };
+            defDepDate = { defaultDate: this.state.departure };
+        }
         return (
             <div className="browse-container">
                 <div className="container">
                     <div className="row reduced-row-margin">
                         <div className="row">
-                            {/* <div className="col s6 m3 input-field inline">
-                                <input type="number" min={0} max={500} className="" id="range-cap" onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
+                            <div className="col s6 m3 input-field inline">
+                                <input type="number" min={0} max={500} className="" id="range-cap" value={this.state.coords.distance} onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
                                 <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
-                            </div> */}
-                            <div className="col s6 m3">
-                                <DatePicker
-                                    className="material-date-picker"
-                                    onChange={(nul, date) => this.setState({ arrival: date })}
-                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
-                                    textFieldStyle={{ width: '100%' }}
-                                    defaultDate={this.state.arrival || Today}
-                                //disableYearSelection={this.state.disableYearSelection}
-                                />
-                            </div>
-                            <div className="col s6 m3">
-                                <DatePicker
-                                    className="material-date-picker"
-                                    onChange={(nul, date) => this.setState({ departure: date })}
-                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
-                                    textFieldStyle={{ width: '100%' }}
-                                    defaultDate={this.state.departure || Today}
-                                />
-                            </div>
-                            <div className="col s6 m3">
-                                <SelectBuilder
-                                    onChange={this.handleChange}
-                                    selectArrObj={dropObj}
-                                    label="State"
-                                    extraProps={{}}
-                                    multiple={true}
-                                />
                             </div>
                             <div className="col s6 m3 search-button">
                                 <ConnectedButton
@@ -142,6 +127,42 @@ class Browse extends Component {
                                     onClick={this.searchForPlaces}
                                 />
                             </div>
+                            <div className="col s6 m3">
+                                <DatePicker
+                                    className="material-date-picker"
+                                    onChange={(nul, date) => this.setState({ arrival: date })}
+                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
+                                    textFieldStyle={{ width: '100%' }}
+                                    {...defArrDate}
+                                //disableYearSelection={this.state.disableYearSelection}
+                                />
+                            </div>
+                            <div className="col s6 m3">
+                                <DatePicker
+                                    className="material-date-picker"
+                                    onChange={(nul, date) => this.setState({ departure: date })}
+                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
+                                    textFieldStyle={{ width: '100%' }}
+                                    {...defDepDate}
+                                />
+                            </div>
+                            {/*<div className="col s6 m3">*/}
+                                {/*<SelectBuilder*/}
+                                    {/*onChange={this.handleChange}*/}
+                                    {/*selectArrObj={dropObj}*/}
+                                    {/*label="State"*/}
+                                    {/*extraProps={{}}*/}
+                                    {/*multiple={true}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
+                            {/*<div className="col s6 m3 search-button">*/}
+                                {/*<ConnectedButton*/}
+                                    {/*icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}*/}
+                                    {/*actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}*/}
+                                    {/*buttonText="Search"*/}
+                                    {/*onClick={this.searchForPlaces}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
                             {/* <div className="col s6 m4 l3  input-field inline">
                             <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
                             <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true" /> Sleeps how many</label>

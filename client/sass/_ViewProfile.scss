@@ -1,102 +1,110 @@
 .profile-view-container {
-    margin-right: 0;
-    margin-left: 0;
-    .profile-img {
-        margin: 15px 0;
-        @extend .true-circle;
-        height: 100%;
-        width: 100%;
-        img {
-            width: 100%;
-            @media #{$small-and-down} {
-                width: 60%;
-            }
-        }
+  margin-right: 0;
+  margin-left: 0;
+  .profile-img {
+      margin: 15px 0;
+      @extend .true-circle;
+      height: 100%;
+      width: 100%;
+      img {
+          width: 100%;
+          @media #{$small-and-down} {
+              width: 60%;
+          }
+      }
+  }
+  .profile-info {
+      p {
+          margin-top: 0;
+      }
+      .interests-section {
+          p {
+              margin-bottom: 5px;
+          }
+      }
+  }
+  .tab-row {
+    @media #{$small-and-down} {
+      width: 103% !important;
+      margin-left: -1.5%;
     }
-    .profile-info {
-        p {
-            margin-top: 0;
-        }
-        .interests-section {
-            p {
-                margin-bottom: 5px;
-            }
-        }
-    }
-    .tab-text {
-        @media #{$small-and-down} {
-            display: none !important;
-        }
-    }
-    .place-images {
-        .image-gallery-slide.img-gal {
-          height: 300px;
+  }
+  .tab-text {
+      @media #{$small-and-down} {
+          display: none !important;
+      }
+  }
+  .place-images {
+      .image-gallery-slide.img-gal {
+        height: 300px;
 
-        }
-        margin-top:1.0rem;
-        @media #{$medium-and-up} {
-            .image-gallery-slide.img-gal {
-                height: 450px;
-            }
-        }
+      }
+      margin-top:1.0rem;
+      @media #{$medium-and-up} {
+          .image-gallery-slide.img-gal {
+              height: 450px;
+          }
+      }
+  }
+  .space-top {
+    padding-top: 2.0rem;
+    width: 100%;
+    display: inline-block;
+  }
+  .place-section {
+    display: inline-block;
+    width: 100%;
+    p {
+      margin-top: 0;
     }
+  }
 
-    .send-message {
-        min-width: 100%;
-    }
+  .send-message {
+      min-width: 100%;
+  }
 
-    .marg-top {
-        margin-top: 1.0rem !important;
-    }
+  .marg-top {
+      margin-top: 1.0rem !important;
+  }
 
-    .main-image {
-        max-width: 100%;
-        padding-right:0px;
-        min-height: 90%;
-    }
-    
-    .scroll-image {
-        max-width: 100%;
-    }
-    .school {
-        font-size: 1.2rem;
-    }
-    .no-pad {
-        padding-left: 0px;
-        padding-right:0px;
-    }
-    .first-row {
-        display: flex;
-    }
-    .header {
-        display: inline;
-    }
-    
-    .checkbox {
-        border-radius: 30px;
-        padding: 0 9px;
-        float: right;
-        margin: -7px 0px;
-        i {
-          width: 18px;
-        }
-    }
-    .profile-section {
-        padding: 0;
-    }
-    .place-section {
-        display: inline-block;
-        padding: 0;
-        p {
-            margin-top: 0;
-        }
-    }
-    .checkbox-container {
-        button {
-            background: $primary-accent-color;
-        }
-    }
-    .space-top {
-        padding-top: 2.0rem;
-    }
+  .main-image {
+      max-width: 100%;
+      padding-right:0px;
+      min-height: 90%;
+  }
+
+  .scroll-image {
+      max-width: 100%;
+  }
+  .school {
+      font-size: 1.2rem;
+  }
+  .no-pad {
+      padding-left: 0px;
+      padding-right:0px;
+  }
+  .first-row {
+      display: flex;
+  }
+  .header {
+      display: inline;
+  }
+
+  .checkbox {
+      border-radius: 30px;
+      padding: 0 9px;
+      float: right;
+      margin: -7px 0px;
+      i {
+        width: 18px;
+      }
+  }
+  .profile-section {
+      padding: 0;
+  }
+  .checkbox-container {
+      button {
+          background: $primary-accent-color;
+      }
+  }
 }

@@ -123,6 +123,7 @@ export const FieldsForBrowseProfile = {
     recommendations: 1,
     generalNotes: 1,
     detailedDesc: 1,
+    availableDates: 1,
 };
 
 export const FieldsForTrip = {

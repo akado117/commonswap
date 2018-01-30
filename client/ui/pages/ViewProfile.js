@@ -7,12 +7,9 @@ import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
 import FontIcon from 'material-ui/FontIcon';
-import MenuItem from 'material-ui/MenuItem';
 import Checkbox from '../components/forms/Checkbox';
 import InterestElements from '../components/forms/InterestElements';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates, Today } from '../../../imports/helpers/DateHelpers';
-import ProfileComponent from '../components/profileComps/ProfileComponent.js'
-import PlaceComponent from '../components/placeComponents/PlaceComponent.js'
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
@@ -366,6 +363,7 @@ class ViewProfile extends React.Component {
                                         <div className="calendar-container" >
                                             <InfiniteCalendar
                                                 Component={withMultipleRanges(Calendar)}
+                                                height={500}
                                                 width="100%"
                                                 selected={this.state.selectedDates}
                                                 initialSelectedDate={Today}

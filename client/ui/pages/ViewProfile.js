@@ -142,14 +142,14 @@ class ViewProfile extends React.Component {
 
     };
 
-    requestSwap = (data) => {
-        const { placeId, user } = this.props.params;
+    requestSwap = (data, props) => {
+        const { placeId } = props.params;
         this.props.profileActions.requestSwap({
             placeId,
             Arrival: data.dates.arrival,
             Departure: data.dates.departure,
             Notes: data.swapperMessage,
-            User: user,
+            User: props.user,
         });
     }
 
@@ -161,7 +161,7 @@ class ViewProfile extends React.Component {
 
     continueSaving = (data, props, currentPlace, modalActions) => {
         this.props.modalActions.closeModal();
-        this.requestSwap(data);
+        this.requestSwap(data, props);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;

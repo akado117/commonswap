@@ -65,7 +65,7 @@ class SwapPicker extends Component {
                     buttonText="Request Swap"
                     onClick={() => this.props.requestSwap(this.state)}
                     className="swap-button"
-                    successText="Your Swap Submitted"
+                    successText="Your swap request has been sent"
                 />
             </div>
         );

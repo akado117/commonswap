@@ -328,15 +328,15 @@ Meteor.methods({
                     RequestedPlace,
                 },
             });
-            consoleLogHelper(`Email for new swap from ${User} sent`, genericSuccessCode, userId, `Place Id of interest ${placeId}`);
+            consoleLogHelper(`Email for new swap from ${User && User.userId} sent`, genericSuccessCode, userId, `Place Id of interest ${placeId}`);
             return serviceSuccessBuilder(res.data, genericSuccessCode, {
-                serviceMessage: `Email for new swap from ${User} sent`,
+                serviceMessage: `Email for new swap from ${User && User.userId} sent`,
                 data: res.data,
             });
         } catch (err) {
             console.log(err.stack);
-            consoleErrorHelper(`Email for new swap from ${User} failed`, upsertFailedCode, userId, err);
-            return serviceErrorBuilder(`Email for new swap from ${User} failed`, upsertFailedCode, err);
+            consoleErrorHelper(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, err);
         }
     },
     sendMessage(data) {
@@ -455,10 +455,12 @@ Meteor.methods({
                 tripClone._id = tripGUID.insertedId;
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
+            console.log(tripGUID)
             delete tripClone.requesteeEmail;
-            consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
+            const message = tripGUID.insertedId ? `key ${tripGUID.insertId}` : `userId: ${requesterUserId}, requesteeUserId: ${requesteeUserId}, dates: ${JSON.stringify(dates)}`;
+            consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with search of ${message}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
             return serviceSuccessBuilder({ tripGUID }, genericSuccessCode, {
-                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with key ${tripGUID.insertedId || tripClone._id}`,
+                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with with search of ${message}`,
                 data: {
                     trip: tripClone,
                 },

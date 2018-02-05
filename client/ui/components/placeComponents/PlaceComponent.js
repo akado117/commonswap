@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectBuilder from '../forms/SelectBuilder.js'
+import AppBar from 'material-ui/AppBar';
+import SelectBuilder from '../forms/SelectBuilder'
 import ButtonArrayComp from '../forms/ButtonArrayComp';
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import Address from './Address';
 import Uploader from '../Uploader';
 import ImageCarousel from '../ImageCarousel';
-import AppBar from 'material-ui/AppBar';
 import MapWithASearchBox from '../MapWithASearchBox';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 import { MaxImageDimTypes } from '../../../../imports/lib/Constants';

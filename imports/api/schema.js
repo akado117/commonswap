@@ -160,6 +160,7 @@ export default [
     recommendations: String
     generalNotes: String
     placeImages: [Image]
+    availableAnytime: Boolean
   }
   
   type Image {

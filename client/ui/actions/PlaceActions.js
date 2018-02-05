@@ -47,6 +47,8 @@ const PlaceActions = {
             };
         }
     },
+    updateAlwaysAvailable: ({ availableAnytime, _id, ownerUserId }) => dispatch => Meteor.call('places.updateAlwaysAvailable', { availableAnytime, _id, ownerUserId }, (error, result) =>
+        standardResponseFunc(error, result, actionTypes.PLACE_UPDATE_ALWAYS_AVAILABLE, dispatch)),
     getPlaceById(_id) {
         return dispatch => Meteor.call('places.getPlaceById', {_id}, (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_ID, dispatch);

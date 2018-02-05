@@ -10,7 +10,7 @@ import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert 
 const PlaceActions = {
     upsertPlace: (placeData, cb) => {
         const currentPlaceData = buildPlaceForUpsert(placeData, Store.getState());
-        const { place = {}, address = {}, amenities = {} } = currentPlaceData;
+        const {place = {}, address = {}, amenities = {}} = currentPlaceData;
 
         mapMongoGeoSpatialCoords(place);
         servicePending(actionTypes.SAVE_PLACE);
@@ -48,7 +48,7 @@ const PlaceActions = {
         }
     },
     getPlaceById(_id) {
-        return dispatch => Meteor.call('places.getPlaceById', { _id }, (error, result) => {
+        return dispatch => Meteor.call('places.getPlaceById', {_id}, (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_ID, dispatch);
         });
     },
@@ -100,8 +100,15 @@ const PlaceActions = {
             return standardResponseFunc(error, result, actionTypes.SAVE_TRIP, dispatch);
         });
     },
+    chargeCards: (trip) => {
+        return dispatch => Meteor.call('trips.createCharge', trip, (error, result) => {
+            return standardResponseFunc(error, result, actionTypes.CARDS_CHARGED, dispatch);
+        });
+    },
     getSwaps: args => dispatch => Meteor.call('trips.getUserTrips', args, (error, result) =>
         standardResponseFunc(error, result, actionTypes.GET_TRIPS, dispatch)),
+    updateSwapStatus: ({ _id, status, prevStatus }) => dispatch => Meteor.call('trips.updateTripStatus', { _id, status, prevStatus }, (error, result) =>
+        standardResponseFunc(error, result, actionTypes.TRIP_UPDATE_STATUS, dispatch)),
 };
 
 export default PlaceActions;

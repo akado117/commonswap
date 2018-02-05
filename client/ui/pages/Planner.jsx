@@ -9,7 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import AppBar from 'material-ui/AppBar';
-import { FormateDate, ParseDates, PrettyDate, convertPlannerDates } from '../../../imports/helpers/DateHelpers';
+import { FormateDate, ParseDates, PrettyDate, convertPlannerDates, Today } from '../../../imports/helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 import Footer from '../components/Footer';
@@ -28,8 +28,7 @@ import ConnectedButton from '../components/forms/ConnectedButton';
 const CITIES = require('../../../node_modules/react-select/examples/src/data/states');
 
 
-const today = new Date();
-const minDate = addDays(today, -40);
+const minDate = addDays(Today, -20);
 
 const examplePastSwap = [{
     address: {
@@ -51,6 +50,7 @@ const examplePastSwap = [{
     status: tripStatus.ACTIVE,
     rating: 4,
     message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
+    _id: '1',
 }];
 
 const exampleActiveSwap = [{
@@ -67,10 +67,11 @@ const exampleActiveSwap = [{
     requesterName: 'Leonardo (Example Active Swap)',
     requesteeName: 'Leonardo (Example Active Swap)',
     dates: {
-        departure: PrettyDate(addDays(today, 5)),
-        arrival: PrettyDate(today),
+        departure: PrettyDate(addDays(Today, 5)),
+        arrival: PrettyDate(Today),
     },
     status: tripStatus.ACTIVE,
+    _id: '2',
 }];
 
 const examplePendingSwaps = [
@@ -88,10 +89,11 @@ const examplePendingSwaps = [
         requesterName: 'Raphael (Example)',
         requesteeName: 'Raphael (Example)',
         dates: {
-            departure: PrettyDate(addDays(today, 5)),
-            arrival: PrettyDate(today),
+            departure: PrettyDate(addDays(Today, 5)),
+            arrival: PrettyDate(Today),
         },
         status: tripStatus.PENDING,
+        _id: '3',
     }, {
         address: {
             state: 'HI',
@@ -106,10 +108,11 @@ const examplePendingSwaps = [
         requesterName: 'Donatello (Example)',
         requesteeName: 'Donatello (Example)',
         dates: {
-            departure: PrettyDate(addDays(today, 5)),
-            arrival: PrettyDate(today),
+            departure: PrettyDate(addDays(Today, 5)),
+            arrival: PrettyDate(Today),
         },
         status: tripStatus.ACCEPTED,
+        _id: '4',
     },{
         address: {
             state: 'NY',
@@ -124,8 +127,8 @@ const examplePendingSwaps = [
         requesterName: 'Shredder (Example)',
         requesteeName: 'Shredder (Example)',
         dates: {
-            departure: FormateDate(addDays(today, 5)),
-            arrival: FormateDate(today),
+            departure: FormateDate(addDays(Today, 5)),
+            arrival: FormateDate(Today),
         },
         status: tripStatus.PENDING,
         place: {
@@ -137,6 +140,7 @@ const examplePendingSwaps = [
         },
         requesterMessage: 'This is an example of what you will see when someone else requests to swap with you',
         examplePlace: true,
+        _id: '5',
     }];
 
 class Planner extends React.Component {
@@ -209,37 +213,44 @@ class Planner extends React.Component {
     }
 
     tripBuilder= (trips, userId) => trips.map((trip, idx) => <Trip
-        key={`trip-${idx}`}
+        key={`trip-${trip._id}`}
         swapObj={trip}
         currentUserId={userId}
-        acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openSwapModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
+        acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openChargeCardModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
         declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false, trip)}
     />);
 
-    exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${idx}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
+    exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${trip._id}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
-    openSwapModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
+    openChargeCardModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
         modalActions.openModal(<ChargeCardModal
-            buttonAccept={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
+            buttonAccept={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, accepted, trip)}
             buttonDecline={this.props.modalActions.closeModal} />);
     }
 
-    openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
-        modalActions.openModal(<AcceptSwapModal
-            requesterProfileImg={requesterProfileImage}
-            primaryText={accepted ? 'Swap Accepted' : 'Swap Declined'}
-            requesteeProfileImg={requesteeProfileImage}
-            buttonHandler={this.props.modalActions.closeModal} />);
-        if(accepted)
-        {
-            this.props.profileActions.chargeCards(trip);
+    acceptModalAcceptHandler = (trip, accepted) => {
+        const { _id, status } = trip;
+        if (accepted) {
+            this.props.placeActions.chargeCards(trip);//charges and updates to accepted
+        } else {
+            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.DECLINED });
         }
+        this.props.modalActions.closeModal();
+    }
+
+    openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
+        modalActions.openModal(
+            <AcceptSwapModal
+                requesterProfileImg={requesterProfileImage}
+                primaryText={accepted ? 'Swap Accepted' : 'Really Decline Swap?'}
+                requesteeProfileImg={requesteeProfileImage}
+                acceptButtonHandler={() => this.acceptModalAcceptHandler(trip, accepted)}
+                declineButtonHandler={accepted ? null : this.props.modalActions.closeModal}
+            />);
     }
 
     render() {
         const { userId } = this.props.user;
-        let today = new Date();
-        today = today.getDate();
         const { pendingTrips, activeTrips, pastTrips } = this.props.trip;
         const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : this.exampleTripBuilder(examplePendingSwaps, userId, 2);
         const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : this.tripBuilder(exampleActiveSwap, userId);
@@ -273,7 +284,7 @@ class Planner extends React.Component {
                                         layout={'portrait'}
                                         width={'100%'}
                                         onSelect={this.onCalendarSelect}
-                                        minDate={today}
+                                        minDate={Today}
                                     />
                                 </div>
                             </div>
@@ -294,7 +305,7 @@ class Planner extends React.Component {
                     </div>
                     <div className="row">
                         <AppBar
-                            title={<span>Activity - UNDER CONSTRUCTION</span>}
+                            title={<span>Activity</span>}
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />

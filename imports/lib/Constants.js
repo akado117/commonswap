@@ -66,6 +66,7 @@ export const tripStatus = {
     ACCEPTED: 'ACCEPTED',
     COMPLETE: 'COMPLETE',
     PENDING: 'PENDING',
+    DECLINED: 'DECLINED',
 };
 
 export const serviceErrorBuilder = (message, code, err = {}, extraParams = {}) => ({

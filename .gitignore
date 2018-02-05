@@ -1,3 +1,6 @@
 node_modules/
 .deploy/
+.idea/
+prod.settings.json
+dev.settings.json
 package-lock.json

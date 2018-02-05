@@ -511,6 +511,25 @@ const methods = {
             return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
         }
     },
+    'places.updateAlwaysAvailable'({ availableAnytime, _id, ownerUserId }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting place info', tripErrorCode);
+        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode, );
+        try {
+            const tripGUID = Places.update({ _id, ownerUserId}, { $set: { availableAnytime } });
+            consoleLogHelper(`Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`, genericSuccessCode, userId, '');
+            return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
+                serviceMessage: `Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`,
+                data: {
+                    availableAnytime,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Failed when attempting to update trip: ${id}`, mongoFindOneError, Meteor.userId(), err);
+            return serviceErrorBuilder(`Failed when attempting to update trip: ${id}`, mongoFindOneError, err);
+        }
+    },
     'places.getPlaceById': function getPlaceById({ _id, ...args }) {
         if (!_id) {
             consoleErrorHelper('Failed when attempting to find a place, please send correct Args', mongoFindOneError, Meteor.userId(), args);
@@ -574,7 +593,7 @@ const methods = {
             };
             if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
             if (arrival && departure) {
-                searchObj.$or = [{ availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
+                searchObj.$or = [{ availableAnytime: true }, { availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
                     { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }];
             }
             const places = Places.find(searchObj, { fields: FieldsForBrowseProfile }).fetch();

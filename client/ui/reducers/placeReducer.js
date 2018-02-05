@@ -24,6 +24,10 @@ function placeReducer(state = initialState, action = {}) {
         stateClone = cloneDeep(state);
         stateClone.place.availableDates = action.data.place.availableDates;
         return stateClone;
+    case `${actionTypes.PLACE_UPDATE_ALWAYS_AVAILABLE}_${SUCCESS}`:
+        stateClone = cloneDeep(state);
+        stateClone.place.availableAnytime = action.data.availableAnytime;
+        return stateClone;
     case `${actionTypes.GET_PLACE_BY_AVAILABILITY}_${SUCCESS}`:
         stateClone = cloneDeep(state);
         stateClone.placesForBrowsing = action.data || [];

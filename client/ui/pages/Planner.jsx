@@ -3,12 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import 'react-rater/lib/react-rater.css';
 import PropTypes from 'prop-types';
-import FontIcon from 'material-ui/FontIcon';
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import Toggle from 'material-ui/Toggle';
+import AppBar from 'material-ui/AppBar';
 import addDays from 'date-fns/add_days';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
-import AppBar from 'material-ui/AppBar';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates, Today } from '../../../imports/helpers/DateHelpers';
 import '../../../node_modules/react-infinite-calendar/styles.css';
 import '../../../node_modules/react-select/dist/react-select.css';
@@ -249,9 +248,15 @@ class Planner extends React.Component {
             />);
     }
 
+    updateAvailableAnytime(availableAnytime, place, placeActions, userId) {
+        const { _id, ownerUserId } = place;
+        placeActions.updateAlwaysAvailable({ availableAnytime, _id, ownerUserId: userId });
+    }
+
     render() {
         const { userId } = this.props.user;
         const { pendingTrips, activeTrips, pastTrips } = this.props.trip;
+        const { place } = this.props.place;
         const pendTrips = pendingTrips.length ? this.tripBuilder(pendingTrips, userId) : this.exampleTripBuilder(examplePendingSwaps, userId, 2);
         const actTrips = activeTrips.length ? this.tripBuilder(activeTrips, userId) : this.tripBuilder(exampleActiveSwap, userId);
         const pastedTrips = pastTrips.length ? this.tripBuilder(pastTrips, userId) : this.tripBuilder(examplePastSwap, userId);
@@ -289,8 +294,16 @@ class Planner extends React.Component {
                                 </div>
                             </div>
                             <div className="col s12">
-                                <div className="row">
-                                    <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">
+                                <div className="row center-content">
+                                    <div className="col s6 m4 l3 offset-m4 offset-l6">
+                                        <Toggle
+                                            toggled={place.availableAnytime}
+                                            onToggle={(obj, state) => this.updateAvailableAnytime(state, place, this.props.placeActions, userId)}
+                                            label="Always Available?"
+                                            labelStyle={{ fontWeight: 'bold', fontSize: '1rem', textAlign: 'right' }}
+                                        />
+                                    </div>
+                                    <div className="col s6 m4 l3 ">
                                         <ConnectedButton
                                             icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                                             actionType={actionTypes.SAVE_PLACE_AVAILABILITY}

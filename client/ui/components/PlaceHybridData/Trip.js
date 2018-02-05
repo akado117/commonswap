@@ -86,8 +86,8 @@ const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
                 </div>
             </div>
 
-            <div className="row">
-                <div className="col s12 l6">
+            <div className="row float-right">
+                <div className="col s12">
                     <RaisedButton
                         className=""
                         target="_blank"
@@ -119,6 +119,7 @@ function getNameAndImage(swapObj, status, currentUserId) {
     if (status === tripStatus.PENDING) formattedName = `Your request to swap with ${firstName} is pending`;
     else if (status === tripStatus.ACTIVE || status === tripStatus.COMPLETE) formattedName = firstName;
     else if (status === tripStatus.ACCEPTED) formattedName = `Your request to swap with ${firstName} has been accepted`;
+    else if (status === tripStatus.DECLINED) formattedName = `Swap with ${firstName} has been declined`;
     const profileImg = (isRequester ? swapObj.requesteeProfileImg : swapObj.requesterProfileImg) || {};
     return {
         formattedName,

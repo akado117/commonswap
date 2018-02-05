@@ -95,6 +95,13 @@ export function checkIfCoordsAreValid(coords) {
     return lat !== undefined && lng !== undefined;
 }
 
+export function getTripType(trip) {
+    if (trip.status === tripStatus.COMPLETE || trip.status === tripStatus.DECLINED) return 'pastTrips';
+    if (trip.status === tripStatus.ACTIVE) return 'activeTrips';
+    if (trip.status === tripStatus.PENDING || trip.status === tripStatus.ACCEPTED) return 'pendingTrips';
+    return 'pendingTrips';
+}
+
 export function MapTripsToCorrectCategories(trips) {
     const mappedObj = {
         pendingTrips: [],
@@ -103,9 +110,8 @@ export function MapTripsToCorrectCategories(trips) {
     };
     if (!trips || !trips.length) return mappedObj;
     trips.forEach((trip) => {
-        if (trip.status === tripStatus.PENDING || trip.status === tripStatus.ACCEPTED) mappedObj.pendingTrips.push(trip);
-        if (trip.status === tripStatus.COMPLETE) mappedObj.pastTrips.push(trip);
-        if (trip.status === tripStatus.ACTIVE) mappedObj.activeTrips.push(trip);
+        const tripType = getTripType(trip);
+        mappedObj[tripType].push(trip);
     });
     return mappedObj;
 }

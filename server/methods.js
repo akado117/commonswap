@@ -117,7 +117,7 @@ function sendAcceptEmail(swapObj) {
 
 }
 
-Meteor.methods({
+const methods = {
     sendAcceptEmail,
     signup(customer) {
         check(customer, Object);
@@ -212,52 +212,6 @@ Meteor.methods({
                 return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
             }
         });
-    },
-    createCharge(swapObj) {
-        try {
-            const { _id, place, address, requesterName, requesterEmail, requesterPlaceId, requesterUserId, requesterProfileImg, requesteeUserId, requesteePlaceId, requesteeProfileImg, guests, requesterMessage, dates, requesteeEmail, requesteeName, status } = swapObj;
-            console.log("Place");
-            console.log(swapObj);
-
-            let swapClone = cloneDeep(swapObj);
-
-            const userId = Meteor.userId();
-
-            const currentUserCustomer = Customers.findOne({ userId: userId }) || {};
-            const requesterCustomer = Customers.findOne({ userId: requesterUserId }) || {};
-
-            const stripe = Stripe(Meteor.settings.private.stripe);
-
-            stripe.charges.create({
-                amount: 5000,
-                currency: "usd",
-                customer: currentUserCustomer.customerId,
-            });
-
-            stripe.charges.create({
-                amount: 5000,
-                currency: "usd",
-                customer: requesterCustomer.customerId,
-            });
-            swapClone.status = tripStatus.ACTIVE;
-
-            const swapGUID = Trips.upsert({ _id: swapClone._id }, swapClone);
-
-            sendAcceptEmail(swapObj);
-
-            consoleLogHelper(`Swap Accecpted and Charded for ${requesterName} and ${requesteeName}.`, genericSuccessCode, userId, `Swap Id ${JSON.stringify(swapClone._id)}`);
-            return serviceSuccessBuilder({ requesterName, requesteeName }, genericSuccessCode, {
-                serviceMessage: `Swap updated', with key ${swapClone._id}`,
-                data: {
-                    requesterName: requesterName,
-                    requesteeName: requesteeName,
-                },
-            });
-        }
-        catch (err) {
-            console.log("Create charge error");
-            console.log(err);
-        }
     },
     getCardInfo() {
         const userId = Meteor.userId();
@@ -473,8 +427,8 @@ Meteor.methods({
     },
     'trips.getUserTrips': function getUserTrips({ id }) {
         const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', placeErrorCode);
-        if (!id) return serviceErrorBuilder('Please send the correct arguments', placeErrorCode);
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', tripErrorCode);
+        if (!id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
         try {
             const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }, { fields: FieldsForTrip }).fetch();
             consoleLogHelper(`Found ${trips.length} swaps`, genericSuccessCode, Meteor.userId(), '');
@@ -488,6 +442,73 @@ Meteor.methods({
             console.log(err.stack);
             consoleErrorHelper('Failed when attempting to find trips for user', mongoFindOneError, Meteor.userId(), err);
             return serviceErrorBuilder('Failed when attempting to find trips for user', mongoFindOneError, err);
+        }
+    },
+    'trips.updateTripStatus'({ _id, status, prevStatus }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', tripErrorCode);
+        if (!_id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
+        try {
+            const tripGUID = Trips.update({ _id, $or: [{ requesterUserId: userId }, { requesteeUserId: userId }] }, { $set: { status } });
+            consoleLogHelper(`Updated trip: ${_id} from: ${prevStatus} to ${status}`, genericSuccessCode, Meteor.userId(), '');
+            return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
+                serviceMessage: `Updated trip: ${_id} from: ${prevStatus} to ${status}`,
+                data: {
+                    _id,
+                    prevStatus,
+                    status,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Failed when attempting to update trip: ${id}`, mongoFindOneError, Meteor.userId(), err);
+            return serviceErrorBuilder(`Failed when attempting to update trip: ${id}`, mongoFindOneError, err);
+        }
+    },
+    'trips.createCharge'(swapObj) {
+        const userId = Meteor.userId();
+        try {
+            const { requesterName, requesterUserId, requesteeName, requesteeUserId } = swapObj;
+
+            let swapClone = cloneDeep(swapObj);
+
+            const currentUserCustomer = Customers.findOne({ userId: userId }) || {};
+            const requesterCustomer = Customers.findOne({ userId: requesterUserId }) || {};
+
+            const stripe = Stripe(Meteor.settings.private.stripe);
+
+            stripe.charges.create({
+                amount: Meteor.settings.private.swapCost,
+                currency: "usd",
+                customer: currentUserCustomer.customerId,
+            });
+
+            stripe.charges.create({
+                amount: Meteor.settings.private.swapCost,
+                currency: "usd",
+                customer: requesterCustomer.customerId,
+            });
+            const status = tripStatus.ACTIVE;
+
+            const swapGUID = Trips.update({ _id: swapClone._id }, { $set: { status }});
+
+            sendAcceptEmail(swapObj);
+
+            consoleLogHelper(`Swap Accecpted and Charged ${(Meteor.settings.private.swapCost / 2).toFixed(2)} for ${requesterName} and ${requesteeName}. ${JSON.stringify(swapGUID)}`, genericSuccessCode, userId, `Swap Id ${JSON.stringify(swapClone._id)}`);
+            return serviceSuccessBuilder({ requesterName, requesteeName, requesteeUserId, requesterUserId, swapGUID }, genericSuccessCode, {
+                serviceMessage: `Swap Accecpted and Charged ${(Meteor.settings.private.swapCost / 2).toFixed(2)}`,
+                data: {
+                    requesterName,
+                    requesteeName,
+                    _id: swapClone._id,
+                    status,
+                },
+            });
+        }
+        catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Create Charge error`, upsertFailedCode, userId, err);
+            return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
         }
     },
     'places.getPlaceById': function getPlaceById({ _id, ...args }) {
@@ -690,4 +711,6 @@ Meteor.methods({
 
         throw new Meteor.Error('500', 'Must be logged in to do that!');
     },
-});
+};
+
+Meteor.methods(methods);

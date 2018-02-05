@@ -48,11 +48,6 @@ const ProfileActions = {
             return standardResponseFunc(error, result, actionTypes.GET_CONTACT, dispatch);
         });
     },
-    chargeCards: (trip) => {
-        return dispatch => Meteor.call('createCharge', trip, (error, result) => {
-            return standardResponseFunc(error, result, actionTypes.CARDS_CHARGED, dispatch);
-        });
-    },
 }
 
 export default ProfileActions

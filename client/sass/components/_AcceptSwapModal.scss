@@ -1,0 +1,12 @@
+.accept-swap-modal {
+  .button-row {
+    @media #{$small-and-down} {
+      span:not(.material-icons) {
+        display: none !important;
+      }
+      span {
+        margin-left: 0 !important;
+      }
+    }
+  }
+}

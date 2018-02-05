@@ -26,7 +26,8 @@
     }
   },
   "private": {
-    "stripe": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc"
+    "stripe": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc",
+    "swapCost": 2500
   },
   "stripe": "pk_test_YSCffEJB0CIc3DrqVBE56Hjl",
   "stripe_customer": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc",

@@ -14,6 +14,7 @@ import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
 import Footer from '../components/Footer';
 import MapWithASearchBox from '../components/MapWithASearchBox';
+import PlacesWithStandaloneSearchBox from '../components/StandaloneSearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
 import ConnectedButton from '../components/forms/ConnectedButton';
 import { onChangeHelper } from '../../../imports/helpers/DataHelpers';
@@ -100,7 +101,7 @@ class Browse extends Component {
         this.props.router.push('/viewProfile');
     }
 
-    handleChange = (event, index, value) => this.setState({value});
+    handleChange = (event, index, value) => this.setState({ value });
 
     render() {
         const { placesForBrowsing, place } = this.props.place;
@@ -146,27 +147,7 @@ class Browse extends Component {
                                     {...defDepDate}
                                 />
                             </div>
-                            {/*<div className="col s6 m3">*/}
-                                {/*<SelectBuilder*/}
-                                    {/*onChange={this.handleChange}*/}
-                                    {/*selectArrObj={dropObj}*/}
-                                    {/*label="State"*/}
-                                    {/*extraProps={{}}*/}
-                                    {/*multiple={true}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
-                            {/*<div className="col s6 m3 search-button">*/}
-                                {/*<ConnectedButton*/}
-                                    {/*icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}*/}
-                                    {/*actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}*/}
-                                    {/*buttonText="Search"*/}
-                                    {/*onClick={this.searchForPlaces}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
-                            {/* <div className="col s6 m4 l3  input-field inline">
-                            <input type="number" className="" id="guest-cap" onChange={e => this.setState({ numOfGuests: onChangeHelper(e) })} />
-                            <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true" /> Sleeps how many</label>
-                        </div> */}
+                            <PlacesWithStandaloneSearchBox />
                         </div>
                     </div>
                 </div>

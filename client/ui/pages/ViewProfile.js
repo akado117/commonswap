@@ -199,7 +199,10 @@ class ViewProfile extends React.Component {
     }
 
     sendMessage = (data) => {
-        const { placeId, question, user } = this.props.params;
+        const { placeId } = this.props.params;
+        const { user } = this.props;
+        const { question } = data;
+
         this.props.profileActions.sendMessage({
             placeId,
             Question: question,
@@ -312,7 +315,7 @@ class ViewProfile extends React.Component {
         });
 
         const interestIconLabels = Object.keys(interests).map((key, idx) => {
-            if(interests[key] && interestIcons[key]) {
+            if (interests[key] && interestIcons[key]) {
                 return <div className="col s4 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
             }
         })

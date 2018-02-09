@@ -1,7 +1,7 @@
 /* global google */
 import React from 'react';
 import { get } from 'lodash';
-import { compose, withProps, lifecycle, defaultProps } from 'recompose';
+import { compose, withProps, lifecycle, defaultProps, withHandlers } from 'recompose';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 import PropTypes from 'prop-types';
 const { SearchBox } = require('react-google-maps/lib/components/places/SearchBox');
@@ -14,6 +14,12 @@ const MapSearchBox = compose(
         containerElement: <div className="map-wrapper" />,
         mapElement: <div style={{ height: `100%` }} id="map-canvas" />,
     })),
+    withHandlers({
+        onMarkerClick: () => (marker) => {
+            console.log('MARKER');
+            console.log(marker);
+        },
+    }),
     withScriptjs,
     withGoogleMap,
     defaultProps({
@@ -96,7 +102,7 @@ const MapSearchBox = compose(
                     marker.coords.lng,
                 ));
             }
-            return <Marker key={`external-marker-${index}`} position={marker.coords} />;
+            return <Marker key={`external-marker-${index}`} position={marker.coords} onClick={() => props.onMarkerClick(marker)}/>;
         }
     });
     const fullMarkerArr = markers.concat(externalMarks);
@@ -147,7 +153,6 @@ class MapComponent extends React.PureComponent {
     }
 
     componentDidMount() {
-        console.log('THIS SHIT IS NEVER CALLED');
         this.delayedShowMarker();
     }
 
@@ -157,7 +162,9 @@ class MapComponent extends React.PureComponent {
         }, 3000);
     }
 
-    handleMarkerClick = () => {
+    handleMarkerClick = (marker) => {
+        console.log('MARKER');
+        console.log(marker);
         this.setState({ isMarkerShown: false });
         this.delayedShowMarker();
     }

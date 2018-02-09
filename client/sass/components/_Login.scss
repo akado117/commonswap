@@ -2,13 +2,14 @@
   padding: 0 !important;
   .login-button {
     width: 100%;
-    margin: 0px;
+    margin: 0px auto;
     background: #4f81e9;
     color: white;
     padding: 0px;
     border-radius: 0;
     font-size: 13px;
     border: none;
+    height:100%;
   }
 }
 .pop-over-login-button {
@@ -22,6 +23,9 @@
       display: flex;
       align-items: center;
       margin-top: -39px;
+      padding: 0 15px 0 15px;
+      height: 100%;
+
       .img-holder {
        @extend .true-circle
       }

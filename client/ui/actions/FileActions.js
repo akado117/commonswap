@@ -1,10 +1,13 @@
+import { browserHistory } from 'react-router';
 import { actionTypes, standardResponseFunc } from '../helpers/ConstantsRedux';
 import Store from '../store/store';
 
-
 export default {
-    getImagesForPlace: ({ placeId }) => {
+    getImagesForPlace: ({ placeId }, isLogin) => {
         return dispatch => Meteor.call('images.place.get', { placeId }, (error, result) => {
+            if (isLogin && result && result.data && result.data.images && !result.data.images.length){
+                browserHistory.push('/profile');
+            }
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_IMAGES, dispatch);
         });
     },

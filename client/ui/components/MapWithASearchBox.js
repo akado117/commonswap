@@ -7,6 +7,15 @@ import PropTypes from 'prop-types';
 const { SearchBox } = require('react-google-maps/lib/components/places/SearchBox');
 import { buildMarkerObj } from '../../../imports/helpers/DataHelpers';
 
+const centerMarker = {
+    path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+    fillColor: 'yellow',
+    fillOpacity: 0.8,
+    scale: 1,
+    strokeColor: 'gold',
+    strokeWeight: 14,
+};
+
 const MapSearchBox = compose(
     withProps(props => ({
         googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1VkVvNXQUiKRzjVJoWfsyrusO5pkAWE&v=3.exp&libraries=geometry,drawing,places',
@@ -54,16 +63,7 @@ const MapSearchBox = compose(
                 onSearchBoxMounted: ref => {
                     refs.searchBox = ref;
                 },
-                onPlacesChanged: () => {
-                    const places = refs.searchBox.getPlaces();
-
-                    places.map(({ address_components, geometry: { location } }) => {
-                        this.props.onSetLocation({
-                            lat: location.lat(),
-                            lng: location.lng(),
-                        });
-                    });
-
+                setNewCenter: (places) => {
                     const nextMarkers = places.map(place => ({
                         position: place.geometry.location,
                     }));
@@ -73,11 +73,31 @@ const MapSearchBox = compose(
                         center: nextCenter,
                         markers: nextMarkers,
                     });
+                },
+                onPlacesChanged: () => {
+                    const places = refs.searchBox.getPlaces();
+
+                    places.map(({ address_components, geometry: { location } }) => {
+                        this.props.onSetLocation({
+                            lat: location.lat(),
+                            lng: location.lng(),
+                        });
+                    });
+                    this.state.setNewCenter(places);
                     // refs.map.fitBounds(bounds);
                 },
             })
         },
-        componentDidUpdate() {
+        componentDidUpdate(prevProps) {
+            const { place } = prevProps;
+            if (!this.state.markers.length && place && !place.coords && this.props.place.coords) {
+                const places = [{
+                    geometry: {
+                        location: this.props.place.coords,
+                    },
+                }];
+                this.state.setNewCenter(places);
+            }
         },
     }),
 )((props) => {
@@ -162,18 +182,10 @@ class MapComponent extends React.PureComponent {
         }, 3000);
     }
 
-    handleMarkerClick = (marker) => {
-        console.log('MARKER');
-        console.log(marker);
-        this.setState({ isMarkerShown: false });
-        this.delayedShowMarker();
-    }
-
     render() {
         return (
             <MapSearchBox
                 isMarkerShown={this.state.isMarkerShown}
-                onMarkerClick={this.handleMarkerClick}
             />
         );
     }

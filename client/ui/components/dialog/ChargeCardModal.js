@@ -9,7 +9,7 @@ const ChargeCardModal = ({ requesterProfileImg = {}, requesteeProfileImg = {}, p
             <h4>We need your permission</h4>
         </div>
         <div className="col s12">
-            <p>Upon clicking accept, you give us the right to charge your credit card $50 if the other community member accepts your swap.</p>
+            <p>Upon clicking accept, you give us the right to charge your credit card $25 if the other community member accepts your swap.</p>
         </div>
         {buttonAccept ? <FlatButton
             label="Accept"

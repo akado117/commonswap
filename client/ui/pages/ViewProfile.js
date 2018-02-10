@@ -18,7 +18,7 @@ import ImageCarousel from '../components/ImageCarousel';
 import ModalActions from '../actions/ModalActions';
 import ChargeCardModal from '../components/dialog/ChargeCardModal';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import SwipeableViews from '../../../node_modules/react-swipeable-views';
+import SwipeableViews from '../../../node_modules/react-swipeable';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import BetaWarning from '../components/BetaWarning';
 
@@ -98,8 +98,11 @@ class ViewProfile extends React.Component {
             guests: '',
             slideIndex: 0,
             selectedDates: convertPlannerDates(ParseDates(props.place.place.availableDates || [])),
+            displayEdit: false,
         };
         const { placeId } = this.props.params;
+
+
         if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
             props.placeActions.getPlaceById(placeId);
         }
@@ -234,10 +237,10 @@ class ViewProfile extends React.Component {
         });
         return (
             <div className="place-images row">
-                <div className="col s12 l6">
-                    <div className="place-section z-depth-2">
+                <div className="col s12 l6 place-text">
+                    <div className="place-section z-depth-1">
                         <AppBar
-                            title={<span>Basic Information</span>}
+                            title={<span>Basic Information <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: 0 }}
                         />
@@ -261,9 +264,9 @@ class ViewProfile extends React.Component {
                         {amenitiesElements}
                     </div>
                     <div className="space-top">
-                        <div className="place-section z-depth-2 ">
+                        <div className="place-section z-depth-1 ">
                             <AppBar
-                                title={<span>Description</span>}
+                                title={<span>Description <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
@@ -273,9 +276,9 @@ class ViewProfile extends React.Component {
                         </div>
                     </div>
                     <div className="space-top">
-                        <div className="place-section z-depth-2">
+                        <div className="place-section z-depth-1">
                             <AppBar
-                                title={<span>Recommendations</span>}
+                                title={<span>Recommendations <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
@@ -284,10 +287,13 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="space-top">
-                        <div className="place-section z-depth-2">
+                </div>
+                <div className="col s12 l6 place-photos">
+                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                    <div className="space-top general-container">
+                        <div className="place-section z-depth-1">
                             <AppBar
-                                title={<span>General Courtesy Guidelines</span>}
+                                title={<span>General Courtesy Guidelines <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
@@ -297,9 +303,7 @@ class ViewProfile extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="col s12 l6">
-                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
-                </div>
+
             </div>
         )
     }
@@ -362,7 +366,7 @@ class ViewProfile extends React.Component {
                                     {this.getProfile(place)}
                                 </div>
                                 <div style={styles.slide}>
-                                    <div className="z-depth-2 calendar-wrapper" >
+                                    <div className="z-depth-1 calendar-wrapper" >
                                         <div className="calendar-container" >
                                             <InfiniteCalendar
                                                 Component={withMultipleRanges(Calendar)}

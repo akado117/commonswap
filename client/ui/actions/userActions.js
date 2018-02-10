@@ -29,8 +29,8 @@ const actions = {
     userLoggedIn: () => {
         Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
-        Store.dispatch(PlaceActions.upsertPlace({}, (err, data) => {
-            Store.dispatch(FileActions.getImagesForPlace({ placeId: data.placeId }));
+        Store.dispatch(PlaceActions.upsertPlace({}, (err, res) => {
+            Store.dispatch(FileActions.getImagesForPlace({ placeId: res.data.place._id }, true));
         }));
         return {
             type: 'USER_LOGGING_IN',

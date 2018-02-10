@@ -208,7 +208,9 @@ class ViewProfile extends React.Component {
     }
     getTabs = profile => (
         <Tabs
-            onChange={this.handleChange}
+            onChange={(index, e) => this.handleChange(index, this.state.slideIndex, {
+                reason: 'click',
+            })}
             value={this.state.slideIndex}
             initialSelectedIndex={0}
             style={{ backgroundColor: 'transparent' }}
@@ -355,7 +357,7 @@ class ViewProfile extends React.Component {
                                 index={this.state.slideIndex}
                                 onChangeIndex={this.handleChange}
                             >
-                                <div className="col s12">
+                                <div style={styles.slide}>
                                     {this.getProfile(place)}
                                 </div>
                                 <div style={styles.slide}>

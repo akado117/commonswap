@@ -19,6 +19,10 @@
     font-style: sans-serif;
   }
 
+  .connect {
+    margin-top: 4.0rem;
+  }
+
   .trip-image {
     @extend .true-circle;
     height: 460px;
@@ -130,7 +134,7 @@
     width: 100vw;
     overflow: hidden;
     position: relative;
-    height: 70vh;
+    height: 50vh;
     margin-bottom: 25px;
     .baseButton {
       position: absolute;

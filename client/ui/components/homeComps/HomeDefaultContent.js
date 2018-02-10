@@ -1,6 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { connect }  from 'react-redux';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import { defaultImageUrls } from '../../../../imports/lib/Constants';
@@ -12,7 +12,7 @@ function HomeDefaultContent({ userActions }) {
         <div>
             <div className="col s12 purpose">
                 <div className="row">
-                    <div className="col s12 l6 center-align">
+                    <div className="col s12 l6 center-align connect">
                         <p className="col s12 center-align purpose-desc" style={{ fontSize: '2.0rem !important' }}>We connect like-minded travelers from different cities to exchange living accommodations to reduce travel expenses</p>
                     </div>
                     <div className="col s12 l6 how-video">

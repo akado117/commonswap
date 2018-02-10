@@ -1,11 +1,20 @@
 /* global google */
 import React from 'react';
 import { get } from 'lodash';
-import { compose, withProps, lifecycle, defaultProps } from 'recompose';
+import { compose, withProps, lifecycle, defaultProps, withHandlers } from 'recompose';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 import PropTypes from 'prop-types';
 const { SearchBox } = require('react-google-maps/lib/components/places/SearchBox');
 import { buildMarkerObj } from '../../../imports/helpers/DataHelpers';
+
+const centerMarker = {
+    path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+    fillColor: 'yellow',
+    fillOpacity: 0.8,
+    scale: 1,
+    strokeColor: 'gold',
+    strokeWeight: 14,
+};
 
 const MapSearchBox = compose(
     withProps(props => ({
@@ -14,6 +23,12 @@ const MapSearchBox = compose(
         containerElement: <div className="map-wrapper" />,
         mapElement: <div style={{ height: `100%` }} id="map-canvas" />,
     })),
+    withHandlers({
+        onMarkerClick: () => (marker) => {
+            console.log('MARKER');
+            console.log(marker);
+        },
+    }),
     withScriptjs,
     withGoogleMap,
     defaultProps({
@@ -48,16 +63,7 @@ const MapSearchBox = compose(
                 onSearchBoxMounted: ref => {
                     refs.searchBox = ref;
                 },
-                onPlacesChanged: () => {
-                    const places = refs.searchBox.getPlaces();
-
-                    places.map(({ address_components, geometry: { location } }) => {
-                        this.props.onSetLocation({
-                            lat: location.lat(),
-                            lng: location.lng(),
-                        });
-                    });
-
+                setNewCenter: (places) => {
                     const nextMarkers = places.map(place => ({
                         position: place.geometry.location,
                     }));
@@ -67,11 +73,31 @@ const MapSearchBox = compose(
                         center: nextCenter,
                         markers: nextMarkers,
                     });
+                },
+                onPlacesChanged: () => {
+                    const places = refs.searchBox.getPlaces();
+
+                    places.map(({ address_components, geometry: { location } }) => {
+                        this.props.onSetLocation({
+                            lat: location.lat(),
+                            lng: location.lng(),
+                        });
+                    });
+                    this.state.setNewCenter(places);
                     // refs.map.fitBounds(bounds);
                 },
             })
         },
-        componentDidUpdate() {
+        componentDidUpdate(prevProps) {
+            const { place } = prevProps;
+            if (!this.state.markers.length && place && !place.coords && this.props.place.coords) {
+                const places = [{
+                    geometry: {
+                        location: this.props.place.coords,
+                    },
+                }];
+                this.state.setNewCenter(places);
+            }
         },
     }),
 )((props) => {
@@ -96,7 +122,7 @@ const MapSearchBox = compose(
                     marker.coords.lng,
                 ));
             }
-            return <Marker key={`external-marker-${index}`} position={marker.coords} />;
+            return <Marker key={`external-marker-${index}`} position={marker.coords} onClick={() => props.onMarkerClick(marker)}/>;
         }
     });
     const fullMarkerArr = markers.concat(externalMarks);
@@ -147,7 +173,6 @@ class MapComponent extends React.PureComponent {
     }
 
     componentDidMount() {
-        console.log('THIS SHIT IS NEVER CALLED');
         this.delayedShowMarker();
     }
 
@@ -157,16 +182,10 @@ class MapComponent extends React.PureComponent {
         }, 3000);
     }
 
-    handleMarkerClick = () => {
-        this.setState({ isMarkerShown: false });
-        this.delayedShowMarker();
-    }
-
     render() {
         return (
             <MapSearchBox
                 isMarkerShown={this.state.isMarkerShown}
-                onMarkerClick={this.handleMarkerClick}
             />
         );
     }

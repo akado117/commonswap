@@ -42,7 +42,7 @@ const SEARCHED = 'SEACHED';
 class Browse extends Component {
     constructor(props) {
         super(props);
-        const coords = props.place.coords || props.place.place.coords || {};
+        const coords = (props.place.coords && props.place.coords.lat) || props.place.place.coords || {};
         coords.distance = 50;
         this.state = {
             numOfGuests: props.place.numOfGuests,
@@ -55,6 +55,12 @@ class Browse extends Component {
     componentDidMount = () => {
         if (Materialize.updateTextFields) {
             Materialize.updateTextFields();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.place.place && !prevProps.place.place.coords && this.props.place.place.coords && !this.state.coords.lat) {
+            this.onSetLocation(this.props.place.place.coords);
         }
     }
 
@@ -159,7 +165,7 @@ class Browse extends Component {
                 <div className="row">
                     <div className="map-container col s12 m7 l6">
                         <MapWithASearchBox
-                            profile={place}
+                            place={place}
                             coords={this.state.coords}
                             onSetLocation={this.onSetLocation}
                             externalMarkers={placesForBrowsing}

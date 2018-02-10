@@ -256,7 +256,7 @@ class PlaceComponent extends Component {
                                 <ConnectedButton
                                     icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                                     actionType={actionTypes.SAVE_PROFILE}
-                                    buttonText="Next"
+                                    buttonText="Preview"
                                     onClick={this.nextButtonHandler}
                                 />
                             </div>

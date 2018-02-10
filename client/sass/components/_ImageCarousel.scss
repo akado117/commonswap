@@ -3,7 +3,7 @@
     height: 400px;
     width: 100%;
     display: block;
-    background-color: black;
+    background-color: white;
     .image-gallery-image {
       height: 100%;
       overflow: hidden;
@@ -62,7 +62,7 @@
         font-size: 1.1em;
         top: 9px;
         left: -6px;
-        color: white;
+        color: black;
         @media #{$small-and-down} {
           top: 8px;
           left: -2px;

@@ -53,16 +53,9 @@ class Home extends Component {
                         <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
                             <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
                         </video>
-                        <div className="col s12 center-align">
-                            <div className="header-container overlay-desc">
-                                <h1 className={`header-title ${this.state.muted ? '' : 'fade-out'}`}> <br />
-                                    <strong>Experience More</strong>
-                                </h1>
-                            </div>
-                        </div>
                     </div>
                 </header>
-                { this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent /> }
+                {this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}
                 <Footer />
             </div>
         );

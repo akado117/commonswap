@@ -13,6 +13,16 @@
           }
       }
   }
+  .place-text {
+      border: 1px solid blue;
+  }
+  .place-photos {
+      border: 1px solid red;
+  }
+  .general-container {
+      border: 1px solid green;
+      width:100%;
+  }
   .profile-info {
       p {
           margin-top: 0;

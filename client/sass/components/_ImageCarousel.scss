@@ -11,15 +11,15 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      img {
-        max-height: 100%;
-        max-width: 100%;
-        width: auto;
-      }
+    img {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
     }
   }
-  .image-gallery-bullets {
-    transform: scale(0.75);
+}
+.image-gallery-bullets {
+  transform: scale(0.75);
   }
   .custom-control-wrapper {
     position: absolute;
@@ -62,7 +62,7 @@
         font-size: 1.1em;
         top: 9px;
         left: -6px;
-        color: black;
+        color: white;
         @media #{$small-and-down} {
           top: 8px;
           left: -2px;

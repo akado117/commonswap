@@ -235,9 +235,6 @@ class ViewProfile extends React.Component {
         return (
             <div className="place-images row">
                 <div className="col s12 l6">
-                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
-                </div>
-                <div className="col s12 l6">
                     <div className="place-section z-depth-2">
                         <AppBar
                             title={<span>Basic Information</span>}
@@ -299,6 +296,9 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="col s12 l6">
+                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
                 </div>
             </div>
         )
@@ -380,7 +380,7 @@ class ViewProfile extends React.Component {
                                         disableButton={!placeId || placeId === this.props.user.userId}
                                     />
                                 </div>
-                                <div style={styles.slide}>
+                                <div className="align-center col s6 offset-s3">
                                     <div className="center-align">
                                         <SwapPicker
                                             requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}

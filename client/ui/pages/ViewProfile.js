@@ -18,7 +18,7 @@ import ImageCarousel from '../components/ImageCarousel';
 import ModalActions from '../actions/ModalActions';
 import ChargeCardModal from '../components/dialog/ChargeCardModal';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import SwipeableViews from '../../../node_modules/react-swipeable';
+import SwipeableViews from '../../../node_modules/react-swipeable-views';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
 import BetaWarning from '../components/BetaWarning';
 
@@ -98,11 +98,8 @@ class ViewProfile extends React.Component {
             guests: '',
             slideIndex: 0,
             selectedDates: convertPlannerDates(ParseDates(props.place.place.availableDates || [])),
-            displayEdit: false,
         };
         const { placeId } = this.props.params;
-
-
         if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
             props.placeActions.getPlaceById(placeId);
         }
@@ -202,10 +199,7 @@ class ViewProfile extends React.Component {
     }
 
     sendMessage = (data) => {
-        const { placeId } = this.props.params;
-        const { user } = this.props;
-        const { question } = data;
-
+        const { placeId, question, user } = this.props.params;
         this.props.profileActions.sendMessage({
             placeId,
             Question: question,
@@ -214,7 +208,9 @@ class ViewProfile extends React.Component {
     }
     getTabs = profile => (
         <Tabs
-            onChange={this.handleChange}
+            onChange={(index, e) => this.handleChange(index, this.state.slideIndex, {
+                reason: 'click',
+            })}
             value={this.state.slideIndex}
             initialSelectedIndex={0}
             style={{ backgroundColor: 'transparent' }}
@@ -237,10 +233,13 @@ class ViewProfile extends React.Component {
         });
         return (
             <div className="place-images row">
-                <div className="col s12 l6 place-text">
-                    <div className="place-section z-depth-1">
+                <div className="col s12 l6">
+                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                </div>
+                <div className="col s12 l6">
+                    <div className="place-section z-depth-2">
                         <AppBar
-                            title={<span>Basic Information <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
+                            title={<span>Basic Information</span>}
                             showMenuIconButton={false}
                             style={{ marginBottom: '10px', zIndex: 0 }}
                         />
@@ -264,9 +263,9 @@ class ViewProfile extends React.Component {
                         {amenitiesElements}
                     </div>
                     <div className="space-top">
-                        <div className="place-section z-depth-1 ">
+                        <div className="place-section z-depth-2 ">
                             <AppBar
-                                title={<span>Description <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
+                                title={<span>Description</span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
@@ -276,9 +275,9 @@ class ViewProfile extends React.Component {
                         </div>
                     </div>
                     <div className="space-top">
-                        <div className="place-section z-depth-1">
+                        <div className="place-section z-depth-2">
                             <AppBar
-                                title={<span>Recommendations <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
+                                title={<span>Recommendations</span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
@@ -287,13 +286,10 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="col s12 l6 place-photos">
-                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
-                    <div className="space-top general-container">
-                        <div className="place-section z-depth-1">
+                    <div className="space-top">
+                        <div className="place-section z-depth-2">
                             <AppBar
-                                title={<span>General Courtesy Guidelines <i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'right' }} /></span>}
+                                title={<span>General Courtesy Guidelines</span>}
                                 showMenuIconButton={false}
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
@@ -303,7 +299,6 @@ class ViewProfile extends React.Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
@@ -319,7 +314,7 @@ class ViewProfile extends React.Component {
         });
 
         const interestIconLabels = Object.keys(interests).map((key, idx) => {
-            if (interests[key] && interestIcons[key]) {
+            if(interests[key] && interestIcons[key]) {
                 return <div className="col s4 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
             }
         })
@@ -362,11 +357,11 @@ class ViewProfile extends React.Component {
                                 index={this.state.slideIndex}
                                 onChangeIndex={this.handleChange}
                             >
-                                <div className="col s12">
+                                <div style={styles.slide}>
                                     {this.getProfile(place)}
                                 </div>
                                 <div style={styles.slide}>
-                                    <div className="z-depth-1 calendar-wrapper" >
+                                    <div className="z-depth-2 calendar-wrapper" >
                                         <div className="calendar-container" >
                                             <InfiniteCalendar
                                                 Component={withMultipleRanges(Calendar)}
@@ -384,7 +379,7 @@ class ViewProfile extends React.Component {
                                         disableButton={!placeId || placeId === this.props.user.userId}
                                     />
                                 </div>
-                                <div className="align-center col s6 offset-s3">
+                                <div style={styles.slide}>
                                     <div className="center-align">
                                         <SwapPicker
                                             requestSwap={data => this.saveSwap(data, this.props, place, this.props.modalActions)}

@@ -215,36 +215,57 @@ class Planner extends React.Component {
         key={`trip-${trip._id}`}
         swapObj={trip}
         currentUserId={userId}
-        acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openChargeCardModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
+        acceptSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, true, trip)}
         declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false, trip)}
     />);
 
     exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${trip._id}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
-    openChargeCardModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
-        modalActions.openModal(<ChargeCardModal
-            buttonAccept={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, accepted, trip)}
-            buttonDecline={this.props.modalActions.closeModal} />);
+    onChargeCardAccept(modalActions, trip, accepted) {
+        //if (accepted) this.props.placeActions.chargeCards(trip);//charges and updates to accepted
+        modalActions.closeModal();
     }
 
-    acceptModalAcceptHandler = (trip, accepted) => {
-        const { _id, status } = trip;
-        if (accepted) {
-            this.props.placeActions.chargeCards(trip);//charges and updates to accepted
-        } else {
-            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.DECLINED });
-        }
-        this.props.modalActions.closeModal();
+    openChargeCardModal(modalActions, trip) {
+        modalActions.openModal(
+            <ChargeCardModal
+                buttonAccept={() => this.onChargeCardAccept(modalActions, trip, false)}
+            />,
+        );
     }
+
+    acceptModalAcceptHandler = (trip, accepted, modalActions) => {
+        const { _id, status } = trip;
+        if (!accepted) {
+            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.DECLINED });
+            this.props.modalActions.closeModal();
+        } else {
+            this.props.modalActions.closeModal();
+            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.ACCEPTED });
+            this.openChargeCardModal(modalActions, trip);
+        }
+    };
 
     openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, accepted, trip) {
         modalActions.openModal(
             <AcceptSwapModal
                 requesterProfileImg={requesterProfileImage}
-                primaryText={accepted ? 'Swap Accepted' : 'Really Decline Swap?'}
+                primaryText={accepted ? 'Accept Swap?' : 'Really Decline Swap?'}
                 requesteeProfileImg={requesteeProfileImage}
-                acceptButtonHandler={() => this.acceptModalAcceptHandler(trip, accepted)}
-                declineButtonHandler={accepted ? null : this.props.modalActions.closeModal}
+                acceptButtonHandler={() => this.acceptModalAcceptHandler(trip, accepted, modalActions)}
+                declineButtonHandler={() => this.props.modalActions.closeModal()}
+            />);
+    }
+
+    //todo: tim if you hook up the param to autolaunch accept modal. This should work out of the box
+    openAcceptOrDeclineModal(requesterProfileImage, requesteeProfileImage, trip, modalActions, requesteeName) {
+        modalActions.openModal(
+            <AcceptSwapModal
+                requesterProfileImg={requesterProfileImage}
+                primaryText={`Accept swap with ${requesteeName}`}
+                requesteeProfileImg={requesteeProfileImage}
+                acceptButtonHandler={() => this.acceptModalAcceptHandler(trip, true, modalActions)}
+                declineButtonHandler={() => this.acceptModalAcceptHandler(trip, false, modalActions)}
             />);
     }
 

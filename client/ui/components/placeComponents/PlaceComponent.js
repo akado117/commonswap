@@ -11,6 +11,7 @@ import MapWithASearchBox from '../MapWithASearchBox';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
 import ConnectedButton from '../forms/ConnectedButton';
+import { getCoordsFromPlaces } from '../../../../imports/helpers/DataHelpers';
 
 const BUTTONS = [
     { label: 'Gym/Fitness Center', name: 'gym' },
@@ -116,6 +117,11 @@ class PlaceComponent extends Component {
         }
     }
 
+    onSearchComplete = (places) => {
+        const coordsObj = getCoordsFromPlaces(places)[0]
+        this.onSetLocation(coordsObj)
+    }
+
     onSetLocation = cords => {
         this.getValueFunc('coords', cords);
     }
@@ -155,7 +161,7 @@ class PlaceComponent extends Component {
                     </div>
                 </div>
                 <MapWithASearchBox
-                    onSetLocation={this.onSetLocation}
+                    onSearchComplete={this.onSearchComplete}
                     place={place}
                 />
                 <div className="row">

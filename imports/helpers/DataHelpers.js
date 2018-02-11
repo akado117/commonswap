@@ -135,3 +135,20 @@ export function determineImageDimensions(width, height, maxDimObj) {
 export function obfiscateId(id) {
     return id.substr(4,6) + id.substr(7) + id.substr(0,3);
 }
+
+export function getCoordsFromPlaces(places) {
+    return places.map(({ address_components, geometry: { location } }) => {
+        return {
+            lat: location.lat(),
+            lng: location.lng(),
+        };
+    });
+}
+
+export function buildBoundsRange(coord, latLngFunc, range) {
+    const { lat, lng } = coord;
+    return {
+        sw: new latLngFunc(lat - range, lng - range),
+        ne: new latLngFunc(lat + range, lng + range),
+    };
+}

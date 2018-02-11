@@ -17,7 +17,7 @@ import MapWithASearchBox from '../components/MapWithASearchBox';
 import PlacesWithStandaloneSearchBox from '../components/StandaloneSearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
 import ConnectedButton from '../components/forms/ConnectedButton';
-import { onChangeHelper } from '../../../imports/helpers/DataHelpers';
+import { onChangeHelper, getCoordsFromPlaces } from '../../../imports/helpers/DataHelpers';
 import { Today } from '../../../imports/helpers/DateHelpers';
 import { actionTypes } from '../helpers/ConstantsRedux';
 import { stateFields } from '../../../imports/lib/Constants';
@@ -42,7 +42,7 @@ const SEARCHED = 'SEACHED';
 class Browse extends Component {
     constructor(props) {
         super(props);
-        const coords = (props.place.coords && props.place.coords.lat) || props.place.place.coords || {};
+        const coords = (props.place.coords && props.place.coords.lat && props.place.coords ) || props.place.place.coords || {};
         coords.distance = 50;
         this.state = {
             numOfGuests: props.place.numOfGuests,
@@ -60,7 +60,7 @@ class Browse extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.place.place && !prevProps.place.place.coords && this.props.place.place.coords && !this.state.coords.lat) {
-            this.onSetLocation(this.props.place.place.coords);
+            this.setLocation(this.props.place.place.coords);
         }
     }
 
@@ -91,7 +91,12 @@ class Browse extends Component {
         this.props.placeActions.saveBrowseData(halfwayHouse);
     }
 
-    onSetLocation = (coordsObj) => {
+    onSearchChange = (places) => {
+        const coordsObject = getCoordsFromPlaces(places)[0];
+        this.setLocation(coordsObject);
+    }
+
+    setLocation = (coordsObj) => {
         const coords = merge({}, this.state.coords, coordsObj);
         this.setState({ coords });
     }
@@ -122,6 +127,9 @@ class Browse extends Component {
                 <div className="container">
                     <div className="row reduced-row-margin">
                         <div className="row">
+                            <PlacesWithStandaloneSearchBox
+                                onSearchComplete={this.onSearchChange}
+                            />
                             <div className="col s6 m3 input-field inline">
                                 <input type="number" min={0} max={500} className="" id="range-cap" value={this.state.coords.distance} onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
                                 <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
@@ -134,26 +142,25 @@ class Browse extends Component {
                                     onClick={this.searchForPlaces}
                                 />
                             </div>
-                            <div className="col s6 m3">
-                                <DatePicker
-                                    className="material-date-picker"
-                                    onChange={(nul, date) => this.setState({ arrival: date })}
-                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}
-                                    textFieldStyle={{ width: '100%' }}
-                                    {...defArrDate}
-                                //disableYearSelection={this.state.disableYearSelection}
-                                />
-                            </div>
-                            <div className="col s6 m3">
-                                <DatePicker
-                                    className="material-date-picker"
-                                    onChange={(nul, date) => this.setState({ departure: date })}
-                                    floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}
-                                    textFieldStyle={{ width: '100%' }}
-                                    {...defDepDate}
-                                />
-                            </div>
-                            <PlacesWithStandaloneSearchBox />
+                            {/*<div className="col s6 m3">*/}
+                                {/*<DatePicker*/}
+                                    {/*className="material-date-picker"*/}
+                                    {/*onChange={(nul, date) => this.setState({ arrival: date })}*/}
+                                    {/*floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}*/}
+                                    {/*textFieldStyle={{ width: '100%' }}*/}
+                                    {/*{...defArrDate}*/}
+                                {/*//disableYearSelection={this.state.disableYearSelection}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
+                            {/*<div className="col s6 m3">*/}
+                                {/*<DatePicker*/}
+                                    {/*className="material-date-picker"*/}
+                                    {/*onChange={(nul, date) => this.setState({ departure: date })}*/}
+                                    {/*floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}*/}
+                                    {/*textFieldStyle={{ width: '100%' }}*/}
+                                    {/*{...defDepDate}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 </div>
@@ -167,9 +174,10 @@ class Browse extends Component {
                         <MapWithASearchBox
                             place={place}
                             coords={this.state.coords}
-                            onSetLocation={this.onSetLocation}
+                            onSearchComplete={this.onSearchChange}
                             externalMarkers={placesForBrowsing}
                             resizeBounds
+                            hideSearchBar
                         />
                     </div>
                     <div className="scroll-listing col s12 m5 l6 no-pad" >

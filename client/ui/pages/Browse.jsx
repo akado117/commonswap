@@ -128,6 +128,7 @@ class Browse extends Component {
                     <div className="row reduced-row-margin">
                         <div className="row">
                             <PlacesWithStandaloneSearchBox
+                                className="col s12 m6"
                                 onSearchComplete={this.onSearchChange}
                             />
                             <div className="col s6 m3 input-field inline">

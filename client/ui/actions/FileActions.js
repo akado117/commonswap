@@ -5,8 +5,12 @@ import Store from '../store/store';
 export default {
     getImagesForPlace: ({ placeId }, isLogin) => {
         return dispatch => Meteor.call('images.place.get', { placeId }, (error, result) => {
-            if (isLogin && result && result.data && result.data.images && !result.data.images.length){
-                browserHistory.push('/profile');
+            if (isLogin && result && result.data && result.data.images){
+                if (!result.data.images.length) {
+                    browserHistory.push('/profile');
+                } else if (process.env.NODE_ENV === 'production') {
+                    browserHistory.push('/browse');
+                }
             }
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_IMAGES, dispatch);
         });

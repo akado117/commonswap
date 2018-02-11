@@ -67,7 +67,7 @@ const MapSearchBox = compose(
             const refs = {};
             const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || { lat: 41.9, lng: -87.624 };
             const initialMarker = lat !== undefined && lng !== undefined ? [buildMarkerObj({ lat, lng })] : [];
-            const boundPoints = buildBoundsRange({ lat, lng }, window.google.maps.LatLng, 1);
+            const boundPoints = buildBoundsRange({ lat, lng }, window.google.maps.LatLng, 3);
 
             this.setState({
                 bounds: new window.google.maps.LatLngBounds(boundPoints.sw, boundPoints.ne),
@@ -136,7 +136,7 @@ const MapSearchBox = compose(
                 }];
                 this.state.setNewCenter(places);
             }
-            if (prevProps.coords.lat !== this.props.coords.lat && prevProps.coords.lng !== this.props.coords.lng) {
+            if (prevProps.coords && prevProps.coords.lat !== this.props.coords.lat && prevProps.coords.lng !== this.props.coords.lng) {
                 const places = [{
                     geometry: {
                         location: this.props.coords,

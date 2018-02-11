@@ -47,18 +47,24 @@ const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
             </div>
             <div className="row">
                 <div className="col s12 m3 l3">
-                    <div className="trip-image">
-                        <img className="" src={requesterProfileImg != null ? requesterProfileImg.url : defaultImageUrls.cameraDude} alt="profDemo" />
+                    <div className="centering-container">
+                        <div className="trip-image">
+                            <img className="" src={requesterProfileImg != null ? requesterProfileImg.url : defaultImageUrls.cameraDude} alt="profDemo" />
+                        </div>
                     </div>
                     <div className="col s4 m12 l12">
-                        <h5>{requesterName}</h5>
+                        <div className="centering-container">
+                            <h5>{requesterName}</h5>
+                        </div>
                     </div>
                     <div className="col s6 m12 l12">
-                        <h5 className="location">{`${address.city}, ${address.state}`}</h5>
+                        <div className="centering-container">
+                            <h5 className="location">{`${address.city}, ${address.state}`}</h5>
+                        </div>
                     </div>
                 </div>
                 <Link className="col s12 m4 l4 img-cont" to={profileLink}>
-                    <img src={(placeImg && placeImg.url) || defaultImageUrls.awesomePlace} alt="" className="image" style={{ height: '250px', width: '100%' }} />
+                    <img src={(placeImg && placeImg.url) || defaultImageUrls.awesomePlace} alt="" className="image" />
                     <div className="middle">
                         <div className="text">View Place</div>
                     </div>

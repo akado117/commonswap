@@ -1,5 +1,10 @@
 .trip-container {
   margin-bottom: 15px;
+  .centering-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
   .place-title {
     h3 {
       font-size: 1.64rem;

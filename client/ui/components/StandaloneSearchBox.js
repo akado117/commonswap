@@ -56,9 +56,10 @@ const PlacesWithStandaloneSearchBox = compose(
         },
     })
 )(props => {
-    const { bounds } = props;
+    const { bounds, labelText, icon } = props;
+    const labelIcon = icon || <i className="fa fa-search fa-1x" aria-hidden="true" />;
     return (
-        <div data-standalone-searchbox="" className={props.className}>
+        <div data-standalone-searchbox="" className={`input-field inline ${props.className}`}>
             <StandaloneSearchBox
                 ref={props.onSearchBoxMounted}
                 bounds={bounds}
@@ -68,22 +69,17 @@ const PlacesWithStandaloneSearchBox = compose(
                     <input type="text" className="" id="search-box" style={{ textOverflow: 'ellipses' }} />
                     <label htmlFor="range-cap"><i className="fas fa-map-marker-alt" aria-hidden="true" />Search Listings</label>
                 </div> */}
-                <input
-                    type="text"
-                    placeholder="Search Listings"
-                    style={{
-                        boxSizing: `border-box`,
-                        border: `1px solid transparent`,
-                        width: `240px`,
-                        height: `32px`,
-                        padding: `0 12px`,
-                        borderRadius: `3px`,
-                        boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                        fontSize: `14px`,
-                        outline: `none`,
-                        textOverflow: `ellipses`,
-                    }}
-                />
+                <div>
+                    <input
+                        type="text"
+                        id="location-search"
+                        style={{ textOverflow: 'ellipses' }}
+                        placeholder=""
+                    />
+                    <label htmlFor="location-search">
+                        {labelIcon}{' '}{labelText || 'Search Location'}
+                    </label>
+                </div>
             </StandaloneSearchBox>
         </div>);
 });
@@ -93,6 +89,8 @@ PlacesWithStandaloneSearchBox.propTypes = {
     longitude: PropTypes.string,
     onSearchComplete: PropTypes.func,
     className: PropTypes.string,
+    labelText: PropTypes.string,
+    icon: PropTypes.element,
 };
 
 export default PlacesWithStandaloneSearchBox;

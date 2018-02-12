@@ -20,7 +20,7 @@ export function addFacebookShare() {
 export function triggerFBShareDialog(redirectURL, message) {
     FB.ui({
         method: 'share',
-        href: redirectURL || 'https://www.commonswap.com',
+        href: redirectURL || Meteor.settings.public.deployUrl,
         hashtag: '#exploreCommonSwap',
     }, function(response){});
 }

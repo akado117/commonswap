@@ -23,7 +23,8 @@
     "googleKeys": {
       "googleMapsApiKey": "AIzaSyAoLzYqxbgSUGz2DKfZj6vvsxRVjGP-sDw",
       "gtm": "UA-96116664-4"
-    }
+    },
+    "fuid": "351678141936553"
   },
   "private": {
     "stripe": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc",

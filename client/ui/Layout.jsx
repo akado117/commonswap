@@ -7,7 +7,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Navbar from './components/Navbar';
 import Dialog from './components/dialog/WrappedDialog';
-
+import { addFacebookShare } from './helpers/externalServiceScriptInjection';
 
 const test = gql;
 
@@ -17,6 +17,7 @@ injectTapEventPlugin();
 
 class Layout extends React.Component {
     componentDidMount() {
+        addFacebookShare();
     }
     render() {
         return (

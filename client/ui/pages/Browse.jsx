@@ -4,14 +4,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 const { cloneDeep, merge } = require('lodash');
-import FontIcon from 'material-ui/FontIcon';
 import MenuItem from 'material-ui/MenuItem';
-import DatePicker from 'material-ui/DatePicker';
-import addDays from 'date-fns/add_days';
 
 import ProfileActions from '../actions/ProfileActions';
 import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
+import ModalActions from '../actions/ModalActions';
 import Footer from '../components/Footer';
 import MapWithASearchBox from '../components/MapWithASearchBox';
 import PlacesWithStandaloneSearchBox from '../components/StandaloneSearchBox';
@@ -107,12 +105,25 @@ class Browse extends Component {
         this.setState({ coords });
     }
 
-    goToProfile = (profileId) => {
+    goToProfile = (profileId, isInModal) => {
+        if (isInModal) this.props.modalActions.closeModal();
         if (profileId) return this.props.router.push(`/viewProfile/${profileId}`);
-        this.props.router.push('/viewProfile');
+        return this.props.router.push('/viewProfile');
     }
 
     handleChange = (event, index, value) => this.setState({ value });
+
+    onMarkerClick = (placeFB) => {
+        this.props.modalActions.openModal(<PlaceForBrowse
+            placeForBrowse={placeFB}
+            address={placeFB.address}
+            profile={placeFB.profile}
+            placeImgs={placeFB.placeImgs}
+            profileImg={placeFB.profileImg}
+            goToProfile={() => this.goToProfile(placeFB._id, true)}
+            noZDepth
+        />);
+    }
 
     render() {
         const { placesForBrowsing, place } = this.props.place;
@@ -179,6 +190,7 @@ class Browse extends Component {
                             externalMarkers={placesForBrowsing}
                             resizeBounds
                             hideSearchBar
+                            injectedMarkerClick={this.onMarkerClick}
                         />
                     </div>
                     <div className="scroll-listing col s12 m5 l6 no-pad" >
@@ -217,6 +229,7 @@ function mapDispatchToProps(dispatch) {
         profileActions: bindActionCreators(ProfileActions, dispatch),
         placeActions: bindActionCreators(PlaceActions, dispatch),
         fileActions: bindActionCreators(FileActions, dispatch),
+        modalActions: bindActionCreators(ModalActions, dispatch),
     };
 }
 
@@ -224,6 +237,7 @@ Browse.propTypes = {
     profileActions: PropTypes.object.isRequired, //eslint-disable-line
     placeActions: PropTypes.object.isRequired,
     fileActions: PropTypes.object.isRequired,
+    modalActions: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     place: PropTypes.object.isRequired,
     images: PropTypes.object.isRequired,

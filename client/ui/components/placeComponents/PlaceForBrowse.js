@@ -4,10 +4,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import ImageCarousel from '../ImageCarousel';
 
-const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profile, goToProfile }) => {
+const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profile, goToProfile, noZDepth }) => {
     const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
     return (
-        <div className="z-depth-2 browse-place-container" style={{ marginBottom: '20px' }}>
+        <div className={`${noZDepth ? '' : 'z-depth-2'} browse-place-container`} style={{ marginBottom: '20px' }}>
             <div className="row reduced-row-margin">
                 <div className="col s6 m12 profile-image-container">
                     <div className="profile-image">
@@ -68,6 +68,7 @@ PlaceForBrowse.propTypes = {
     placeImgs: PropTypes.array,
     profile: PropTypes.object.isRequired,
     goToProfile: PropTypes.func.isRequired,
+    noZDepth: PropTypes.bool,
 };
 
 PlaceForBrowse.defaultProps = {

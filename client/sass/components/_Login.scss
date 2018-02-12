@@ -27,7 +27,9 @@
       height: 100%;
 
       .img-holder {
-       @extend .true-circle
+        @extend .true-circle;
+        height: 45px;
+        width: 45px;
       }
       img {
         max-width: 110%;

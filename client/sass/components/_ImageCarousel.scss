@@ -1,4 +1,7 @@
 .image-carousel {
+  button:hover {
+    opacity: 0.6;
+  }
   .img-gal {
     height: 400px;
     width: 100%;
@@ -11,15 +14,44 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-    img {
-      max-height: 100%;
-      max-width: 100%;
-      width: auto;
+      img {
+        max-height: 100%;
+        max-width: 100%;
+        width: auto;
+      }
+   }
+  }
+  .galleryButtons {
+    width: 45px;
+    height: 45px;
+    background-color: $primary-accent-color;
+    border-radius: 50%;
+    padding: 0;
+    margin: 25px;
+    font-size: 12px;
+    box-shadow: $button-boxshadow-default;
+    &:active {
+      box-shadow: $button-boxshadow-active;
     }
   }
-}
-.image-gallery-bullets {
-  transform: scale(0.75);
+  .image-gallery-fullscreen-button {
+    @extend .galleryButtons;
+    &:before {
+      padding: 0;
+    }
+  }
+  .image-gallery-play-button {
+    @extend .galleryButtons;
+    padding-left: 4px;
+    &.active {
+      padding-left: 0;
+    }
+    &:before {
+      padding: 0;
+    }
+  }
+  .image-gallery-bullets {
+    transform: scale(0.75);
   }
   .custom-control-wrapper {
     position: absolute;
@@ -49,11 +81,11 @@
         background-color: $primary-accent-color;
         width: 30px;
         height: 30px;
+
         @media #{$small-and-down} {
           .background-div {
             width: 25px;
             height: 25px;
-
           }
         }
       }

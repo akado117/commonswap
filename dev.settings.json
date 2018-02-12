@@ -24,7 +24,8 @@
       "googleMapsApiKey": "AIzaSyAoLzYqxbgSUGz2DKfZj6vvsxRVjGP-sDw",
       "gtm": "UA-96116664-4"
     },
-    "fuid": "351678141936553"
+    "fuid": "351678141936553",
+    "deployUrl": "https://www.commonswap.net"
   },
   "private": {
     "stripe": "sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc",

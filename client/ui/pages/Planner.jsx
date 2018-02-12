@@ -230,6 +230,7 @@ class Planner extends React.Component {
         modalActions.openModal(
             <ChargeCardModal
                 buttonAccept={() => this.onChargeCardAccept(modalActions, trip, false)}
+                isRequester
             />,
         );
     }
@@ -241,7 +242,7 @@ class Planner extends React.Component {
             this.props.modalActions.closeModal();
         } else {
             this.props.modalActions.closeModal();
-            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.ACCEPTED });
+            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.ACTIVE });
             this.openChargeCardModal(modalActions, trip);
         }
     };

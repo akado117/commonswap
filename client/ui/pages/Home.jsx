@@ -55,7 +55,8 @@ class Home extends Component {
                         </video>
                     </div>
                 </header>
-                {this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}
+                {/*{this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}*/}
+                <HomeDefaultContent />
                 <Footer />
             </div>
         );

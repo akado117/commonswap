@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Uploader from '../Uploader';
 import { MaxImageDimTypes, MaxImageUploadDim } from '../../../../imports/lib/Constants';
+import GenericXButton from '../forms/GenericXButton';
 
 
 class ProfileImage extends Component {
@@ -46,8 +47,10 @@ class ProfileImage extends Component {
             content = this.props.imageSrc ? (
                 <button className="profile-image-button" onClick={this.toggleUploader} style={{ border: 'none', background: 'transparent' }}>
                     <img src={this.props.imageSrc} alt="" />
-                    <i className="fa fa-plus-circle add-prof-image-button" />
-                    <div className="add-prof-image-button"> </div>
+                    <GenericXButton
+                        className="add-prof-image-button"
+                        fontIconClass="fa-plus-circle"
+                    />
                 </button>)
                 : (
                     <div>

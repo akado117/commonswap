@@ -30,6 +30,7 @@
     margin: 25px;
     font-size: 12px;
     box-shadow: $button-boxshadow-default;
+    transition: box-shadow .3s ease-out;
     &:active {
       box-shadow: $button-boxshadow-active;
     }

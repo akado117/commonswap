@@ -168,7 +168,7 @@ const MapSearchBox = compose(
                     marker.coords.lng,
                 ));
             }
-            return <Marker key={'external-marker-' + index} position={marker.coords} onClick={() => props.onMarkerClick(marker)}/>;
+            return <Marker key={'external-marker-' + index} position={marker.coords} onClick={() => props.injectedMarkerClick(marker)}/>;
         }
     });
     const fullMarkerArr = markers.concat(externalMarks);
@@ -196,12 +196,14 @@ MapSearchBox.propTypes = {
     resizeBounds: PropTypes.bool,
     hideSearchBar: PropTypes.bool,
     onSearchComplete: PropTypes.func.isRequired,
+    injectedMarkerClick: PropTypes.func,
 };
 
 MapSearchBox.defaultProps = {
     className: '',
     externalMarkers: [],
     resizeBounds: false,
+    injectedMarkerClick: () => {},
 };
 
 export default MapSearchBox;

@@ -94,9 +94,12 @@ const PlaceActions = {
         });
     },
     saveSwap: (swapObj) => {
-        const { swapObj } = data;
+        const Notes = swapObj.requesterMessage;
+        const Arrival = swapObj.dates.arrival;
+        const Departure = swapObj.dates.departure;
         const swapClone = cloneDeep(swapObj);
         swapClone.dates = FormateDates([swapObj.dates])[0];
+
         servicePending(actionTypes.SAVE_TRIP);
         return dispatch => Meteor.call('trips.saveTrip', swapClone, Notes, Arrival, Departure, (error, result) => {
             serviceResponded(actionTypes.SAVE_TRIP);

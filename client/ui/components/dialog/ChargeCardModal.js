@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
-import {defaultImageUrls, loginTypes} from '../../../../imports/lib/Constants';
+import { defaultImageUrls, loginTypes } from '../../../../imports/lib/Constants';
 import { triggerFBShareDialog } from '../../helpers/externalServiceScriptInjection';
 
 const ChargeCardModal = ({ buttonAccept, buttonDecline, isRequester }) => (
@@ -15,7 +15,7 @@ const ChargeCardModal = ({ buttonAccept, buttonDecline, isRequester }) => (
             <p>Upon clicking accept, you give us the right to charge your credit card
                 <span className="crossed-out"> $25</span>
                 <strong> $0</strong>{isRequester ? 'if the other community member accepts your swap.' : ''}</p>
-            <p>We hope you enjoy your experience, Please do us a favor and share CommonSwap with your friends!</p>
+            <p>We hope you enjoy your experience. Please do us a favor and share CommonSwap with your friends!</p>
         </div>
         <div className="col s12">
             <div className="center-align">
@@ -25,7 +25,7 @@ const ChargeCardModal = ({ buttonAccept, buttonDecline, isRequester }) => (
                     backgroundColor="#3B5998"
                     labelColor="#ffffff"
                     className="sign-button"
-                    style={{width: '135px'}}
+                    style={{ width: '135px' }}
                     icon={<FontIcon className="fa fa-facebook" />}
                     onClick={() => triggerFBShareDialog()}
                 />
@@ -56,7 +56,7 @@ ChargeCardModal.propTypes = {
 };
 
 ChargeCardModal.defaultProps = {
-    
+
 };
 
 export default ChargeCardModal;

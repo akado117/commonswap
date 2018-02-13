@@ -30,7 +30,13 @@ $nav-wrapper-height: 65px;
       span {
         color: white;
       }
-      box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0)
+      box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0);
+      .button-collapse {
+        .material-icons {
+          color: white !important;
+        }
+        padding: 0.5rem;
+      }
     }
     .side-nav {
       a {
@@ -41,6 +47,9 @@ $nav-wrapper-height: 65px;
   &.visible {
     nav {
       background-color: white;
+    }
+    .button-collapse {
+      padding: 0.5rem;
     }
   }
 }

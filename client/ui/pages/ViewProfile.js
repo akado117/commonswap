@@ -191,7 +191,7 @@ class ViewProfile extends React.Component {
             placeImg,
             ...data,
         };
-        props.placeActions.saveSwap(swapObj, data);
+        props.placeActions.saveSwap(swapObj);
     }
 
     saveSwap = (data, props, currentPlace, modalActions) => {

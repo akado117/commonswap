@@ -260,13 +260,14 @@ const methods = {
             return serviceErrorBuilder(`Get contact info called for ${userId} but failed`, upsertFailedCode, err);
         }
     },
-    requestEmail(data, Notes, Arrival, Departure) {
-        const { requesterPlaceId, requesteePlaceId, requesteeUserId } = data;
-        const Profile = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
+    requestEmail(data) {
+
+        const { Arrival, Departure, Notes, User, placeId } = data;
+        const ownerPlace = Places.findOne({ _id: placeId }) || {};
+        const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
         const userId = Meteor.userId();
-        const RequestorPlace = Places.findOne({ _id: requesterPlaceId }) || {};
-        const RequestedPlace = Places.findOne({ _id: requesteePlaceId }) || {};
-        const User = Profiles.findOne({ ownerUserId: userId }) || {};
+        const RequestorPlace = ownerPlace;
+        const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
@@ -391,7 +392,7 @@ const methods = {
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
-    'trips.saveTrip': function saveTrip(trip, notes, arrival, departure) {
+    'trips.saveTrip': function saveTrip(trip) {
         const tripClone = cloneDeep(trip);
         const userId = Meteor.userId();
         const { dates, requesterUserId, requesteeUserId } = tripClone;
@@ -406,8 +407,6 @@ const methods = {
             const tripGUID = Trips.upsert({ requesterUserId, dates, requesteeUserId }, setterOrInsert(tripClone));
             if (tripGUID.insertedId) {
                 tripClone._id = tripGUID.insertedId;
-                console.log('Trip Clone');
-                methods.requestEmail(tripClone, notes, arrival, departure);
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
             console.log(tripGUID)
@@ -491,7 +490,7 @@ const methods = {
             });
             const status = tripStatus.ACTIVE;
 
-            const swapGUID = Trips.update({ _id: swapClone._id }, { $set: { status } });
+            const swapGUID = Trips.update({ _id: swapClone._id }, { $set: { status }});
 
             sendAcceptEmail(swapObj);
 
@@ -517,7 +516,7 @@ const methods = {
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting place info', tripErrorCode);
         if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode, );
         try {
-            const tripGUID = Places.update({ _id, ownerUserId }, { $set: { availableAnytime } });
+            const tripGUID = Places.update({ _id, ownerUserId}, { $set: { availableAnytime } });
             consoleLogHelper(`Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`, genericSuccessCode, userId, '');
             return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
                 serviceMessage: `Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`,
@@ -595,7 +594,7 @@ const methods = {
             if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
             if (arrival && departure) {
                 searchObj.$or = [{ availableAnytime: true }, { availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
-                { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }];
+                    { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }];
             }
             const places = Places.find(searchObj, { fields: FieldsForBrowseProfile }).fetch();
             const placeIds = [];

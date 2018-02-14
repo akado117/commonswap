@@ -261,12 +261,16 @@ const methods = {
         }
     },
     requestEmail(data, Notes, Arrival, Departure) {
-        const { requesterPlaceId, requesteePlaceId, requesteeUserId } = data;
+        const { requesterPlaceId, requesteePlaceId, requesteeUserId, _id } = data;
         const Profile = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
         const userId = Meteor.userId();
         const RequestorPlace = Places.findOne({ _id: requesterPlaceId }) || {};
         const RequestedPlace = Places.findOne({ _id: requesteePlaceId }) || {};
         const User = Profiles.findOne({ ownerUserId: userId }) || {};
+        const SwapId = _id;
+
+        console.log('TRIP ID');
+        console.log(SwapId);
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
@@ -281,7 +285,7 @@ const methods = {
                     RequestedPlace,
                 },
             });
-            consoleLogHelper(`Email for new swap from ${User && User.userId} sent`, genericSuccessCode, userId, `Place Id of interest ${placeId}`);
+            consoleLogHelper(`Email for new swap from ${User && User.userId} sent`, genericSuccessCode, userId, `Place`);
             return serviceSuccessBuilder(res.data, genericSuccessCode, {
                 serviceMessage: `Email for new swap from ${User && User.userId} sent`,
                 data: res.data,

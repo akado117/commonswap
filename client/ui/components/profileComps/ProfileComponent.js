@@ -125,7 +125,7 @@ class ProfileComponent extends Component {
                 <div className="col s6 m4 input-field inline">
                     <DatePicker
                         className="date-picker"
-                        defaultDate={typeof profile.birthday !== 'undefined' ? ParseDate(profile.birthday) : undefined}
+                        defaultDate={typeof profile.birthday !== 'undefined' ? ParseDate(profile.birthday) : new Date(1993, 1, 1)}
                         onChange={(nul, date) => getValueFunc('birthday', date)}
                         floatingLabelText={<span><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</span>}
                     />

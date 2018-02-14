@@ -10,7 +10,7 @@ import { buildPlaceForBrowseObjs, mapMongoGeoSpatialCoords, buildPlaceForUpsert 
 const PlaceActions = {
     upsertPlace: (placeData, cb) => {
         const currentPlaceData = buildPlaceForUpsert(placeData, Store.getState());
-        const {place = {}, address = {}, amenities = {}} = currentPlaceData;
+        const { place = {}, address = {}, amenities = {} } = currentPlaceData;
 
         mapMongoGeoSpatialCoords(place);
         servicePending(actionTypes.SAVE_PLACE);
@@ -50,7 +50,7 @@ const PlaceActions = {
     updateAlwaysAvailable: ({ availableAnytime, _id, ownerUserId }) => dispatch => Meteor.call('places.updateAlwaysAvailable', { availableAnytime, _id, ownerUserId }, (error, result) =>
         standardResponseFunc(error, result, actionTypes.PLACE_UPDATE_ALWAYS_AVAILABLE, dispatch)),
     getPlaceById(_id) {
-        return dispatch => Meteor.call('places.getPlaceById', {_id}, (error, result) => {
+        return dispatch => Meteor.call('places.getPlaceById', { _id }, (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_BY_ID, dispatch);
         });
     },
@@ -94,10 +94,14 @@ const PlaceActions = {
         });
     },
     saveSwap: (swapObj) => {
+        const Notes = swapObj.requesterMessage;
+        const Arrival = swapObj.dates.arrival;
+        const Departure = swapObj.dates.departure;
         const swapClone = cloneDeep(swapObj);
         swapClone.dates = FormateDates([swapObj.dates])[0];
+
         servicePending(actionTypes.SAVE_TRIP);
-        return dispatch => Meteor.call('trips.saveTrip', swapClone, (error, result) => {
+        return dispatch => Meteor.call('trips.saveTrip', swapClone, Notes, Arrival, Departure, (error, result) => {
             serviceResponded(actionTypes.SAVE_TRIP);
             return standardResponseFunc(error, result, actionTypes.SAVE_TRIP, dispatch);
         });

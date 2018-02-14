@@ -161,7 +161,7 @@ class ViewProfile extends React.Component {
 
     continueSaving = (data, props, currentPlace, modalActions) => {
         this.props.modalActions.closeModal();
-        // this.requestSwap(data, props);
+        this.requestSwap(data, props);
         const { numOfGuests, bedrooms, _id } = props.place.place;
         const { state, city } = props.place.address;
         const { firstName, email } = props.profile.profile;
@@ -314,11 +314,20 @@ class ViewProfile extends React.Component {
         });
 
         const interestIconLabels = Object.keys(interests).map((key, idx) => {
-            if (interests[key] && interestIcons[key]) {
+            if(interests[key] && interestIcons[key]) {
                 return <div className="col s4 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
             }
         })
 
+        // onCalendarSelect = (selectedDates, eventData) => {
+        // if (eventData && eventData.eventType === EVENT_TYPES.END) {
+        //     const dateObj = selectedDates[eventData.modifiedDateIndex] || {};
+        //     this.setState({
+        //         selectedDates,
+        //         initialSelectedDate: dateObj.start,
+        //     });
+        // }
+        // }
         return (
             <section className="profile-view-container">
                 <div className="container">

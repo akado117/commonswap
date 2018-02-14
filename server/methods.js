@@ -261,27 +261,12 @@ const methods = {
         }
     },
     requestEmail(data, Notes, Arrival, Departure) {
-        console.log('DATA');
-        console.log(data);
-        console.log('NOTES');
-        console.log(Notes);
-        console.log('Arrival');
-        console.log(Arrival);
-
-
         const { requesterPlaceId, requesteePlaceId, requesteeUserId } = data;
         const Profile = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
         const userId = Meteor.userId();
         const RequestorPlace = Places.findOne({ _id: requesterPlaceId }) || {};
         const RequestedPlace = Places.findOne({ _id: requesteePlaceId }) || {};
-        const User = Profiles.findOne({ _id: userId }) || {};
-
-        console.log('DATA');
-        console.log(data);
-        console.log('NOTES');
-        console.log(Notes);
-        console.log('Arrival');
-        console.log(Arrival);
+        const User = Profiles.findOne({ ownerUserId: userId }) || {};
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {

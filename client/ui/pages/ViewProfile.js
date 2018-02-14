@@ -319,15 +319,6 @@ class ViewProfile extends React.Component {
             }
         })
 
-        // onCalendarSelect = (selectedDates, eventData) => {
-        // if (eventData && eventData.eventType === EVENT_TYPES.END) {
-        //     const dateObj = selectedDates[eventData.modifiedDateIndex] || {};
-        //     this.setState({
-        //         selectedDates,
-        //         initialSelectedDate: dateObj.start,
-        //     });
-        // }
-        // }
         return (
             <section className="profile-view-container">
                 <div className="container">

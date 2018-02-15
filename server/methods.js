@@ -392,7 +392,7 @@ const methods = {
             return serviceErrorBuilder('Place create or update failed', upsertFailedCode, err);
         }
     },
-    'trips.saveTrip': function saveTrip(trip) {
+    'trips.saveTrip': function saveTrip(trip, notes, arrival, departure) {
         const tripClone = cloneDeep(trip);
         const userId = Meteor.userId();
         const { dates, requesterUserId, requesteeUserId } = tripClone;
@@ -407,6 +407,8 @@ const methods = {
             const tripGUID = Trips.upsert({ requesterUserId, dates, requesteeUserId }, setterOrInsert(tripClone));
             if (tripGUID.insertedId) {
                 tripClone._id = tripGUID.insertedId;
+                console.log('Trip Clone');
+                methods.requestEmail(tripClone, notes, arrival, departure);
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
             console.log(tripGUID)

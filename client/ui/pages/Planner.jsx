@@ -112,7 +112,7 @@ const examplePendingSwaps = [
         },
         status: tripStatus.ACCEPTED,
         _id: '4',
-    },{
+    }, {
         address: {
             state: 'NY',
             city: 'New York',
@@ -163,18 +163,22 @@ class Planner extends React.Component {
             open: false,
         };
         var options = CITIES[this.state.country];
+        // const { placeId } = this.props.params;
+        // if(placeId) {
+        //     this.acceptModalAcceptHandler
+        // }
     }
 
     componentDidMount = () => {
         if (!this.props.trip.getTripsCalled) {
-            this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId()});
+            this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
         }
     }
     componentDidUpdate = (prevProps) => {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
             const selectedDates = convertPlannerDates(ParseDates(this.props.place.place.availableDates || []));
             this.setState({ selectedDates });
-            if (!this.props.trip.getTripsCalled) this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId()});
+            if (!this.props.trip.getTripsCalled) this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
         }
     }
 
@@ -211,7 +215,7 @@ class Planner extends React.Component {
         }
     }
 
-    tripBuilder= (trips, userId) => trips.map((trip, idx) => <Trip
+    tripBuilder = (trips, userId) => trips.map((trip, idx) => <Trip
         key={`trip-${trip._id}`}
         swapObj={trip}
         currentUserId={userId}
@@ -219,7 +223,7 @@ class Planner extends React.Component {
         declineSwapHandler={(requesterProfileImage, requesteeProfileImage) => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, this.props.modalActions, false, trip)}
     />);
 
-    exampleTripBuilder= (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${trip._id}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
+    exampleTripBuilder = (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${trip._id}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
     onChargeCardAccept(modalActions, trip, accepted) {
         //if (accepted) this.props.placeActions.chargeCards(trip);//charges and updates to accepted
@@ -404,8 +408,7 @@ Planner.propTypes = {
 };
 
 Planner.defaultProps = {
-    
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);
-

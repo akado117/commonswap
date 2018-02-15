@@ -269,9 +269,6 @@ const methods = {
         const User = Profiles.findOne({ ownerUserId: userId }) || {};
         const SwapId = _id;
 
-        console.log('TRIP ID');
-        console.log(SwapId);
-
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
             const res = sync('POST', Meteor.settings.azureLambdaURLS.requestEmail, {

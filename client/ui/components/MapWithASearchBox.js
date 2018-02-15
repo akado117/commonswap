@@ -65,7 +65,7 @@ const MapSearchBox = compose(
     lifecycle({
         componentWillMount() {
             const refs = {};
-            const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || { lat: 41.9, lng: -87.624 };
+            const { lat, lng } = this.props.coords && this.props.coords.lat && this.props.coords || (this.props.place && this.props.place.coords) || { lat: 41.9, lng: -87.624 };
             const initialMarker = lat !== undefined && lng !== undefined ? [buildMarkerObj({ lat, lng })] : [];
             const boundPoints = buildBoundsRange({ lat, lng }, window.google.maps.LatLng, 3);
 

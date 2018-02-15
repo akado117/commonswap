@@ -7,6 +7,7 @@ export const PrettyDate = date => format(date, 'MMMM D, YYYY');
 export const FormateDates = dates => dates.map(dateObj => ({ arrival: format(dateObj.arrival, 'YYYY-MM-DD'), departure: format(dateObj.departure, 'YYYY-MM-DD') }));
 export const ParseDate = date => parse(date);
 export const ParseDates = dates => dates.map(dateObj => ({ arrival: parse(dateObj.arrival), departure: parse(dateObj.departure) }));
+export const DefaultBirthDate = new Date(1993, 1, 1);
 export const GetSwapDateRange = (arrival, departure) => {
     if (isSameMonth(arrival, departure)) {
         return `${format(arrival, 'MMM Do')} - ${format(departure, 'Do')}`;

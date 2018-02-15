@@ -40,7 +40,7 @@ const SEARCHED = 'SEACHED';
 class Browse extends Component {
     constructor(props) {
         super(props);
-        const coords = (props.place.coords && props.place.coords.lat && props.place.coords ) || props.place.place.coords || {};
+        const coords = (props.place.coords && props.place.coords.lat && props.place.coords) || props.place.place.coords || {};
         coords.distance = 50;
         this.state = {
             numOfGuests: props.place.numOfGuests,
@@ -135,8 +135,25 @@ class Browse extends Component {
         }
         return (
             <div className="browse-container">
-                <div className="container">
-                    <div className="row reduced-row-margin">
+                <div className="row">
+                    <div className="map-container col s12 m7 l5">
+                        <MapWithASearchBox
+                            place={place}
+                            coords={this.state.coords}
+                            onSearchComplete={this.onSearchChange}
+                            externalMarkers={placesForBrowsing}
+                            resizeBounds
+                            hideSearchBar
+                            injectedMarkerClick={this.onMarkerClick}
+                        />
+                    </div>
+                    <div className="scroll-listing col s12 m5 l7 no-pad" >
+                        <div className="row explore-container">
+                            <h3 className="explore-title">Explore</h3>
+                        </div>
+                        <div className="row">
+                            <p>To browse potential swaps, first enter your desired travel destination in the search box. You can adjust the range of your search using the range field below</p>
+                        </div>
                         <div className="row">
                             <PlacesWithStandaloneSearchBox
                                 className="col s12 m6"
@@ -154,46 +171,12 @@ class Browse extends Component {
                                     onClick={this.searchForPlaces}
                                 />
                             </div>
-                            {/*<div className="col s6 m3">*/}
-                                {/*<DatePicker*/}
-                                    {/*className="material-date-picker"*/}
-                                    {/*onChange={(nul, date) => this.setState({ arrival: date })}*/}
-                                    {/*floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Arrival</span>}*/}
-                                    {/*textFieldStyle={{ width: '100%' }}*/}
-                                    {/*{...defArrDate}*/}
-                                {/*//disableYearSelection={this.state.disableYearSelection}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
-                            {/*<div className="col s6 m3">*/}
-                                {/*<DatePicker*/}
-                                    {/*className="material-date-picker"*/}
-                                    {/*onChange={(nul, date) => this.setState({ departure: date })}*/}
-                                    {/*floatingLabelText={<span><FontIcon className="material-icons">date_range</FontIcon> Departure</span>}*/}
-                                    {/*textFieldStyle={{ width: '100%' }}*/}
-                                    {/*{...defDepDate}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
                         </div>
-                    </div>
-                </div>
-                <div className={`row error-message ${this.state.searchMessage === '' ? 'hide' : ''}`} style={{ marginBottom: '10px' }}>
-                    <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
-                        {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="map-container col s12 m7 l6">
-                        <MapWithASearchBox
-                            place={place}
-                            coords={this.state.coords}
-                            onSearchComplete={this.onSearchChange}
-                            externalMarkers={placesForBrowsing}
-                            resizeBounds
-                            hideSearchBar
-                            injectedMarkerClick={this.onMarkerClick}
-                        />
-                    </div>
-                    <div className="scroll-listing col s12 m5 l6 no-pad" >
+                        <div className={`row error-message ${this.state.searchMessage === '' ? 'hide' : ''}`} style={{ marginBottom: '10px' }}>
+                            <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
+                                {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
+                            </div>
+                        </div>
                         {placesForBrowsing.map((placeFB, idx) => (
                             <div className="col s12 l6 " key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}>
                                 <PlaceForBrowse

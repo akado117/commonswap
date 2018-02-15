@@ -5,7 +5,7 @@ import SelectBuilder from '../forms/SelectBuilder.js'
 import ButtonArrayComp from '../forms/ButtonArrayComp.js'
 import TextFieldStandardized from '../forms/TextFieldStandardized';
 import ProfileImage from './ProfileImage';
-import { ParseDate } from '../../../../imports/helpers/DateHelpers';
+import { ParseDate, DefaultBirthDate } from '../../../../imports/helpers/DateHelpers';
 import ConnectedButton from '../forms/ConnectedButton';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 
@@ -125,7 +125,7 @@ class ProfileComponent extends Component {
                 <div className="col s6 m4 input-field inline">
                     <DatePicker
                         className="date-picker"
-                        defaultDate={typeof profile.birthday !== 'undefined' ? ParseDate(profile.birthday) : undefined}
+                        defaultDate={typeof profile.birthday !== 'undefined' ? ParseDate(profile.birthday) : DefaultBirthDate}
                         onChange={(nul, date) => getValueFunc('birthday', date)}
                         floatingLabelText={<span><i className="fa fa-birthday-cake fa-1x" aria-hidden="true"></i> Date of Birth</span>}
                     />

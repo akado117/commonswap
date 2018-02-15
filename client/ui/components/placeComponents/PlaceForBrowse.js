@@ -7,21 +7,33 @@ import ImageCarousel from '../ImageCarousel';
 const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profile, goToProfile, noZDepth }) => {
     const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
     return (
-        <div className={`${noZDepth ? '' : 'z-depth-2'} browse-place-container`} style={{ marginBottom: '20px' }}>
+        <div className={`${noZDepth ? '' : 'z-depth-1'} browse-place-container`} style={{ marginBottom: '20px' }}>
             <div className="row reduced-row-margin">
-                <div className="col s6 m12 profile-image-container">
+                <div className="col s5 profile-image-container">
                     <div className="profile-image">
                         <img src={profileImg.url ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
                     </div>
                 </div>
-                <div className="user-text col s6 m12">
-                    <p className="marg-top"><strong>{profile.firstName}</strong></p>
-                    <p className="marg-top">{address.city}, {address.state}</p>
+                <div className="user-text col s7">
+                    <p className="marg-top"><strong>{profile.firstName} ({address.city}, {address.state})</strong></p>
+                    {/* <p className="marg-top">{address.city}, {address.state}</p> */}
                     <p className="marg-top">{profile.occupation}</p>
                     <p className="marg-top">{profile.school}</p>
+                    <div className="col s6 no-pad">
+                        <p>{placeForBrowse.access}</p>
+                    </div>
+                    <div className="col s6 no-pad">
+                        <p><i className="fa fa-bed" aria-hidden="true"></i> Beds: {placeForBrowse.bedrooms}</p>
+                    </div>
+                    <div className="col s6 no-pad">
+                        <p><i className="fa fa-bath" aria-hidden="true"></i> Baths: {placeForBrowse.bathrooms}</p>
+                    </div>
+                    <div className="col s6 no-pad">
+                        <p><i className="fa fa-home" aria-hidden="true"></i> Partial Apt.</p>
+                    </div>
                 </div>
             </div>
-            <div className="row reduced-row-margin">
+            {/* <div className="row reduced-row-margin">
                 <div className="col s6">
                     <p>{placeForBrowse.access}</p>
                 </div>
@@ -34,10 +46,10 @@ const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profil
                 <div className="col s6">
                     <p><i className="fa fa-home" aria-hidden="true"></i> Partial Apt.</p>
                 </div>
-            </div>
+            </div> */}
             <div className="row reduced-row-margin">
                 <div className="col s12">
-                    <p>About {profile.firstName}:</p>
+                    <strong><p>About {profile.firstName}:</p></strong>
                 </div>
                 <div className="col s12 summary-container">
                     {profile.personalSummary}

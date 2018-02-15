@@ -412,3 +412,4 @@ Planner.defaultProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);
+

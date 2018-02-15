@@ -280,6 +280,7 @@ const methods = {
                     Profile,
                     RequestorPlace,
                     RequestedPlace,
+                    SwapId,
                 },
             });
             consoleLogHelper(`Email for new swap from ${User && User.userId} sent`, genericSuccessCode, userId, `Place`);

@@ -15,6 +15,19 @@ $nav-wrapper-height: 65px;
     .nav-login {
       float: right;
     }
+    .border-nav {
+      padding: 0 0.5rem 0 0.5rem;
+    }
+    .explore {
+      display: inline-block;
+      background-color: #E0CB38;
+      border-radius: 5px;
+      line-height: 2.8rem;
+      a {
+        color: white;
+        border-bottom: none !important;
+      }
+    }
   }
   &.invisible {
     nav {

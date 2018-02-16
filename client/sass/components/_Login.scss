@@ -23,8 +23,20 @@
       display: flex;
       align-items: center;
       margin-top: -39px;
-      padding: 0 15px 0 15px;
+      padding: 0 0 0 15px;
       height: 100%;
+      margin-right: 15px;
+      border-radius: 5px;
+      background-color: $primary-accent-color;
+      color: white;
+      box-shadow: $button-boxshadow-default;
+      transition: box-shadow 300ms ease-in-out;
+      &:hover {
+        opacity: 0.8;
+      }
+      &:active {
+        box-shadow: $button-boxshadow-active;
+      }
 
       .img-holder {
         @extend .true-circle;
@@ -42,8 +54,12 @@
       text-transform: none !important;
     }
     i {
-      padding-right: 8px;
-      height: 16px;
+      width: 35px;
+      height: 35px;
+      padding-top: 10px;
+      background: $primary-accent-color;
+      font-weight: bold;
+      border-radius: 50%;
     }
   }
 }

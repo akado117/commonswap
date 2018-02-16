@@ -61,8 +61,12 @@
             content: 'Resizing';
             display: block;
             text-align: center;
-            padding-top: 25px;
+            padding-top: 50%;
             color: white;
+            font-size: 24px;
+            transition: opacity ;
+            opacity: 1;
+            animation: fade 1.7s linear infinite;
           }
         }
         img {
@@ -77,4 +81,8 @@
       }
     }
   }
+}
+@keyframes fade {
+  0%,100% { opacity: 1 }
+  50% { opacity: 0 }
 }

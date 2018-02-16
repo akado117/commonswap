@@ -106,7 +106,7 @@ class Uploaders extends React.Component {
                 {this.props.deleteFunc && !this.state.isUploading ?  <button className="delete" onClick={this.deleteHandler}>&times;</button> : ''}
                 {this.state.isUploading ?
                     <div className="progress-container"><Progress bottom={ this.state.uploadProgress } top={ 100 } /></div>
-                    : <div className={!this.state.resizing ? 'resizing' : ''} style={resizeStyle}><div className="overlay" /></div>}
+                    : <div className={!this.state.resizing ? 'resizing' : ''} style={resizeStyle}><LoadingSpinner /><div className="overlay" /></div>}
             </div>);
     }
 }

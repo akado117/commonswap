@@ -13,6 +13,7 @@ import CloseButton from './forms/CloseButton';
 import { MaxImageUploadDim } from '../../../imports/lib/Constants';
 import { determineImageDimensions } from '../../../imports/helpers/DataHelpers';
 import { picaResizeFunction, willNeedResize } from '../helpers/ImageHelpers';
+import LoadingSpinner from './forms/LoadingSpinner';
 
 let pica;
 
@@ -95,12 +96,17 @@ class Uploaders extends React.Component {
     }
 
     render() {
+        const resizeStyle = {
+            background: `url(${this.props.file.preview})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+        };
         return (
             <div className="preview-container">
                 {this.props.deleteFunc && !this.state.isUploading ?  <button className="delete" onClick={this.deleteHandler}>&times;</button> : ''}
                 {this.state.isUploading ?
                     <div className="progress-container"><Progress bottom={ this.state.uploadProgress } top={ 100 } /></div>
-                    : <div className={this.state.resizing ? 'resizing' : ''}><div className="overlay" /><img src={this.props.file.preview} alt="preview" /></div>}
+                    : <div className={!this.state.resizing ? 'resizing' : ''} style={resizeStyle}><div className="overlay" /></div>}
             </div>);
     }
 }

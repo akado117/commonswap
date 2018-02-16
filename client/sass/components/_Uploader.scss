@@ -1,4 +1,5 @@
 .uploader {
+  width: 100%;
   button {
     transform: scale(.75);
   }
@@ -6,10 +7,11 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    z-index: 5;
   }
   .dropzone {
     min-height: 200px;
-    min-width: 200px;
+    min-width: 125px;
     border: black dashed 1.5px;
     display: flex;
     flex-wrap: wrap;
@@ -42,6 +44,13 @@
       }
       .resizing {
         position: relative;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 100%;
         .overlay {
           z-index: 2;
           background-color: rgba(0,0,0,.45);

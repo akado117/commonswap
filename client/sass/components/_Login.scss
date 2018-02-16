@@ -38,6 +38,15 @@
         box-shadow: $button-boxshadow-active;
       }
 
+      &.logged-in {
+        box-shadow: none;
+        background-color: transparent;
+        color: black;
+        &:active {
+          box-shadow: none;
+        }
+      }
+
       .img-holder {
         @extend .true-circle;
         height: 45px;

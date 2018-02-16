@@ -113,7 +113,7 @@ class LoginPage extends React.Component {
         const imgUrl = this.props.userImage.url ||this.props.user.picture;
         const photo = imgUrl ? <div className="img-holder"><img src={imgUrl} alt="" /></div> : <i className="fa fa-user-o fa-1x" aria-hidden="true" />;
         return (
-            <div className="button-element align-center">
+            <div className={`button-element align-center ${Meteor.userId() ? 'logged-in' : ''}`}>
                 <span className="hide-on-small-only">{this.getDropDownText()}</span>{photo}
             </div>);
     }

@@ -30,6 +30,11 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 const client = new ApolloClient(meteorClientConfig());
 
+class LatLngBounds {
+    extend() {}
+}
+
+window.google = { maps: { Map: () => {}, LatLng: class mock {}, LatLngBounds } };
 
 Meteor.startup(() => {
     Analytics();

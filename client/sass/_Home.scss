@@ -134,7 +134,7 @@
     margin-bottom: 25px;
     .signup-button {
       position: absolute;
-      top: 45vh;
+      bottom: -30px;
       width: 100%;
       z-index: 10;
     }
@@ -291,9 +291,6 @@
     // styles for medium screens and down
     .video-parent {
       height: 45vh;
-      .signup-button {
-        top: 40vh;
-      }
     }
 
     .header-title {
@@ -400,9 +397,6 @@
 
     .video-parent {
       height: 35vh;
-      .signup-button {
-        top: 30vh;
-      }
     }
 
     .home-video-container {

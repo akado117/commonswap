@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { defaultImageUrls } from '../../../imports/lib/Constants';
 import LoggedInContent from '../components/homeComps/LoggedInContent';
 import HomeDefaultContent from '../components/homeComps/HomeDefaultContent';
+import SignupModalButton from '../components/SignupModalButton';
 
 const styles = {
     customWidth: {
@@ -49,6 +50,11 @@ class Home extends Component {
                     <button className="mute-button" onClick={this.toggleMuted}>
                         <i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />
                     </button>
+                    <div className="row center-content signup-button">
+                        <SignupModalButton
+                            className="col s6 m4 l3"
+                        />
+                    </div>
                     <div className="home-video-container">
                         <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
                             <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />

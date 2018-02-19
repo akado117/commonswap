@@ -20,6 +20,7 @@ import { Today } from '../../../imports/helpers/DateHelpers';
 import { actionTypes } from '../helpers/ConstantsRedux';
 import { stateFields } from '../../../imports/lib/Constants';
 import SelectBuilder from '../components/forms/SelectBuilder';
+import SignupModalButton from '../components/SignupModalButton';
 
 const { values } = stateFields.fields;
 const dropObj = {
@@ -133,6 +134,13 @@ class Browse extends Component {
             defArrDate = { defaultDate: this.state.arrival };
             defDepDate = { defaultDate: this.state.departure };
         }
+        const searchButton = this.props.user.userId
+            ? (<ConnectedButton
+                icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{float: 'left'}}/>}
+                actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
+                buttonText="Search"
+                onClick={this.searchForPlaces}
+            />) : <SignupModalButton />;
         return (
             <div className="browse-container">
                 <div className="row">
@@ -164,12 +172,7 @@ class Browse extends Component {
                                 <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
                             </div>
                             <div className="col s6 m3 search-button">
-                                <ConnectedButton
-                                    icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
-                                    actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
-                                    buttonText="Search"
-                                    onClick={this.searchForPlaces}
-                                />
+                                {searchButton}
                             </div>
                         </div>
                         <div className={`row error-message ${this.state.searchMessage === '' ? 'hide' : ''}`} style={{ marginBottom: '10px' }}>

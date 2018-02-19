@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import { defaultImageUrls } from '../../../../imports/lib/Constants';
 import { loginTypes } from "../../../../imports/lib/Constants";
 import UserActions from '../../actions/userActions';
+import SignupModalButton from '../../components/SignupModalButton';
 
 function HomeDefaultContent({ userActions }) {
     return (
@@ -52,6 +53,11 @@ function HomeDefaultContent({ userActions }) {
                         </div>
                         <p className="how-text col s12"><strong>Travel and Explore</strong><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away. Want to know the best Mexican restaurant in town? Ask your swap.</p>
                     </div>
+                </div>
+                <div className="row center-content signup-button">
+                    <SignupModalButton
+                        className="col s6 m4 l3"
+                    />
                 </div>
             </div>
             <div className="col s12 how-title">
@@ -159,41 +165,26 @@ function HomeDefaultContent({ userActions }) {
                          </div> */}
                     </div>
                 </div>
+                <div className="row center-content signup-button">
+                    <SignupModalButton
+                        className="col s6 m4 l3"
+                    />
+                </div>
             </div>
             <div className="col s12 how-title">
                 <div className="row">
                     <div className="col s12 center-align">
                         <h2 className="how-title">JOIN OUR COMMUNITY</h2>
-                        <p className="how-desc">We are currently accepting beta users for the 2018 calendar year.</p>
                     </div>
                 </div>
             </div>
-            <div className="col s12 signin">
-                <div className="row">
-                    <div className="col s12 l6 center-align sign-up">
-                        <RaisedButton
-                            href="https://github.com/callemall/material-ui"
-                            target="_blank"
-                            label="Sign up with Facebook"
-                            backgroundColor="#3B5998"
-                            labelColor="#ffffff"
-                            className="sign-button"
-                            icon={<FontIcon className="fa fa-facebook" />}
-                            onClick={() => userActions.loginWithOAuth(loginTypes.facebook)}
-                        />
-                    </div>
-                    <div className="col s12 l6 center-align sign-up-mail">
-                        <RaisedButton
-                            label="Sign up with Google"
-                            containerElement="label"
-                            backgroundColor="#e14441"
-                            labelColor="#ffffff"
-                            icon={<FontIcon className="fa fa-google" />}
-                            className="sign-button"
-                            onClick={() => userActions.loginWithOAuth(loginTypes.google)}
-                        />
-                    </div>
-                </div>
+            <div className="center-content">
+                <p className="how-desc">We are currently accepting beta users for the 2018 calendar year.</p>
+            </div>
+            <div className="row center-content signup-button">
+                <SignupModalButton
+                    className="col s6 m4 l3"
+                />
             </div>
         </div>
     );

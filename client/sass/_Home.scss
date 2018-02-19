@@ -132,6 +132,12 @@
     position: relative;
     height: 50vh;
     margin-bottom: 25px;
+    .signup-button {
+      position: absolute;
+      top: 45vh;
+      width: 100%;
+      z-index: 10;
+    }
     .baseButton {
       position: absolute;
       bottom: 15px;
@@ -231,16 +237,36 @@
     color: #00CED1;
   }
   .how-desc {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    color: white;
+    color: black;
+    padding: 0 25px;
+    text-align: center;
   }
 
   .signin {
     min-height: 200px;
   }
 
-  @media #{$large-and-up} {
+  .signup-button {
+    margin-bottom: 45px;
+  }
+
+  @media only screen and (max-width: 1300px) {
+    .home-video-container {
+      left: -15%;
+      width: 130%;
+    }
+  }
+
+  @media only screen and (max-width: 1100px) {
+    .home-video-container {
+      left: -22%;
+      width: 144%;
+    }
+  }
+
+  @media #{$large-and-up} {//993px
     .overlay-desc {
       position: absolute;
       top: 30%;
@@ -261,13 +287,13 @@
     }
   }
 
-  @media #{$medium-and-up} {
-    // styles for medium screens and larger
-  }
   @media #{$medium-and-down} {
     // styles for medium screens and down
     .video-parent {
-      height: 60vh;
+      height: 45vh;
+      .signup-button {
+        top: 40vh;
+      }
     }
 
     .header-title {
@@ -282,6 +308,11 @@
       z-index: 1;
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
+    }
+
+    .home-video-container {
+      left: -30%;
+      width: 160%;
     }
 
     header {
@@ -306,11 +337,11 @@
   }
   @media only screen and (max-width: 800px) {
     .video-parent {
-      height: 65vh;
+      height: 35vh;
     }
     .home-video-container {
-      left: -32.5%;
-      width: 165%;
+      left: -39%;
+      width: 178%;
     }
   }
 
@@ -368,16 +399,18 @@
     }
 
     .video-parent {
-      height: 65vh;
+      height: 35vh;
+      .signup-button {
+        top: 30vh;
+      }
     }
 
     .home-video-container {
-      left: -35%;
-      width: 170%;
+      left: -28%;
+      width: 156%;
     }
 
     .head-mobile {
-      min-height: 50vh;
       max-height: 500px;
       opacity: 0.9;
     }
@@ -419,12 +452,9 @@
 
   }
   @media (max-width: 525px) {
-    .video-parent {
-      height: 40vh;
-    }
     .home-video-container {
-      width: 200%;
-      left: -50%
+      width: 224%;
+      left: -56%
     }
   }
 }

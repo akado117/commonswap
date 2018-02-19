@@ -41,9 +41,10 @@ class SignupModalButton extends React.Component {
         const { userActions } = this.props;
         if (type === 'close') {
             userActions.LogUserOut(() => { this.forceUpdate(); });
-        } else {
+        } else if (type) {
             userActions.loginWithOAuth(type);
         }
+        setTimeout(() => this.props.modalActions.closeModal(), 1000);
     }
 
     getModalContent  = () => (
@@ -103,7 +104,7 @@ SignupModalButton.propTypes = {
     profile: PropTypes.object.isRequired,
     className: PropTypes.string,
     userActions: PropTypes.object.isRequired,
-    userImage: PropTypes.object.isRequired,
+    modalActions: PropTypes.object.isRequired,
 }
 
 SignupModalButton.defaultProps = {

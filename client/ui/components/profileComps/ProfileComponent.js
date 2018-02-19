@@ -8,6 +8,7 @@ import ProfileImage from './ProfileImage';
 import { ParseDate, DefaultBirthDate } from '../../../../imports/helpers/DateHelpers';
 import ConnectedButton from '../forms/ConnectedButton';
 import { actionTypes } from '../../helpers/ConstantsRedux';
+import SignupModalButton from '../SignupModalButton';
 
 function onChangeHelper(event) {
     return event.target.value;
@@ -84,6 +85,38 @@ class ProfileComponent extends Component {
         if (value) this.getValueFunc(key, value);
         return value;
     }
+
+    getNextButtons = () => {
+        const buttons = this.props.user.userId
+            ? (<div className="row">
+                <div className="col s6 m4 l3 offset-m4 offset-l6">
+                    <ConnectedButton
+                        icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                        actionType={actionTypes.SAVE_PROFILE}
+                        buttonText="Save"
+                        onClick={() => this.props.saveProfile()}
+                        successText="Profile Saved"
+                    />
+                </div>
+                <div className="col s6 m4 l3">
+                    <ConnectedButton
+                        icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                        actionType={actionTypes.SAVE_PROFILE}
+                        buttonText="Next"
+                        onClick={() => this.props.saveProfile(true)}
+                        successText="Your Profile Saved"
+                    />
+                </div>
+            </div>)
+            : <div className="row">
+                <div>
+                    <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9">
+                        <SignupModalButton />
+                    </div>
+                </div>
+            </div>
+        return buttons;
+    };
 
     render() {
         const getValueFunc = this.getValueFunc;
@@ -184,26 +217,7 @@ class ProfileComponent extends Component {
                 </div>
                 <ButtonArrayComp getValueFunc={(key, value) => this.props.getValueFunc('interests', key, value)} buttonData={this.BUTTONS} defaultValues={interests} />
                 <div className="col s12">
-                    <div className="row">
-                        <div className="col s6 m4 l3 offset-m4 offset-l6">
-                            <ConnectedButton
-                                icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
-                                actionType={actionTypes.SAVE_PROFILE}
-                                buttonText="Save"
-                                onClick={() => this.props.saveProfile()}
-                                successText="Profile Saved"
-                            />
-                        </div>
-                        <div className="col s6 m4 l3">
-                            <ConnectedButton
-                                icon={<i className="fa fa-hand-o-right fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
-                                actionType={actionTypes.SAVE_PROFILE}
-                                buttonText="Next"
-                                onClick={() => this.props.saveProfile(true)}
-                                successText="Your Profile Saved"
-                            />
-                        </div>
-                    </div>
+                    {this.getNextButtons()}
                 </div>
             </div>
         );

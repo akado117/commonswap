@@ -148,11 +148,9 @@ class LoginPage extends React.Component {
         const { className } = this.props;
         return (
             <div className={className}>
-                <RaisedButton
-                    onClick={this.handleTouchTap}
-                    label={this.getButtonElement()}
-                    className="pop-over-login-button"
-                />
+                <button onClick={this.handleTouchTap} className="pop-over-login-button" >
+                    {this.getButtonElement()}
+                </button>
                 <Popover
                     open={this.state.open}
                     anchorEl={this.state.anchorEl}

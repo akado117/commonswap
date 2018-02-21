@@ -60,15 +60,15 @@ class Navbar extends React.Component {
                             <li style={{ color: 'black' }} className="border-nav"><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
                             <li style={{ color: 'black' }} className="border-nav"><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
                             <li style={{ color: 'black' }} className="border-nav"><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
-                            <li style={{ color: 'black' }} className="border-nav"><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                             <li style={{ color: 'black' }} className="border-nav explore-container"><span className="explore"><Link to="/explore" activeStyle={ACTIVE}>Explore</Link></span></li>
+                            <li style={{ color: 'black' }} className="border-nav"><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                         </ul>
                         <ul className="side-nav" id="mobile-demo">
                             <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
                             <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
-                            <li><Link to="/browse" activeStyle={ACTIVE}>Browse</Link></li>
+                            <li><Link to="/explore" activeStyle={ACTIVE}>Browse</Link></li>
                             <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
-                            <li><Link className="explore" to="/exlpore" activeStyle={ACTIVE}>Profile</Link></li>
+                            <li><Link to="/exlpore" activeStyle={ACTIVE}>Profile</Link></li>
                         </ul>
                     </div>
                     {this.props.children}

@@ -132,7 +132,7 @@ class FAQ extends Component {
             <Tab className="nav-label" label={<span className="tab-text">What it is</span>} value={0} style={tabStyle} />
             <Tab className="nav-label" label={<span className="tab-text">Cost</span>} value={1} style={tabStyle} />
             <Tab className="nav-label" label={<span className="tab-text">Safety</span>} value={2} style={tabStyle} />
-            <Tab className="nav-label" label={<span className="tab-text">Problems/Feedback</span>} value={3} style={tabStyle} />
+            <Tab className="nav-label" label={<span className="tab-text">Problems</span>} value={3} style={tabStyle} />
         </Tabs>
     )
 

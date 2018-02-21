@@ -44,6 +44,11 @@ button.pop-over-login-button {
         box-shadow: none;
       }
     }
+    &:not(.logged-in) {
+      span {
+        padding-left: 10px;
+      }
+    }
     @media #{$small-and-down} {
       background-color: transparent;
       box-shadow: none;
@@ -66,9 +71,6 @@ button.pop-over-login-button {
     }
     img {
       max-width: 110%;
-    }
-    span {
-      padding-left: 10px;
     }
   }
   div {

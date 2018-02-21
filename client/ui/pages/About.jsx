@@ -18,7 +18,7 @@ const styles = {
         fontWeight: 400,
     },
     slide: {
-        padding: "15px 10px",
+        padding: "15px 0",
     },
 };
 
@@ -31,8 +31,15 @@ class About extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: parseInt(props.params.index, 10) || 0,
+            slideIndex: parseInt(props.params.index, 10) || 0,
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!this.props.params) return;
+        if (this.props.params.index !== prevProps.params.index) {
+            this.handleChange(parseInt(this.props.params.index, 10) || 0, prevProps.params.index, {});
+        }
     }
 
     handleChange = (newValue, oldVal, { reason }) => {
@@ -71,13 +78,13 @@ class About extends Component {
                     <div className="row">
                         {this.getTabs()}
                     </div>
-                    <SwipeableViews
-                        index={this.state.slideIndex}
-                        onChangeIndex={this.handleChange}
-                    >
-                        <div style={styles.slide}>
-                            <div className="col 12 purpose-statement">
-                                <h4>“We exist to foster a new way of traveling. Our goal is to
+                    <div className="row">
+                        <SwipeableViews
+                            index={this.state.slideIndex}
+                            onChangeIndex={this.handleChange}
+                        >
+                            <div style={styles.slide}>
+                                <h4 className="purpose-statement">“We exist to foster a new way of traveling. Our goal is to
                                 connect a community of adventure seekers founded on the
                                 values of respect and integrity to experience more of the
                                 world. We are firm believers that traveling opens up the
@@ -88,14 +95,14 @@ class About extends Component {
                                 become more compassionate, empathetic, and respectful of
                                 each other.”</h4>
                             </div>
-                        </div>
-                        <div style={styles.slide}>
-                            <Founders />
-                        </div>
-                        <div style={styles.slide}>
-                            <Testimonials />
-                        </div>
-                    </SwipeableViews>
+                            <div style={styles.slide}>
+                                <Founders />
+                            </div>
+                            <div style={styles.slide}>
+                                <Testimonials />
+                            </div>
+                        </SwipeableViews>
+                    </div>
                 </div>
                 <Footer />
             </div>

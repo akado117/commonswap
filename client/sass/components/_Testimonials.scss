@@ -1,11 +1,18 @@
 .testimonial-container {
     .grow { transition: all .2s ease-in-out; }
     .test-img {
-        max-height: 550px;
         width:100%;
     }
     .pad-top {
         padding-top: 1.0rem;
+    }
+    .image-container {
+        overflow: hidden;
+        height: 25vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
     }
     header {
         height: 5vh;
@@ -17,12 +24,13 @@
         background-origin: padding-box;
     }
     @media #{$medium-and-down} {
-        
+        .image-container {
+            height: 46vw;
+        }
     }
     @media #{$small-and-down} {
-       .test-img{
-           width:100%;
-           min-height: 400px;
-       } 
+        .image-container {
+            height: 106vw;
+        }
     }
 }

@@ -10,8 +10,10 @@ const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profil
         <div className={`${noZDepth ? '' : 'z-depth-1'} browse-place-container`} style={{ marginBottom: '20px' }}>
             <div className="row reduced-row-margin">
                 <div className="col s5 profile-image-container">
-                    <div className="profile-image">
-                        <img src={profileImg.url ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" style={{ height: '140px', width: '140px' }} />
+                    <div className="one-to-one-aspect-ratio">
+                        <div className="profile-image">
+                            <img src={profileImg.url ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" />
+                        </div>
                     </div>
                 </div>
                 <div className="user-text col s7">

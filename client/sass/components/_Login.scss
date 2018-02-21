@@ -66,7 +66,7 @@ button.pop-over-login-button {
       max-width: 110%;
     }
     span {
-      padding-right: 10px;
+      padding-left: 10px;
     }
   }
   div {
@@ -75,10 +75,17 @@ button.pop-over-login-button {
   i {
     width: 35px;
     height: 35px;
-    padding-top: 10px;
-    padding-right: 5px;
     background: $primary-accent-color;
     font-weight: bold;
     border-radius: 50%;
+    position: relative;
+    &:before {
+      position: absolute;
+      top: 10px;
+      left: 11px;
+      @media #{$medium-and-up} {
+        top: 9px;
+      }
+    }
   }
 }

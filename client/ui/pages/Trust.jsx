@@ -11,22 +11,32 @@ class Trust extends Component {
     render() {
         return (
             <div className="trust-container">
-                <header style={{ paddingTop: '35px' }}>
-                    <div className="col s12 center-align">
-                        <div className="header-container overlay-desc">
-                            <h1 className="header-title">Trust &amp; Verification<br />
-                            </h1>
+                <div className="container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
+                    <div className="row">
+                        <h2 className="faq-title">Trust &amp; Safety</h2>
+                    </div>
+                    <div className="row">
+                        <div className="col 12 qa-block">
+                            <h4><strong>User Verification</strong></h4>
+                            <p>CommonSwap performs a general user verification screening and requires all beta users to be Facebook verified.
+                            </p>
+                        </div>
+                        <div className="col 12 qa-block">
+                            <h4><strong>24/7 Contact Support</strong></h4>
+                            <p>Users will be provided a 24/7 hotline and can also contact CommonSwap Support via email during their swap to report any issues or problems.
+                            </p>
                         </div>
                     </div>
-                </header>
-                <div className="row container">
-                    <div className="col s12">
-                        <ul>
-                            <li>User Verification – Each of our user will go through a background check and verification process.</li>
-                            <li>Profile Reviews – Get to know your swap through detailed profile reviews. </li>
-                            <li>24/7 Contact Support – Users will be provided a 24/7 hotline and can also contact CommonSwap Support via email during their swap to report any issues or problems.</li>
-                            <li>Message Inquiry – We provide a platform to reach out to potential swaps and learn more about them or ask any questions.</li>
-                        </ul>
+                    <div className="col 12 qa-block">
+                        <h4><strong>Message Inquiry</strong></h4>
+                        <p>Each of our user will go through a background check and verification process
+                        </p>
+                    </div>
+                    <div className="col 12 qa-block">
+                        <h4><strong>Community Values</strong></h4>
+                        <p>CommonSwap has outlined our standards and expectations in our Community Values section and any violators will be banned from our
+                            community.
+                        </p>
                     </div>
                 </div>
                 <Footer />

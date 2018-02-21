@@ -1,31 +1,28 @@
 .trust-container {
-    header {
-        //background-image: url(https://s3.us-east-2.amazonaws.com/cslistingphotos/trustHeader/AdobeStock_130247071.jpeg);
-        //background-image: url(https://s3.us-east-2.amazonaws.com/cslistingphotos/trustHeader/AdobeStock_88918338.jpeg);
-        background-image: url("https://s3.us-east-2.amazonaws.com/com-swap-prod/static/AdobeStock_85935768s.jpg");
-        background-repeat: no-repeat;
-        background-position: 75% 50%;
-        background-size: cover;
-        height:80vh;
-        padding: 0 0;
-        background-origin: padding-box;
-        @media #{$small-and-down} {
-            height: 60vh;
+    .content {
+        line-height: 45px;
+    }
+    #faq-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        button {
+            min-width: 65px !important;
         }
     }
-    .header-title {
-        color: white;
-        font-size:5.5rem;
-        @media #{$small-and-down} {
-            font-size: 3.5rem;
+    .faq-footer {
+        @media #{$medium-and-down} {
+            margin-bottom: 65px;
         }
     }
-    .overlay-desc {
-        position:absolute;
-        top:30%;
-        left:50%;
-        z-index:1;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
+    .faq-title {
+        font-weight: 700;
+    }
+    .qa-block {
+        padding: 1.0rem 0 1.0rem 0;
+    }
+    .emphasize {
+        font-style: italic;
+        font-weight: 600;
     }
 }

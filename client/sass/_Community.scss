@@ -1,23 +1,25 @@
 .community-container {
-    header {
-        background-image: url(https://s3.us-east-2.amazonaws.com/com-swap-prod/static/AdobeStock_130247071s.jpg);
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        height:80vh;
-        padding: 0 0;
-        background-origin: padding-box;
+    .faq-title {
+        font-weight: 700;
     }
-    .header-title {
-        color: white;
-        font-size:5.5rem;
+    .emphasize {
+        font-style: italic;
+        font-weight: 600;
     }
-    .overlay-desc {
-        position:absolute;
-        top:30%;
-        left:50%;
-        z-index:1;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
+    .qa-block {
+        padding: 1.0rem 0 1.0rem 0;
+    }
+    .content {
+        line-height: 45px;
+    }
+    .faq-title {
+        font-weight: 700;
+    }
+    .qa-block {
+        padding: 1.0rem 0 1.0rem 0;
+    }
+    .emphasize {
+        font-style: italic;
+        font-weight: 600;
     }
 }

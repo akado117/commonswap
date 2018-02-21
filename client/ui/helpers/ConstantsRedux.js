@@ -10,6 +10,8 @@ export function setStore(Store) {
     store = Store;
 }
 
+export const SEARCHED = 'SEARCHED';
+
 export const actionTypes = {
     LOGIN_: 'LOGIN_',
     LOGOUT: 'LOGOUT',

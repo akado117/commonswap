@@ -136,7 +136,7 @@ class Browse extends Component {
         }
         const searchButton = this.props.user.userId
             ? (<ConnectedButton
-                icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{float: 'left'}}/>}
+                icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                 actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
                 buttonText="Search"
                 onClick={this.searchForPlaces}
@@ -144,54 +144,107 @@ class Browse extends Component {
         return (
             <div className="browse-container">
                 <div className="row">
-                    <div className="map-container col s12 m7 l5">
-                        <MapWithASearchBox
-                            place={place}
-                            coords={this.state.coords}
-                            onSearchComplete={this.onSearchChange}
-                            externalMarkers={placesForBrowsing}
-                            resizeBounds
-                            hideSearchBar
-                            injectedMarkerClick={this.onMarkerClick}
-                        />
-                    </div>
-                    <div className="scroll-listing col s12 m5 l7 no-pad" >
-                        <div className="row explore-container">
-                            <h3 className="explore-title">Explore</h3>
-                        </div>
-                        <div className="row">
-                            <p>To browse potential swaps, first enter your desired travel destination in the search box. You can adjust the range of your search using the range field below</p>
-                        </div>
-                        <div className="row">
-                            <PlacesWithStandaloneSearchBox
-                                className="col s12 m6"
+                    <div className="hide-on-med-and-down">
+                        <div className="map-container col s12 m7 l5">
+                            <MapWithASearchBox
+                                place={place}
+                                coords={this.state.coords}
                                 onSearchComplete={this.onSearchChange}
+                                externalMarkers={placesForBrowsing}
+                                resizeBounds
+                                hideSearchBar
+                                injectedMarkerClick={this.onMarkerClick}
                             />
-                            <div className="col s6 m3 input-field inline">
-                                <input type="number" min={0} max={500} className="" id="range-cap" value={this.state.coords.distance} onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
-                                <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
-                            </div>
-                            <div className="col s6 m3 search-button">
-                                {searchButton}
-                            </div>
                         </div>
-                        <div className={`row error-message ${this.state.searchMessage === '' ? 'hide' : ''}`} style={{ marginBottom: '10px' }}>
-                            <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
-                                {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
+                        <div className="scroll-listing col s12 m5 l7 no-pad" >
+                            <div className="row explore-container">
+                                <h3 className="explore-title">Explore</h3>
                             </div>
+                            <div className="row">
+                                <p>To browse potential swaps, first enter your desired travel destination in the search box. You can adjust the range of your search using the range field below</p>
+                            </div>
+                            <div className="row">
+                                <PlacesWithStandaloneSearchBox
+                                    className="col s12 m6"
+                                    onSearchComplete={this.onSearchChange}
+                                />
+                                <div className="col s6 m3 input-field inline">
+                                    <input type="number" min={0} max={500} className="" id="range-cap" value={this.state.coords.distance} onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
+                                    <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
+                                </div>
+                                <div className="col s6 m3 search-button">
+                                    {searchButton}
+                                </div>
+                            </div>
+                            <div className={`row error-message ${this.state.searchMessage === '' ? 'hide' : ''}`} style={{ marginBottom: '10px' }}>
+                                <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
+                                    {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
+                                </div>
+                            </div>
+                            {placesForBrowsing.map((placeFB, idx) => (
+                                <div className="col s12 l6 " key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}>
+                                    <PlaceForBrowse
+                                        placeForBrowse={placeFB}
+                                        address={placeFB.address}
+                                        profile={placeFB.profile}
+                                        placeImgs={placeFB.placeImgs}
+                                        profileImg={placeFB.profileImg}
+                                        goToProfile={() => this.goToProfile(placeFB._id)}
+                                    />
+                                </div>
+                            ))}
                         </div>
-                        {placesForBrowsing.map((placeFB, idx) => (
-                            <div className="col s12 l6 " key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}>
-                                <PlaceForBrowse
-                                    placeForBrowse={placeFB}
-                                    address={placeFB.address}
-                                    profile={placeFB.profile}
-                                    placeImgs={placeFB.placeImgs}
-                                    profileImg={placeFB.profileImg}
-                                    goToProfile={() => this.goToProfile(placeFB._id)}
+                    </div>
+                    <div className="show-on-small">
+                        <div className="scroll-listing col s12 m5 l7 no-pad hide-on-med-and-up" >
+                            <div className="row explore-container col s12">
+                                <h3 className="explore-title">Explore</h3>
+                            </div>
+                            <div className="row">
+                                <p className="col s12">To browse potential swaps, first enter your desired travel destination in the search box. You can adjust the range of your search using the range field below</p>
+                            </div>
+                            <div className="row">
+                                <PlacesWithStandaloneSearchBox
+                                    className="col s8"
+                                    onSearchComplete={this.onSearchChange}
+                                />
+                                <div className="col s4 input-field inline">
+                                    <input type="number" min={0} max={500} className="" id="range-cap" value={this.state.coords.distance} onChange={e => this.updateCordsDistance(onChangeHelper(e))} />
+                                    <label htmlFor="range-cap"><i className="fa fa-location-arrow" aria-hidden="true" /> Search Radius (Mi)</label>
+                                </div>
+                                <div className="col s6 search-button">
+                                    {searchButton}
+                                </div>
+                            </div>
+                            <div className={`row error-message ${this.state.searchMessage === '' ? 'hide' : ''}`} style={{ marginBottom: '10px' }}>
+                                <div className="col s6 m4 l3 offset-s6 offset-m8 offset-l9" >
+                                    {this.state.searchMessage !== SEARCHED ? this.state.searchMessage : `We found ${placesForBrowsing.length} places`}
+                                </div>
+                            </div>
+                            <div className="map-container col s12 m7 l5">
+                                <MapWithASearchBox
+                                    place={place}
+                                    coords={this.state.coords}
+                                    onSearchComplete={this.onSearchChange}
+                                    externalMarkers={placesForBrowsing}
+                                    resizeBounds
+                                    hideSearchBar
+                                    injectedMarkerClick={this.onMarkerClick}
                                 />
                             </div>
-                        ))}
+                            {placesForBrowsing.map((placeFB, idx) => (
+                                <div className="col s12 l6 " key={placeFB.profile ? `${placeFB.profile.firstName}-${idx}` : `browsePlace-${idx}`}>
+                                    <PlaceForBrowse
+                                        placeForBrowse={placeFB}
+                                        address={placeFB.address}
+                                        profile={placeFB.profile}
+                                        placeImgs={placeFB.placeImgs}
+                                        profileImg={placeFB.profileImg}
+                                        goToProfile={() => this.goToProfile(placeFB._id)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
                 <Footer />

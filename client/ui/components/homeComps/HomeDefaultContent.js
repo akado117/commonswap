@@ -54,11 +54,6 @@ function HomeDefaultContent({ userActions }) {
                         <p className="how-text col s12"><strong>Travel and Explore</strong><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away. Want to know the best Mexican restaurant in town? Ask your swap.</p>
                     </div>
                 </div>
-                <div className="row center-content signup-button">
-                    <SignupModalButton
-                        className="col s6 m4 l3"
-                    />
-                </div>
             </div>
             <div className="col s12 how-title">
                 <div className="row">
@@ -164,11 +159,6 @@ function HomeDefaultContent({ userActions }) {
                          <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
                          </div> */}
                     </div>
-                </div>
-                <div className="row center-content signup-button">
-                    <SignupModalButton
-                        className="col s6 m4 l3"
-                    />
                 </div>
             </div>
             <div className="col s12 how-title">

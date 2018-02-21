@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import Paper from 'material-ui/Paper';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Footer from '../components/Footer';
 import Founders from '../components/about/Founders';

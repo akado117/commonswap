@@ -37,7 +37,9 @@ button.pop-over-login-button {
     &.logged-in {
       box-shadow: none;
       background-color: transparent;
-      color: black;
+      span {
+        padding-right: 10px;
+      }
       &:active {
         box-shadow: none;
       }

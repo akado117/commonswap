@@ -7,20 +7,6 @@
   .container {
     margin-top: 25px;
   }
-  .explore-title {
-    font-weight: 700;
-  }
-  .explore-container {
-    margin-bottom: 0;
-  }
-  .search-button {
-    display: inline-flex;
-    height: 80px;
-    line-height: 0;
-    .search-button-text {
-      width: 80%;
-    }
-  }
   .scroll-listing {
     padding-top: $scrollAndMapPadding;
     max-height: 715px;
@@ -46,6 +32,7 @@
       // styles for small screens and down
       .scroll-listing {
           padding-top: 10px;
+        max-height: none;
       }
   }
   .no-pad {

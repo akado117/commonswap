@@ -1,0 +1,17 @@
+.browse-controls-container {
+  .explore-title {
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+  }
+  .explore-container {
+    margin-bottom: 0;
+  }
+  .search-button {
+    display: inline-flex;
+    height: 80px;
+    line-height: 0;
+    .search-button-text {
+      width: 80%;
+    }
+  }
+}

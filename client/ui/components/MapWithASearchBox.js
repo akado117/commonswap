@@ -102,7 +102,7 @@ const MapSearchBox = compose(
                         bounds: this.state.buildNewBoundsObject(nextCenter),
                         center: nextCenter,
                         markers: nextMarkers,
-                    });
+                    }, () => this.state.getMapRef().setZoom(15));
                 },
                 buildNewBoundsObject: (nextCenter) => {
                     const boundsCenter = {

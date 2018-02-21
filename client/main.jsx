@@ -22,7 +22,7 @@ import Browse from './ui/pages/Browse';
 import About from './ui/pages/About';
 import FAQ from './ui/pages/FAQ';
 import Testimonials from './ui/components/Testimonials';
-import Trust from './ui/pages/Trust';
+import Trust from './ui/components/faq/Trust';
 import Community from './ui/pages/Community';
 import Analytics from './ui/Analytics/Analytics';
 

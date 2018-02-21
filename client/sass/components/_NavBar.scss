@@ -19,6 +19,7 @@ $nav-wrapper-height: 65px;
       padding: 0 0.5rem 0 0.5rem;
     }
     .explore {
+      @extend .button-animations;
       display: inline-block;
       background-color: #E0CB38;
       border-radius: 5px;

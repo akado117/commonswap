@@ -12,7 +12,7 @@
     "savesecrets:dev": "now secrets add com-swap-dev-setting $(python -m json.tool dev.settings.json | tr -d '\n'| tr -d ' ')",
     "savesecrets:prod": "now secrets add com-swap-prod-setting $(python -m json.tool prod.settings.json | tr -d '\n'| tr -d ' ')",
     "now:dev": "meteor-now -e MONGO_URL=mongodb://takodev:S0meJun3Pw4@ds229415.mlab.com:29415/comswapdev -e ROOT_URL=https://www.commonswap.net -e NODE_ENV=production -e METEOR_SETTINGS=@com-swap-dev-setting",
-    "now:prod": "meteor-now -e  -e ROOT_URL=https://www.commonswap.com -e NODE_ENV=production -e METEOR_SETTINGS=@com-swap-prod-setting"
+    "now:prod": "meteor-now -e MONGO_URL=@mon-pro-url -e ROOT_URL=https://www.commonswap.com -e NODE_ENV=production -e METEOR_SETTINGS=@com-swap-prod-setting"
   },
   "dependencies": {
     "apollo-client": "^1.9.3",

@@ -57,6 +57,11 @@ class Home extends Component {
                     </div>
                 </header>
                 {/*{this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}*/}
+                <div className="row center-content signup-button">
+                    <SignupModalButton
+                        className="col s6 m4 l3"
+                    />
+                </div>
                 <HomeDefaultContent />
                 <Footer />
             </div>

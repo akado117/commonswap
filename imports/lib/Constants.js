@@ -17,10 +17,10 @@ export const FileTypes = {
 
 export const stateFields = {
     fields: {
-        displayNames: ["N/A","Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
+        displayNames: ["N/A", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
             "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-        values: ["N/A","AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MT","NE",
-            "NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","MD","MA","MI","MN","MS","MO","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"],
+        values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE",
+            "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"],
     },
 };
 
@@ -57,6 +57,8 @@ export const defaultImageUrls = {
     cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
     alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',
+    tim: 'https://com-swap-images-dev.s3-us-east-2.amazonaws.com/customers/-1123435525/profile/Image uploaded from iOS (1).jpg',
+    alec: 'http://graph.facebook.com/10214567323439151/picture/?type=large',
     sassyChick: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/rsz_1profilestock2.jpg',
     awesomePlace: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/rsz_apartment.jpg',
 };
@@ -114,7 +116,7 @@ export const FieldsForBrowseProfile = {
     state: 1,
     school: 1,
     classOf: 1,
-    occupation:1,
+    occupation: 1,
     profileImg: 1,
     interests: 1,
     amenities: 1,

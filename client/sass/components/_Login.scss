@@ -2,9 +2,9 @@
   padding: 0 !important;
   .login-button {
     width: 100%;
+    color: white !important;
     margin: 0px auto;
     background: #4f81e9;
-    color: white;
     padding: 0px;
     border-radius: 0;
     font-size: 13px;
@@ -17,6 +17,7 @@ button.pop-over-login-button {
   height: $nav-wrapper-height;
   border: none;
   min-width: 40px !important;
+  color: black;
   .button-element {
     display: flex;
     align-items: center;
@@ -24,7 +25,6 @@ button.pop-over-login-button {
     height: 40px;
     border-radius: 5px;
     background-color: $primary-accent-color;
-    color: white;
     box-shadow: $button-boxshadow-default;
     transition: box-shadow 300ms ease-in-out;
     &:hover {
@@ -46,6 +46,7 @@ button.pop-over-login-button {
     }
     &:not(.logged-in) {
       span {
+        color: white;
         padding-left: 10px;
       }
     }
@@ -83,6 +84,7 @@ button.pop-over-login-button {
     font-weight: bold;
     border-radius: 50%;
     position: relative;
+    color: white;
     &:before {
       position: absolute;
       top: 10px;

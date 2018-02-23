@@ -20,7 +20,7 @@ class Community extends Component {
         return (
             <div className="">
                 <div className="community-container">
-                    <div className="container" style={{ marginTop: '35px', height: '90%', minHeight: '500px' }}>
+                    <div className="container">
                         <div className="row">
                             <h2 className="faq-title">Community Values</h2>
                         </div>

@@ -12,7 +12,7 @@ const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profil
                 <div className="col s5 profile-image-container">
                     <div className="one-to-one-aspect-ratio">
                         <div className="profile-image">
-                            <img src={profileImg.url ? profileImg.url : 'http://stretchflex.net/photos/profileStock.jpeg'} alt="profDemo" />
+                            <img src={profileImg.url ? profileImg.url : 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/profStock.jpeg'} alt="profDemo" />
                         </div>
                     </div>
                 </div>

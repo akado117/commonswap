@@ -3,6 +3,15 @@
     display: inline-block;
     margin-bottom: 0;
   }
+  .tablet-and-up-detailed-desc, .tablet-and-up-recommendations, .tablet-and-up-general,
+  .tablet-and-up-beds, .tablet-and-up-baths, .tablet-and-up-sleeps, .tablet-and-up-rooms 
+   {
+    display: block;
+  }
+  .mobile-detailed-desc, .recommendations-mobile, .mobile-general,
+  .mobile-guest-beds, .mobile-guest-baths, .mobile-sleeps, .mobile-rooms {
+    display: none;
+  }
   .address-disclaimer {
     color: $label-grey;
     margin: 0;
@@ -27,6 +36,16 @@
           }
         }
       }
+    }
+  }
+  @media #{$small-and-down} {
+    .tablet-and-up-detailed-desc, .tablet-and-up-recommendations, .tablet-and-up-general,
+    .tablet-and-up-beds, .tablet-and-up-baths, .tablet-and-up-sleeps, .tablet-and-up-rooms {
+      display: none;
+    }
+    .mobile-detailed-desc, .recommendations-mobile, .mobile-general,
+    .mobile-guest-beds, .mobile-guest-baths, .mobile-sleeps, .mobile-rooms {
+      display: block;
     }
   }
 }

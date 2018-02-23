@@ -151,23 +151,19 @@ class Planner extends React.Component {
             selectedDates: convertPlannerDates(ParseDates(props.place.place.availableDates || [])),
             imgsData: [
                 {
-                    url: 'http://stretchflex.net/photos/apartment.jpeg'
+                    url: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/apartment_1.jpg'
                 },
                 {
-                    url: 'http://stretchflex.net/photos/apartment2.jpeg'
+                    url: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/apartment_2.jpeg'
                 },
                 {
-                    url: 'http://stretchflex.net/photos/apartment3.jpeg'
+                    url: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/apartment_3.jpeg'
                 }
             ],
             cities: [],
             open: false,
         };
         var options = CITIES[this.state.country];
-        // const { placeId } = this.props.params;
-        // if(placeId) {
-        //     this.acceptModalAcceptHandler
-        // }
     }
 
     componentDidMount = () => {

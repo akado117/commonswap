@@ -31,15 +31,15 @@ class Founders extends Component {
     getCofounders(cofounderData) {
         return (
             <div className="cofounder" key={cofounderData.name}>
-                <div className="col s3">
+                <div className="col s12 m3">
                     <img
                         className="circle responsive-img"
-                        src={cofounderData.imgUrl ? cofounderData.imgUrl : 'http://stretchflex.net/photos/profileStock.jpeg'}
+                        src={cofounderData.imgUrl ? cofounderData.imgUrl : 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/profStock.jpeg'}
                         alt="profDemo"
                         style={{ height: '140px', width: '140px' }}
                     />
                 </div>
-                <div className="col s9">
+                <div className="col s12 m9">
                     <div className="col s12">
                         <h5>{cofounderData.name}</h5>
                     </div>

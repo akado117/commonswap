@@ -4,16 +4,15 @@ import Dropzone from 'react-dropzone';
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Slingshot } from 'meteor/edgee:slingshot';
-import LoadImage from 'blueimp-load-image';
 import Pica from 'pica';
 import { merge, cloneDeep } from 'lodash';
 import uploadToS3 from '../../../imports/helpers/upload-to-s3';
 import Progress from './Progress';
 import CloseButton from './forms/CloseButton';
 import { MaxImageUploadDim } from '../../../imports/lib/Constants';
-import { determineImageDimensions } from '../../../imports/helpers/DataHelpers';
 import { picaResizeFunction, willNeedResize } from '../helpers/ImageHelpers';
 import LoadingSpinner from './forms/LoadingSpinner';
+import GenericXButton from './forms/GenericXButton';
 
 let pica;
 
@@ -101,12 +100,13 @@ class Uploaders extends React.Component {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         };
+        const resizingElements = this.state.resizing ? <div><LoadingSpinner /><div className="overlay" /></div> : '';
         return (
             <div className="preview-container">
-                {this.props.deleteFunc && !this.state.isUploading ?  <button className="delete" onClick={this.deleteHandler}>&times;</button> : ''}
+                {this.props.deleteFunc && !this.state.isUploading ? <GenericXButton className="delete" onClick={this.deleteHandler} /> : ''}
                 {this.state.isUploading ?
                     <div className="progress-container"><Progress bottom={ this.state.uploadProgress } top={ 100 } /></div>
-                    : <div className={!this.state.resizing ? 'resizing' : ''} style={resizeStyle}><LoadingSpinner /><div className="overlay" /></div>}
+                    : <div className="preview-image" style={resizeStyle}>{resizingElements}</div>}
             </div>);
     }
 }
@@ -201,7 +201,7 @@ class Uploader extends React.Component {
 
     getUploaders = (files, picaOptions) => files.map((file, idx) => (
         <Uploaders
-            key={`uploader-${idx}`}
+            key={`uploader-${file.preview}`}
             uploaderInstance={this.props.uploaderInstance}
             uploadTrigger={this.state.triggerUpload}
             onUploadComplete={() => this.markFileUploadComplete(idx)}

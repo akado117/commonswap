@@ -180,20 +180,36 @@ class PlaceComponent extends Component {
                         <label htmlFor="rent"><i className="fa fa-usd" aria-hidden="true"></i> Current Monthly Rent</label>
                         <input type="number" min="0" className="" id="rent" onChange={e => getValFunc('rent', onChangeHelper(e))} defaultValue={place.rent} />
                     </div> */}
-                    <div className="col s6 input-field inline">
+                    <div className="col s6 input-field inline tablet-and-up-beds">
                         <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e))} defaultValue={place.beds} />
                         <label htmlFor="beds"><i className="fa fa-bed" aria-hidden="true"></i> Guest beds Available</label>
                     </div>
-                    <div className="col s6 input-field inline">
+                    <div className="col s6 input-field inline tablet-and-up-baths">
                         <input type="number" className="" id="bathrooms" min="0" onChange={e => getValFunc('bathrooms', onChangeHelper(e))} defaultValue={place.bathrooms} />
                         <label htmlFor="bathrooms"><i className="fa fa-bath" aria-hidden="true"></i> Guest Baths Available</label>
                     </div>
-                    <div className="col s6 input-field inline">
+                    <div className="col s6 input-field inline tablet-and-up-sleeps">
                         <input type="number" className="" id="guest-cap" onChange={e => getValFunc('numOfGuests', onChangeHelper(e))} defaultValue={place.numOfGuests} />
                         <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
                     </div>
-                    <div className="col s6 input-field">
+                    <div className="col s6 input-field tablet-and-up-rooms">
                         <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms Available</label>
+                        <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e))} defaultValue={place.bedrooms} />
+                    </div>
+                    <div className="col s6 input-field inline mobile-guest-beds">
+                        <input type="number" className="" id="beds" min="0" onChange={e => getValFunc('beds', onChangeHelper(e))} defaultValue={place.beds} />
+                        <label htmlFor="beds"><i className="fa fa-bed" aria-hidden="true"></i> Guest beds</label>
+                    </div>
+                    <div className="col s6 input-field inline mobile-guest-baths">
+                        <input type="number" className="" id="bathrooms" min="0" onChange={e => getValFunc('bathrooms', onChangeHelper(e))} defaultValue={place.bathrooms} />
+                        <label htmlFor="bathrooms"><i className="fa fa-bath" aria-hidden="true"></i> Guest Baths</label>
+                    </div>
+                    <div className="col s6 input-field inline mobile-sleeps">
+                        <input type="number" className="" id="guest-cap" onChange={e => getValFunc('numOfGuests', onChangeHelper(e))} defaultValue={place.numOfGuests} />
+                        <label htmlFor="guest-cap"><i className="fa fa-users" aria-hidden="true"></i> Sleeps how many</label>
+                    </div>
+                    <div className="col s6 input-field mobile-rooms">
+                        <label htmlFor="bedroom-count"><i className="fa fa-bed" aria-hidden="true"></i> Guest Bedrooms</label>
                         <input type="number" className="" id="bedroom-count" onChange={e => getValFunc('bedrooms', onChangeHelper(e))} defaultValue={place.bedrooms} />
                     </div>
                     <div className="col m6 s12 input-field inline">
@@ -213,7 +229,18 @@ class PlaceComponent extends Component {
                             buttonData={BUTTONS}
                         />
                     </div>
-                    <div className="col s12">
+                    <div className="col s12 mobile-detailed-desc">
+                        <TextFieldStandardized
+                            floatingLabelText="Detailed place description"
+                            onChange={(e, value) => getValFunc('detailedDesc', value)}
+                            extraProps={{
+                                defaultValue: place.detailedDesc,
+                                hintText: place.detailedDesc ? undefined : 'My place is a 1bedroom/1bathroom with a full kitchen. I have a queen bed and also 2 sofas in the living room.  My place can comfortably sleep 2-3 people. Amenities include a gym and a lounge. I live in the “Dupont Circle” area of Washington D.C. All monuments and attractions are either walking distance or a short car ride away.',
+                                floatingLabelFixed: true,
+                            }}
+                        />
+                    </div>
+                    <div className="col s12 tablet-and-up-detailed-desc">
                         <TextFieldStandardized
                             floatingLabelText="Write a detailed description about your place"
                             onChange={(e, value) => getValFunc('detailedDesc', value)}
@@ -224,7 +251,18 @@ class PlaceComponent extends Component {
                             }}
                         />
                     </div>
-                    <div className="col s12">
+                    <div className="col s12 recommendations-mobile">
+                        <TextFieldStandardized
+                            floatingLabelText="Top travel recommendations for your swap"
+                            onChange={(e, value) => getValFunc('recommendations', value)}
+                            extraProps={{
+                                defaultValue: place.recommendations,
+                                hintText: place.recommendations ? undefined : 'I would recommend checking out the famous DC landmarks – the Monument, Jefferson Memorial, Lincoln Memorial, etc. if you haven’t done so. U St is a lively area with several bars and restaurants.',
+                                floatingLabelFixed: true,
+                            }}
+                        />
+                    </div>
+                    <div className="col s12 tablet-and-up-recommendations">
                         <TextFieldStandardized
                             floatingLabelText="What are some of your top recommendations for visitors in your city?"
                             onChange={(e, value) => getValFunc('recommendations', value)}
@@ -235,9 +273,20 @@ class PlaceComponent extends Component {
                             }}
                         />
                     </div>
-                    <div className="col s12">
+                    <div className="col s12 tablet-and-up-general">
                         <TextFieldStandardized
                             floatingLabelText="Include any general guidelines you would like to inform your swap:"
+                            onChange={(e, value) => getValFunc('generalNotes', value)}
+                            extraProps={{
+                                defaultValue: place.generalNotes,
+                                hintText: place.generalNotes ? undefined : 'Please take your shoes off when entering my place. In addition, smoking is not allowed in my place. Don’t forget to lock the door anytime you leave!',
+                                floatingLabelFixed: true,
+                            }}
+                        />
+                    </div>
+                    <div className="col s12 mobile-general">
+                        <TextFieldStandardized
+                            floatingLabelText="General guidelines for your swap:"
                             onChange={(e, value) => getValFunc('generalNotes', value)}
                             extraProps={{
                                 defaultValue: place.generalNotes,

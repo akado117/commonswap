@@ -54,7 +54,7 @@ export const defaultImageUrls = {
         amjed: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/amjed.png',
         bolai: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bolaji.png',
     },
-    cameraDude: 'http://stretchflex.net/photos/profileStock.jpeg',
+    cameraDude: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/profStock.jpeg',
     kevin: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/kevProf.JPG',
     alex: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/profile_images/AKprofile.png',
     tim: 'https://com-swap-images-dev.s3-us-east-2.amazonaws.com/customers/-1123435525/profile/Image uploaded from iOS (1).jpg',

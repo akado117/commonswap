@@ -9,7 +9,7 @@ export default {
                 if (!result.data.images.length) {
                     browserHistory.push('/profile');
                 } else if (process.env.NODE_ENV === 'production') {
-                    browserHistory.push('/browse');
+                    browserHistory.push('/explore');
                 }
             }
             return standardResponseFunc(error, result, actionTypes.GET_PLACE_IMAGES, dispatch);

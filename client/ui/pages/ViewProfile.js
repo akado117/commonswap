@@ -314,7 +314,7 @@ class ViewProfile extends React.Component {
 
         const interestIconLabels = Object.keys(interests).map((key, idx) => {
             if (interests[key] && interestIcons[key]) {
-                return <div className="col s4 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
+                return <div className="col s6 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
             }
         })
 
@@ -333,8 +333,8 @@ class ViewProfile extends React.Component {
                     <BetaWarning></BetaWarning>
                     <div className="row" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div className="col s12 m4" >
-                            <div className="profile-img" >
-                                <img className="circle responsive-img" src={profileImg ? profileImg.url : 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/profStock.jpeg'} alt="profDemo" />
+                            <div className="" >
+                                <img className="responsive-img" src={profileImg ? profileImg.url : 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/profStock.jpeg'} alt="profDemo" />
                             </div>
                         </div>
                         <div className="col s12 m8 profile-info">

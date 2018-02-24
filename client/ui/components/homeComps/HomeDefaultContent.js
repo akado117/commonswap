@@ -8,7 +8,24 @@ import { loginTypes } from "../../../../imports/lib/Constants";
 import UserActions from '../../actions/userActions';
 import SignupModalButton from '../../components/SignupModalButton';
 
-function HomeDefaultContent({ userActions }) {
+function HomeDefaultContent(props) {
+    const joinCommunity = props.user ? '' : <div className="join-section">
+        <div className="col s12 how-title">
+            <div className="row">
+                <div className="col s12 center-align">
+                    <h2 className="how-title">JOIN OUR COMMUNITY</h2>
+                </div>
+            </div>
+        </div>
+        <div className="center-content">
+            <p className="how-desc">We are currently accepting beta users for the 2018 calendar year.</p>
+        </div>
+        <div className="row center-content signup-button">
+            <SignupModalButton
+                className="col s6 m4 l3"
+            />
+        </div>
+    </div>;
     return (
         <div>
             <div className="col s12 purpose">
@@ -161,21 +178,7 @@ function HomeDefaultContent({ userActions }) {
                     </div>
                 </div>
             </div>
-            <div className="col s12 how-title">
-                <div className="row">
-                    <div className="col s12 center-align">
-                        <h2 className="how-title">JOIN OUR COMMUNITY</h2>
-                    </div>
-                </div>
-            </div>
-            <div className="center-content">
-                <p className="how-desc">We are currently accepting beta users for the 2018 calendar year.</p>
-            </div>
-            <div className="row center-content signup-button">
-                <SignupModalButton
-                    className="col s6 m4 l3"
-                />
-            </div>
+            {joinCommunity}
         </div>
     );
 }
@@ -185,9 +188,7 @@ function mapStateToProps() {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        userActions: bindActionCreators(UserActions, dispatch),
-    };
+    return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeDefaultContent);

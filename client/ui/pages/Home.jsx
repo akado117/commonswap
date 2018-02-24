@@ -40,7 +40,11 @@ class Home extends Component {
     // }
 
     render() {
-        // const getValueFunc = this.getValueFunc;
+        const signUp = this.props.user.userId ? '' : <div className="row center-content signup-button">
+            <SignupModalButton
+                className="col s6 m4 l3"
+            />
+        </div>;
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">
@@ -57,12 +61,8 @@ class Home extends Component {
                     </div>
                 </header>
                 {/*{this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}*/}
-                <div className="row center-content signup-button">
-                    <SignupModalButton
-                        className="col s6 m4 l3"
-                    />
-                </div>
-                <HomeDefaultContent />
+                {signUp}
+                <HomeDefaultContent user={this.props.user.userId} />
                 <Footer />
             </div>
         );

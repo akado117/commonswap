@@ -261,7 +261,7 @@ const methods = {
         }
     },
     requestEmail(tripData) {
-        const { requesterPlaceId, requesteePlaceId, requesteeUserId, _id, arrival, departure, requesterMessage  } = tripData;
+        const { requesterPlaceId, requesteePlaceId, requesteeUserId, _id, arrival, departure, requesterMessage } = tripData;
         const Profile = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
         const userId = Meteor.userId();
         const RequestorPlace = Places.findOne({ _id: requesterPlaceId }) || {};
@@ -296,6 +296,31 @@ const methods = {
             consoleErrorHelper(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, userId, err);
             return serviceErrorBuilder(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, err);
         }
+    },
+    contactUs(data) {
+        const { firstName, lastName, email, phone, comments } = data;
+        const sync = Meteor.wrapAsync(HTTP.call);
+        try {
+            const res = sync('POST', Meteor.settings.azureLambdaURLS.contactUs, {
+                data: {
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    comments,
+                },
+            });
+            consoleLogHelper(`Contact form filled out from ${firstName} ${firstName} sent`, genericSuccessCode);
+            return serviceSuccessBuilder(res.data, genericSuccessCode, {
+                serviceMessage: `Contact form filled out from ${firstName} ${firstName} sent`,
+                data: res.data,
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Contact form filled out from ${firstName} ${firstName} failed`, upsertFailedCode, err);
+            return serviceErrorBuilder(`Contact form filled out from ${firstName} ${firstName} failed`, upsertFailedCode, err);
+        }
+
     },
     sendMessage(data) {
 

@@ -16,6 +16,7 @@ import ImagePOC from './ui/pages/ImagePOC';
 import Planner from './ui/pages/Planner';
 import Home from './ui/pages/Home';
 import ViewProfile from './ui/pages/ViewProfile';
+import ContactUs from './ui/pages/ContactUs';
 import store from './ui/store/store';
 import CreditCard from './ui/components/verificationComponent/CreditCard';
 import Browse from './ui/pages/Browse';
@@ -31,10 +32,10 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 const client = new ApolloClient(meteorClientConfig());
 
 class LatLngBounds {
-    extend() {}
+    extend() { }
 }
 
-window.google = { maps: { Map: () => {}, LatLng: class mock {}, LatLngBounds } };
+window.google = { maps: { Map: () => { }, LatLng: class mock { }, LatLngBounds } };
 
 Meteor.startup(() => {
     Analytics();
@@ -58,6 +59,7 @@ Meteor.startup(() => {
                         <Route path="trust" component={Trust} />
                         <Route path="community" component={Community} />
                         <Route path="card" component={CardForm} />
+                        <Route path="contact" component={ContactUs} />
                     </Route>
                 </Router>
             </Provider>

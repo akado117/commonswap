@@ -30,7 +30,7 @@ class ContactUs extends Component {
                     <div className="container center-align">
                         <div className="row">
                             <h1 className="contact-title">Contact Us</h1>
-                            <p><em>Please provide any feedback about our product.</em></p>
+                            <p><em>See below to contact us for any questions, comments, and/or feedback.</em></p>
                         </div>
                         <ContactForm
                             contactUs={data => this.contactUs(data)}

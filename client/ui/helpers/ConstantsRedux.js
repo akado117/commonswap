@@ -45,10 +45,11 @@ export const actionTypes = {
     SAVE_CARD: 'SAVE_CARD',
     REORDER_PLACE_IMAGES: 'REORDER_PLACE_IMAGES',
     SAVE_PLACE_IMAGE_ORDER: 'SAVE_PLACE_IMAGE_ORDER',
-    SEND_MESSAGE:'SEND_MESSAGE',
-    MESSAGE_SENT:'MESSAGE_SENT',
-    SAVE_CONTACT:'SAVE_CONTACT',
-    GET_CONTACT:'GET_CONTACT',
+    SEND_MESSAGE: 'SEND_MESSAGE',
+    MESSAGE_SENT: 'MESSAGE_SENT',
+    SAVE_CONTACT: 'SAVE_CONTACT',
+    GET_CONTACT: 'GET_CONTACT',
+    SEND_CONTACT: 'SEND_CONTACT',
 };
 
 const serviceMessages = {
@@ -65,7 +66,7 @@ export function standardResponseFunc(error, result, actionType, dispatch, cb) {
     const failure = `${actionType}_${FAILURE}`;
     const success = `${actionType}_${SUCCESS}`;
     if (!cb) {
-        callback = () => {};
+        callback = () => { };
     }
     if (error) {
         console.log(error);

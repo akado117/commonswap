@@ -36,6 +36,7 @@
   "azureLambdaURLS": {
     "sendMessage": "https://commonswap.azurewebsites.net/api/SendMessage?code=qTYrMobecKFQrzZCv9OajHgGSD5BmHl9r6P2onSyBoovwzFo7du2LA==",
     "requestEmail": "https://commonswap.azurewebsites.net/api/SwapRequest?code=X7a3QL7LeF89LYcDidaAxhQG3h5jY2A7fQRKP7a38ZydqTUBrV9orw==",
-    "sendAcceptEmail": "https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA=="
+    "sendAcceptEmail": "https://commonswap.azurewebsites.net/api/SwapAccepted?code=/zFRwG9QENy9GO0LSEQmaHJ81Mye4VeZhmIVtFm8DRkwgASjYv6qJA==",
+    "contactUs": "https://commonswap.azurewebsites.net/api/Contact?code=9HCFxRUsZaoIk83ntSVbsDIrECFytcbUr5J6mzxP1jvD8EUnAfGtHg=="
   }
 }

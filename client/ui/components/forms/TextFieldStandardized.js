@@ -6,7 +6,7 @@ function TextFieldStandardized({ floatingLabelText, onChange, extraProps, hintTe
     return (<TextField
         floatingLabelText={floatingLabelText}
         underlineStyle={{ borderBottomColor: '#9e9e9e' }}
-        floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e' }}
+        floatingLabelStyle={{ top: '33px', fontSize: '1rem', color: '#9e9e9e', left: '0 !important' }}
         multiLine
         rows={1}
         rowsMax={9}
@@ -26,7 +26,7 @@ TextFieldStandardized.propTypes = {
 
 TextFieldStandardized.defaultProps = {
     floatingLabelText: '',
-    onChange: () => {},
+    onChange: () => { },
     extraProps: {},
 }
 

@@ -9,7 +9,7 @@ class Footer extends React.Component {
 
     render() {
         return (
-            <footer className={`page-footer ${this.props.className}`} style={{float:'bottom', backgroundColor:'rgb(0, 188, 212)'}}>
+            <footer className={`page-footer ${this.props.className}`} style={{ float: 'bottom', backgroundColor: 'rgb(0, 188, 212)' }}>
                 <div className="container">
                     <div className="row">
                         <div className="col l4 s12">
@@ -36,9 +36,7 @@ class Footer extends React.Component {
                         <div className="col l3 s12">
                             <h5 className="white-text">Support</h5>
                             <ul>
-                                <li><a className="grey-text text-lighten-3" href="#!">Contact Us</a></li>
-                                <li><a className="grey-text text-lighten-3" href="#!">Provide Feedback</a></li>
-
+                                <li><Link to="/contact" className="grey-text text-lighten-3">Contact Us</Link></li>
                             </ul>
                         </div>
                         <div className="col l3 s12">

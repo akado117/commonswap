@@ -38,6 +38,13 @@ const ProfileActions = {
             return standardResponseFunc(error, result, actionTypes.SAVE_CONTACT, dispatch);
         })
     },
+    contactUs: (data) => {
+        servicePending(actionTypes.SEND_CONTACT);
+        return dispatch => Meteor.call('contactUs', data, (error, result) => {
+            serviceResponded(actionTypes.SEND_CONTACT);
+            return standardResponseFunc(error, result, actionTypes.SEND_CONTACT, dispatch);
+        })
+    },
     retrieveCardInfo: () => {
         return dispatch => Meteor.call('getCardInfo', (error, result) => {
             return standardResponseFunc(error, result, actionTypes.GET_CARD_INFO, dispatch);

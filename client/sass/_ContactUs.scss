@@ -1,0 +1,9 @@
+.contact-container {
+    min-height: 67vh;
+    @media #{$small-and-down} {
+        min-height: unset;
+    }
+    .contact-title {
+        font-weight:700;
+    }
+}

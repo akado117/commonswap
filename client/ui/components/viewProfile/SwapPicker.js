@@ -49,13 +49,11 @@ class SwapPicker extends Component {
                 />
                 <div className="input-field">
                     <label htmlFor="bedroom-count"><i className="fa fa-user fa-1x" aria-hidden="true" /> Number of Guests</label>
-                    <input type="number" min="0" className="" id="bedroom-count" onChange={e => this.setState({ guests: onChangeHelper(e)})} value={this.state.guests} />
+                    <input type="number" min="0" className="" id="bedroom-count" onChange={e => this.setState({ guests: onChangeHelper(e) })} value={this.state.guests} />
                 </div>
                 <TextFieldStandardized
                     hintText="Description"
-                    className="label-left"
                     floatingLabelText={<span><i className="fa fa-envelope fa-1x" aria-hidden="true" /> Add a message</span>}
-                    style={{ textAlign: 'left' }}
                     onChange={(nul, requesterMessage) => this.setState({ requesterMessage })}
                 />
                 <ConnectedButton

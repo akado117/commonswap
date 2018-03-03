@@ -34,9 +34,11 @@ const ProfileActions = {
         })
     },
     saveContact: (data) => {
+        servicePending(actionTypes.SAVE_CONTACT);
         return dispatch => Meteor.call('saveContact', data, (error, result) => {
+            serviceResponded(actionTypes.SAVE_CONTACT);
             return standardResponseFunc(error, result, actionTypes.SAVE_CONTACT, dispatch);
-        })
+        });
     },
     contactUs: (data) => {
         servicePending(actionTypes.SEND_CONTACT);

@@ -6,8 +6,9 @@ import FileActions from './FileActions';
 import Store from '../store/store';
 
 const actions = {
-    loginWithOAuth: (loginType) => {
+    loginWithOAuth: (loginType, onLoginCallBack) => {
         const callBack = (error, res, dispatch) => {
+            if (onLoginCallBack) onLoginCallBack();
             if (error) {
                 console.warn('something bad happened:', error);
                 return dispatch({
@@ -19,7 +20,7 @@ const actions = {
             // });
         };
         const loginFunctions = {
-            facebook: dispatch => Meteor.loginWithFacebook(/*{ requestPermissions: ['public_profile', 'email', 'user_location', 'user_birthday'] }, */(error,res) => callBack(error, res, dispatch)),
+            facebook: dispatch => Meteor.loginWithFacebook((error,res) => callBack(error, res, dispatch)),
             google: dispatch => Meteor.loginWithGoogle((error,res) => callBack(error, res, dispatch)),
             twitter: dispatch => Meteor.loginWithTwitter((error,res) => callBack(error, res, dispatch)),
         };

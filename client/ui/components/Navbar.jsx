@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import Login from '../pages/Login';
 import { defaultImageUrls } from '../../../imports/lib/Constants';
 import ModalActions from '../actions/ModalActions';
+import SignUpModal from './modals/SignUpModal'
 
 const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px' };
 
@@ -57,7 +58,11 @@ class Navbar extends React.Component {
     transitionIfLoggedIn(path) {
         const goToPathFunc = () => this.props.router.push(path);
         if (this.props.user.userId) return goToPathFunc();
-        return this.props.modalActions
+        const onLogIn = () => {
+            this.props.modalActions.closeModal();
+            goToPathFunc();
+        }
+        return this.props.modalActions.openModal(<SignUpModal onLogIn={onLogIn} />)
     }
 
     render() {

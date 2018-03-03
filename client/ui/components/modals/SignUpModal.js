@@ -34,14 +34,18 @@ class SignUpModal extends React.Component {
         return <h3>Welcome, Traveler</h3>;
     }
 
+    loginCallBackHandler = () => {
+        if (this.props.onLogIn) this.props.onLogIn();
+    }
+
     loginHandler = (type) => {
         const { userActions } = this.props;
         if (type === 'close') {
             userActions.LogUserOut(() => { this.forceUpdate(); });
+            this.loginCallBackHandler();
         } else if (type) {
-            userActions.loginWithOAuth(type);
+            userActions.loginWithOAuth(type, () => this.loginCallBackHandler());
         }
-        setTimeout(() => this.props.modalActions.closeModal(), 1000);
     }
 
     render() {
@@ -86,6 +90,7 @@ SignUpModal.propTypes = {
     userActions: PropTypes.object.isRequired,
     modalActions: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    onLogIn: PropTypes.func,
 }
 
 SignUpModal.defaultProps = {

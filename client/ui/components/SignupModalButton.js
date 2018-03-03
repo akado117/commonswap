@@ -20,7 +20,7 @@ class SignupModalButton extends React.Component {
     }
 
     openSignupModal = () => {
-        this.props.modalActions.openModal(<SignUpModal />);
+        this.props.modalActions.openModal(<SignUpModal onLogIn={this.props.modalActions.closeModal} />);
     }
 
     render() {

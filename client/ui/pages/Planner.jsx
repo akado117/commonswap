@@ -168,6 +168,9 @@ class Planner extends React.Component {
 
     componentDidMount = () => {
         if (!this.props.trip.getTripsCalled) {
+            this.setState({
+                getTripsCalled: true,
+            })
             this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
         }
     }
@@ -175,7 +178,7 @@ class Planner extends React.Component {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
             const selectedDates = convertPlannerDates(ParseDates(this.props.place.place.availableDates || []));
             this.setState({ selectedDates });
-            if (!this.props.trip.getTripsCalled) this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
+            if (!this.props.trip.getTripsCalled && !this.state.getTripsCalled) this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
         }
     }
 

@@ -45,13 +45,14 @@ class ProfileImage extends Component {
                 : <p>Please Sign In</p>;
 
             content = this.props.imageSrc ? (
-                <button className="profile-image-button" onClick={this.toggleUploader} style={{ border: 'none', background: 'transparent' }}>
+                <div className="profile-image-button" style={{ border: 'none', background: 'transparent' }} >
                     <img src={this.props.imageSrc} alt="" />
                     <GenericXButton
                         className="add-prof-image-button"
                         fontIconClass="fa-plus-circle"
+                        onClick={this.toggleUploader}
                     />
-                </button>)
+                </div>)
                 : (
                     <div>
                         <h4>Profile Page</h4>

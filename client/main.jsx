@@ -48,7 +48,7 @@ Meteor.startup(() => {
                         <Route path="profile" component={Profile} />
                         <Route path="imagePOC" component={ImagePOC} />
                         <Route path="fuse" component={Fuse} />
-                        <Route path="planner" component={Planner} />
+                        <Route path="planner(/:swapId)" component={Planner} />
                         <Route path="home" component={Home} />
                         <Route path="viewprofile(/:placeId)" component={ViewProfile} />
                         <Route path="card" component={CreditCard} />

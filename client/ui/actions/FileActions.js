@@ -8,7 +8,7 @@ export default {
             if (isLogin && result && result.data && result.data.images){
                 if (!result.data.images.length) {
                     browserHistory.push('/profile');
-                } else if (process.env.NODE_ENV === 'production') {
+                } else if (process.env.NODE_ENV === 'production' && browserHistory.getCurrentLocation().pathname.indexOf('/planner') !== -1) {
                     browserHistory.push('/explore');
                 }
             }

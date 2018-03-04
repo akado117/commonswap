@@ -28,8 +28,8 @@ const actions = {
         return loginFunctions[loginType];
     },
     userLoggedIn: () => {
-        Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
+        Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(PlaceActions.upsertPlace({}, (err, res) => {
             Store.dispatch(FileActions.getImagesForPlace({ placeId: res.data.place._id }, true));
         }));

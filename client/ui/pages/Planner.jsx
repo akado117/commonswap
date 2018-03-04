@@ -166,19 +166,22 @@ class Planner extends React.Component {
         var options = CITIES[this.state.country];
     }
 
-    componentDidMount = () => {
-        if (!this.props.trip.getTripsCalled) {
-            this.setState({
-                getTripsCalled: true,
-            })
-            this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
-        }
-    }
     componentDidUpdate = (prevProps) => {
         if (!prevProps.place.place._id && this.props.place.place._id) { //set dates from newly logged in user
             const selectedDates = convertPlannerDates(ParseDates(this.props.place.place.availableDates || []));
             this.setState({ selectedDates });
             if (!this.props.trip.getTripsCalled && !this.state.getTripsCalled) this.props.placeActions.getSwaps({ id: this.props.user.userId || Meteor.userId() });
+        }
+        if (this.props.params.swapId && !prevProps.trip.pendingTrips.length && this.props.trip.pendingTrips.length) {
+            this.launchSwapModalIfSwapAndUserExists(this.props.params.swapId, this.props.user.userId, this.props.trip.pendingTrips, this.props.modalActions);
+        }
+    }
+
+    launchSwapModalIfSwapAndUserExists(swapId, userId, trips, modalActions) {
+        const swap = trips.filter(trip => trip._id === swapId)[0];
+        if (swap) {
+            const {requesterProfileImg, requesteeProfileImg, requesterName } = swap;
+            this.openAcceptOrDeclineModal(requesterProfileImg, requesteeProfileImg, swap, modalActions, requesterName);
         }
     }
 
@@ -226,14 +229,16 @@ class Planner extends React.Component {
     exampleTripBuilder = (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${trip._id}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
     onChargeCardAccept(modalActions, trip, accepted) {
+        const { _id, status} = trip;
         //if (accepted) this.props.placeActions.chargeCards(trip);//charges and updates to accepted
+        this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.ACTIVE });
         modalActions.closeModal();
     }
 
     openChargeCardModal(modalActions, trip) {
         modalActions.openModal(
             <ChargeCardModal
-                buttonAccept={() => this.onChargeCardAccept(modalActions, trip, false)}
+                buttonAccept={() => this.onChargeCardAccept(modalActions, trip, true)}
                 isRequester
             />,
         );
@@ -246,7 +251,6 @@ class Planner extends React.Component {
             this.props.modalActions.closeModal();
         } else {
             this.props.modalActions.closeModal();
-            this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.ACTIVE });
             this.openChargeCardModal(modalActions, trip);
         }
     };
@@ -270,7 +274,7 @@ class Planner extends React.Component {
                 primaryText={`Accept swap with ${requesteeName}`}
                 requesteeProfileImg={requesteeProfileImage}
                 acceptButtonHandler={() => this.acceptModalAcceptHandler(trip, true, modalActions)}
-                declineButtonHandler={() => this.acceptModalAcceptHandler(trip, false, modalActions)}
+                declineButtonHandler={() => this.openAcceptModal(requesterProfileImage, requesteeProfileImage, modalActions, false, trip)}
             />);
     }
 
@@ -412,10 +416,11 @@ Planner.propTypes = {
     modalActions: PropTypes.object,
     placeActions: PropTypes.object,
     profileActions: PropTypes.object,
+    params: PropTypes.object,
 };
 
 Planner.defaultProps = {
-
-}
+    params: {},
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);

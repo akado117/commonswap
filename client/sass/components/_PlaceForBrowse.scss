@@ -1,6 +1,11 @@
 .browse-place-container {
   padding-top: 25px;
   padding-bottom: 5px;
+  .user-text {
+    p {
+      height: 42px;
+    }
+  }
   p {
     margin: 5px 0;
   }

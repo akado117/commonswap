@@ -24,7 +24,7 @@ class SignUpModal extends React.Component {
         if (!Meteor.userId()) {
             return (
                 <div>
-                    <h3>Please Sign-Up or Sign-In</h3>
+                    <h3>{this.props.title || 'Please Sign-Up or Sign-In'}</h3>
                     <p>(An account will automatically be created when you sign in with social)</p>
                 </div>
             );
@@ -91,6 +91,7 @@ SignUpModal.propTypes = {
     modalActions: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     onLogIn: PropTypes.func,
+    title: PropTypes.string,
 }
 
 SignUpModal.defaultProps = {

@@ -163,7 +163,7 @@ class Planner extends React.Component {
             cities: [],
             open: false,
         };
-        var options = CITIES[this.state.country];
+        const options = CITIES[this.state.country];
     }
 
     componentDidUpdate = (prevProps) => {
@@ -179,8 +179,8 @@ class Planner extends React.Component {
 
     launchSwapModalIfSwapAndUserExists(swapId, userId, trips, modalActions) {
         const swap = trips.filter(trip => trip._id === swapId)[0];
-        if (swap) {
-            const {requesterProfileImg, requesteeProfileImg, requesterName } = swap;
+        if (swap && swap.requesteeUserId === userId) {
+            const { requesterProfileImg, requesteeProfileImg, requesterName } = swap;
             this.openAcceptOrDeclineModal(requesterProfileImg, requesteeProfileImg, swap, modalActions, requesterName);
         }
     }

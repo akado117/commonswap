@@ -62,7 +62,7 @@ class Navbar extends React.Component {
             this.props.modalActions.closeModal();
             goToPathFunc();
         }
-        return this.props.modalActions.openModal(<SignUpModal onLogIn={onLogIn} />)
+        return this.props.modalActions.openModal(<SignUpModal onLogIn={onLogIn} title="Please Sign-Up or Sign-In To See This Page" />);
     }
 
     render() {

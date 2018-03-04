@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const InterestElements = ({ label, iconName, name }) => {
+const FAElements = ({ label, iconName, name }) => {
     return (
         <div className="interest-element">
             <p><i className={`fa fa-${iconName}`} aria-hidden="true" /> {name}</p>
@@ -9,15 +9,15 @@ const InterestElements = ({ label, iconName, name }) => {
     );
 }
 
-InterestElements.propTypes = {
+FAElements.propTypes = {
     name: PropTypes.string.isRequired,
     iconName: PropTypes.string,
     label: PropTypes.string,
     onClick: PropTypes.func,
 };
 
-InterestElements.defaultProps = {
-    onClick: () => {},
+FAElements.defaultProps = {
+    onClick: () => { },
 };
 
-export default InterestElements;
+export default FAElements;

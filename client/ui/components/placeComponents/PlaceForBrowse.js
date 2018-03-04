@@ -21,17 +21,14 @@ const PlaceForBrowse = ({ placeForBrowse, address, profileImg, placeImgs, profil
                     {/* <p className="marg-top">{address.city}, {address.state}</p> */}
                     <p className="marg-top">{profile.occupation}</p>
                     <p className="marg-top">{profile.school}</p>
-                    <div className="col s6 no-pad">
-                        <p>{placeForBrowse.access}</p>
+                    <div className="col s12 no-pad">
+                        <p><i className="fa fa-home" aria-hidden="true"></i> {placeForBrowse.access}</p>
                     </div>
                     <div className="col s6 no-pad">
                         <p><i className="fa fa-bed" aria-hidden="true"></i> Beds: {placeForBrowse.bedrooms}</p>
                     </div>
                     <div className="col s6 no-pad">
                         <p><i className="fa fa-bath" aria-hidden="true"></i> Baths: {placeForBrowse.bathrooms}</p>
-                    </div>
-                    <div className="col s6 no-pad">
-                        <p><i className="fa fa-home" aria-hidden="true"></i> Partial Apt.</p>
                     </div>
                 </div>
             </div>

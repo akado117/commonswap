@@ -33,11 +33,11 @@ const amenitiesTextMap = {
 }
 
 const amenitiesIcons = {
-    gym: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/gymIcon.jpg',
+    gym: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/GymFitness.svg',
     parking: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/Parking.svg',
-    handicap: 'wheelchair',
-    heat: 'none',
-    wiFi: 'wifi',
+    handicap: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/Handicapped.svg',
+    heat: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/AirCondition.svg',
+    wiFi: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/Wifi.svg',
     kitchen: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/KitchenAppliances.svg',
     washer: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/WasherDryer.svg',
 }
@@ -235,28 +235,40 @@ class ViewProfile extends React.Component {
         const { amenities, numOfGuests, placeImgs, bedrooms, detailedDesc, recommendations, generalNotes } = place;
         const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
 
-        // const amenitiesElements = Object.keys(amenities).map((key) => {
-        //     if (amenities[key] && amenitiesTextMap[key]) {
-        //         return <div key={`checkboxes-${key}`} ><Checkbox label={amenitiesTextMap[key]} active name={key} key={key} /></div>;
-        //     }
-        // });
-
         const amenitiesElements = Object.keys(amenities).map((key, idx) => {
             if (amenitiesTextMap[key] && amenitiesIcons[key]) {
                 return <div className="col s6"><IconElements key={`interests-${idx}`} iconName={amenitiesIcons[key]} name={amenitiesTextMap[key]} /></div>;
             }
         })
 
-        // const amenitiesElements = Object.keys(amenitiesElements).map((key, idx) => {
-        //     if (interests[key] && amenitiesIcons[key]) {
-        //         return <div className="col s6 m6 l4"><InterestElements key={`interests-${idx}`} iconName={amenitiesIcons[key]} name={interestsTextMap[key]} /></div>;
-        //     }
-        // });
-
         return (
             <div className="place-images row">
                 <div className="col s12 l6">
                     <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                    <div className="space-top show-on-large hide-on-med-and-down">
+                        <div className="place-section z-depth-2">
+                            <AppBar
+                                title={<span>Recommendations</span>}
+                                showMenuIconButton={false}
+                                style={{ marginBottom: '10px', zIndex: 0 }}
+                            />
+                            <div className="col s12">
+                                <p>{recommendations}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="space-top show-on-large hide-on-med-and-down">
+                        <div className="place-section z-depth-2">
+                            <AppBar
+                                title={<span>General Courtesy Guidelines</span>}
+                                showMenuIconButton={false}
+                                style={{ marginBottom: '10px', zIndex: 0 }}
+                            />
+                            <div className="col s12">
+                                <p>{generalNotes}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="col s12 l6">
                     <div className="place-section z-depth-2">
@@ -296,7 +308,7 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="space-top">
+                    <div className="space-top hide-on-large-only">
                         <div className="place-section z-depth-2">
                             <AppBar
                                 title={<span>Recommendations</span>}
@@ -308,7 +320,7 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="space-top">
+                    <div className="space-top hide-on-large-only">
                         <div className="place-section z-depth-2">
                             <AppBar
                                 title={<span>General Courtesy Guidelines</span>}

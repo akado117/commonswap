@@ -6,10 +6,10 @@ const _ = require('lodash')
 
 const IconElements = ({ label, iconName, name }) => {
     return (
-        <div className="amenity-element">
+        <div className="icon-element">
             {_.includes(iconName, 'https://') ?
-                <CustomIcon key={`amenities-${name}`} url={iconName} name={name} />
-                : <FAElements key={`amenities-${name}`} iconName={iconName} name={name} />}
+                <CustomIcon key={`custom-${name}`} url={iconName} name={name} />
+                : <FAElements key={`fa-${name}`} iconName={iconName} name={name} />}
         </div>
     );
 }

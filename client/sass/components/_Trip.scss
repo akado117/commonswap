@@ -1,5 +1,20 @@
 .trip-container {
   margin-bottom: 15px;
+  position: relative;
+  .test-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #333333;
+    opacity: 0.3;
+    top: 0;
+    left: 0;
+    text-align: center;
+    color: white;
+    padding-top: 250px;
+    font-size: 32px;
+    z-index: 5;
+  }
   .centering-container {
     width: 100%;
     display: flex;

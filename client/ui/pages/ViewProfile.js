@@ -8,7 +8,7 @@ import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
 import FontIcon from 'material-ui/FontIcon';
 import Checkbox from '../components/forms/Checkbox';
-import InterestElements from '../components/forms/InterestElements';
+import IconElements from '../components/forms/IconElements';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates, Today } from '../../../imports/helpers/DateHelpers';
 import Footer from '../components/Footer';
 import AppBar from 'material-ui/AppBar';
@@ -32,19 +32,29 @@ const amenitiesTextMap = {
     washer: 'Washer/Dryer',
 }
 
+const amenitiesIcons = {
+    gym: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/gymIcon.jpg',
+    parking: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/Parking.svg',
+    handicap: 'wheelchair',
+    heat: 'none',
+    wiFi: 'wifi',
+    kitchen: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/KitchenAppliances.svg',
+    washer: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/icons/WasherDryer.svg',
+}
+
 const interestIcons = {
     books: 'book',
     breweries: 'beer',
     cars: 'car',
-    clubber: 'clubbing',
+    clubber: 'star',
     environment: 'tree',
-    fashion: 'film',
+    fashion: 'cut',
     film: 'film',
     arts: 'paint-brush',
     foodie: 'cutlery',
     gaming: 'gamepad',
     fitness: 'heartbeat',
-    hiking: 'heartbeat',
+    hiking: 'image',
     liveMusic: 'music',
     orgTour: 'music',
     animals: 'paw',
@@ -139,7 +149,6 @@ class ViewProfile extends React.Component {
             placeImgs,
         };
         return placeForBrowse;
-
     };
 
     requestSwap = (data, props) => {
@@ -225,11 +234,25 @@ class ViewProfile extends React.Component {
     getProfile = (place) => {
         const { amenities, numOfGuests, placeImgs, bedrooms, detailedDesc, recommendations, generalNotes } = place;
         const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
-        const amenitiesElements = Object.keys(amenities).map((key) => {
-            if (amenities[key] && amenitiesTextMap[key]) {
-                return <div key={`checkboxes-${key}`} ><Checkbox label={amenitiesTextMap[key]} active name={key} key={key} /></div>;
+
+        // const amenitiesElements = Object.keys(amenities).map((key) => {
+        //     if (amenities[key] && amenitiesTextMap[key]) {
+        //         return <div key={`checkboxes-${key}`} ><Checkbox label={amenitiesTextMap[key]} active name={key} key={key} /></div>;
+        //     }
+        // });
+
+        const amenitiesElements = Object.keys(amenities).map((key, idx) => {
+            if (amenitiesTextMap[key] && amenitiesIcons[key]) {
+                return <div className="col s6"><IconElements key={`interests-${idx}`} iconName={amenitiesIcons[key]} name={amenitiesTextMap[key]} /></div>;
             }
-        });
+        })
+
+        // const amenitiesElements = Object.keys(amenitiesElements).map((key, idx) => {
+        //     if (interests[key] && amenitiesIcons[key]) {
+        //         return <div className="col s6 m6 l4"><InterestElements key={`interests-${idx}`} iconName={amenitiesIcons[key]} name={interestsTextMap[key]} /></div>;
+        //     }
+        // });
+
         return (
             <div className="place-images row">
                 <div className="col s12 l6">
@@ -244,7 +267,7 @@ class ViewProfile extends React.Component {
                         />
                         <div className="row reduced-row-margin">
                             <div className="col s4" style={{ textAlign: 'center' }}>
-                                <p>Entire Apt</p>
+                                <p>{place.access}</p>
                                 <p><FontIcon className="material-icons large">home</FontIcon></p>
                             </div>
                             <div className="col s4" style={{ textAlign: 'center' }}>
@@ -314,19 +337,10 @@ class ViewProfile extends React.Component {
 
         const interestIconLabels = Object.keys(interests).map((key, idx) => {
             if (interests[key] && interestIcons[key]) {
-                return <div className="col s6 m6 l4"><InterestElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
+                return <div className="col s6 m6 l4"><IconElements key={`interests-${idx}`} iconName={interestIcons[key]} name={interestsTextMap[key]} /></div>;
             }
         })
 
-        // onCalendarSelect = (selectedDates, eventData) => {
-        // if (eventData && eventData.eventType === EVENT_TYPES.END) {
-        //     const dateObj = selectedDates[eventData.modifiedDateIndex] || {};
-        //     this.setState({
-        //         selectedDates,
-        //         initialSelectedDate: dateObj.start,
-        //     });
-        // }
-        // }
         return (
             <section className="profile-view-container">
                 <div className="container">

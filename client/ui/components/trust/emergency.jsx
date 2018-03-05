@@ -50,44 +50,43 @@ class Emergency extends Component {
 
                     <div className="col s12 m6 input-field inline">
                         <label htmlFor="firstName">First Name</label>
-                        <input 
-                            type="text" 
-                            className="validate" 
-                            id="firstName" 
-                            onChange={e => this.setState({ firstName: onChangeHelper(e)})} 
+                        <input
+                            type="text"
+                            className="validate"
+                            id="firstName"
+                            onChange={e => this.setState({ firstName: onChangeHelper(e)})}
                             defaultValue={this.state.firstName} />
                     </div>
 
                     <div className="col s12 m6 input-field inline">
                         <label htmlFor="lastName">Last Name</label>
-                        <input 
-                            type="text" 
-                            className="validate" 
-                            id="lastName" 
-                            onChange={e => this.setState({ lastName: onChangeHelper(e)})} 
+                        <input
+                            type="text"
+                            className="validate"
+                            id="lastName"
+                            onChange={e => this.setState({ lastName: onChangeHelper(e)})}
                             defaultValue={this.state.lastName} />
                     </div>
 
                     <div className="col s12 m6 input-field inline">
                         <label htmlFor="realtionship">Relationship</label>
-                        <input 
-                            type="text" 
-                            className="validate" 
-                            id="phone" 
-                            onChange={e => this.setState({ relationship: onChangeHelper(e)})} 
+                        <input
+                            type="text"
+                            className="validate"
+                            id="phone"
+                            onChange={e => this.setState({ relationship: onChangeHelper(e)})}
                             defaultValue={this.state.relationship} />
                     </div>
 
                     <div className="col s12 m6 input-field inline">
                         <label htmlFor="phone">Phone</label>
-                        <input 
-                            type="text" 
-                            className="validate" 
-                            id="phone" 
-                            onChange={e => this.setState({ phone: onChangeHelper(e)})} 
+                        <input
+                            type="text"
+                            className="validate"
+                            id="phone"
+                            onChange={e => this.setState({ phone: onChangeHelper(e)})}
                             defaultValue={this.state.phone} />
                     </div>
-                
                 </div>
                 <div className="row">
                     <div className="col m4 s9">
@@ -97,6 +96,7 @@ class Emergency extends Component {
                             buttonText="Save Contact"
                             onClick={() => this.props.saveContact(this.state)}
                             className=""
+                            successText="Emergency Contact Saved"
                         />
                     </div>
                 </div>

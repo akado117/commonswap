@@ -38,6 +38,7 @@ const TripRequest = (swapObj, handleAcceptSwap, handleDeclineSwap) => {
     const profileLink = `/viewProfile/${requesterPlaceId || ''}`;
     return (
         <div className="col s12 z-depth-2">
+            {swapObj.examplePlace && <div className="test-overlay" >EXAMPLE</div> }
             <div className="row">
                 <div className="col s12 place-title" style={{ textAlign: 'center' }}>
                     <h3>
@@ -175,6 +176,7 @@ const Trip = ({ swapObj, showRating, showPlace, currentUserId, acceptSwapHandler
     return (
         <div className="trip-container">
             {content}
+            {swapObj.examplePlace && <div style={{clear: 'both'}} /> }
         </div>
     );
 }

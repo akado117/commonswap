@@ -14,7 +14,7 @@ const ChargeCardModal = ({ buttonAccept, buttonDecline, isRequester }) => (
         <div className="col s12">
             <p>Upon clicking accept, you give us the right to charge your credit card
                 <span className="crossed-out"> $25</span>
-                <strong> $0</strong>{isRequester ? 'if the other community member accepts your swap.' : ''}</p>
+                <strong> $0 </strong>{isRequester ? 'if the other community member accepts your swap.' : ''}</p>
             <p>We hope you enjoy your experience. Please do us a favor and share CommonSwap with your friends!</p>
         </div>
         <div className="col s12">

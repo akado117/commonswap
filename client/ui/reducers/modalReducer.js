@@ -10,6 +10,7 @@ const initialState = {
 function modal(state = initialState, action = {}) {
     switch (action.type) {
     case actionTypes.OPEN_MODAL: {
+        state.content = '';
         const stateClone = merge({}, state, action.data);
         stateClone.open = true;
         return stateClone;

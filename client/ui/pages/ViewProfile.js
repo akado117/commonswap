@@ -3,24 +3,24 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import FontIcon from 'material-ui/FontIcon';
 import ProfileActions from '../actions/ProfileActions';
+import AppBar from 'material-ui/AppBar';
 import PlaceActions from '../actions/PlaceActions';
 import FileActions from '../actions/FileActions';
-import FontIcon from 'material-ui/FontIcon';
 import Checkbox from '../components/forms/Checkbox';
 import IconElements from '../components/forms/IconElements';
 import { FormateDate, ParseDates, PrettyDate, convertPlannerDates, Today } from '../../../imports/helpers/DateHelpers';
 import Footer from '../components/Footer';
-import AppBar from 'material-ui/AppBar';
 import SwapPicker from '../components/viewProfile/SwapPicker';
 import SendMessage from '../components/viewProfile/SendMessage';
 import ImageCarousel from '../components/ImageCarousel';
 import ModalActions from '../actions/ModalActions';
 import ChargeCardModal from '../components/dialog/ChargeCardModal';
-import { Tabs, Tab } from 'material-ui/Tabs';
 import SwipeableViews from '../../../node_modules/react-swipeable-views';
 import InfiniteCalendar, { Calendar, withMultipleRanges, EVENT_TYPES } from 'react-infinite-calendar';
-import BetaWarning from '../components/BetaWarning';
+import ConnectedButton from '../components/forms/ConnectedButton';
 
 const amenitiesTextMap = {
     gym: 'Gym/Fitness Center',
@@ -334,7 +334,34 @@ class ViewProfile extends React.Component {
                     </div>
                 </div>
             </div>
-        )
+        );
+    }
+
+    gotToPath(props, path) {
+        const { router } = props;
+        router.push(path);
+    }
+
+    getSaveButtons(props) {
+        if (props.params.placeId !== props.place.place._id) return '';
+        return (
+            <div className="row">
+                <div className="col s6 m4 l3 offset-m4 offset-l6">
+                    <ConnectedButton
+                        icon={<i className="fa fa-floppy-o fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                        buttonText="Save"
+                        onClick={() => this.gotToPath(props, '/explore')}
+                    />
+                </div>
+                <div className="col s6 m4 l3">
+                    <ConnectedButton
+                        icon={<i className="fa fa-edit fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                        buttonText="edit"
+                        onClick={() => this.gotToPath(props, '/profile')}
+                    />
+                </div>
+            </div>
+        );
     }
     render() {
         const { placeId } = this.props.params;
@@ -356,7 +383,6 @@ class ViewProfile extends React.Component {
         return (
             <section className="profile-view-container">
                 <div className="container">
-                    <BetaWarning></BetaWarning>
                     <div className="row" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div className="col s12 m4" >
                             <div className="" >
@@ -375,6 +401,7 @@ class ViewProfile extends React.Component {
                             </div>
                         </div>
                     </div>
+                    {this.getSaveButtons(this.props)}
                     <div className="row">
                         <div className="row">
                             {this.getTabs(profile)}

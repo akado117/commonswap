@@ -26,6 +26,13 @@
   //ALEX YOU DO NOT HAVE TO ADD THIS LINE TO DEV UNLESS WE AGREE IT LOOKS COOL
   header {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 5vw));
+    @media #{$medium-and-down} {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 8vw));
+    }
+    @media #{$small-and-down} {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 20vw));
+    }
+
   }
 
   .trip-image {

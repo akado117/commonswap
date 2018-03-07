@@ -174,8 +174,8 @@ class ProfileComponent extends Component {
                     />
                 </div>
                 <div className="col s12">
-                    <div className="card-panel teal">
-                        <span className="white-text">
+                    <div className="card-panel">
+                        <span className="">
                             CommonSwap relies on the trust and respect of our
                             community. Tell us a little bit about yourself to get to know you. What’s
                             your favorite music genre or sports team? What’s your ideal Friday
@@ -207,8 +207,8 @@ class ProfileComponent extends Component {
                     <input type="text" className="validate" id="occupation" onChange={e => getValueFunc('occupation', onChangeHelper(e))} defaultValue={profile.occupation} />
                 </div>
                 <div className="col s12">
-                    <div className="card-panel teal">
-                        <span className="white-text">
+                    <div className="card-panel">
+                        <span className="">
                             For a more compatible swap, check off your interests below. If
                             you can’t find an interest you would like to include, list it in the “Describe
                             Yourself” section.

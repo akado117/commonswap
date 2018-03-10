@@ -7,6 +7,11 @@
   .container {
     margin-top: 25px;
   }
+  .footer-copyright {
+    .container {
+      margin-top: 0;
+    }
+  }
   .scroll-listing {
     padding-top: $scrollAndMapPadding;
     max-height: 715px;

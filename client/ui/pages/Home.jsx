@@ -40,11 +40,16 @@ class Home extends Component {
     // }
 
     render() {
-        const signUp = this.props.user.userId ? '' : <div className="row center-content signup-button">
-            <SignupModalButton
-                className="col s6 m4 l3"
-            />
-        </div>;
+        const signUp = this.props.user.userId ? '' :
+            <div class="button-and-desc">
+                <div className="signup-button top">
+                    <SignupModalButton
+                        className=""
+                        free={true}
+                    />
+                </div>
+                <p className="how-desc no-bottom-marg">We are currently accepting beta users for the 2018 calendar year.</p>
+            </div>;
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">

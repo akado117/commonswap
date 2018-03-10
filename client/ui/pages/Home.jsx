@@ -51,9 +51,9 @@ class Home extends Component {
                     <button className="play-button" onClick={this.togglePlaying}>
                         <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />
                     </button>
-                    <button className="mute-button" onClick={this.toggleMuted}>
-                        <i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />
-                    </button>
+                    {/*<button className="mute-button" onClick={this.toggleMuted}>*/}
+                        {/*<i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />*/}
+                    {/*</button>*/}
                     <div className="home-video-container">
                         <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
                             <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />

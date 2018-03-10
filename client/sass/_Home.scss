@@ -12,6 +12,10 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .how-title-under {
+    font-weight: 700;
+  }
   
   .purpose {
     display: flex;
@@ -457,7 +461,9 @@
     .how-desc {
       font-size: 1.2rem;
     }
-
+    .purpose-desc {
+      margin-bottom: 0;
+    }
   }
   @media (max-width: 525px) {
     .home-video-container {

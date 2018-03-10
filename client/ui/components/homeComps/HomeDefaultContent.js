@@ -51,7 +51,7 @@ function HomeDefaultContent(props) {
                             <img className="how-img" src={defaultImageUrls.homeAssets.joinHome} alt="joinHome" />
                         </div>
                         <p className="how-text col s12">
-                            <strong>Join Our Community of Adventure Seekers</strong>
+                            <span className="how-title-under">Join Our Community of Adventure Seekers</span>
                             <br />
                             Create your profile, list your space, and tell us a little bit about yourself. Each user will go through a background check and verification process to ensure the safety of our community.
                         </p>
@@ -60,13 +60,13 @@ function HomeDefaultContent(props) {
                         <div className="s12">
                             <img className="how-img" src={defaultImageUrls.homeAssets.bookHome} alt="bookHome" />
                         </div>
-                        <p className="how-text col s12"><strong>Book Your Destination</strong><br />Select your travel destinations and travel dates. Browse profiles and select who you want to swap with based on your preferences such as similar profession, alma mater, interests, or amenities</p>
+                        <p className="how-text col s12"><span className="how-title-under">Book Your Destination</span><br />Select your travel destinations and travel dates. Browse profiles and select who you want to swap with based on your preferences such as similar profession, alma mater, interests, or amenities</p>
                     </div>
                     <div className="col s12 l4 center-align">
                         <div className="s12">
                             <img className="how-img" src={defaultImageUrls.homeAssets.travelHome} alt="travelHome2" />
                         </div>
-                        <p className="how-text col s12"><strong>Travel and Explore</strong><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away. Want to know the best Mexican restaurant in town? Ask your swap.</p>
+                        <p className="how-text col s12"><span className="how-title-under">Travel and Explore</span><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away. Want to know the best Mexican restaurant in town? Ask your swap.</p>
                     </div>
                 </div>
             </div>

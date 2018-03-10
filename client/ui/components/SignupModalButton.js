@@ -28,7 +28,7 @@ class SignupModalButton extends React.Component {
             <div className={this.props.className} style={{ margin: '0' }}>
                 <RaisedButton
                     target="_blank"
-                    label="Sign-Up!"
+                    label={this.props.free === true ? "Sign Up! (it's free)" : 'Sign Up!'}
                     style={{ width: '100%' }}
                     primary
                     icon={<FontIcon className="material-icons">person outline</FontIcon>}
@@ -42,10 +42,12 @@ class SignupModalButton extends React.Component {
 SignupModalButton.propTypes = {
     className: PropTypes.string,
     modalActions: PropTypes.object.isRequired,
+    free: PropTypes.bool,
 }
 
 SignupModalButton.defaultProps = {
     className: '',
+    free: false,
 }
 
 function mapDispatchToProps(dispatch) {

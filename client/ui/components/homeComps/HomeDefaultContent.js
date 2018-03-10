@@ -29,14 +29,12 @@ function HomeDefaultContent(props) {
     return (
         <div>
             <div className="col s12 purpose">
-                <div className="row">
-                    <div className="col s12 l6 center-align connect">
-                        <p className="col s12 center-align purpose-desc" style={{ fontSize: '2.0rem !important' }}>We connect like-minded travelers from different cities to exchange living accommodations to reduce travel expenses</p>
-                    </div>
-                    <div className="col s12 l6 how-video">
-                        {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
-                        <video playsInline poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
-                    </div>
+                <div className="col s12 l6 connect">
+                    <p className="col s12 center-align purpose-desc" style={{ fontSize: '2.0rem !important' }}>We connect like-minded travelers from different cities to exchange living accommodations to reduce travel expenses</p>
+                </div>
+                <div className="col s12 l6 how-video">
+                    {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
+                    <video playsInline poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
                 </div>
             </div>
             <div className="col s12 how-title">
@@ -118,7 +116,7 @@ function HomeDefaultContent(props) {
                                 <br />
                                 We recently used CommonSwap for our weekend trip to New York. Using CommonSwap made it easy and affordable to travel to NYC without the expenses of overpriced hotels and Airbnbs. We were able to spend the money saved on other things during our trip.
                             </p>
-                            <div className="col s12 center-align quote-icon">
+                            <div className="col s12 center-align quote-icon hide-on-med-and-up show-on-small">
                                 <div className="col s12">
                                     <img src={defaultImageUrls.homeAssets.quotes} alt="quotes" />
                                 </div>
@@ -139,7 +137,7 @@ function HomeDefaultContent(props) {
                                 <br />
                                 I really enjoyed my experience with CommonSwap. The opportunity to meet people who shared the same living space with the person I was swapping with was a huge positive about my experience. I would be more than happy to use it again and recommend it to a friend.
                             </p>
-                            <div className="col s12 center-align quote-icon">
+                            <div className="col s12 center-align quote-icon hide-on-med-and-up show-on-small">
                                 <div className="col s12">
                                     <img src={defaultImageUrls.homeAssets.quotes} alt="quotes" />
                                 </div>
@@ -160,21 +158,21 @@ function HomeDefaultContent(props) {
                                 <br />
                                 My experience with CommonSwap was great. My swap’s room was tidy and the apartment had everything I needed for my trip. My swap was very helpful in directing me to the best attractions and sites based on my interests. CommonSwap allows me to take more trips during the year than normal with the money saved.
                             </p>
-                            <div className="col s12 center-align">
+                            <div className="col s12 center-align hide-on-med-and-up show-on-small">
                                 <div className="col s12">
                                     <img src={defaultImageUrls.homeAssets.quotes} alt="quotes" />
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="col s4">
-                         <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
-                         </div>
-                         <div className="col s4">
-                         <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
-                         </div>
-                         <div className="col s4">
-                         <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
-                         </div> */}
+                        <div className="col s4 show-on-medium-and-up hide-on-small-only">
+                            <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                        </div>
+                        <div className="col s4 show-on-medium-and-up hide-on-small-only">
+                            <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                        </div>
+                        <div className="col s4 show-on-medium-and-up hide-on-small-only">
+                            <img src="https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png" alt="quotes" />
+                        </div>
                     </div>
                 </div>
             </div>

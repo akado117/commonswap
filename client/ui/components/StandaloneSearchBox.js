@@ -89,7 +89,7 @@ PlacesWithStandaloneSearchBox.propTypes = {
     longitude: PropTypes.string,
     onSearchComplete: PropTypes.func,
     className: PropTypes.string,
-    labelText: PropTypes.string,
+    labelText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     icon: PropTypes.element,
 };
 

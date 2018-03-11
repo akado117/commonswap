@@ -8,8 +8,11 @@ class SelectBuilder extends Component {
         super(props);
 
         this.state = {
-            value: props.defaultValue,
+            value: props.value || props.defaultValue,
         };
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.value !== this.props.value) this.setState({ value: this.props.value });
     }
     onChangeHandler = (e, t, value) => {
         this.props.onChange(value);
@@ -57,6 +60,7 @@ SelectBuilder.propTypes = {
     extraProps: PropTypes.object,
     defaultValue: PropTypes.string,
     multiple: PropTypes.bool,
+    value: PropTypes.string,
 };
 
 export default SelectBuilder

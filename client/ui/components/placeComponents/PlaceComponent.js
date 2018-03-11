@@ -7,11 +7,9 @@ import TextFieldStandardized from '../forms/TextFieldStandardized';
 import Address from './Address';
 import Uploader from '../Uploader';
 import ImageCarousel from '../ImageCarousel';
-import MapWithASearchBox from '../MapWithASearchBox';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
 import ConnectedButton from '../forms/ConnectedButton';
-import { getCoordsFromPlaces } from '../../../../imports/helpers/DataHelpers';
 
 const BUTTONS = [
     { label: 'Gym/Fitness Center', name: 'gym' },
@@ -36,6 +34,7 @@ class PlaceComponent extends Component {
             ...props.place.place,
             uploadActive: false,
             isUploading: false,
+            coords: false,
         };
     }
 
@@ -117,17 +116,6 @@ class PlaceComponent extends Component {
         }
     }
 
-    onSearchComplete = (places) => {
-        const coordsObj = getCoordsFromPlaces(places)[0]
-        this.onSetLocation(coordsObj)
-    }
-
-    onSetLocation = cords => {
-        this.getValueFunc('coords', cords);
-    }
-
-    toggleDisclaimer = () => this.setState({ showDisclaimer: !this.state.showDisclaimer });
-
     nextButtonHandler = () => {
         const { router, savePlace, place } = this.props;
         savePlace();
@@ -137,9 +125,6 @@ class PlaceComponent extends Component {
     render() {
         const getValFunc = this.getValueFunc;
         const { place, address, amenities } = this.props.place;
-        const dislaimerText = this.state.showDisclaimer
-            ? 'Your address will be kept private for security reasons until you have confirmed to swap. If you do not wish to disclose your full address, we recommend using the closest intersection using the interactive map below. (i.e.. 14th st and 6th ave, New York, NY)'
-            : 'Click to see security information about your address';
         const accessFields = {
             defaultField: <span><i className="fa fa-handshake-o fa-1x" aria-hidden="true"></i> Access to: </span>,
             fields: {
@@ -149,21 +134,7 @@ class PlaceComponent extends Component {
         };
         return (
             <div className="place-container">
-                <Address getValueFunc={(key, value) => this.props.getValueFunc('address', key, value)} defaultValues={address} />
-                <div className="row">
-                    <div className="address-disclaimer center-align col s12 m8 offset-m2" onClick={this.toggleDisclaimer} >{dislaimerText}</div>
-                </div>
-                <div className="col s12">
-                    <div className="card-panel teal">
-                        <span className="white-text">
-                            Use the map below to determine where you wish the marker to appear when our community searches your listing.
-                        </span>
-                    </div>
-                </div>
-                <MapWithASearchBox
-                    onSearchComplete={this.onSearchComplete}
-                    place={place}
-                />
+                <Address getValueFunc={this.props.getValueFunc} address={address} onSearchChanged={this.onSearchComplete} place={place} />
                 <div className="row">
                     <div className="col s12 input-field inline">
                         <input

@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { intTypeParams, doubleTypeParams, tripStatus } from '../lib/Constants';
+import { intTypeParams, doubleTypeParams, tripStatus, googleAddressCompsToCSAddressData, Google_address_components } from '../lib/Constants';
 import { Today, FormatDate } from './DateHelpers';
 //arr and indexArry need to match
 export const pullMatchingFromArray = (arr, indexArry, val) => {//arr is obj array, indexArr is array of key index to find, key is key to compare against, value is value to Match
@@ -151,4 +151,20 @@ export function buildBoundsRange(coord, latLngFunc, range) {
         sw: new latLngFunc(lat - range, lng - range),
         ne: new latLngFunc(lat + range, lng + range),
     };
+}
+
+export function mapPlaceAddressCompsToCSData(place) {
+    const addressObj = {};
+    for (let i = 0; i < place.address_components.length; i++) {
+        const addressComponentType = place.address_components[i].types[0];
+        if (Google_address_components[addressComponentType]) {
+            addressObj[googleAddressCompsToCSAddressData[addressComponentType]] = place.address_components[i][Google_address_components[addressComponentType]];
+        }
+    }
+    if (addressObj.streetAdd1 && addressObj.streetAdd2) {
+        addressObj.street = `${addressObj.streetAdd1} ${addressObj.streetAdd2}`;
+    }
+    delete addressObj.streetAdd1;
+    delete addressObj.streetAdd2;
+    return addressObj;
 }

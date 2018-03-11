@@ -24,6 +24,24 @@ export const stateFields = {
     },
 };
 
+export const Google_address_components = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    country: 'long_name',
+    postal_code: 'short_name',
+};
+
+export const googleAddressCompsToCSAddressData = {
+    street_number: 'streetAdd1',
+    route: 'streetAdd2',
+    locality: 'city',
+    administrative_area_level_1: 'state',
+    country: 'country',
+    postal_code: 'zip',
+};
+
 export const loginTypes = {
     google: 'google',
     facebook: 'facebook',

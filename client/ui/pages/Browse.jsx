@@ -12,14 +12,11 @@ import FileActions from '../actions/FileActions';
 import ModalActions from '../actions/ModalActions';
 import Footer from '../components/Footer';
 import MapWithASearchBox from '../components/MapWithASearchBox';
-import PlacesWithStandaloneSearchBox from '../components/StandaloneSearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
 import ConnectedButton from '../components/forms/ConnectedButton';
 import { onChangeHelper, getCoordsFromPlaces } from '../../../imports/helpers/DataHelpers';
-import { Today } from '../../../imports/helpers/DateHelpers';
 import { actionTypes, SEARCHED } from '../helpers/ConstantsRedux';
 import { stateFields } from '../../../imports/lib/Constants';
-import SelectBuilder from '../components/forms/SelectBuilder';
 import SignupModalButton from '../components/SignupModalButton';
 import BrowseControls from '../components/BrowseControls';
 

@@ -231,9 +231,10 @@ class ViewProfile extends React.Component {
         </Tabs>
     )
 
-    getProfile = (place) => {
+    getProfile = (place, profile) => {
         const { amenities, numOfGuests, placeImgs, bedrooms, detailedDesc, recommendations, generalNotes } = place;
         const remappedImages = placeImgs.map(image => ({ original: image.url, thumbnail: image.url, originalClass: "img-gal" }));
+        const { firstName } = profile;
 
         const amenitiesElements = Object.keys(amenities).map((key, idx) => {
             if (amenitiesTextMap[key] && amenitiesIcons[key]) {
@@ -244,7 +245,10 @@ class ViewProfile extends React.Component {
         return (
             <div className="place-images row">
                 <div className="col s12 l6">
-                    <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                    {!remappedImages ? <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                        : <div id="card-alert" class="card red">
+                            <p class="card-content white-text"><i className="fa fa-info-circle" aria-hidden="true"></i> {firstName} has not uploaded photos of their place yet!</p>
+                        </div>}
                     <div className="space-top show-on-large hide-on-med-and-down">
                         <div className="place-section z-depth-2">
                             <AppBar
@@ -253,7 +257,9 @@ class ViewProfile extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
                             <div className="col s12">
-                                <p>{recommendations}</p>
+                                {!recommendations ? <div class="card-content red-text">
+                                    <p>{firstName} has not added recommendations yet.</p>
+                                </div> : <p> {recommendations}</p>}
                             </div>
                         </div>
                     </div>
@@ -265,7 +271,9 @@ class ViewProfile extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
                             <div className="col s12">
-                                <p>{generalNotes}</p>
+                                {!generalNotes ? <div class="card-content red-text">
+                                    <p> {firstName} has not added general courtesy guidelines yet.</p>
+                                </div> : <p> {generalNotes}</p>}
                             </div>
                         </div>
                     </div>
@@ -304,7 +312,9 @@ class ViewProfile extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
                             <div className="col s12">
-                                <p>{detailedDesc}</p>
+                                {!detailedDesc ? <div class="card-content red-text">
+                                    <p>{firstName} has not added a description yet.</p>
+                                </div> : <p>{detailedDesc}</p>}
                             </div>
                         </div>
                     </div>
@@ -316,7 +326,9 @@ class ViewProfile extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
                             <div className="col s12">
-                                <p>{recommendations}</p>
+                                {!recommendations ? <div class="card-content red-text">
+                                    <p>{firstName} has not added recommendations yet.</p>
+                                </div> : <p> {recommendations}</p>}
                             </div>
                         </div>
                     </div>
@@ -328,7 +340,9 @@ class ViewProfile extends React.Component {
                                 style={{ marginBottom: '10px', zIndex: 0 }}
                             />
                             <div className="col s12">
-                                <p>{generalNotes}</p>
+                                {!generalNotes ? <div class="card-content red-text">
+                                    <p>{firstName} has not added general courtesy guidelines yet.</p>
+                                </div> : <p> {generalNotes}</p>}
                             </div>
                         </div>
                     </div>
@@ -410,7 +424,7 @@ class ViewProfile extends React.Component {
                                 onChangeIndex={this.handleChange}
                             >
                                 <div style={styles.slide}>
-                                    {this.getProfile(place)}
+                                    {this.getProfile(place, profile)}
                                 </div>
                                 <div style={styles.slide}>
                                     <div className="z-depth-2 calendar-wrapper" >

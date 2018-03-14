@@ -4,17 +4,13 @@ import Dropzone from 'react-dropzone';
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Slingshot } from 'meteor/edgee:slingshot';
-import Pica from 'pica';
 import { merge, cloneDeep } from 'lodash';
 import uploadToS3 from '../../../imports/helpers/upload-to-s3';
 import Progress from './Progress';
 import CloseButton from './forms/CloseButton';
-import { MaxImageUploadDim } from '../../../imports/lib/Constants';
 import { picaResizeFunction, willNeedResize } from '../helpers/ImageHelpers';
 import LoadingSpinner from './forms/LoadingSpinner';
 import GenericXButton from './forms/GenericXButton';
-
-let pica;
 
 class Uploaders extends React.Component {
     constructor(props) {
@@ -48,22 +44,10 @@ class Uploaders extends React.Component {
         this.calculateProgress();
         const { maxPicaDimensionProp } = this.props;
         const resizeDimensions = willNeedResize(file, maxPicaDimensionProp);
-        const resizeDims = MaxImageUploadDim[maxPicaDimensionProp] || {};
-        const scaleParams = {
-            maxWidth: resizeDims.width,
-            maxHeight: resizeDims.height,
-            orientation: true,
-            canvas: true,
-        }
         new Promise((resolve, reject) => {
             if (maxPicaDimensionProp && resizeDimensions.resized) {
                 console.log('about to pica');//two different returns, one for pica and another for loadImageResize
-                return resolve(picaResizeFunction(file, resizeDimensions, this.state.picaOptions));
-                //return LoadImage(file, (cvs) => {
-                //     cvs.toBlob((blob) => {
-                //         resolve(blob);
-                //     }, 'image/jpeg', 0.95);
-                // }, scaleParams);
+                return resolve(picaResizeFunction(file, resizeDimensions, this.state.picaOptions, maxPicaDimensionProp));
             } else {
                 console.log('pica skipped');
                 return resolve(file);
@@ -78,10 +62,8 @@ class Uploaders extends React.Component {
                         this.setState({ isUploading: false, uploadProgress: 0, resizing: false });
                         return error;
                     }
-                    if (!error && this.state.uploadProgress === 100) {
-                        setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0, resizing: false }); }, 500);
-                        return resp;
-                    }
+                    setTimeout(() => { this.setState({ isUploading: false, uploadProgress: 0, resizing: false }); }, 500);
+                    return resp;
                 });
             }).catch((error) => {
                 this.setState({ isUploading: false, uploadProgress: 0, resizing: false });

@@ -3,8 +3,6 @@ import Pica from 'pica';
 import { determineImageDimensions } from '../../../imports/helpers/DataHelpers';
 import { MaxImageUploadDim } from '../../../imports/lib/Constants';
 
-let pica;
-
 export function getOrientation(file, callback) {
     // var reader = new FileReader();
     // reader.onload = function(e) {
@@ -42,6 +40,8 @@ export function getOrientation(file, callback) {
 }
 
 export function rotateImageBasedOnOrientation(orientation, ctx, canvas) {
+    if (orientation < 2) return -1;
+    console.log('Rotating based upon orientation', orientation);
     const { height, width } = canvas;
     ctx.save();
     if (orientation > 4) {
@@ -98,7 +98,7 @@ export function drawtoCanvasFromBlob(ctx, blob, redrawnCanvas, imgDim) {
             //window.image = img;
             //window.cvs = redrawnCanvas;
             //window.ctx = ctx;
-            res({blob, redrawnCanvas});
+            res({ blob, redrawnCanvas });
         };
 
         img.src = URL.createObjectURL(blob);
@@ -112,30 +112,50 @@ export function willNeedResize(file, maxDimensionProp) {
     dimensionsObject.image = image;
     return dimensionsObject;
 }
+export function loadImageResize(file, res, maxPicaDimensionProp) {
+    const resizeDims = MaxImageUploadDim[maxPicaDimensionProp] || {};
+    const scaleParams = {
+        maxWidth: resizeDims.width,
+        maxHeight: resizeDims.height,
+        orientation: true,
+        canvas: true,
+    }
+    LoadImage(file, (cvs) => {
+        cvs.toBlob((blob) => {
+            res(blob);
+        }, 'image/jpeg', 0.95);
+    }, scaleParams);
+}
 
-export function picaResizeFunction(file, resizeDimensions, picaOptions) {
+export function picaResizeFunction(file, resizeDimensions, picaOptions, maxPicaDimensionProp) {
     const { width, height, resized, image } = resizeDimensions;
     if (!resized) {
         return file;
     };
-    pica = pica || Pica(['js', 'wasm', 'ww']);
+    const pica = Pica(['js', 'wasm', 'ww']);
     const offPageCVS = document.createElement('canvas');
     offPageCVS.width = width;
     offPageCVS.height = height;
     let orientation;
     return new Promise((res, rej) => {
-        getOrientation(file, res);
-    }).then((orient) => {
-        orientation = orient;
-        return pica.resize(image, offPageCVS, picaOptions);
-    }).then((result) => {
-        return pica.toBlob(result, 'image/jpeg', 100);
-    }).then(blob => {
-        const ctx = offPageCVS.getContext('2d');
-        rotateImageBasedOnOrientation(orientation, ctx, offPageCVS);
-        return drawtoCanvasFromBlob(ctx, blob, offPageCVS, { width, height });
-    }).then(({blob, redrawnCanvas}) => {
-        return pica.toBlob(redrawnCanvas, 'image/jpeg', 100);
+    //     getOrientation(file, res);
+    // }).then((orient) => {
+    //     orientation = orient;
+    //     return pica.resize(image, offPageCVS, picaOptions);
+    // }).then((result) => {
+    //     return pica.toBlob(result, 'image/jpeg', 100);
+    // }).then(blob => {
+    //     const ctx = offPageCVS.getContext('2d');
+    //     if (rotateImageBasedOnOrientation(orientation, ctx, offPageCVS) !== -1) {
+    //         return drawtoCanvasFromBlob(ctx, blob, offPageCVS, {width, height});
+    //     }
+    //     return { blob };
+    // }).then(({ blob, redrawnCanvas }) => {
+    //     if (redrawnCanvas) {
+    //         return pica.toBlob(redrawnCanvas, 'image/jpeg', 100);
+    //     }
+    //     return blob;
+        return loadImageResize(file, res, maxPicaDimensionProp);
     }).then((blob) => {
         blob.name = file.name;
         blob.lastModified = file.lastModified;

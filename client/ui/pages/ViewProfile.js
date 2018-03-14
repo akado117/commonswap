@@ -245,10 +245,10 @@ class ViewProfile extends React.Component {
         return (
             <div className="place-images row">
                 <div className="col s12 l6">
-                    {!remappedImages ? <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
-                        : <div id="card-alert" class="card red">
-                            <p class="card-content white-text"><i className="fa fa-info-circle" aria-hidden="true"></i> {firstName} has not uploaded photos of their place yet!</p>
-                        </div>}
+                    {!remappedImages || remappedImages.length === 0 ? <div id="card-alert" className="card red">
+                        <p class="card-content white-text"><i className="fa fa-info-circle" aria-hidden="true"></i> {firstName} has not uploaded photos of their place yet!</p>
+                    </div> : <ImageCarousel images={remappedImages} extraProps={{ showBullets: true }} />
+                    }
                     <div className="space-top show-on-large hide-on-med-and-down">
                         <div className="place-section z-depth-2">
                             <AppBar

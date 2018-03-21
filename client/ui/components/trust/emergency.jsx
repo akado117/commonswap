@@ -19,9 +19,9 @@ class Emergency extends Component {
 
         this.state = {
             firstName: '',
-            lastName:'',
-            relationship:'',
-            phone:'',
+            lastName: '',
+            relationship: '',
+            phone: '',
         };
     }
     componentDidMount() {
@@ -41,11 +41,7 @@ class Emergency extends Component {
         const { emergencyContacts } = this.props.profile;
         return (
             <div>
-                <AppBar
-                    title={<span><i className="fa fa-ambulance" aria-hidden="true"></i> Emergency Contact</span>}
-                    showMenuIconButton={false}
-                    style={{ marginBottom: '10px', zIndex: '0' }}
-                />
+                <span style={{ marginBottom: '1.0rem', fontSize: '24px' }}><i className="fa fa-ambulance" aria-hidden="true"></i> Emergency Contact</span>
                 <div className="row">
 
                     <div className="col s12 m6 input-field inline">
@@ -54,7 +50,7 @@ class Emergency extends Component {
                             type="text"
                             className="validate"
                             id="firstName"
-                            onChange={e => this.setState({ firstName: onChangeHelper(e)})}
+                            onChange={e => this.setState({ firstName: onChangeHelper(e) })}
                             defaultValue={this.state.firstName} />
                     </div>
 
@@ -64,7 +60,7 @@ class Emergency extends Component {
                             type="text"
                             className="validate"
                             id="lastName"
-                            onChange={e => this.setState({ lastName: onChangeHelper(e)})}
+                            onChange={e => this.setState({ lastName: onChangeHelper(e) })}
                             defaultValue={this.state.lastName} />
                     </div>
 
@@ -74,7 +70,7 @@ class Emergency extends Component {
                             type="text"
                             className="validate"
                             id="phone"
-                            onChange={e => this.setState({ relationship: onChangeHelper(e)})}
+                            onChange={e => this.setState({ relationship: onChangeHelper(e) })}
                             defaultValue={this.state.relationship} />
                     </div>
 
@@ -84,12 +80,12 @@ class Emergency extends Component {
                             type="text"
                             className="validate"
                             id="phone"
-                            onChange={e => this.setState({ phone: onChangeHelper(e)})}
+                            onChange={e => this.setState({ phone: onChangeHelper(e) })}
                             defaultValue={this.state.phone} />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col m4 s9">
+                    <div className="col m4 s10">
                         <ConnectedButton
                             icon={<i className="fa fa-floppy-o" aria-hidden="true"></i>}
                             actionType={actionTypes.SAVE_CONTACT}
@@ -111,20 +107,20 @@ function mapStateToProps(state) {
         profile,
         user,
     };
-  }
-  
-  function mapDispatchToProps(dispatch) {
+}
+
+function mapDispatchToProps(dispatch) {
     return {
         profileActions: bindActionCreators(ProfileActions, dispatch),
     };
-  }
-  
-  Emergency.propTypes = {
+}
+
+Emergency.propTypes = {
     saveContact: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     profileActions: PropTypes.object.isRequired,
     emergencyContact: PropTypes.object,
-  };
+};
 
-  export default connect(mapStateToProps, mapDispatchToProps)(Emergency);
+export default connect(mapStateToProps, mapDispatchToProps)(Emergency);

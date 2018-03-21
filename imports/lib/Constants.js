@@ -61,9 +61,9 @@ export const defaultImageUrls = {
         whoAreWe: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/CommonSwap+Demo+Video_WR.m4v',
     },
     homeAssets: {
-        joinHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/joinHome.png',
-        bookHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/bookHome.png',
-        travelHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/travelHome2.png',
+        joinHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/joinHome.png',
+        bookHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bookHome.png',
+        travelHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/travelHome.jpg',
         quotes: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png',
         moneyhome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png',
         planeHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png',

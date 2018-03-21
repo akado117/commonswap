@@ -10,6 +10,8 @@ import ImageCarousel from '../ImageCarousel';
 import { actionTypes } from '../../helpers/ConstantsRedux';
 import { MaxImageDimTypes } from '../../../../imports/lib/Constants';
 import ConnectedButton from '../forms/ConnectedButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
 
 const BUTTONS = [
     { label: 'Gym/Fitness Center', name: 'gym' },
@@ -92,19 +94,30 @@ class PlaceComponent extends Component {
                 placeImgs={images}
             />;
         }
-        const toggleText = !this.state.uploadActive ? '- Click to Add Photos' : '- Click to See Photos'
+        const toggleText = !this.state.uploadActive ? 'Add Photos' : 'See Photos'
         return (
-            <div className="image-section-container col s12">
-                <AppBar
-                    title={<span>Photos &amp; Videos<span onClick={this.toggleUploadActive} style={{ fontSize: '16px', cursor: 'pointer' }} role="button">{toggleText}</span></span>}
-                    showMenuIconButton={false}
-                    style={{ marginBottom: '10px', zIndex: '0' }}
-                />
-                {/* <div className="teal img-header">
+            <div>
+                <div class="col s12 m6 l4" style={{ marginBottom: '1.0rem' }}>
+                    <ConnectedButton
+                        icon={<i className="fa fa-image fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
+                        actionType={actionTypes.SAVE_PLACE}
+                        buttonText={<span style={{ fontSize: '16px', cursor: 'pointer' }} role="button">{toggleText}</span>}
+                        onClick={this.toggleUploadActive}
+                        successText="Your Place Saved"
+                    />
+                </div>
+                <div className="image-section-container col s12">
+                    {/* <AppBar
+                        title={<span>Photos &amp; Videos<span onClick={this.toggleUploadActive} style={{ fontSize: '16px', cursor: 'pointer' }} role="button">{toggleText}</span></span>}
+                        showMenuIconButton={false}
+                        style={{ marginBottom: '10px', zIndex: '0' }}
+                    /> */}
+                    {/* <div className="teal img-header">
                     <h3 className="container-desc">Photos & Video<span className="click-text" onClick={this.toggleUploadActive}> {images.length ? '- click to add more' : ''}</span></h3>
                 </div> */}
-                {component}
-            </div>
+                    {component}
+                </div>
+            </div >
         );
     }
 

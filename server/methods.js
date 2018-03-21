@@ -74,7 +74,7 @@ function addOwnerIdAndDateStamp(obj, userId, extraProps) {// modifies original o
     if (obj._id) return; //only way possible is for record to not exist THIS RELYS ON CHECKING DB FOR RECORDS BASED UPON USEROWNERID FIRST
     obj.ownerUserId = userId;
     obj.added = new Date();
-    console.log(extraProps);
+    // console.log(extraProps);
     if (extraProps) {
         Object.keys(extraProps).forEach((key) => {
             obj[key] = extraProps[key];
@@ -202,8 +202,8 @@ const methods = {
             source: token,
         }).then(function (customer) {
             try {
-                console.log('Inside upsert card');
-                console.log(JSON.stringify(customer));
+                // console.log('Inside upsert card');
+                // console.log(JSON.stringify(customer));
                 //send success data to client
             }
             catch (err) {
@@ -238,8 +238,8 @@ const methods = {
         const userId = Meteor.userId;
         try {
             const contact = EmergencyContacts.findOne({ ownerUserId: userId }) || {};
-            console.log('CONTACT');
-            console.log(contact);
+            // console.log('CONTACT');
+            // console.log(contact);
             if (!contact.firstName) {
                 consoleErrorHelper('No contact info found for user', upsertFailedCode, userId);
                 return serviceErrorBuilder('No contact info found for user', upsertFailedCode, {});
@@ -260,8 +260,9 @@ const methods = {
             return serviceErrorBuilder(`Get contact info called for ${userId} but failed`, upsertFailedCode, err);
         }
     },
-    requestEmail(tripData) {
-        const { requesterPlaceId, requesteePlaceId, requesteeUserId, _id, arrival, departure, requesterMessage } = tripData;
+    requestEmail(tripData, dates) {
+        const { requesterPlaceId, requesteePlaceId, requesteeUserId, _id, requesterMessage } = tripData;
+        const { arrival, departure } = dates;
         const Profile = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
         const userId = Meteor.userId();
         const RequestorPlace = Places.findOne({ _id: requesterPlaceId }) || {};
@@ -436,7 +437,7 @@ const methods = {
             const tripGUID = Trips.upsert({ requesterUserId, dates, requesteeUserId }, setterOrInsert(tripClone));
             if (tripGUID.insertedId) {
                 tripClone._id = tripGUID.insertedId;
-                methods.requestEmail(tripClone);
+                methods.requestEmail(tripClone, dates);
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
             delete tripClone.requesteeEmail;

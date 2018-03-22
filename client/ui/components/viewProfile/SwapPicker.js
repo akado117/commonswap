@@ -14,7 +14,7 @@ class SwapPicker extends Component {
         super(props);
 
         this.state = {
-            guests: 0,
+            guests: 1,
             requesterMessage: '',
             dates: {
                 arrival: Today,
@@ -49,7 +49,7 @@ class SwapPicker extends Component {
                 />
                 <div className="input-field">
                     <label htmlFor="bedroom-count"><i className="fa fa-user fa-1x" aria-hidden="true" /> Number of Guests</label>
-                    <input type="number" min="0" className="" id="bedroom-count" onChange={e => this.setState({ guests: onChangeHelper(e) })} value={this.state.guests} />
+                    <input type="number" min="1" className="" id="bedroom-count" onChange={e => this.setState({ guests: onChangeHelper(e) })} value={this.state.guests} />
                 </div>
                 <TextFieldStandardized
                     hintText="Description"

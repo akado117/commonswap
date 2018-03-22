@@ -85,7 +85,7 @@ class Navbar extends React.Component {
                         <ul className="side-nav" id="mobile-demo">
                             <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
                             <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
-                            <li><Link to="/explore" activeStyle={ACTIVE}>Browse</Link></li>
+                            <li><Link to="/explore" activeStyle={ACTIVE}>Explore</Link></li>
                             <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
                             <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                         </ul>

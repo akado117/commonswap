@@ -26,6 +26,8 @@ const dropObj = {
     displayNames: values,
 };
 
+let searchButtonActive = false;
+
 const items = [
     <MenuItem key={1} value={1} primaryText="1" />,
     <MenuItem key={2} value={2} primaryText="2" />,
@@ -87,6 +89,7 @@ class Browse extends Component {
     }
 
     onSearchChange = (places) => {
+        this.searchButtonActive = true;
         const coordsObject = getCoordsFromPlaces(places)[0];
         this.setLocation(coordsObject);
     }
@@ -136,6 +139,7 @@ class Browse extends Component {
                 actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
                 buttonText="Search"
                 onClick={this.searchForPlaces}
+                className={this.searchButtonActive ? null : 'grey lighten-1'}
             />) : <SignupModalButton />;
         return (
             <div className="browse-container">

@@ -52,30 +52,30 @@ const examplePastSwap = [
     // rating: 4,
     // message: 'This is an example past swap, please complete a swap and tell us how your experience was.',
     // _id: '1',
-// }
+    // }
 ];
 
 const exampleActiveSwap = [
-//     {
-//     address: {
-//         state: 'OH',
-//         city: 'Columbus',
-//     },
-//     requesterProfileImg: {
-//         url: defaultImageUrls.alex,
-//     },
-//     requesteeProfileImg: {
-//         url: defaultImageUrls.alex,
-//     },
-//     requesterName: 'Leonardo (Example Active Swap)',
-//     requesteeName: 'Leonardo (Example Active Swap)',
-//     dates: {
-//         departure: PrettyDate(addDays(Today, 5)),
-//         arrival: PrettyDate(Today),
-//     },
-//     status: tripStatus.ACTIVE,
-//     _id: '2',
-// }
+    //     {
+    //     address: {
+    //         state: 'OH',
+    //         city: 'Columbus',
+    //     },
+    //     requesterProfileImg: {
+    //         url: defaultImageUrls.alex,
+    //     },
+    //     requesteeProfileImg: {
+    //         url: defaultImageUrls.alex,
+    //     },
+    //     requesterName: 'Leonardo (Example Active Swap)',
+    //     requesteeName: 'Leonardo (Example Active Swap)',
+    //     dates: {
+    //         departure: PrettyDate(addDays(Today, 5)),
+    //         arrival: PrettyDate(Today),
+    //     },
+    //     status: tripStatus.ACTIVE,
+    //     _id: '2',
+    // }
 ];
 
 const examplePendingSwaps = [
@@ -244,7 +244,7 @@ class Planner extends React.Component {
     exampleTripBuilder = (trips, userId, idxToForcePlace) => trips.map((trip, idx) => <Trip key={`trip-${trip._id}`} swapObj={trip} currentUserId={userId} showPlace={idx === idxToForcePlace} />);
 
     onChargeCardAccept(modalActions, trip, accepted) {
-        const { _id, status} = trip;
+        const { _id, status } = trip;
         //if (accepted) this.props.placeActions.chargeCards(trip);//charges and updates to accepted
         this.props.placeActions.updateSwapStatus({ _id, prevStatus: status, status: tripStatus.ACTIVE });
         modalActions.closeModal();
@@ -274,7 +274,7 @@ class Planner extends React.Component {
         modalActions.openModal(
             <AcceptSwapModal
                 requesterProfileImg={requesterProfileImage}
-                primaryText={accepted ? 'Accept Swap?' : 'Really Decline Swap?'}
+                primaryText={accepted ? 'Accept Swap?' : 'Are you sure you want to decline this Swap?'}
                 requesteeProfileImg={requesteeProfileImage}
                 acceptButtonHandler={() => this.acceptModalAcceptHandler(trip, accepted, modalActions)}
                 declineButtonHandler={() => this.props.modalActions.closeModal()}

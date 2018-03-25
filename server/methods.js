@@ -91,12 +91,13 @@ function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceChe
 }
 
 function sendAcceptEmail(swapObj) {
-    const { _id, place, address, requesterName, requesterEmail, requesterPlaceId, requesterUserId, requesterProfileImg, requesteeUserId, requesteePlaceId, requesteeProfileImg, guests, requesterMessage, dates, requesteeEmail, requesteeName, status } = swapObj;
+    const { dates, requesterUserId, requesteeUserId } = swapObj;
     const Requester = Profiles.findOne({ ownerUserId: requesterUserId }) || {};
     const Requestee = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
     const RequesterPlace = Places.findOne({ ownerUserId: requesterUserId }) || {};
     const RequesteePlace = Places.findOne({ ownerUserId: requesteeUserId }) || {};
     const Dates = dates;
+
     const sync = Meteor.wrapAsync(HTTP.call);
     try {
         const res = sync('POST', Meteor.settings.azureLambdaURLS.sendAcceptEmail, {
@@ -480,6 +481,11 @@ const methods = {
         if (!_id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
         try {
             const tripGUID = Trips.update({ _id, $or: [{ requesterUserId: userId }, { requesteeUserId: userId }] }, { $set: { status } });
+            let swapObj = Trips.find({ $or: [{ requesterUserId: userId }, { requesteeUserId: userId }] }, { fields: FieldsForTrip }).fetch();
+            if (swapObj && swapObj.length > 1) {
+                swapObj = swapObj[0];
+            }
+            sendAcceptEmail(swapObj);
             consoleLogHelper(`Updated trip: ${_id} from: ${prevStatus} to ${status}`, genericSuccessCode, Meteor.userId(), '');
             return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
                 serviceMessage: `Updated trip: ${_id} from: ${prevStatus} to ${status}`,

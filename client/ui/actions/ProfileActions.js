@@ -27,10 +27,10 @@ const ProfileActions = {
     },
     sendMessage: (data) => {
         const { Question, User, placeId } = data;
-        servicePending(actionTypes.MESSAGE_SENT);
+        servicePending(actionTypes.SEND_MESSAGE);
         return dispatch => Meteor.call('sendMessage', data, (error, result) => {
-            serviceResponded(actionTypes.MESSAGE_SENT);
-            return standardResponseFunc(error, result, actionTypes.MESSAGE_SENT, dispatch);
+            serviceResponded(actionTypes.SEND_MESSAGE);
+            return standardResponseFunc(error, result, actionTypes.SEND_MESSAGE, dispatch);
         })
     },
     saveContact: (data) => {

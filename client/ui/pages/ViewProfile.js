@@ -206,12 +206,14 @@ class ViewProfile extends React.Component {
         this.chargeCardModal(data, props, currentPlace, modalActions);
     }
 
-    sendMessage = (data) => {
-        const { placeId, question, user } = this.props.params;
+    sendMessage = (data, props) => {
+        const { question } = data;
+        const { placeId } = this.props.params;
+
         this.props.profileActions.sendMessage({
             placeId,
             Question: question,
-            User: user,
+            User: props.user,
         });
     }
     getTabs = profile => (
@@ -441,7 +443,7 @@ class ViewProfile extends React.Component {
                                 </div>
                                 <div style={styles.slide}>
                                     <SendMessage
-                                        sendMessage={data => this.sendMessage(data)}
+                                        sendMessage={data => this.sendMessage(data, this.props)}
                                         disableButton={!placeId || placeId === this.props.user.userId}
                                     />
                                 </div>

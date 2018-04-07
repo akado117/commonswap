@@ -40,35 +40,22 @@ class Home extends Component {
     // }
 
     render() {
-        const signUp = this.props.user.userId ? '' :
-            <div class="button-and-desc">
-                <div className="signup-button top">
-                    <SignupModalButton
-                        className=""
-                        free={true}
-                    />
-                </div>
-                <p className="how-desc no-bottom-marg">We are currently accepting beta users for the 2018 calendar year.</p>
-            </div>;
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">
-                    <button className="play-button" onClick={this.togglePlaying}>
+                <div className="mask"></div>
+                    {/* <button className="play-button" onClick={this.togglePlaying}>
                         <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />
-                    </button>
+                    </button> */}
                     {/*<button className="mute-button" onClick={this.toggleMuted}>*/}
                         {/*<i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />*/}
                     {/*</button>*/}
-                    <div className="home-video-container">
+                        <h3 className="center-align header-desc" style={{ fontSize: '2.0rem !important', color: 'white', fontWeight:'700' }}>We connect travelers from different cities to exchange living accommodations</h3>
                         <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
                             <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
                         </video>
-                    </div>
                 </header>
-                {/*{this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}*/}
-                {signUp}
                 <HomeDefaultContent user={this.props.user.userId} />
-                <Footer />
             </div>
         );
     }

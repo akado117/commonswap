@@ -28,7 +28,7 @@ function HomeDefaultContent(props) {
         </div>
     </div>;
     const signUp = props.user ? '' :
-        <div class="button-and-desc mt-4">
+        <div className="button-and-desc mt-4">
             <div className="signup-button top">
                 <SignupModalButton
                     className=""

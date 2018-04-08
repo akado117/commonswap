@@ -40,7 +40,7 @@
     "pica": "4.0.1",
     "prop-types": "15.6.0",
     "react": "^16.1.0",
-    "react-addons-css-transition-group": "15.6.2",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-addons-test-utils": "^15.6.2",
     "react-apollo": "^2.0.1",
     "react-bootstrap": "^0.31.5",

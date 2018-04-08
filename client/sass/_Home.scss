@@ -1,6 +1,16 @@
 .home-container {
   * {
-    font-style: sans-serif;
+    font-style: "Avenir Next" !important;
+  }
+  .example-appear {
+    opacity: 0;
+    transform: translateY(-10rem);
+    transition: all 300ms ease-out;
+    transition-delay: 300ms;
+  }
+  .example-appear.example-appear-active {
+    opacity: 1;
+    transform: none;
   }
   .connect,
   .how-video {
@@ -11,20 +21,34 @@
     position: fixed;
     z-index: 10;
     top: 20%;
-    left:25%;
-    width:50%;
+    left: 25%;
+    width: 50%;
     line-height: 1.3;
-  }
-
-
-  .mask{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.3);
+    @media only screen and (max-width: 1024px) {
+      top: 20%;
+      left: 11%;
+      width: 75%;
     }
+    @media only screen and (max-width: 768px) {
+      top: 20%;
+      left: 11%;
+      width: 75%;
+    }
+    @media only screen and (max-width: 768px) {
+      top: 10%;
+      left: 4%;
+      width: 90%;
+      font-size: 2.2rem;
+    }
+  }
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+  }
   .parralax {
-    background-color:white !important;
+    background-color: white !important;
     position: relative;
   }
   .how-img {
@@ -257,8 +281,7 @@
   }
   .signin {
     min-height: 200px;
-  }
-  // @media only screen and (max-width: 1300px) {
+  } // @media only screen and (max-width: 1300px) {
   //   .home-video-container {
   //     left: -15%;
   //     width: 130%;
@@ -308,8 +331,7 @@
       z-index: 1;
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
-    }
-    // .home-video-container {
+    } // .home-video-container {
     //   left: -30%;
     //   width: 160%;
     // }
@@ -333,8 +355,7 @@
   @media only screen and (max-width: 800px) {
     .video-parent {
       height: 35vh;
-    }
-    // .home-video-container {
+    } // .home-video-container {
     //   left: -39%;
     //   width: 178%;
     // }
@@ -386,9 +407,8 @@
       font-weight: 300;
     }
     .video-parent {
-      height: 35vh;
-    }
-    // .home-video-container {
+      height: 50vh;
+    } // .home-video-container {
     //   left: -28%;
     //   width: 156%;
     // }

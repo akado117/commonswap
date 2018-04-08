@@ -6,6 +6,7 @@ import { defaultImageUrls } from '../../../imports/lib/Constants';
 import LoggedInContent from '../components/homeComps/LoggedInContent';
 import HomeDefaultContent from '../components/homeComps/HomeDefaultContent';
 import SignupModalButton from '../components/SignupModalButton';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const styles = {
     customWidth: {
@@ -43,17 +44,25 @@ class Home extends Component {
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">
-                <div className="mask"></div>
+                    <div className="mask"></div>
                     {/* <button className="play-button" onClick={this.togglePlaying}>
                         <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />
                     </button> */}
                     {/*<button className="mute-button" onClick={this.toggleMuted}>*/}
-                        {/*<i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />*/}
+                    {/*<i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />*/}
                     {/*</button>*/}
-                        <h3 className="center-align header-desc" style={{ fontSize: '2.0rem !important', color: 'white', fontWeight:'700' }}>We connect travelers from different cities to exchange living accommodations</h3>
-                        <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
-                            <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
-                        </video>
+                    <ReactCSSTransitionGroup
+                        transitionName="example"
+                        transitionAppear={true}
+                        transitionAppearTimeout={500}
+                        transitionEnter={false}
+                        transitionLeave={false}
+                    >
+                        <h3 className="center-align header-desc" style={{ fontSize: '2.0rem !important', color: 'white', fontWeight: '700' }}>We connect travelers from different cities to exchange living accommodations</h3>
+                    </ReactCSSTransitionGroup>
+                    <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
+                        <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
+                    </video>
                 </header>
                 <HomeDefaultContent user={this.props.user.userId} />
             </div>

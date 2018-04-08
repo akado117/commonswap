@@ -18,7 +18,8 @@ export const FileTypes = {
 export const stateFields = {
     fields: {
         displayNames: ["N/A", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
-            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+        ],
         values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VI", "VA", "WA", "WV", "WI", "WY"],
     },
 };
@@ -56,7 +57,7 @@ export const defaultImageUrls = {
     videos: {
         homeVideoPoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/dreamPoster.png',
         homeVideo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/Following+my+Dreams+Changed+my+Life+WR.m4v',
-        whoAreWePoster: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png',
+        whoAreWePoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/playbutton.png',
         whoAreWe: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/CommonSwap+Demo+Video_WR.m4v',
     },
     homeAssets: {
@@ -64,9 +65,9 @@ export const defaultImageUrls = {
         bookHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bookHome.png',
         travelHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/travelHome.jpg',
         quotes: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png',
-        moneyhome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png',
-        planeHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png',
-        conHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png',
+        moneyhome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/money-transparent.png',
+        planeHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/airplane-transparent.png',
+        conHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/handshake-transparent.png',
         alysa: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/alyssa.png',
         amjed: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/amjed.png',
         bolai: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bolaji.png',

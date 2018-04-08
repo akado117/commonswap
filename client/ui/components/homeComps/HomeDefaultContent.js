@@ -7,6 +7,7 @@ import { defaultImageUrls } from '../../../../imports/lib/Constants';
 import { loginTypes } from "../../../../imports/lib/Constants";
 import UserActions from '../../actions/userActions';
 import SignupModalButton from '../../components/SignupModalButton';
+import Footer from '../../components/Footer';
 
 function HomeDefaultContent(props) {
     const joinCommunity = props.user ? '' : <div className="join-section">
@@ -26,13 +27,21 @@ function HomeDefaultContent(props) {
             />
         </div>
     </div>;
-    return (
-        <div>
-            <div className="col s12 purpose">
-                <div className="col s12 l6 connect">
-                    <p className="col s12 center-align purpose-desc" style={{ fontSize: '2.0rem !important' }}>We connect like-minded travelers from different cities to exchange living accommodations to reduce travel expenses</p>
-                </div>
-                <div className="col s12 l6 how-video">
+    const signUp = props.user ? '' :
+        <div className="button-and-desc mt-4">
+            <div className="signup-button top">
+                <SignupModalButton
+                    className=""
+                    free={true}
+                />
+            </div>
+            <p className="how-desc no-bottom-marg">We are currently accepting beta users for the 2018 calendar year.</p>
+        </div>;
+    return ( 
+        <div class="parralax">
+            {signUp}
+            <div className="col s12 purpose" style={props.user ? {paddingTop:'1.5rem'} : {}}>
+                <div className="col s12 how-video">
                     {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
                     <video playsInline poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />
                 </div>
@@ -51,7 +60,7 @@ function HomeDefaultContent(props) {
                             <img className="how-img" src={defaultImageUrls.homeAssets.joinHome} alt="joinHome" />
                         </div>
                         <p className="how-text col s12">
-                            <span className="how-title-under">Join Our Community of Adventure Seekers</span>
+                            <span className="how-title-under">Join Our Community</span>
                             <br />
                             Create your profile, list your space, and tell us a little bit about yourself. Each user will go through a background check and verification process to ensure the safety of our community.
                         </p>
@@ -66,7 +75,7 @@ function HomeDefaultContent(props) {
                         <div className="s12">
                             <img className="how-img" src={defaultImageUrls.homeAssets.travelHome} alt="travelHome2" />
                         </div>
-                        <p className="how-text col s12"><span className="how-title-under">Travel and Explore</span><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away. Want to know the best Mexican restaurant in town? Ask your swap.</p>
+                        <p className="how-text col s12"><span className="how-title-under">Travel and Explore</span><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away.</p>
                     </div>
                 </div>
             </div>
@@ -177,6 +186,7 @@ function HomeDefaultContent(props) {
                 </div>
             </div>
             {joinCommunity}
+            <Footer />
         </div>
     );
 }

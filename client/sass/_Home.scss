@@ -1,36 +1,82 @@
 .home-container {
   * {
-    font-style: sans-serif;
+    font-style: "Avenir Next" !important;
   }
-
-  .connect , .how-video {
-    width:50%;
+  .example-appear {
+    opacity: 0;
+    transform: translateY(-10rem);
+    transition: all 550ms ease-out;
+    transition-delay: 550ms;
   }
-
+  .example-appear.example-appear-active {
+    opacity: 1;
+    transform: none;
+  }
+  .connect,
+  .how-video {
+    width: 60%;
+    margin: 0 auto;
+  }
+  .video-text-container {
+    position: fixed !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  .header-desc {
+    position: relative;
+    z-index: 10;
+    width: 50%;
+    line-height: 1.3;
+    font-size: 3.0rem;
+    color: white;
+    font-weight: 700;
+    margin-left: auto;
+    margin-right: auto;
+    @media only screen and (max-width: 1024px) {
+      width: 75%;
+      font-size: 2.0rem;
+    }
+    @media only screen and (max-width: 768px) {
+      width: 75%;
+    }
+    @media only screen and (max-width: 768px) {
+      width: 90%;
+      font-size: 2.2rem;
+    }
+  }
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+  }
+  .parralax {
+    background-color: white !important;
+    position: relative;
+  }
   .how-img {
     width: 70%;
   }
-
   .button-and-desc {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 1.5rem;
   }
-
   .how-title-under {
     font-weight: 700;
   }
-  
   .purpose {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
-
   .signup-button {
     margin-bottom: 0;
   }
-
   .trip-image {
     @extend .true-circle;
     height: 460px;
@@ -41,11 +87,9 @@
       width: 390px !important;
     }
   }
-
   .no-bottom-marg {
-    margin-bottom:0 !important;
+    margin-bottom: 0 !important;
   }
-
   .signup-button.top {
     @media #{$large-and-up} {
       width: 25%;
@@ -54,16 +98,14 @@
       width: 33%;
     }
     @media #{$small-and-down} {
-      width:70%;
+      width: 70%;
     }
   }
-
   .name {
     p {
       font-size: 1.5rem;
     }
   }
-  
   .person-desc {
     padding: 0.3rem !important;
     font-weight: 500;
@@ -71,89 +113,81 @@
       font-size: 1.0rem;
     }
   }
-
   .sign-button {
     width: 50%;
   }
   .cities-select {
     padding-top: 5.0rem !important;
   }
-
   .holiday-img {
     width: 90%;
   }
-
   .cities-selector {
     width: 90%;
   }
-  .sign-up-mail, .sign-up {
+  .sign-up-mail,
+  .sign-up {
     padding-top: 4.5rem !important;
   }
-
   .home-icon {
     padding-bottom: 1.5rem !important;
   }
-
   .quote-icon {
     padding-top: 3.5rem !important;
   }
-
   .testimonial-container {
-    .grow { transition: all .2s ease-in-out; }
-    .grow:hover { transform: scale(1.7); }
+    .grow {
+      transition: all .2s ease-in-out;
+    }
+    .grow:hover {
+      transform: scale(1.7);
+    }
     .test-img {
-        max-height: 350px;
-        width:100%;
+      max-height: 350px;
+      width: 100%;
     }
     .pad-top {
-        padding-top: 1.0rem;
+      padding-top: 1.0rem;
     }
-
-    @media #{$medium-and-down} {
-        
-    }
+    @media #{$medium-and-down} {}
     @media #{$small-and-down} {
-       .test-img{
-           width:100%;
-           min-height: 400px;
-       } 
+      .test-img {
+        width: 100%;
+        min-height: 400px;
+      }
     }
   }
-
-  .intro, .purpose {
+  .intro,
+  .purpose {
     margin-top: 0.0rem !important;
   }
-
-  .purpose-title, .why-title, .how-title {
-      font-size: 4.5rem;
-      font-weight: 500;
-      color: #35323d;
+  .purpose-title,
+  .why-title,
+  .how-title {
+    font-size: 4.5rem;
+    font-weight: 500;
+    color: #35323d;
   }
-
   .community-city {
     font-size: 2.5rem;
   }
-
   .purpose-desc {
     font-size: 2.5rem;
   }
-
   .how-desc2 {
     font-size: 2.5rem;
     font-weight: 400;
   }
-
   .how-text {
     font-size: 1.5rem;
     font-weight: 300;
   }
-
   .video-parent {
     width: 100vw;
     overflow: hidden;
     position: relative;
-    height: 40vh;
-    margin-bottom: 25px;
+    height: 45vw;
+    max-height: 65vh;
     .signup-button {
       position: absolute;
       bottom: -30px;
@@ -184,27 +218,19 @@
     }
     video {
       left: 50%;
-      position: absolute;
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, 0);
+      position: fixed;
+      top: 0;
+      object-fit: cover;
     }
   }
-  .home-video-container {
-    width: 115%;
-    left: -7.5%;
-    height: 100%;
-    top: 0px;
-    z-index: 0;
-    position: relative;
-  }
-
   .header-title {
     transition: opacity 500ms ease;
     &.fade-out {
       opacity: 0;
     }
   }
-
   .delivery-image {
     background-image: url('');
     background-repeat: no-repeat;
@@ -222,7 +248,6 @@
     padding: 0 0;
     background-origin: padding-box;
   }
-
   .book-image {
     background-image: url('https://s3.us-east-2.amazonaws.com/com-swap-prod/static/travel.jpeg');
     background-repeat: no-repeat;
@@ -232,7 +257,6 @@
     padding: 0 0;
     background-origin: padding-box;
   }
-
   .travel-image {
     background-image: url('https://s3.us-east-2.amazonaws.com/com-swap-prod/static/pexels-photo3s.jpg');
     background-repeat: no-repeat;
@@ -242,17 +266,14 @@
     padding: 0 0;
     background-origin: padding-box;
   }
-
   .header-title {
     color: white;
     font-size: 5.5rem;
   }
-
   .test-img {
     width: 31.5rem;
     max-width: 90%;
   }
-
   .how-desc-title {
     font-size: 4.5rem;
     font-weight: 500;
@@ -265,26 +286,22 @@
     padding: 0 25px;
     text-align: center;
   }
-
   .signin {
     min-height: 200px;
-  }
-
-  @media only screen and (max-width: 1300px) {
-    .home-video-container {
-      left: -15%;
-      width: 130%;
-    }
-  }
-
-  @media only screen and (max-width: 1100px) {
-    .home-video-container {
-      left: -22%;
-      width: 144%;
-    }
-  }
-
-  @media #{$large-and-up} {//993px
+  } // @media only screen and (max-width: 1300px) {
+  //   .home-video-container {
+  //     left: -15%;
+  //     width: 130%;
+  //   }
+  // }
+  // @media only screen and (max-width: 1100px) {
+  //   .home-video-container {
+  //     left: -22%;
+  //     width: 144%;
+  //   }
+  // }
+  @media #{$large-and-up} {
+    //993px
     .overlay-desc {
       position: absolute;
       top: 30%;
@@ -293,34 +310,27 @@
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
     }
-
     header {
       max-height: 700px;
       opacity: 0.9;
     }
   }
-
   @media #{$medium-and-down} {
     // styles for medium screens and down
     .video-parent {
-      height: 45vh;
+      height: 45vw;
     }
-
     .header-title {
       color: white;
       font-size: 4rem;
     }
-
     .purpose-desc {
       font-size: 1.5rem;
     }
-
-
-  .purpose {
-    flex-direction: column;
-    align-items: center;
-  }
-
+    .purpose {
+      flex-direction: column;
+      align-items: center;
+    }
     .overlay-desc {
       position: absolute;
       top: 30%;
@@ -328,25 +338,19 @@
       z-index: 1;
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
-    }
-
-    .home-video-container {
-      left: -30%;
-      width: 160%;
-    }
-
+    } // .home-video-container {
+    //   left: -30%;
+    //   width: 160%;
+    // }
     header {
       opacity: 0.9;
     }
-
     .register-image {
       min-height: 700px;
     }
-
     .book-image {
       min-height: 500px;
     }
-
     .travel-image {
       min-height: 500px;
     }
@@ -355,16 +359,6 @@
       background-position: bottom-right;
     }
   }
-  @media only screen and (max-width: 800px) {
-    .video-parent {
-      height: 35vh;
-    }
-    .home-video-container {
-      left: -39%;
-      width: 178%;
-    }
-  }
-
   @media #{$small-and-down} {
     .sign-up {
       padding-top: 3.0rem !important;
@@ -381,56 +375,46 @@
     .home-icon {
       padding-top: 2.0rem !important;
     }
-
     .mobile-holiday {
       padding-top: 4.0rem !important;
     }
-  
-    .purpose-title, .why-title, .how-title {
-        font-size: 3.0rem;
-        font-weight: 500;
+    .purpose-title,
+    .why-title,
+    .how-title {
+      font-size: 3.0rem;
+      font-weight: 500;
     }
-    
     video {
       min-height: 400px;
     }
-
     .how-img {
       width: 80%;
     }
-
-    .connect , .how-video {
-      width:100%;
+    .connect,
+    .how-video {
+      width: 100%;
     }
-
     .purpose-desc {
       font-size: 1.3rem;
     }
-  
     .how-desc2 {
       font-size: 1.5rem;
       font-weight: 400;
     }
-  
     .how-text {
       font-size: 1.5rem;
       font-weight: 300;
     }
-
     .video-parent {
-      height: 35vh;
-    }
-
-    .home-video-container {
-      left: -28%;
-      width: 156%;
-    }
-
+      height: 44vh;
+    } // .home-video-container {
+    //   left: -28%;
+    //   width: 156%;
+    // }
     .head-mobile {
       max-height: 500px;
       opacity: 0.9;
     }
-
     .overlay-desc {
       position: absolute;
       top: 30%;
@@ -439,12 +423,10 @@
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
     }
-
     .delivery-image {
       background-image: url('');
       background-position: bottom-right;
     }
-
     .header-title {
       color: white;
       font-size: 2.5rem;
@@ -453,15 +435,12 @@
       background-position: 74% 20%;
       min-height: 500px;
     }
-
     .book-image {
       min-height: 400px;
     }
-
     .travel-image {
       min-height: 400px;
     }
-
     .how-desc {
       font-size: 1.2rem;
     }
@@ -470,9 +449,9 @@
     }
   }
   @media (max-width: 525px) {
-    .home-video-container {
-      width: 224%;
-      left: -56%
-    }
+    // .home-video-container {
+    //   width: 224%;
+    //   left: -56%
+    // }
   }
 }

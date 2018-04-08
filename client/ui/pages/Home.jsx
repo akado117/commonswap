@@ -49,7 +49,7 @@ class Home extends Component {
                             <ReactCSSTransitionGroup
                                 transitionName="example"
                                 transitionAppear={true}
-                                transitionAppearTimeout={750}
+                                transitionAppearTimeout={1250}
                                 transitionEnter={false}
                                 transitionLeave={false}
                             >

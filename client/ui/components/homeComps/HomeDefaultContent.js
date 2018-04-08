@@ -75,7 +75,7 @@ function HomeDefaultContent(props) {
                         <div className="s12">
                             <img className="how-img" src={defaultImageUrls.homeAssets.travelHome} alt="travelHome2" />
                         </div>
-                        <p className="how-text col s12"><span className="how-title-under">Travel and Explore</span><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away. Want to know the best Mexican restaurant in town? Ask your swap.</p>
+                        <p className="how-text col s12"><span className="how-title-under">Travel and Explore</span><br />Communicate directly with your swap to discuss general ground rules and logistics. Since our swaps are driven by the commonalities of our users, your own personal tour guide is just a message away.</p>
                     </div>
                 </div>
             </div>

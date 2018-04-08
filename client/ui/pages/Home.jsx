@@ -46,15 +46,15 @@ class Home extends Component {
                 <header className="head-mobile video-parent">
                     <div className="video-parent video-text-container">
                         <div className="mask"></div>
-                            <ReactCSSTransitionGroup
-                                transitionName="example"
-                                transitionAppear={true}
-                                transitionAppearTimeout={1250}
-                                transitionEnter={false}
-                                transitionLeave={false}
-                            >
-                                <h3 className="center-align header-desc">We connect travelers from different cities to exchange living accommodations</h3>
-                            </ReactCSSTransitionGroup>
+                        <ReactCSSTransitionGroup
+                            transitionName="example"
+                            transitionAppear={true}
+                            transitionAppearTimeout={1250}
+                            transitionEnter={false}
+                            transitionLeave={false}
+                        >
+                            <h3 className="center-align header-desc">We connect travelers from different cities to exchange living accommodations</h3>
+                        </ReactCSSTransitionGroup>
                     </div>
                     {/* <button className="play-button" onClick={this.togglePlaying}>
                         <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />

@@ -18,10 +18,11 @@
     margin: 0 auto;
   }
   .video-text-container {
-    position: fixed;
+    position: fixed !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
   }
   .header-desc {
     position: relative;

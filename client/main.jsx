@@ -39,6 +39,7 @@ window.google = { maps: { Map: () => { }, LatLng: class mock { }, LatLngBounds }
 
 Meteor.startup(() => {
     Analytics();
+    SyncedCron.start();
     render(
         <ApolloProvider client={client}>
             <Provider client={client} store={store}>

@@ -41,6 +41,7 @@ const userPubFields = {
     // "services.google.given_name": 1,
     // "services.google.family_name": 1,
     // "services.google.picture": 1,
+    isFirstTimeUser: 1,
     oAuthData: 1,
 };
 const user = () => Meteor.users.find({ _id: Meteor.userId }, { fields: userPubFields });

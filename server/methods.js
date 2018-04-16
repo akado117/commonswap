@@ -119,6 +119,12 @@ function sendAcceptEmail(swapObj) {
 }
 
 const methods = {
+    'user.markFirstTimeFalse'() {
+        const _id = Meteor.userId();
+        if (_id) {
+            Meteor.users.update({ _id }, { $set: { isFirstTimeUser: false } });
+        }
+    },
     sendAcceptEmail,
     signup(customer) {
         check(customer, Object);

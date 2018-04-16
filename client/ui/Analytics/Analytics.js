@@ -11,5 +11,14 @@ export function sendPageView(location) {
         gtag('config', Meteor.settings.public.googleKeys.gtm, {
             page_path: location.pathname,
         });
+        if (window.FB) {
+            FB.AppEvents.logPageView();
+        }
+    }
+}
+
+export function sendEvent(eventName, valueToSum, params) {
+    if (window.FB) {
+        FB.AppEvents.logEvent(eventName, valueToSum, params);
     }
 }

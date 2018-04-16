@@ -4,6 +4,7 @@ import ProfileActions from './ProfileActions';
 import PlaceActions from './PlaceActions';
 import FileActions from './FileActions';
 import Store from '../store/store';
+import { sendEvent } from '../Analytics/Analytics';
 
 const actions = {
     loginWithOAuth: (loginType, onLoginCallBack) => {
@@ -27,7 +28,7 @@ const actions = {
         if (!loginFunctions[loginType]) console.error(`${loginType} is not a defined loginType`);
         return loginFunctions[loginType];
     },
-    userLoggedIn: () => {
+    userLoggedIn: (user) => {
         Store.dispatch(ProfileActions.upsertProfile({}, () => Store.dispatch(actions.setUserData())));
         Store.dispatch(FileActions.getImageForProfile());
         Store.dispatch(PlaceActions.upsertPlace({}, (err, res) => {
@@ -38,9 +39,18 @@ const actions = {
         };
     },
     setUserData: () => { //needs to be called after something else has connected to backend
+        const user = Meteor.user();
+        const { FB } = window;
+        if (user.isFirstTimeUser && FB) {
+            sendEvent(FB.AppEvents.EventNames.COMPLETED_REGISTRATION, undefined, {
+                [FB.AppEvents.ParameterNames.REGISTRATION_METHOD]: user.oAuthData.creationMethod,
+                email: user.oAuthData.email,
+            });
+            Meteor.call('user.markFirstTimeFalse');
+        };
         return {
             type: `${actionTypes.LOGIN_}${SUCCESS}`,
-            user: Meteor.user().oAuthData,
+            user: user.oAuthData,
         };
     },
     LogUserOut: (callBack) => {

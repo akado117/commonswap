@@ -49,7 +49,8 @@ import {
 } from '../imports/helpers/DataHelpers';
 import {
     merge,
-    cloneDeep
+    cloneDeep,
+    uniqBy
 } from 'lodash';
 import handleSignup from '../imports/modules/server/stripe/handle-signup';
 import {
@@ -62,6 +63,10 @@ import {
 const client = new ApolloClient(meteorClientConfig());
 let stopLoop = 3;
 let counter = 0;
+
+if (Meteor.isServer) {
+    cronFunction();
+}
 
 function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
@@ -122,14 +127,16 @@ function cronFunction() {
     SyncedCron.add({
         name: 'Find users with incomplete profiles and send an email',
         schedule: function (parser) {
+            // return parser.recur().every(1).minute();
             return parser.recur().on(8).dayOfWeek(1);
         },
         job: function () {
-            var notifyUsers = notfiyUsersFillProfile();
+            var notifyUsers = methods.notfiyProfileIncomplete();
             return notifyUsers;
         }
     });
 
+    SyncedCron.start();
 }
 
 function addOwnerIdAndDateStamp(obj, userId, extraProps) { // modifies original object
@@ -346,8 +353,6 @@ const methods = {
             const contact = EmergencyContacts.findOne({
                 ownerUserId: userId
             }) || {};
-            // console.log('CONTACT');
-            // console.log(contact);
             if (!contact.firstName) {
                 consoleErrorHelper('No contact info found for user', upsertFailedCode, userId);
                 return serviceErrorBuilder('No contact info found for user', upsertFailedCode, {});
@@ -423,21 +428,21 @@ const methods = {
             return serviceErrorBuilder(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, err);
         }
     },
-    notfiyUsersFillProfile() {
+    notfiyProfileIncomplete() {
         // Get all file urls with type place
         let placePhotos = FileUrls.find({
             type: 'PLACE'
         }).fetch();
-        placePhotos = _.uniqBy(placePhotos, placePhotos.placeId);
+        const uniquePhotos = uniqBy(placePhotos, placePhotos.placeId);
         // For each file url placeId, find in places
-        Places.rawCollection().forEach(place => {
-            const userUploaded = placePhotos.find({
-                placeId: place._id
+        uniquePhotos.forEach(place => {
+            const userUploaded = Places.find({
+                _id: place._id
             });
             if (!userUploaded) {
-                const User = Profiles.find({
+                const User = Profiles.findOne({
                     ownerUserId: place.ownerUserId
-                });
+                }) || {};
 
                 const sync = Meteor.wrapAsync(HTTP.call);
                 try {

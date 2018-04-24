@@ -25,9 +25,10 @@ import FAQ from './ui/pages/FAQ';
 import Testimonials from './ui/components/Testimonials';
 import Trust from './ui/components/faq/Trust';
 import Community from './ui/pages/Community';
-import Analytics from './ui/Analytics/Analytics';
+import Analytics, { sendPageView } from './ui/Analytics/Analytics';
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+browserHistory.listen(sendPageView);
 
 const client = new ApolloClient(meteorClientConfig());
 

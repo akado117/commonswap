@@ -1,64 +1,20 @@
 import s3PublicUrl from 'node-s3-public-url';
-import {
-    check
-} from 'meteor/check';
+import { check } from 'meteor/check';
 import Stripe from 'stripe';
 import ApolloClient from 'apollo-client';
+import { meteorClientConfig } from 'meteor/apollo';
+import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips, FileUrls } from '../imports/collections/mainCollection';
 import {
-    meteorClientConfig
-} from 'meteor/apollo';
-import {
-    Addresses,
-    Profiles,
-    Places,
-    Amenities,
-    Interests,
-    EmergencyContacts,
-    DesiredDate,
-    Customers,
-    Trips,
-    FileUrls
-} from '../imports/collections/mainCollection';
-import {
-    serviceErrorBuilder,
-    consoleErrorHelper,
-    serviceSuccessBuilder,
-    consoleLogHelper,
-    mongoFindOneError,
-    tripErrorCode,
-    tripStatus,
-    FieldsForTrip,
-    profileErrorCode,
-    insufficentParamsCode,
-    upsertFailedCode,
-    genericSuccessCode,
-    placeErrorCode,
-    FileTypes,
-    plannerErrorCode,
-    FieldsForBrowseProfile,
-    noShowFieldsForPlace
+    serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus, FieldsForTrip,
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
 } from '../imports/lib/Constants';
-import {
-    clientSideCustomerFields
-} from './helpers/ServerConstants';
+import { clientSideCustomerFields } from './helpers/ServerConstants';
 import S3 from './s3';
-import {
-    parseInts,
-    parseFloats,
-    checkIfCoordsAreValid
-} from '../imports/helpers/DataHelpers';
-import {
-    merge,
-    cloneDeep,
-    uniqBy
-} from 'lodash';
+import { parseInts, parseFloats, checkIfCoordsAreValid } from '../imports/helpers/DataHelpers';
+import { merge, cloneDeep } from 'lodash';
 import handleSignup from '../imports/modules/server/stripe/handle-signup';
-import {
-    HTTP
-} from 'meteor/http';
-import {
-    Meteor
-} from 'meteor/meteor';
+import { HTTP } from 'meteor/http';
+import { Meteor } from 'meteor/meteor';
 
 const client = new ApolloClient(meteorClientConfig());
 let stopLoop = 3;
@@ -91,11 +47,7 @@ function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
             userId,
         };
         if (boundToProp) searchForObj[boundToProp] = fileObj[boundToProp];
-        const numberUpdated = FileUrls.update(searchForObj, {
-            $set: {
-                active: false
-            }
-        });
+        const numberUpdated = FileUrls.update(searchForObj, { $set: { active: false } });
         consoleLogHelper(`${numberUpdated} Images changed to inactive`, genericSuccessCode, userId, '');
     }
     if (typeof fileObj.position === 'number') { //could be built to have the server auto Increment but why spend the comput and db calls to do it
@@ -153,35 +105,18 @@ function addOwnerIdAndDateStamp(obj, userId, extraProps) { // modifies original 
 
 function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceCheck, extraParams = {}) {
     if (!objClone._id || forceCheck) { //check for existing profiles if no id passed in
-        const existingDoc = collection.findOne(searchObj, {
-            ...extraParams,
-            sort: {
-                added: -1
-            }
-        }) || {};
-        return merge(existingDoc, objClone); //overwrite with new data
+        const existingDoc = collection.findOne(searchObj, { ...extraParams, sort: { added: -1 } }) || {};
+        return merge(existingDoc, objClone);//overwrite with new data
     }
     return objClone;
 }
 
 function sendAcceptEmail(swapObj) {
-    const {
-        dates,
-        requesterUserId,
-        requesteeUserId
-    } = swapObj;
-    const Requester = Profiles.findOne({
-        ownerUserId: requesterUserId
-    }) || {};
-    const Requestee = Profiles.findOne({
-        ownerUserId: requesteeUserId
-    }) || {};
-    const RequesterPlace = Places.findOne({
-        ownerUserId: requesterUserId
-    }) || {};
-    const RequesteePlace = Places.findOne({
-        ownerUserId: requesteeUserId
-    }) || {};
+    const { dates, requesterUserId, requesteeUserId } = swapObj;
+    const Requester = Profiles.findOne({ ownerUserId: requesterUserId }) || {};
+    const Requestee = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
+    const RequesterPlace = Places.findOne({ ownerUserId: requesterUserId }) || {};
+    const RequesteePlace = Places.findOne({ ownerUserId: requesteeUserId }) || {};
     const Dates = dates;
 
     const sync = Meteor.wrapAsync(HTTP.call);
@@ -207,7 +142,7 @@ const methods = {
     'user.markFirstTimeFalse'() {
         const _id = Meteor.userId();
         if (_id) {
-            Meteor.users.update({_id}, {$set: {isFirstTimeUser: false}});
+            Meteor.users.update({ _id }, { $set: { isFirstTimeUser: false } });
         }
     },
     sendAcceptEmail,
@@ -230,23 +165,15 @@ const methods = {
 
             try {
                 //profile section
-                let ownerProfileId = profileClone._id; //assumes must be an update if there is an id being passed back
+                let ownerProfileId = profileClone._id;//assumes must be an update if there is an id being passed back
                 if (!ownerProfileId) { //check for existing profiles if no id passed in
-                    const ownerProfile = Profiles.findOne({
-                        ownerUserId: profileClone.ownerUserId || userId
-                    }, {
-                        sort: {
-                            added: -1
-                        }
-                    }) || {};
+                    const ownerProfile = Profiles.findOne({ ownerUserId: profileClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
                     ownerProfileId = ownerProfile._id;
                     profileClone = merge(ownerProfile, profileClone);
                 }
                 if (!profileClone.ownerUserId) profileClone.ownerUserId = profileClone.ownerUserId || userId;
                 if (!profileClone.added) profileClone.added = new Date();
-                const profileGUID = Profiles.upsert({
-                    _id: ownerProfileId
-                }, profileClone);
+                const profileGUID = Profiles.upsert({ _id: ownerProfileId }, profileClone);
                 profileClone._id = profileClone._id || profileGUID.insertedId || ownerProfileId;
                 delete profileClone.ownerUserId
                 //emergency contacts section
@@ -254,9 +181,7 @@ const methods = {
                     ec.ownerUserId = ec.ownerUserId || userId;
                     ec.profileId = profileClone._id || profileGUID.insertedId;
                 });
-                const emergencyGUIDs = emergencyContactsClone.map(ec => EmergencyContacts.upsert({
-                    _id: ec._id
-                }, ec));
+                const emergencyGUIDs = emergencyContactsClone.map(ec => EmergencyContacts.upsert({ _id: ec._id }, ec));
                 emergencyContactsClone.forEach((ec, idx) => {
                     const GUID = emergencyGUIDs[idx] || {};
                     ec._id = GUID.insertedId || ec._id;
@@ -265,31 +190,19 @@ const methods = {
                 });
                 //interests section
                 if (!interestsClone._id) {
-                    const ownerInterests = Interests.findOne({
-                        ownerUserId: interestsClone.ownerUserId || userId
-                    }, {
-                        sort: {
-                            added: -1
-                        }
-                    }) || {};
+                    const ownerInterests = Interests.findOne({ ownerUserId: interestsClone.ownerUserId || userId }, { sort: { added: -1 } }) || {};
                     interestsClone = merge(ownerInterests, interestsClone);
                 }
                 interestsClone.ownerUserId = interestsClone.ownerUserId || userId;
                 interestsClone.profileId = profileClone._id || profileGUID.insertedId;
                 if (!interestsClone.added) interestsClone.added = new Date();
-                const interestsGUID = Interests.upsert({
-                    _id: interestsClone._id
-                }, interestsClone);
+                const interestsGUID = Interests.upsert({ _id: interestsClone._id }, interestsClone);
                 interestsClone._id = interestsGUID.insertedId || interestsClone._id;
                 delete interestsClone.ownerUserId;
                 delete interestsClone.profileId;
 
                 consoleLogHelper(`Profile ${profileClone._id ? 'updated' : 'added'} success`, genericSuccessCode, userId, JSON.stringify(profileClone));
-                return serviceSuccessBuilder({
-                    profileGUID,
-                    emergencyGUIDs,
-                    interestsGUID
-                }, genericSuccessCode, {
+                return serviceSuccessBuilder({ profileGUID, emergencyGUIDs, interestsGUID }, genericSuccessCode, {
                     serviceMessage: `Profile ${profileClone._id ? 'updated' : 'added'}, with key ${profileGUID.insertedId || profileClone._id}`,
                     data: {
                         interests: interestsClone,
@@ -307,10 +220,7 @@ const methods = {
             return serviceErrorBuilder('Profile create or update failed', insufficentParamsCode)
         }
     },
-    upsertCard({
-                   email,
-                   token
-               }) {
+    upsertCard({ email, token }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting card info', placeErrorCode);
         var stripe = Stripe("sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc");
@@ -332,11 +242,7 @@ const methods = {
     getCardInfo() {
         const userId = Meteor.userId();
         try {
-            const cust = Customers.findOne({
-                userId
-            }, {
-                fields: clientSideCustomerFields
-            }) || {};
+            const cust = Customers.findOne({ userId }, { fields: clientSideCustomerFields }) || {};
             if (!cust.card) {
                 consoleErrorHelper('No card info found for user', upsertFailedCode, userId);
                 return serviceErrorBuilder('No card info found for user', upsertFailedCode, {});
@@ -357,9 +263,9 @@ const methods = {
     getContact() {
         const userId = Meteor.userId;
         try {
-            const contact = EmergencyContacts.findOne({
-                ownerUserId: userId
-            }) || {};
+            const contact = EmergencyContacts.findOne({ ownerUserId: userId }) || {};
+            // console.log('CONTACT');
+            // console.log(contact);
             if (!contact.firstName) {
                 consoleErrorHelper('No contact info found for user', upsertFailedCode, userId);
                 return serviceErrorBuilder('No contact info found for user', upsertFailedCode, {});
@@ -381,30 +287,13 @@ const methods = {
         }
     },
     requestEmail(tripData, dates) {
-        const {
-            requesterPlaceId,
-            requesteePlaceId,
-            requesteeUserId,
-            _id,
-            requesterMessage
-        } = tripData;
-        const {
-            arrival,
-            departure
-        } = dates;
-        const Profile = Profiles.findOne({
-            ownerUserId: requesteeUserId
-        }) || {};
+        const { requesterPlaceId, requesteePlaceId, requesteeUserId, _id, requesterMessage } = tripData;
+        const { arrival, departure } = dates;
+        const Profile = Profiles.findOne({ ownerUserId: requesteeUserId }) || {};
         const userId = Meteor.userId();
-        const RequestorPlace = Places.findOne({
-            _id: requesterPlaceId
-        }) || {};
-        const RequestedPlace = Places.findOne({
-            _id: requesteePlaceId
-        }) || {};
-        const User = Profiles.findOne({
-            ownerUserId: userId
-        }) || {};
+        const RequestorPlace = Places.findOne({ _id: requesterPlaceId }) || {};
+        const RequestedPlace = Places.findOne({ _id: requesteePlaceId }) || {};
+        const User = Profiles.findOne({ ownerUserId: userId }) || {};
         const SwapId = _id;
         const Arrival = arrival;
         const Departure = departure;
@@ -472,13 +361,7 @@ const methods = {
         });
     },
     contactUs(data) {
-        const {
-            firstName,
-            lastName,
-            email,
-            phone,
-            comments
-        } = data;
+        const { firstName, lastName, email, phone, comments } = data;
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
             const res = sync('POST', Meteor.settings.azureLambdaURLS.contactUs, {
@@ -504,22 +387,12 @@ const methods = {
     },
     sendMessage(data) {
 
-        const {
-            Question,
-            User,
-            placeId
-        } = data;
-        const ownerPlace = Places.findOne({
-            _id: placeId
-        }) || {};
-        const Profile = Profiles.findOne({
-            ownerUserId: ownerPlace.ownerUserId
-        }) || {};
+        const { Question, User, placeId } = data;
+        const ownerPlace = Places.findOne({ _id: placeId }) || {};
+        const Profile = Profiles.findOne({ ownerUserId: ownerPlace.ownerUserId }) || {};
         const userId = Meteor.userId();
         const RequestorPlace = ownerPlace;
-        const RequestedPlace = Places.findOne({
-            ownerUserId: userId
-        }) || {};
+        const RequestedPlace = Places.findOne({ ownerUserId: userId }) || {};
 
         const sync = Meteor.wrapAsync(HTTP.call);
         try {
@@ -549,13 +422,9 @@ const methods = {
             if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
             let contactClone = cloneDeep(data);
             contactClone.ownerUserId = contactClone.ownerUserId || userId;
-            const contactGUID = EmergencyContacts.upsert({
-                _id: contactClone._id,
-            }, setterOrInsert(contactClone));
+            const contactGUID = EmergencyContacts.upsert({ _id: contactClone._id, }, setterOrInsert(contactClone));
             consoleLogHelper(`Place ${contactGUID ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Contact Id ${JSON.stringify(contactClone._id)}`);
-            return serviceSuccessBuilder({
-                contactGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ contactGUID }, genericSuccessCode, {
                 serviceMessage: `Place ${contactGUID ? 'updated' : 'added'}, with key ${contactGUID || contactClone._id}`,
                 data: {
                     contact: contactClone,
@@ -576,39 +445,23 @@ const methods = {
         let amenitiesClone = cloneDeep(amenities);
         try {
             //place Section
-            placeClone = checkExistingCollectionIfNoId(Places, placeClone, {
-                ownerUserId: placeClone.ownerUserId || userId
-            }, noShowFieldsForPlace);
+            placeClone = checkExistingCollectionIfNoId(Places, placeClone, { ownerUserId: placeClone.ownerUserId || userId }, noShowFieldsForPlace);
             parseInts(placeClone);
             parseFloats(placeClone);
             addOwnerIdAndDateStamp(placeClone, userId);
-            const placeGUID = Places.upsert({
-                _id: placeClone._id
-            }, setterOrInsert(placeClone));
+            const placeGUID = Places.upsert({ _id: placeClone._id }, setterOrInsert(placeClone));
             if (placeGUID.insertedId) placeClone._id = placeGUID.insertedId; //should have a _id already inless placeGUID had it. As a new doc is created without it
 
             //address section
-            addressClone = checkExistingCollectionIfNoId(Addresses, addressClone, {
-                placeId: placeClone._id
-            });
-            addOwnerIdAndDateStamp(addressClone, userId, {
-                placeId: placeClone._id
-            });
-            const addressGUID = Addresses.upsert({
-                _id: addressClone._id
-            }, setterOrInsert(addressClone));
+            addressClone = checkExistingCollectionIfNoId(Addresses, addressClone, { placeId: placeClone._id });
+            addOwnerIdAndDateStamp(addressClone, userId, { placeId: placeClone._id });
+            const addressGUID = Addresses.upsert({ _id: addressClone._id }, setterOrInsert(addressClone));
             if (addressGUID.insertedId) addressClone._id = addressGUID.insertedId;
 
             //ammenities section
-            amenitiesClone = checkExistingCollectionIfNoId(Amenities, amenitiesClone, {
-                placeId: placeClone._id
-            })
-            addOwnerIdAndDateStamp(amenitiesClone, userId, {
-                placeId: placeClone._id
-            });
-            const amenitiesGUID = Amenities.upsert({
-                _id: amenitiesClone._id
-            }, setterOrInsert(amenitiesClone));
+            amenitiesClone = checkExistingCollectionIfNoId(Amenities, amenitiesClone, { placeId: placeClone._id })
+            addOwnerIdAndDateStamp(amenitiesClone, userId, { placeId: placeClone._id });
+            const amenitiesGUID = Amenities.upsert({ _id: amenitiesClone._id }, setterOrInsert(amenitiesClone));
             if (amenitiesGUID.insertedId) amenitiesClone._id = amenitiesGUID.insertedId; //will exist if _id doesn't
             delete placeClone.ownerUserId;
             delete addressClone.ownerUserId;
@@ -617,11 +470,7 @@ const methods = {
             delete amenitiesClone.placeId;
 
             consoleLogHelper(`Place ${placeGUID.insertedId ? 'updated' : 'added'} success`, genericSuccessCode, userId, `Place Id ${JSON.stringify(placeClone._id)}`);
-            return serviceSuccessBuilder({
-                placeGUID,
-                addressGUID,
-                amenitiesGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ placeGUID, addressGUID, amenitiesGUID }, genericSuccessCode, {
                 serviceMessage: `Place ${placeGUID.insertedId ? 'updated' : 'added'}, with key ${placeGUID.insertedId || placeClone._id}`,
                 data: {
                     amenities: amenitiesClone,
@@ -638,34 +487,16 @@ const methods = {
     'trips.saveTrip': function saveTrip(trip) {
         const tripClone = cloneDeep(trip);
         const userId = Meteor.userId();
-        const {
-            dates,
-            requesterUserId,
-            requesteeUserId
-        } = tripClone;
+        const { dates, requesterUserId, requesteeUserId } = tripClone;
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', tripErrorCode);
         if (!dates || !dates.arrival || !dates.departure) return serviceErrorBuilder('Please select dates', tripErrorCode);
         if (!requesterUserId || !requesteeUserId) return serviceErrorBuilder('Are you a ghost!? We don\'t know who you are', tripErrorCode);
         try {
-            const {
-                firstName,
-                email
-            } = Profiles.findOne({
-                ownerUserId: requesteeUserId
-            }, {
-                fields: {
-                    email: 1,
-                    firstName: 1
-                }
-            }) || {};
+            const { firstName, email } = Profiles.findOne({ ownerUserId: requesteeUserId }, { fields: { email: 1, firstName: 1 } }) || {};
             tripClone.requesteeEmail = email;
             tripClone.requesteeName = firstName;
             if (!tripClone.status) tripClone.status = tripStatus.PENDING;
-            const tripGUID = Trips.upsert({
-                requesterUserId,
-                dates,
-                requesteeUserId
-            }, setterOrInsert(tripClone));
+            const tripGUID = Trips.upsert({ requesterUserId, dates, requesteeUserId }, setterOrInsert(tripClone));
             if (tripGUID.insertedId) {
                 tripClone._id = tripGUID.insertedId;
                 methods.requestEmail(tripClone, dates);
@@ -674,9 +505,7 @@ const methods = {
             delete tripClone.requesteeEmail;
             const message = tripGUID.insertedId ? `key ${tripGUID.insertId}` : `userId: ${requesterUserId}, requesteeUserId: ${requesteeUserId}, dates: ${JSON.stringify(dates)}`;
             consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with message of ${message}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
-            return serviceSuccessBuilder({
-                tripGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ tripGUID }, genericSuccessCode, {
                 serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with with search of ${message}`,
                 data: {
                     trip: tripClone,
@@ -688,22 +517,12 @@ const methods = {
             return serviceErrorBuilder('Failed when attempting to find a place by Id', mongoFindOneError, err);
         }
     },
-    'trips.getUserTrips': function getUserTrips({
-                                                    id
-                                                }) {
+    'trips.getUserTrips': function getUserTrips({ id }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', tripErrorCode);
         if (!id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
         try {
-            const trips = Trips.find({
-                $or: [{
-                    requesterUserId: id
-                }, {
-                    requesteeUserId: id
-                }]
-            }, {
-                fields: FieldsForTrip
-            }).fetch();
+            const trips = Trips.find({ $or: [{ requesterUserId: id }, { requesteeUserId: id }] }, { fields: FieldsForTrip }).fetch();
             consoleLogHelper(`Found ${trips.length} swaps`, genericSuccessCode, Meteor.userId(), '');
             return serviceSuccessBuilder({}, genericSuccessCode, {
                 serviceMessage: `Found ${trips.length} swaps via _id of ${id}`,
@@ -717,44 +536,19 @@ const methods = {
             return serviceErrorBuilder('Failed when attempting to find trips for user', mongoFindOneError, err);
         }
     },
-    'trips.updateTripStatus'({
-                                 _id,
-                                 status,
-                                 prevStatus
-                             }) {
+    'trips.updateTripStatus'({ _id, status, prevStatus }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', tripErrorCode);
         if (!_id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
         try {
-            const tripGUID = Trips.update({
-                _id,
-                $or: [{
-                    requesterUserId: userId
-                }, {
-                    requesteeUserId: userId
-                }]
-            }, {
-                $set: {
-                    status
-                }
-            });
-            let swapObj = Trips.find({
-                $or: [{
-                    requesterUserId: userId
-                }, {
-                    requesteeUserId: userId
-                }]
-            }, {
-                fields: FieldsForTrip
-            }).fetch();
+            const tripGUID = Trips.update({ _id, $or: [{ requesterUserId: userId }, { requesteeUserId: userId }] }, { $set: { status } });
+            let swapObj = Trips.find({ $or: [{ requesterUserId: userId }, { requesteeUserId: userId }] }, { fields: FieldsForTrip }).fetch();
             if (swapObj && swapObj.length > 1) {
                 swapObj = swapObj[0];
             }
             sendAcceptEmail(swapObj);
             consoleLogHelper(`Updated trip: ${_id} from: ${prevStatus} to ${status}`, genericSuccessCode, Meteor.userId(), '');
-            return serviceSuccessBuilder({
-                updateInfo: tripGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
                 serviceMessage: `Updated trip: ${_id} from: ${prevStatus} to ${status}`,
                 data: {
                     _id,
@@ -771,21 +565,12 @@ const methods = {
     'trips.createCharge'(swapObj) {
         const userId = Meteor.userId();
         try {
-            const {
-                requesterName,
-                requesterUserId,
-                requesteeName,
-                requesteeUserId
-            } = swapObj;
+            const { requesterName, requesterUserId, requesteeName, requesteeUserId } = swapObj;
 
             let swapClone = cloneDeep(swapObj);
 
-            const currentUserCustomer = Customers.findOne({
-                userId: userId
-            }) || {};
-            const requesterCustomer = Customers.findOne({
-                userId: requesterUserId
-            }) || {};
+            const currentUserCustomer = Customers.findOne({ userId: userId }) || {};
+            const requesterCustomer = Customers.findOne({ userId: requesterUserId }) || {};
 
             const stripe = Stripe(Meteor.settings.private.stripe);
 
@@ -802,24 +587,12 @@ const methods = {
             });
             const status = tripStatus.ACTIVE;
 
-            const swapGUID = Trips.update({
-                _id: swapClone._id
-            }, {
-                $set: {
-                    status
-                }
-            });
+            const swapGUID = Trips.update({ _id: swapClone._id }, { $set: { status } });
 
             sendAcceptEmail(swapObj);
 
             consoleLogHelper(`Swap Accecpted and Charged ${(Meteor.settings.private.swapCost / 2).toFixed(2)} for ${requesterName} and ${requesteeName}. ${JSON.stringify(swapGUID)}`, genericSuccessCode, userId, `Swap Id ${JSON.stringify(swapClone._id)}`);
-            return serviceSuccessBuilder({
-                requesterName,
-                requesteeName,
-                requesteeUserId,
-                requesterUserId,
-                swapGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ requesterName, requesteeName, requesteeUserId, requesterUserId, swapGUID }, genericSuccessCode, {
                 serviceMessage: `Swap Accecpted and Charged ${(Meteor.settings.private.swapCost / 2).toFixed(2)}`,
                 data: {
                     requesterName,
@@ -834,27 +607,14 @@ const methods = {
             return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
         }
     },
-    'places.updateAlwaysAvailable'({
-                                       availableAnytime,
-                                       _id,
-                                       ownerUserId
-                                   }) {
+    'places.updateAlwaysAvailable'({ availableAnytime, _id, ownerUserId }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting place info', tripErrorCode);
-        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode,);
+        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode, );
         try {
-            const tripGUID = Places.update({
-                _id,
-                ownerUserId
-            }, {
-                $set: {
-                    availableAnytime
-                }
-            });
+            const tripGUID = Places.update({ _id, ownerUserId }, { $set: { availableAnytime } });
             consoleLogHelper(`Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`, genericSuccessCode, userId, '');
-            return serviceSuccessBuilder({
-                updateInfo: tripGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
                 serviceMessage: `Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`,
                 data: {
                     availableAnytime,
@@ -866,31 +626,14 @@ const methods = {
             return serviceErrorBuilder(`Failed when attempting to update trip: ${id}`, mongoFindOneError, err);
         }
     },
-    'places.getPlaceById': function getPlaceById({
-                                                     _id,
-                                                     ...args
-                                                 }) {
+    'places.getPlaceById': function getPlaceById({ _id, ...args }) {
         if (!_id) {
             consoleErrorHelper('Failed when attempting to find a place, please send correct Args', mongoFindOneError, Meteor.userId(), args);
-            return serviceErrorBuilder('Failed when attempting to find a place, please send correct Args', mongoFindOneError, {
-                ...args
-            });
+            return serviceErrorBuilder('Failed when attempting to find a place, please send correct Args', mongoFindOneError, { ...args });
         }
         try {
-            const placeForBrowse = Places.findOne({
-                _id
-            }, {
-                fields: FieldsForBrowseProfile
-            }) || {};
-            placeForBrowse.placeImgs = FileUrls.find({
-                placeId: _id,
-                deleted: false
-            }, {
-                fields: FieldsForBrowseProfile,
-                sort: {
-                    position: 1
-                }
-            }).fetch();
+            const placeForBrowse = Places.findOne({ _id }, { fields: FieldsForBrowseProfile }) || {};
+            placeForBrowse.placeImgs = FileUrls.find({ placeId: _id, deleted: false }, { fields: FieldsForBrowseProfile, sort: { position: 1 } }).fetch();
             consoleLogHelper('Found one place', genericSuccessCode, Meteor.userId(), placeForBrowse._id);
             return serviceSuccessBuilder({}, genericSuccessCode, {
                 serviceMessage: `Found one place via _id of ${_id}`,
@@ -904,10 +647,7 @@ const methods = {
             return serviceErrorBuilder('Failed when attempting to find a place by Id', mongoFindOneError, err);
         }
     },
-    'places.updateAvailability': function getByAvailability({
-                                                                availableDates,
-                                                                _id
-                                                            }) {
+    'places.updateAvailability': function getByAvailability({ availableDates, _id }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
         if (!_id || !availableDates) return serviceErrorBuilder('Please provide correct params', placeErrorCode);
@@ -917,14 +657,9 @@ const methods = {
             },
         };
         try {
-            Places.update({
-                _id,
-                ownerUserId: userId
-            }, setObj); //ownerUserId means that only if the place is owned by the logged in user it can be updated
+            Places.update({ _id, ownerUserId: userId }, setObj);//ownerUserId means that only if the place is owned by the logged in user it can be updated
             consoleLogHelper('Place Availability updated successfully', genericSuccessCode, userId, JSON.stringify(availableDates));
-            return serviceSuccessBuilder({
-                numberOfDates: availableDates.length
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ numberOfDates: availableDates.length }, genericSuccessCode, {
                 serviceMessage: `Place availability successfully updated to ${availableDates.length} dates`,
                 data: {
                     place: {
@@ -938,87 +673,35 @@ const methods = {
             return serviceErrorBuilder('Place availability update failed', upsertFailedCode, err);
         }
     },
-    'places.getByAvailability': function getByAvailability({
-                                                               arrival,
-                                                               departure,
-                                                               numOfGuests,
-                                                               coords
-                                                           }) {
+    'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests, coords }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please sign in or create an account before searching for swaps', placeErrorCode);
         if (!coords || !checkIfCoordsAreValid(coords)) return serviceErrorBuilder("We need to know where you're looking to swap!", placeErrorCode);
         try {
-            const {
-                lat,
-                lng,
-                distance
-            } = coords;
+            const { lat, lng, distance } = coords;
             const maxDistance = parseFloat((distance || 50) / 3959);
             const searchObj = {
                 location: {
                     $geoWithin: {
-                        $centerSphere: [
-                            [lng, lat], maxDistance
-                        ],
+                        $centerSphere: [[lng, lat], maxDistance],
                     },
                 },
             };
-            if (numOfGuests) searchObj.numOfGuests = {
-                $gte: parseInt(numOfGuests, 10)
-            };
+            if (numOfGuests) searchObj.numOfGuests = { $gte: parseInt(numOfGuests, 10) };
             if (arrival && departure) {
-                searchObj.$or = [{
-                    availableAnytime: true
-                }, {
-                    availableDates: {
-                        $elemMatch: {
-                            arrival: {
-                                $gte: arrival
-                            },
-                            departure: {
-                                $lte: departure
-                            }
-                        }
-                    }
-                },
-                    {
-                        availableDates: {
-                            $elemMatch: {
-                                arrival: {
-                                    $lte: arrival
-                                },
-                                departure: {
-                                    $gte: departure
-                                }
-                            }
-                        }
-                    }
-                ];
+                searchObj.$or = [{ availableAnytime: true }, { availableDates: { $elemMatch: { arrival: { $gte: arrival }, departure: { $lte: departure } } } },
+                { availableDates: { $elemMatch: { arrival: { $lte: arrival }, departure: { $gte: departure } } } }];
             }
-            const places = Places.find(searchObj, {
-                fields: FieldsForBrowseProfile
-            }).fetch();
+            const places = Places.find(searchObj, { fields: FieldsForBrowseProfile }).fetch();
             const placeIds = [];
             const ownerUserIds = [];
             places.forEach((place) => {
                 placeIds.push(place._id);
                 ownerUserIds.push(place.ownerUserId);
             });
-            const placeImgs = FileUrls.find({
-                placeId: {
-                    $in: placeIds
-                },
-                deleted: false
-            }, {
-                fields: FieldsForBrowseProfile,
-                sort: {
-                    position: 1
-                }
-            }).fetch();
+            const placeImgs = FileUrls.find({ placeId: { $in: placeIds }, deleted: false }, { fields: FieldsForBrowseProfile, sort: { position: 1 } }).fetch();
             consoleLogHelper(`Found ${places.length} places within date range`, genericSuccessCode, userId, JSON.stringify(searchObj));
-            return serviceSuccessBuilder({
-                numberOfPlaces: places.length
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ numberOfPlaces: places.length }, genericSuccessCode, {
                 serviceMessage: `We found ${places.length} places within date range`,
                 data: {
                     places,
@@ -1034,25 +717,14 @@ const methods = {
     'images.place.store': function placeImageStore(fileObj) {
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());
     },
-    'images.place.get': function placeImageGet({
-                                                   placeId
-                                               }) {
+    'images.place.get': function placeImageGet({ placeId }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         const fieldsToReturn = {
             _id: 1,
             url: 1,
         };
-        const files = FileUrls.find({
-            placeId,
-            type: FileTypes.PLACE,
-            deleted: false
-        }, {
-            fields: fieldsToReturn,
-            sort: {
-                position: 1
-            }
-        }).fetch();
+        const files = FileUrls.find({ placeId, type: FileTypes.PLACE, deleted: false }, { fields: fieldsToReturn, sort: { position: 1 } }).fetch();
 
         consoleLogHelper(`Get place images success with ${files.length} found`, genericSuccessCode, userId);
         return serviceSuccessBuilder({}, genericSuccessCode, {
@@ -1062,28 +734,14 @@ const methods = {
             },
         });
     },
-    'images.place.delete': function placeImageDelete({
-                                                         _id,
-                                                         placeId
-                                                     }) {
+    'images.place.delete': function placeImageDelete({ _id, placeId }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         try {
-            const filesGUID = FileUrls.update({
-                _id,
-                type: FileTypes.PLACE,
-                deleted: false,
-                placeId
-            }, {
-                $set: {
-                    deleted: true
-                }
-            });
+            const filesGUID = FileUrls.update({ _id, type: FileTypes.PLACE, deleted: false, placeId }, { $set: { deleted: true } });
 
             consoleLogHelper(`Successfully deleted ${filesGUID} place Images with id: ${_id}`, genericSuccessCode, userId);
-            return serviceSuccessBuilder({
-                guidReturn: filesGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ guidReturn: filesGUID }, genericSuccessCode, {
                 serviceMessage: `Successfully deleted ${filesGUID} place Images`,
                 data: {
                     _id,
@@ -1096,23 +754,15 @@ const methods = {
             return serviceErrorBuilder(`Delete Place image for image id: ${_id} unsuccessful`, placeErrorCode, err);
         }
     },
-    'images.place.saveOrder': function saveImageOrder({
-                                                          placeImgs
-                                                      }) {
+    'images.place.saveOrder': function saveImageOrder({ placeImgs }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         try {
             const bulkUpdates = placeImgs.map((img, idx) => {
                 return {
                     updateOne: {
-                        filter: {
-                            _id: img._id
-                        },
-                        update: {
-                            $set: {
-                                position: img.position || idx
-                            }
-                        },
+                        filter: { _id: img._id },
+                        update: { $set: { position: img.position || idx } },
                     },
                 };
             });
@@ -1121,9 +771,7 @@ const methods = {
             const filesGUID = FileUrls.rawCollection().bulkWrite(bulkUpdates);
 
             consoleLogHelper(`Successfully updated ${filesGUID.updated} place Images' positions`, genericSuccessCode, userId);
-            return serviceSuccessBuilder({
-                guidReturn: filesGUID
-            }, genericSuccessCode, {
+            return serviceSuccessBuilder({ guidReturn: filesGUID }, genericSuccessCode, {
                 serviceMessage: `Successfully updated ${filesGUID.updated} place Images`,
                 data: {
                     placeImgs,
@@ -1145,16 +793,9 @@ const methods = {
             url: 1,
             _id: 1,
         };
-        const file = FileUrls.findOne({
-            userId,
-            type: FileTypes.PROFILE,
-            deleted: false,
-            active: true,
-        }, {
+        const file = FileUrls.findOne({ userId, type: FileTypes.PROFILE, deleted: false, active: true, }, {
             fields: fieldsToReturn,
-            sort: {
-                added: -1
-            },
+            sort: { added: -1 },
         });
 
         consoleLogHelper('Get profile images success with 1 found', genericSuccessCode, userId);
@@ -1171,12 +812,7 @@ const methods = {
         const sanitizedUrl =
             file.url.replace(userId, `${encodeURIComponent(userId)}`)
                 .replace(file.name, `${s3PublicUrl(file.name)}`);
-        return FileUrls.insert({
-            userId: this.userId,
-            url: sanitizedUrl,
-            fileName: file.name,
-            added: new Date()
-        });
+        return FileUrls.insert({ userId: this.userId, url: sanitizedUrl, fileName: file.name, added: new Date() });
     },
     'files.delete': function filesStoreMethod(fileId) {
         check(fileId, String);
@@ -1184,10 +820,7 @@ const methods = {
         consoleLogHelper('File Delete Attempting', 1, this.userId, JSON.stringify(file));
         if (file && file.userId === this.userId) {
             return S3.deleteFile(file, () => {
-                FileUrls.remove({
-                    _id: fileId,
-                    userId: this.userId
-                });
+                FileUrls.remove({ _id: fileId, userId: this.userId });
             });
         }
 

@@ -153,7 +153,8 @@ function addOwnerIdAndDateStamp(obj, userId, extraProps) { // modifies original 
 
 function checkExistingCollectionIfNoId(collection, objClone, searchObj, forceCheck, extraParams = {}) {
     if (!objClone._id || forceCheck) { //check for existing profiles if no id passed in
-        const existingDoc = collection.findOne(searchObj, { ...extraParams,
+        const existingDoc = collection.findOne(searchObj, {
+            ...extraParams,
             sort: {
                 added: -1
             }
@@ -206,7 +207,7 @@ const methods = {
     'user.markFirstTimeFalse'() {
         const _id = Meteor.userId();
         if (_id) {
-            Meteor.users.update({ _id }, { $set: { isFirstTimeUser: false } });
+            Meteor.users.update({_id}, {$set: {isFirstTimeUser: false}});
         }
     },
     sendAcceptEmail,
@@ -307,9 +308,9 @@ const methods = {
         }
     },
     upsertCard({
-        email,
-        token
-    }) {
+                   email,
+                   token
+               }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting card info', placeErrorCode);
         var stripe = Stripe("sk_test_jIZSQ4fsuI9IFmeZeiNdSFPc");
@@ -688,8 +689,8 @@ const methods = {
         }
     },
     'trips.getUserTrips': function getUserTrips({
-        id
-    }) {
+                                                    id
+                                                }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', tripErrorCode);
         if (!id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
@@ -716,11 +717,11 @@ const methods = {
             return serviceErrorBuilder('Failed when attempting to find trips for user', mongoFindOneError, err);
         }
     },
-    'trips.updateTripStatus' ({
-        _id,
-        status,
-        prevStatus
-    }) {
+    'trips.updateTripStatus'({
+                                 _id,
+                                 status,
+                                 prevStatus
+                             }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting profile info', tripErrorCode);
         if (!_id) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
@@ -767,7 +768,7 @@ const methods = {
             return serviceErrorBuilder(`Failed when attempting to update trip: ${id}`, mongoFindOneError, err);
         }
     },
-    'trips.createCharge' (swapObj) {
+    'trips.createCharge'(swapObj) {
         const userId = Meteor.userId();
         try {
             const {
@@ -833,14 +834,14 @@ const methods = {
             return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
         }
     },
-    'places.updateAlwaysAvailable' ({
-        availableAnytime,
-        _id,
-        ownerUserId
-    }) {
+    'places.updateAlwaysAvailable'({
+                                       availableAnytime,
+                                       _id,
+                                       ownerUserId
+                                   }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting place info', tripErrorCode);
-        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode, );
+        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode,);
         try {
             const tripGUID = Places.update({
                 _id,
@@ -866,12 +867,13 @@ const methods = {
         }
     },
     'places.getPlaceById': function getPlaceById({
-        _id,
-        ...args
-    }) {
+                                                     _id,
+                                                     ...args
+                                                 }) {
         if (!_id) {
             consoleErrorHelper('Failed when attempting to find a place, please send correct Args', mongoFindOneError, Meteor.userId(), args);
-            return serviceErrorBuilder('Failed when attempting to find a place, please send correct Args', mongoFindOneError, { ...args
+            return serviceErrorBuilder('Failed when attempting to find a place, please send correct Args', mongoFindOneError, {
+                ...args
             });
         }
         try {
@@ -903,9 +905,9 @@ const methods = {
         }
     },
     'places.updateAvailability': function getByAvailability({
-        availableDates,
-        _id
-    }) {
+                                                                availableDates,
+                                                                _id
+                                                            }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', placeErrorCode);
         if (!_id || !availableDates) return serviceErrorBuilder('Please provide correct params', placeErrorCode);
@@ -937,11 +939,11 @@ const methods = {
         }
     },
     'places.getByAvailability': function getByAvailability({
-        arrival,
-        departure,
-        numOfGuests,
-        coords
-    }) {
+                                                               arrival,
+                                                               departure,
+                                                               numOfGuests,
+                                                               coords
+                                                           }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please sign in or create an account before searching for swaps', placeErrorCode);
         if (!coords || !checkIfCoordsAreValid(coords)) return serviceErrorBuilder("We need to know where you're looking to swap!", placeErrorCode);
@@ -966,19 +968,19 @@ const methods = {
             };
             if (arrival && departure) {
                 searchObj.$or = [{
-                        availableAnytime: true
-                    }, {
-                        availableDates: {
-                            $elemMatch: {
-                                arrival: {
-                                    $gte: arrival
-                                },
-                                departure: {
-                                    $lte: departure
-                                }
+                    availableAnytime: true
+                }, {
+                    availableDates: {
+                        $elemMatch: {
+                            arrival: {
+                                $gte: arrival
+                            },
+                            departure: {
+                                $lte: departure
                             }
                         }
-                    },
+                    }
+                },
                     {
                         availableDates: {
                             $elemMatch: {
@@ -1033,8 +1035,8 @@ const methods = {
         return imageServiceHelper(fileObj, FileTypes.PLACE, 'placeId', Meteor.userId());
     },
     'images.place.get': function placeImageGet({
-        placeId
-    }) {
+                                                   placeId
+                                               }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         const fieldsToReturn = {
@@ -1061,9 +1063,9 @@ const methods = {
         });
     },
     'images.place.delete': function placeImageDelete({
-        _id,
-        placeId
-    }) {
+                                                         _id,
+                                                         placeId
+                                                     }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         try {
@@ -1095,8 +1097,8 @@ const methods = {
         }
     },
     'images.place.saveOrder': function saveImageOrder({
-        placeImgs
-    }) {
+                                                          placeImgs
+                                                      }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in before getting images', placeErrorCode);
         try {
@@ -1168,7 +1170,7 @@ const methods = {
         const userId = this.userId;
         const sanitizedUrl =
             file.url.replace(userId, `${encodeURIComponent(userId)}`)
-            .replace(file.name, `${s3PublicUrl(file.name)}`);
+                .replace(file.name, `${s3PublicUrl(file.name)}`);
         return FileUrls.insert({
             userId: this.userId,
             url: sanitizedUrl,

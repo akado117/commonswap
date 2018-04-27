@@ -11,7 +11,7 @@ import {
 import { clientSideCustomerFields } from './helpers/ServerConstants';
 import S3 from './s3';
 import { parseInts, parseFloats, checkIfCoordsAreValid } from '../imports/helpers/DataHelpers';
-import { merge, cloneDeep } from 'lodash';
+import { merge, cloneDeep, uniqBy } from 'lodash';
 import handleSignup from '../imports/modules/server/stripe/handle-signup';
 import { HTTP } from 'meteor/http';
 import { Meteor } from 'meteor/meteor';
@@ -324,39 +324,24 @@ const methods = {
             return serviceErrorBuilder(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, err);
         }
     },
-    notfiyProfileIncomplete() {
-        // Get all file urls with type place
-        let placePhotos = FileUrls.find({
-            type: 'PLACE'
-        }).fetch();
-        const uniquePhotos = uniqBy(placePhotos, placePhotos.placeId);
-        // For each file url placeId, find in places
-        uniquePhotos.forEach(place => {
-            const userUploaded = Places.find({
-                _id: place._id
-            });
-            if (!userUploaded) {
-                const User = Profiles.findOne({
-                    ownerUserId: place.ownerUserId
-                }) || {};
+    async notfiyProfileIncomplete() {
+        const userIds = await FileUrls.rawCollection().distinct('userId', { type: 'PLACE' });//gets unique userIds from file collection (only place files)
+        const places = Places.find({ ownerUserId: { $nin: userIds } }, { fields: { ownerUserId: 1 } }).fetch();//finds any places that don't have a user id within the fileURL.type === PLACE
+        const users = Profiles.find({ ownerUserId: { $in: places.map(place => place.ownerUserId) } }).fetch();
 
-                const sync = Meteor.wrapAsync(HTTP.call);
-                try {
-                    const res = sync('POST', Meteor.settings.azureLambdaURLS.notifyUserIncomplete, {
-                        data: {
-                            User
-                        },
-                    });
-                    consoleLogHelper(`Email message to ${User} sent`, genericSuccessCode, User.ownerUserId, ``);
-                    return serviceSuccessBuilder(res.data, genericSuccessCode, {
-                        serviceMessage: `Email message to ${User} sent`,
-                        data: res.data,
-                    });
-                } catch (err) {
-                    console.log(err.stack);
-                    consoleErrorHelper(`Email message to ${User} failed`, upsertFailedCode, User.ownerUserId, err);
-                    return serviceErrorBuilder(`Email message to ${User} failed`, upsertFailedCode, err);
-                }
+        const sync = Meteor.wrapAsync(HTTP.call);
+        users.forEach((User) => {
+            if (!User.email) return;
+            try {
+                const res = sync('POST', Meteor.settings.azureLambdaURLS.notifyUserIncomplete, {
+                    data: {
+                        User,
+                    },
+                });
+                consoleLogHelper(`Email message to ${User.email} sent`, genericSuccessCode, User.ownerUserId);
+            } catch (err) {
+                console.log(err.stack);
+                consoleErrorHelper(`Email message to ${User} failed`, upsertFailedCode, User.ownerUserId, err);
             }
         });
     },
@@ -826,6 +811,17 @@ const methods = {
 
         throw new Meteor.Error('500', 'Must be logged in to do that!');
     },
+    'test': async function () {
+        const userIds = await FileUrls.rawCollection().distinct('userId', { type: 'PLACE' });
+        const profiles = Places.find({ ownerUserId: { $nin: userIds } }).fetch();
+        return serviceSuccessBuilder({}, genericSuccessCode, {
+            serviceMessage: 'Get one profile images success with 1 found',
+            data: {
+                userIds,
+                profiles,
+            },
+        });
+    }
 };
 
 Meteor.methods(methods);

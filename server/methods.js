@@ -11,7 +11,7 @@ import {
 import { clientSideCustomerFields } from './helpers/ServerConstants';
 import S3 from './s3';
 import { parseInts, parseFloats, checkIfCoordsAreValid } from '../imports/helpers/DataHelpers';
-import { merge, cloneDeep } from 'lodash';
+import { merge, cloneDeep, uniqBy } from 'lodash';
 import handleSignup from '../imports/modules/server/stripe/handle-signup';
 import { HTTP } from 'meteor/http';
 import { Meteor } from 'meteor/meteor';
@@ -19,6 +19,10 @@ import { Meteor } from 'meteor/meteor';
 const client = new ApolloClient(meteorClientConfig());
 let stopLoop = 3;
 let counter = 0;
+
+if (Meteor.isServer) {
+    cronFunction();
+}
 
 function imageServiceHelper(fileObj, imgType, boundToProp, userId, activeFlag) {
     check(fileObj, Object);
@@ -70,7 +74,24 @@ function setterOrInsert(obj, otherId) {
     };
 }
 
-function addOwnerIdAndDateStamp(obj, userId, extraProps) {// modifies original object
+function cronFunction() {
+
+    SyncedCron.add({
+        name: 'Find users with incomplete profiles and send an email',
+        schedule: function (parser) {
+            // return parser.recur().every(1).minute();
+            return parser.recur().on(8).dayOfWeek(1);
+        },
+        job: function () {
+            var notifyUsers = methods.notfiyProfileIncomplete();
+            return notifyUsers;
+        }
+    });
+
+    SyncedCron.start();
+}
+
+function addOwnerIdAndDateStamp(obj, userId, extraProps) { // modifies original object
     if (obj._id) return; //only way possible is for record to not exist THIS RELYS ON CHECKING DB FOR RECORDS BASED UPON USEROWNERID FIRST
     obj.ownerUserId = userId;
     obj.added = new Date();
@@ -109,8 +130,7 @@ function sendAcceptEmail(swapObj) {
                 Dates,
             },
         });
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err.stack);
         consoleErrorHelper(`Email for accept swap between ${Requester.firstName} and ${Requestee.firstName} failed`, upsertFailedCode, requesterUserId, err);
         return serviceErrorBuilder(`Email for accept swap between ${Requester.firstName} and ${Requestee.firstName} failed`, upsertFailedCode, err);
@@ -212,8 +232,7 @@ const methods = {
                 // console.log('Inside upsert card');
                 // console.log(JSON.stringify(customer));
                 //send success data to client
-            }
-            catch (err) {
+            } catch (err) {
                 console.log(err.stack);
                 consoleErrorHelper('Customer create or update failed', upsertFailedCode, userId, err);
                 return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
@@ -304,6 +323,27 @@ const methods = {
             consoleErrorHelper(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, userId, err);
             return serviceErrorBuilder(`Email for new swap from ${User && User.userId} failed`, upsertFailedCode, err);
         }
+    },
+    async notfiyProfileIncomplete() {
+        const userIds = await FileUrls.rawCollection().distinct('userId', { type: 'PLACE' });//gets unique userIds from file collection (only place files)
+        const places = Places.find({ ownerUserId: { $nin: userIds } }, { fields: { ownerUserId: 1 } }).fetch();//finds any places that don't have a user id within the fileURL.type === PLACE
+        const users = Profiles.find({ ownerUserId: { $in: places.map(place => place.ownerUserId) } }).fetch();
+
+        const sync = Meteor.wrapAsync(HTTP.call);
+        users.forEach((User) => {
+            if (!User.email) return;
+            try {
+                const res = sync('POST', Meteor.settings.azureLambdaURLS.notifyUserIncomplete, {
+                    data: {
+                        User,
+                    },
+                });
+                consoleLogHelper(`Email message to ${User.email} sent`, genericSuccessCode, User.ownerUserId);
+            } catch (err) {
+                console.log(err.stack);
+                consoleErrorHelper(`Email message to ${User} failed`, upsertFailedCode, User.ownerUserId, err);
+            }
+        });
     },
     contactUs(data) {
         const { firstName, lastName, email, phone, comments } = data;
@@ -546,8 +586,7 @@ const methods = {
                     status,
                 },
             });
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err.stack);
             consoleErrorHelper(`Create Charge error`, upsertFailedCode, userId, err);
             return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
@@ -772,6 +811,17 @@ const methods = {
 
         throw new Meteor.Error('500', 'Must be logged in to do that!');
     },
+    'test': async function () {
+        const userIds = await FileUrls.rawCollection().distinct('userId', { type: 'PLACE' });
+        const profiles = Places.find({ ownerUserId: { $nin: userIds } }).fetch();
+        return serviceSuccessBuilder({}, genericSuccessCode, {
+            serviceMessage: 'Get one profile images success with 1 found',
+            data: {
+                userIds,
+                profiles,
+            },
+        });
+    }
 };
 
 Meteor.methods(methods);

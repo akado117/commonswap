@@ -34,3 +34,4 @@ tmeasday:publish-counts
 dynamic-import@0.2.0
 themeteorchef:bert
 mrgalaxy:stripe
+percolate:synced-cron

@@ -401,6 +401,14 @@ const methods = {
             return serviceErrorBuilder(`Email message from ${User} failed`, upsertFailedCode, err);
         }
     },
+    getAllAvailableCities() {
+        try {
+            return Places.find({ address: { $ne: null } }).fetch();
+        } catch (err) {
+            console.log(err.stack);
+            return serviceErrorBuilder('Getting all available cities failed', upsertFailedCode, err);
+        }
+    },
     saveContact(data) {
         try {
             const userId = Meteor.userId();
@@ -595,7 +603,7 @@ const methods = {
     'places.updateAlwaysAvailable'({ availableAnytime, _id, ownerUserId }) {
         const userId = Meteor.userId();
         if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting place info', tripErrorCode);
-        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode, );
+        if (typeof availableAnytime === 'undefined' || !_id || ownerUserId !== userId) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
         try {
             const tripGUID = Places.update({ _id, ownerUserId }, { $set: { availableAnytime } });
             consoleLogHelper(`Updated place: ${_id} to be ${availableAnytime ? 'available anytime' : 'available only on given dates'}`, genericSuccessCode, userId, '');

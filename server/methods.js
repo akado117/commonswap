@@ -156,7 +156,7 @@ function updatePlaceRating(ownerUserId, _id, rating, oldRating) {
         return { placeGUID, updateObject };
     } catch (err) {
         console.log(err.stack);
-        consoleErrorHelper(`Something went wrong when updating place rating`, upsertFailedCode, ownerUserId, err, {ownerUserId, rating});
+        consoleErrorHelper(`Something went wrong when updating place rating`, upsertFailedCode, ownerUserId, err, { ownerUserId, rating });
         return serviceErrorBuilder(`Something went wrong when updating place rating`, upsertFailedCode, err);
     }
 }
@@ -658,7 +658,7 @@ const methods = {
             const { averageRating, numberOfReviews } = updatePlaceResults.updateObject;
 
             const tripGUID = Trips.update({ _id, requesterUserId: trip.requesterUserId, requesteeUserId: trip.requesteeUserId }, { $set: updatedData });
-            const { requesteeUserId, requesterUserId} = trip;
+            const { requesteeUserId, requesterUserId } = trip;
             consoleLogHelper(`Updated trip: ${_id} with review: ${rating} - ${message}`, genericSuccessCode, Meteor.userId(), '');
             return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
                 serviceMessage: `Updated trip: ${_id} with review: ${rating} - ${message}`,
@@ -669,7 +669,7 @@ const methods = {
             });
         } catch (err) {
             console.log(err.stack);
-            consoleErrorHelper(`Failed when attempting to update trip review: ${id}`, mongoFindOneError, Meteor.userId(), err, { _id, rating, message, requesteeUserId, requesterUserId});
+            consoleErrorHelper(`Failed when attempting to update trip review: ${id}`, mongoFindOneError, Meteor.userId(), err, { _id, rating, message, requesteeUserId, requesterUserId });
             return serviceErrorBuilder(`Failed when attempting to update review: ${id}`, mongoFindOneError, err);
         }
     },
@@ -741,7 +741,6 @@ const methods = {
     },
     'places.getByAvailability': function getByAvailability({ arrival, departure, numOfGuests, coords }) {
         const userId = Meteor.userId();
-        if (!userId) return serviceErrorBuilder('Please sign in or create an account before searching for swaps', placeErrorCode);
         if (!coords || !checkIfCoordsAreValid(coords)) return serviceErrorBuilder("We need to know where you're looking to swap!", placeErrorCode);
         try {
             const { lat, lng, distance } = coords;

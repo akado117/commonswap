@@ -18,9 +18,6 @@ function HomeDefaultContent(props) {
                 </div>
             </div>
         </div>
-        <div className="center-content">
-            <p className="how-desc">We are currently accepting beta users for the 2018 calendar year.</p>
-        </div>
         <div className="row center-content signup-button">
             <SignupModalButton
                 className="col s6 m4 l3"
@@ -35,12 +32,11 @@ function HomeDefaultContent(props) {
                     free={true}
                 />
             </div>
-            <p className="how-desc no-bottom-marg">We are currently accepting beta users for the 2018 calendar year.</p>
         </div>;
-    return ( 
+    return (
         <div class="parralax">
             {signUp}
-            <div className="col s12 purpose" style={props.user ? {paddingTop:'1.5rem'} : {}}>
+            <div className="col s12 purpose" style={props.user ? { paddingTop: '1.5rem' } : {}}>
                 <div className="col s12 how-video">
                     {/* <ReactPlayer url="https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/CommonSwap+Demo+Video.mp4" playing muted={this.state.muted} width="100%" height="100%" /> */}
                     <video playsInline poster={defaultImageUrls.videos.whoAreWePoster} src={defaultImageUrls.videos.whoAreWe} type="video/mp4" preload="auto" controls width="100%" height="100%" />

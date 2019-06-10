@@ -133,14 +133,15 @@ class Browse extends Component {
             defArrDate = { defaultDate: this.state.arrival };
             defDepDate = { defaultDate: this.state.departure };
         }
-        const searchButton = this.props.user.userId
-            ? (<ConnectedButton
+        const searchButton = (
+            <ConnectedButton
                 icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                 actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
                 buttonText="Search"
                 onClick={this.searchForPlaces}
                 className={this.searchButtonActive ? null : 'grey lighten-1'}
-            />) : <SignupModalButton />;
+            />
+        );
         return (
             <div className="browse-container">
                 <div className="row">

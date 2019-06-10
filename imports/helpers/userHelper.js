@@ -25,4 +25,6 @@ export function mapUserServiceToProfile(currentUser) {
     return {};
 }
 
-export default () => {};
+export function requesterOrRequestee(Store, requesterId, post = '', pre = '') {
+    return `${pre}${Store.getState().user.userId === requesterId ? 'requester' : 'requestee'}${post}`;
+}

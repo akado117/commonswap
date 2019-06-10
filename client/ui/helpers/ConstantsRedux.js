@@ -4,6 +4,9 @@ import serviceActions from '../actions/ServiceActions';
 export const FAILURE = 'FAILURE';
 export const SUCCESS = 'SUCCESS';
 
+export const _SUCCESS = '_SUCCESS';
+export const _FAILURE = '_FAILURE';
+
 let store;
 
 export function setStore(Store) {
@@ -49,6 +52,7 @@ export const actionTypes = {
     MESSAGE_SENT: 'MESSAGE_SENT',
     GET_CONTACT: 'GET_CONTACT',
     SEND_CONTACT: 'SEND_CONTACT',
+    SAVE_TRIP_REVIEW: 'SAVE_TRIP_REVIEW',
 };
 
 const serviceMessages = {
@@ -102,3 +106,7 @@ export function serviceResponded(actionType) {
 
 
 export const pendingAlert = () => Bert.alert('Waiting on the interwebs', 'info', 'growl-top-left');
+
+export function serviceCallCreator(type, isSuccess) {
+    return type + (isSuccess ? _SUCCESS : _FAILURE);
+}

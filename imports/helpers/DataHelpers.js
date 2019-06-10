@@ -96,7 +96,7 @@ export function checkIfCoordsAreValid(coords) {
 }
 
 export function getTripType(trip) {
-    if (trip.status === tripStatus.COMPLETE || trip.status === tripStatus.DECLINED) return 'pastTrips';
+    if (trip.status === tripStatus.DECLINED || trip.status === tripStatus.COMPLETE) return 'pastTrips';
     if (trip.status === tripStatus.ACTIVE) return 'activeTrips';
     if (trip.status === tripStatus.PENDING || trip.status === tripStatus.ACCEPTED) return 'pendingTrips';
     return 'pendingTrips';

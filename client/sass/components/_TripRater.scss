@@ -1,0 +1,19 @@
+.trip-rater-container {
+  position: relative;
+  .react-rater-star.is-active {
+    color: #ffd921;
+  }
+  .react-rater-star.will-be-active {
+    color: #b2e439;
+  }
+  .save-button {
+    transition: opacity 350ms ease-in-out;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 15px;
+    &.active {
+      opacity: 1;
+    }
+  }
+}

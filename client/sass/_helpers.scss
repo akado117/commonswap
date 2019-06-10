@@ -94,3 +94,11 @@ $button-boxshadow-default: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0,
     left: 0;
   }
 }
+
+.remove-default-button-styling {
+  background: none;
+  border: none;
+    &:hover, &:active, &:focus {
+    background: none;
+  }
+}

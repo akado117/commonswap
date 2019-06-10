@@ -1,35 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Rater from 'react-rater';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router';
 import FontIcon from 'material-ui/FontIcon';
 import { stateFields, defaultImageUrls, tripStatus } from '../../../../imports/lib/Constants';
 import { GetSwapDateRange } from '../../../../imports/helpers/DateHelpers';
+import TripRater from './TripRater';
 
 const { values, displayNames } = stateFields.fields;
 
-function getRater(rating, message, active) {
-    if (!active || rating === undefined) return '';
+function getRater(trip, active) {
+    if (!active) return '';
     return (
-        <div className="col s12 l5">
-            <div className="col s12">
-                <Rater
-                    total={5}
-                    rating={rating || 0}
-                    interactive={true}
-                />
-            </div>
-            <div className="col s12">
-                <TextField
-                    hintText="Feedback"
-                    floatingLabelText="Tell us about your experience"
-                    multiLine={true}
-                    rows={3}
-                />
-            </div>
-        </div>
+        <TripRater
+            trip={trip}
+        />
     )
 }
 
@@ -135,11 +120,11 @@ function getNameAndImage(swapObj, status, currentUserId) {
 }
 
 const TripCard = (swapObj, currentUserId, showRating) => {
-    const { address, dates, rating, ratingMessage, status } = swapObj;
+    const { address, dates, status } = swapObj;
     const displayState = displayNames[values.indexOf(address.state)];
     const showName = status === tripStatus.ACTIVE || status === tripStatus.COMPLETE;
     const { formattedName, profileImg } = getNameAndImage(swapObj, status, currentUserId);
-    const rater = getRater(rating, ratingMessage, showRating);
+    const rater = getRater(swapObj, showRating);
     return (
         <div className="z-depth-2 trip-card">
             <div className="col s12 m3 l3">

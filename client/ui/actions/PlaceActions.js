@@ -115,6 +115,9 @@ const PlaceActions = {
         standardResponseFunc(error, result, actionTypes.GET_TRIPS, dispatch)),
     updateSwapStatus: ({ _id, status, prevStatus }) => dispatch => Meteor.call('trips.updateTripStatus', { _id, status, prevStatus }, (error, result) =>
         standardResponseFunc(error, result, actionTypes.TRIP_UPDATE_STATUS, dispatch)),
+    saveSwapRating: (args) => dispatch => Meteor.call('trips.updateTripReview', args, (error, result) => {
+        standardResponseFunc(error, result, actionTypes.SAVE_TRIP_REVIEW, dispatch);
+    }),
 };
 
 export default PlaceActions;

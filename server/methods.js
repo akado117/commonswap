@@ -6,7 +6,8 @@ import { meteorClientConfig } from 'meteor/apollo';
 import { Addresses, Profiles, Places, Amenities, Interests, EmergencyContacts, DesiredDate, Customers, Trips, FileUrls } from '../imports/collections/mainCollection';
 import {
     serviceErrorBuilder, consoleErrorHelper, serviceSuccessBuilder, consoleLogHelper, mongoFindOneError, tripErrorCode, tripStatus, FieldsForTrip,
-    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace
+    profileErrorCode, insufficentParamsCode, upsertFailedCode, genericSuccessCode, placeErrorCode, FileTypes, plannerErrorCode, FieldsForBrowseProfile, noShowFieldsForPlace,
+    fieldsForTripReview,
 } from '../imports/lib/Constants';
 import { clientSideCustomerFields } from './helpers/ServerConstants';
 import S3 from './s3';
@@ -136,6 +137,28 @@ function sendAcceptEmail(swapObj) {
         return serviceErrorBuilder(`Email for accept swap between ${Requester.firstName} and ${Requestee.firstName} failed`, upsertFailedCode, err);
     }
 
+}
+
+function updatePlaceRating(ownerUserId, _id, rating, oldRating) {
+    try {
+        const { numberOfReviews = 0, totalRating = 0 } = Places.findOne({ _id });
+        const safeRating = parseInt(rating, 10);
+        const safeOldRating = typeof oldRating !== 'undefined' && parseInt(oldRating, 10);
+        const updateObject = {
+            numberOfReviews: safeOldRating === false ? (numberOfReviews + 1) : numberOfReviews,
+            totalRating: totalRating + (safeOldRating === false ? rating : (safeRating - safeOldRating)),
+        };
+        updateObject.averageRating = updateObject.totalRating / updateObject.numberOfReviews;
+
+        const placeGUID = Places.update({ _id }, { $set: updateObject });
+
+        consoleLogHelper(`Place ${_id} number of ratings ${typeof oldRating === 'undefined' ? 'increased to' : ''}: ${updateObject.numberOfReviews}, average rating: ${updateObject.averageRating}`, genericSuccessCode, ownerUserId);
+        return { placeGUID, updateObject };
+    } catch (err) {
+        console.log(err.stack);
+        consoleErrorHelper(`Something went wrong when updating place rating`, upsertFailedCode, ownerUserId, err, {ownerUserId, rating});
+        return serviceErrorBuilder(`Something went wrong when updating place rating`, upsertFailedCode, err);
+    }
 }
 
 const methods = {
@@ -480,7 +503,7 @@ const methods = {
     'trips.saveTrip': function saveTrip(trip) {
         const tripClone = cloneDeep(trip);
         const userId = Meteor.userId();
-        const { dates, requesterUserId, requesteeUserId } = tripClone;
+        const { dates, requesterUserId, requesteeUserId, requesterMessage } = tripClone;
         if (!userId) return serviceErrorBuilder('Please Sign in before submitting profile info', tripErrorCode);
         if (!dates || !dates.arrival || !dates.departure) return serviceErrorBuilder('Please select dates', tripErrorCode);
         if (!requesterUserId || !requesteeUserId) return serviceErrorBuilder('Are you a ghost!? We don\'t know who you are', tripErrorCode);
@@ -489,19 +512,28 @@ const methods = {
             tripClone.requesteeEmail = email;
             tripClone.requesteeName = firstName;
             if (!tripClone.status) tripClone.status = tripStatus.PENDING;
-            const tripGUID = Trips.upsert({ requesterUserId, dates, requesteeUserId }, setterOrInsert(tripClone));
+            let tripFindInfo = { requesterUserId, dates, requesteeUserId };
+
+            const { _id } = Trips.findOne(tripFindInfo) || {};
+            if (_id) {
+                tripFindInfo = { _id };
+                tripClone._id = _id;
+            }
+            const tripGUID = Trips.upsert(tripFindInfo, setterOrInsert(tripClone));
             if (tripGUID.insertedId) {
                 tripClone._id = tripGUID.insertedId;
                 methods.requestEmail(tripClone, dates);
                 //tim, this is where you can send notification emails. As this only happens with a new swap and not with old ones being updated
             }
+
             delete tripClone.requesteeEmail;
-            const message = tripGUID.insertedId ? `key ${tripGUID.insertId}` : `userId: ${requesterUserId}, requesteeUserId: ${requesteeUserId}, dates: ${JSON.stringify(dates)}`;
-            consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with message of ${message}`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}`);
+            const serviceMessage = tripGUID.insertedId ? `key ${tripGUID.insertId}` : `userId: ${requesterUserId}, requesteeUserId: ${requesteeUserId}, dates: ${JSON.stringify(dates)}`;
+            consoleLogHelper(`Swap with user ${requesteeUserId} ${tripGUID.insertedId ? 'created' : 'updated'}, with message of "${requesterMessage}"`, genericSuccessCode, userId, `${dates.arrival} - ${dates.departure}, swapId: ${_id}`);
             return serviceSuccessBuilder({ tripGUID }, genericSuccessCode, {
-                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with with search of ${message}`,
+                serviceMessage: `Swap ${tripGUID.insertedId ? 'created' : 'updated'}, with with search of ${serviceMessage}`,
                 data: {
                     trip: tripClone,
+                    isNewTrip: !!tripGUID.insertedId,
                 },
             });
         } catch (err) {
@@ -598,6 +630,47 @@ const methods = {
             console.log(err.stack);
             consoleErrorHelper(`Create Charge error`, upsertFailedCode, userId, err);
             return serviceErrorBuilder('Customer create or update failed', upsertFailedCode, err);
+        }
+    },
+    'trips.updateTripReview'({ _id, message, rating }) {
+        const userId = Meteor.userId();
+        if (!userId) return serviceErrorBuilder('Please Sign in or create an account before submitting review', tripErrorCode);
+        if (!_id || !message || !rating) return serviceErrorBuilder('Please send the correct arguments', tripErrorCode);
+        try {
+            const trip = Trips.findOne({ _id }, { fields: FieldsForTrip });
+            const isUserRequester = userId === trip.requesterUserId;
+            const userPost = isUserRequester ? 'er' : 'ee';
+            const otherPost = !isUserRequester ? 'er' : 'ee';
+            const oldRating = trip[`request${userPost}Rating`];
+            const placeId = trip[`request${otherPost}PlaceId`];//rating other persons place
+            const updatedData = {
+                [`request${userPost}Rating`]: rating,
+                [`request${userPost}ReviewMessage`]: message,
+            };
+            let changedToComplete = false;
+            if (typeof trip[`request${otherPost}Rating`] !== 'undefined' && typeof rating !== 'undefined') {//other already rated
+                changedToComplete = true;
+                updatedData.status = tripStatus.COMPLETE;
+            }
+            const updatePlaceResults = updatePlaceRating(userId, placeId, rating, oldRating);
+            if (!updatePlaceResults.updateObject) return updatePlaceResults;
+
+            const { averageRating, numberOfReviews } = updatePlaceResults.updateObject;
+
+            const tripGUID = Trips.update({ _id, requesterUserId: trip.requesterUserId, requesteeUserId: trip.requesteeUserId }, { $set: updatedData });
+            const { requesteeUserId, requesterUserId} = trip;
+            consoleLogHelper(`Updated trip: ${_id} with review: ${rating} - ${message}`, genericSuccessCode, Meteor.userId(), '');
+            return serviceSuccessBuilder({ updateInfo: tripGUID }, genericSuccessCode, {
+                serviceMessage: `Updated trip: ${_id} with review: ${rating} - ${message}`,
+                data: {
+                    trip: Object.assign(trip, updatedData),
+                    changedToComplete,
+                },
+            });
+        } catch (err) {
+            console.log(err.stack);
+            consoleErrorHelper(`Failed when attempting to update trip review: ${id}`, mongoFindOneError, Meteor.userId(), err, { _id, rating, message, requesteeUserId, requesterUserId});
+            return serviceErrorBuilder(`Failed when attempting to update review: ${id}`, mongoFindOneError, err);
         }
     },
     'places.updateAlwaysAvailable'({ availableAnytime, _id, ownerUserId }) {

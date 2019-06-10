@@ -105,8 +105,9 @@ export const serviceSuccessBuilder = (data, code, extraParams = {}) => ({
     servicesStatus: SUCCESS,
     ...extraParams,
 });
-export const consoleErrorHelper = (message, code, userId, error = {}) => {
+export const consoleErrorHelper = (message, code, userId, error = {}, extraParams) => {
     console.error(`${new Date().toLocaleString()}: ${userId}, ${code}, ${message}`);
+    if (extraParams) console.error(JSON.stringify(extraParams));
     console.error(error.message);
     console.error(error.stack);
 
@@ -145,6 +146,8 @@ export const FieldsForBrowseProfile = {
     generalNotes: 1,
     detailedDesc: 1,
     availableDates: 1,
+    averageRating: 1,
+    numberOfReviews: 1,
 };
 
 export const FieldsForTrip = {
@@ -169,10 +172,25 @@ export const FieldsForTrip = {
     requesterProfileImg: 1,
     requesteeProfileImg: 1,
     requesterMessage: 1,
-    rating: 1,
-    ratingMessage: 1,
+    requesterRating: 1,
+    requesterReviewMessage: 1,
+    requesteeRating: 1,
+    requesteeReviewMessage: 1,
     status: 1,
-}
+};
+
+export const fieldsForTripReview = {
+    requesterMessage: 1,
+    requesterRating: 1,
+    requesterReviewMessage: 1,
+    requesteeRating: 1,
+    requesteeReviewMessage: 1,
+    requesterUserId: 1,
+    requesteeUserId: 1,
+    requesterPlaceId: 1,
+    requesteePlaceId: 1,
+    status: 1,
+};
 
 export const noShowFieldsForPlace = {
     profileImg: 0,

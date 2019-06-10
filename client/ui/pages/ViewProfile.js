@@ -110,7 +110,7 @@ class ViewProfile extends React.Component {
             selectedDates: convertPlannerDates(ParseDates(props.place.place.availableDates || [])),
         };
         const { placeId } = this.props.params;
-        if (placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
+        if (placeId && this.props.place.place._id !== this.props.params.placeId && !find(this.props.place.placesForBrowsing, place => place._id === placeId)) {
             props.placeActions.getPlaceById(placeId);
         }
     }
@@ -132,13 +132,14 @@ class ViewProfile extends React.Component {
     getPlace = () => {
         const { placeId } = this.props.params;
         let placeForBrowse;
-        if (placeId) {
+        if (placeId && this.props.place.place._id !== this.props.params.placeId) {
             placeForBrowse = find(this.props.place.placesForBrowsing, place => place._id === placeId);
         }
         if (placeForBrowse) return placeForBrowse;
         const { place, amenities, address } = this.props.place;
-        const { profile, interests } = this.props.profile;
         const { placeImgs } = this.props.images;
+        if (place._id) return { ...place, placeImgs};
+        const { profile, interests } = this.props.profile;
 
         placeForBrowse = {
             ...this.props.place.place,

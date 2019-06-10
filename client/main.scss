@@ -49,3 +49,8 @@
 @import "{}/client/sass/components/_BrowseControls.scss";
 @import "{}/client/sass/components/_ContactForm.scss";
 @import "{}/client/sass/components/_TripRater.scss";
+
+@font-face {
+    font-family: Avenir Next;
+    src: url('./font/avenir-next.otf') format('opentype');
+}

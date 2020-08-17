@@ -28,7 +28,7 @@ module.exports = {
         "prefer-const": 2,
         "no-console": 2,
         "no-cond-assign": 2,
-        "no-unreachable":2,
+        "no-unreachable": 2,
         "no-unsafe-negation": 2,
         "no-extra-semi": 1,
         "complexity": [1, { "max": 5 }],
@@ -51,6 +51,7 @@ module.exports = {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
             "jsx": true,
+            "legacyDecotators": true
         },
     },
     "plugins": [

@@ -81,11 +81,11 @@ class LoginPage extends React.Component {
     };
 
     componentDidMount = () => {
-        Meteor.autorun(() => {
+        Tracker.autorun(() => {
             if (Meteor.userId()) this.forceUpdate();
         });
     }
- 
+
     handleTouchTap = (event) => {
         // This prevents ghost click.
         event.preventDefault();
@@ -110,7 +110,7 @@ class LoginPage extends React.Component {
     }
 
     getButtonElement = () => {
-        const imgUrl = this.props.userImage.url ||this.props.user.picture;
+        const imgUrl = this.props.userImage.url || this.props.user.picture;
         const photo = imgUrl ? <div className="img-holder"><img src={imgUrl} alt="" /></div> : <i className="fa fa-user-o fa-1x" aria-hidden="true" />;
         return (
             <div className={`button-element align-center ${Meteor.userId() ? 'logged-in' : ''}`}>
@@ -131,13 +131,13 @@ class LoginPage extends React.Component {
     getLoginButtons = userId => (!userId ?
         <div>
             <MenuItem innerDivStyle={styles.menuItem}>
-                <button className="login-button" href="" onClick={() => this.loginHandler(loginTypes.facebook)} style={{...styles.btnFacebook }}>
+                <button className="login-button" href="" onClick={() => this.loginHandler(loginTypes.facebook)} style={{ ...styles.btnFacebook }}>
                     <i className="fa fa-facebook fa-lg" />
                     <span style={styles.btnSpan}>Log in with Facebook</span>
                 </button>
             </MenuItem>
             <MenuItem innerDivStyle={styles.menuItem}>
-                <button className="login-button" href="" onClick={() => this.loginHandler(loginTypes.google)} style={{...styles.btnGoogle }}>
+                <button className="login-button" href="" onClick={() => this.loginHandler(loginTypes.google)} style={{ ...styles.btnGoogle }}>
                     <i className="fa fa-google-plus fa-lg" />
                     <span style={styles.btnSpan}>Log in with Google</span>
                 </button>
@@ -166,7 +166,7 @@ class LoginPage extends React.Component {
                         {/*<span style={styles.btnSpan}>Log in with Twitter</span>*/}
                         {/*</button>*/}
                         {Meteor.userId() ? <MenuItem innerDivStyle={styles.menuItem}>
-                            <button className="login-button" href="" onClick={() => this.loginHandler('close')} style={{...styles.btnTwitter }}>
+                            <button className="login-button" href="" onClick={() => this.loginHandler('close')} style={{ ...styles.btnTwitter }}>
                                 <i className={`fa ${Meteor.userId() ? 'fa-lock' : 'fa-key'} fa-lg`} />
                                 <span style={styles.btnSpan}>Logout</span>
                             </button>

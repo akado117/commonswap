@@ -15,7 +15,7 @@ const style = {
 
 class SignUpModal extends React.Component {
     componentDidMount = () => {
-        Meteor.autorun(() => {
+        Tracker.autorun(() => {
             if (Meteor.userId()) this.forceUpdate();
         });
     }

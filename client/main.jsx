@@ -30,6 +30,8 @@ import Analytics, { sendPageView } from './ui/Analytics/Analytics';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 browserHistory.listen(sendPageView);
 
+import "./main.html"
+
 const client = new ApolloClient(meteorClientConfig());
 
 class LatLngBounds {

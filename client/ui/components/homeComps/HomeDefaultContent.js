@@ -34,7 +34,7 @@ function HomeDefaultContent(props) {
             </div>
         </div>;
     return (
-        <div class="parralax">
+        <div className="parralax">
             {signUp}
             <div className="col s12 purpose" style={props.user ? { paddingTop: '1.5rem' } : {}}>
                 <div className="col s12 how-video">

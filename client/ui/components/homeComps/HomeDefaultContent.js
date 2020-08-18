@@ -18,9 +18,10 @@ function HomeDefaultContent(props) {
                 </div>
             </div>
         </div>
-        <div className="row center-content signup-button">
+        <div className="row center-content signup-button" style={{ marginBottom: "1rem" }}>
             <SignupModalButton
                 className="col s6 m4 l3"
+                free
             />
         </div>
     </div>;
@@ -28,8 +29,8 @@ function HomeDefaultContent(props) {
         <div className="button-and-desc mt-4">
             <div className="signup-button top">
                 <SignupModalButton
-                    className=""
-                    free={true}
+                    className="col s6 m4 l3 mb-1"
+                    free
                 />
             </div>
         </div>;

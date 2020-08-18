@@ -31,7 +31,7 @@ class SignupModalButton extends React.Component {
                     label={this.props.free === true ? "Sign Up! (it's free)" : 'Sign Up!'}
                     style={{ width: '100%' }}
                     primary
-                    icon={<FontIcon className="material-icons">person outline</FontIcon>}
+                    icon={<FontIcon className="material-icons" style={{ width: "2rem" }}>person outline</FontIcon>}
                     onClick={this.openSignupModal}
                 />
             </div>

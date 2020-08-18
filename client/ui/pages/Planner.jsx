@@ -233,13 +233,6 @@ class Planner extends React.Component {
                             style={{ marginBottom: '10px', zIndex: '0' }}
                         />
                         <p className="planner-helper-text">Select the date range(s) that you are able to travel</p>
-                        {userId ? '' : (
-                            <div className="row center-content signup-button">
-                                <SignupModalButton
-                                    className="col s6 m4 l3"
-                                />
-                            </div>
-                        )}
                         <div className="z-depth-2 calendar-wrapper" >
                             <div className="row">
                                 <div className="col s12 calendar-container" >

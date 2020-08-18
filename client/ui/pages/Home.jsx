@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { defaultImageUrls } from '../../../imports/lib/Constants';
 import LoggedInContent from '../components/homeComps/LoggedInContent';
 import HomeDefaultContent from '../components/homeComps/HomeDefaultContent';
-import SignupModalButton from '../components/SignupModalButton';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const styles = {

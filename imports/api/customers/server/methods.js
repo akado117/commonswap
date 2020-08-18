@@ -6,7 +6,7 @@ import handleChangeSubscription from '../../../modules/server/stripe/handle-chan
 import handleUpdatePayment from '../../../modules/server/stripe/handle-update-payment';
 import { Profiles } from '../imports/collections/mainCollection';
 
-Meteor.methods({
+// Meteor.methods({
   // signup(customer) {
   //   console.log('Customer HERE');
   //   console.log(customer);
@@ -25,4 +25,4 @@ Meteor.methods({
 //       throw new Meteor.Error('500', `${error}`);
 //     });
 //   },
-});
+// });

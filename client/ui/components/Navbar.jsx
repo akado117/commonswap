@@ -21,12 +21,14 @@ class Navbar extends React.Component {
         };
     }
 
-    getSideNav() {
-        return M.Sidenav.getInstance(document.querySelector('.button-collapse'))
+    getSideNav(isNative) {
+        const elem = document.querySelector('.sidenav');
+        if (isNative) return elem;
+        return M.Sidenav.getInstance(elem);
     }
 
     componentDidMount = () => {
-        M.Sidenav.init(this.getSideNav());
+        M.Sidenav.init(this.getSideNav('isNative'), {});
         if (this.isInvisRoute(this.props)) document.addEventListener('scroll', this.scrollFunc);
     }
 
@@ -78,7 +80,7 @@ class Navbar extends React.Component {
                 <nav className="nav-wrapper">
                     <div>
                         <div onClick={this.travelHome} className="brand-logo"><img src={defaultImageUrls.assets.mainLogo} alt="" style={{ maxHeight: '64px', paddingLeft: '15px', paddingBottom: '5px' }} /></div>
-                        <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
+                        <a href="#" data-target="mobile-demo" className="button-collapse sidenav-trigger"><FontIcon className="material-icons">menu</FontIcon></a>
                         <Login className="nav-login border-nav" />
                         <ul className="right hide-on-med-and-down">
                             <li className="border-nav"><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
@@ -90,13 +92,14 @@ class Navbar extends React.Component {
                     </div>
                     {this.props.children}
                 </nav>
-                <ul className="side-nav" id="mobile-demo">
+                <ul className="sidenav" id="mobile-demo">
                     <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
                     <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
                     <li><Link to="/explore" activeStyle={ACTIVE}>Explore</Link></li>
                     <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
                     <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                 </ul>
+
             </div>
         );
     }

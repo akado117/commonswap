@@ -50,8 +50,8 @@ class Browse extends Component {
     }
 
     componentDidMount = () => {
-        if (Materialize.updateTextFields) {
-            Materialize.updateTextFields();
+        if (M.updateTextFields) {
+            M.updateTextFields();
         }
     }
 

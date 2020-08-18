@@ -20,7 +20,7 @@ function onChangeHelper(event) {
 class AddressComponent extends React.Component {
     constructor(props) {
         super(props);
-        const { apt = '', street = '', city = '', state = '', zip = ''} = props.address;
+        const { apt = '', street = '', city = '', state = '', zip = '' } = props.address;
         this.state = {
             apt,
             street,
@@ -31,8 +31,8 @@ class AddressComponent extends React.Component {
         };
     }
     updateMaterializeFields() {
-        if (Materialize.updateTextFields) {
-            Materialize.updateTextFields();
+        if (M.updateTextFields) {
+            M.updateTextFields();
         }
     }
     componentDidMount = () => {
@@ -65,7 +65,7 @@ class AddressComponent extends React.Component {
 
     onSetLocation = (coords, place) => {
         this.getValueFunc('coords', coords);
-        let addressObj = { apt: '', street: '', city: '', state: '', zip: ''};
+        let addressObj = { apt: '', street: '', city: '', state: '', zip: '' };
         if (place) addressObj = merge(addressObj, mapPlaceAddressCompsToCSData(place));
         Object.keys(addressObj).forEach((key) => {
             this.getValueFunc(key, addressObj[key]);
@@ -80,7 +80,7 @@ class AddressComponent extends React.Component {
             : 'Click to see security information about your address';
         return (
             <div>
-                <div className="row" style={{marginBottom: '0'}}>
+                <div className="row" style={{ marginBottom: '0' }}>
                     <StandAloneSearchBox
                         className="col s12"
                         onSearchComplete={this.onSearchComplete}

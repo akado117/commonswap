@@ -64,14 +64,14 @@ class ProfileComponent extends Component {
     }
 
     componentDidMount = () => {
-        if (Materialize.updateTextFields) {
-            Materialize.updateTextFields();
+        if (M.updateTextFields) {
+            M.updateTextFields();
         }
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps.profile !== this.props.profile && Materialize.updateTextFields) {
-            Materialize.updateTextFields();
+        if (prevProps.profile !== this.props.profile && M.updateTextFields) {
+            M.updateTextFields();
         }
     }
 

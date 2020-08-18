@@ -18,10 +18,28 @@ export const FileTypes = {
 export const stateFields = {
     fields: {
         displayNames: ["N/A", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Maryland", "Massachusetts", "Michigan",
-            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-        values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE",
-            "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"],
+            "Minnesota", "Mississippi", "Missouri", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+        ],
+        values: ["N/A", "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VI", "VA", "WA", "WV", "WI", "WY"],
     },
+};
+
+export const Google_address_components = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    country: 'long_name',
+    postal_code: 'short_name',
+};
+
+export const googleAddressCompsToCSAddressData = {
+    street_number: 'streetAdd1',
+    route: 'streetAdd2',
+    locality: 'city',
+    administrative_area_level_1: 'state',
+    country: 'country',
+    postal_code: 'zip',
 };
 
 export const loginTypes = {
@@ -39,17 +57,17 @@ export const defaultImageUrls = {
     videos: {
         homeVideoPoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/dreamPoster.png',
         homeVideo: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/Following+my+Dreams+Changed+my+Life+WR.m4v',
-        whoAreWePoster: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/video/Screen+Shot+2017-12-06+at+8.01.51+PM.png',
+        whoAreWePoster: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/playbutton.png',
         whoAreWe: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/videos/CommonSwap+Demo+Video_WR.m4v',
     },
     homeAssets: {
-        joinHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/joinHome.png',
-        bookHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/bookHome.png',
-        travelHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/travelHome2.png',
+        joinHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/joinHome.png',
+        bookHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bookHome.png',
+        travelHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/travelHome.jpg',
         quotes: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/quotes.png',
-        moneyhome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/moneyHome.png',
-        planeHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/planeHome.png',
-        conHome: 'https://s3.us-east-2.amazonaws.com/com-swap-prod/static/connectHome.png',
+        moneyhome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/money-transparent.png',
+        planeHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/airplane-transparent.png',
+        conHome: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/handshake-transparent.png',
         alysa: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/alyssa.png',
         amjed: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/amjed.png',
         bolai: 'https://s3.us-east-2.amazonaws.com/cslistingphotos/home/bolaji.png',
@@ -87,8 +105,9 @@ export const serviceSuccessBuilder = (data, code, extraParams = {}) => ({
     servicesStatus: SUCCESS,
     ...extraParams,
 });
-export const consoleErrorHelper = (message, code, userId, error = {}) => {
+export const consoleErrorHelper = (message, code, userId, error = {}, extraParams) => {
     console.error(`${new Date().toLocaleString()}: ${userId}, ${code}, ${message}`);
+    if (extraParams) console.error(JSON.stringify(extraParams));
     console.error(error.message);
     console.error(error.stack);
 
@@ -127,6 +146,8 @@ export const FieldsForBrowseProfile = {
     generalNotes: 1,
     detailedDesc: 1,
     availableDates: 1,
+    averageRating: 1,
+    numberOfReviews: 1,
 };
 
 export const FieldsForTrip = {
@@ -151,10 +172,25 @@ export const FieldsForTrip = {
     requesterProfileImg: 1,
     requesteeProfileImg: 1,
     requesterMessage: 1,
-    rating: 1,
-    ratingMessage: 1,
+    requesterRating: 1,
+    requesterReviewMessage: 1,
+    requesteeRating: 1,
+    requesteeReviewMessage: 1,
     status: 1,
-}
+};
+
+export const fieldsForTripReview = {
+    requesterMessage: 1,
+    requesterRating: 1,
+    requesterReviewMessage: 1,
+    requesteeRating: 1,
+    requesteeReviewMessage: 1,
+    requesterUserId: 1,
+    requesteeUserId: 1,
+    requesterPlaceId: 1,
+    requesteePlaceId: 1,
+    status: 1,
+};
 
 export const noShowFieldsForPlace = {
     profileImg: 0,

@@ -12,20 +12,16 @@ const teamData = [
         imgUrl: defaultImageUrls.kevin,
     }, {
         name: 'Alex Kaidan',
-        title: 'TBM, Technomancer & Co-Founder',
+        title: 'TBM & Co-Founder',
         description: 'I’ve always been someone who likes to solve puzzles and complex challenges. From my roots as a mechanical engineer to my current path in software engineering. It’s always been about leveraging my analytical prowess by solving problems and providing the most positive impact to this world. Common Swap’s vision grabbed me from day one. More than just a service to enable cheap traveling. We aim to expand minds and build a much more open and accepting world through the power of travel. This is much more than an app to me; it’s the ability to change the lives of thousands, and someday millions.',
         imgUrl: defaultImageUrls.alex,
     }, {
-        name: 'Alec Miller',
-        title: 'CMO & Co-Founder',
-        description: 'Kevin and I meet for the first time at a Startup Weekend event in Columbus in June of 2017. Within just a few minutes of meeting Kevin and hearing the basic idea behind CommonSwap, I knew that it had massive potential and that Kevin had the drive and ability to make it a success. What I saw in CommonSwap was on opportunity to build a company that had purpose and that would change the way people viewed travel forever. By providing more people the opportunity to experience the world from the viewpoint of another person, culture, or country I truly believe we will build a more connected and compassionate society.',
-        imgUrl: defaultImageUrls.alec,
-    }, {
         name: 'Tim Hawkins Hodgson',
         title: 'TBM & Co-Founder',
-        description: 'I want to be a connector. CommonSwap provides the perfect platform to connect people from all walks of life. We want to help people to explore new places and inspire them to go do things in real life. Joining CommonSwap has afforded me the opportunity to help people create groundbreaking new experiences across the globe through technology.',
+        description: 'I am a connector. I want to inspire people to go do things in real life by giving them the tools to explore new places. CommonSwap provides the perfect platform to connect people from all walks of life.',
         imgUrl: defaultImageUrls.tim,
-    },];
+    }
+];
 
 class Founders extends Component {
     getCofounders(cofounderData) {

@@ -26,7 +26,7 @@ const AcceptSwapModal = ({ requesterProfileImg = {}, requesteeProfileImg = {}, p
             {acceptButtonHandler ? <RaisedButton
                 className="col s4 l3 no-padding right"
                 target="_blank"
-                label="Okay"
+                label="Yes"
                 style={{ margin: '12px' }}
                 primary
                 icon={<FontIcon className="material-icons">check</FontIcon>}
@@ -38,7 +38,7 @@ const AcceptSwapModal = ({ requesterProfileImg = {}, requesteeProfileImg = {}, p
                 label="No"
                 style={{ margin: '12px' }}
                 secondary
-                onClick={declineButtonHandler }
+                onClick={declineButtonHandler}
                 icon={<FontIcon className="material-icons">close</FontIcon>}
             /> : ''}
         </div>

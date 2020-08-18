@@ -11,7 +11,7 @@ class SendMessage extends Component {
         super(props);
 
         this.state = {
-            question:'',
+            question: '',
         };
     }
 
@@ -33,6 +33,7 @@ class SendMessage extends Component {
                     buttonText="Send Message"
                     onClick={() => this.props.sendMessage(this.state)}
                     className="message-button"
+                    successText="Your message has been sent"
                 />
             </div>
         );

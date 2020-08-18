@@ -27,11 +27,7 @@ class CardForm extends Component {
         const { card } = this.props.profile;
         return (
             <div className="card-form">
-                <AppBar
-                    title={<span><FontIcon className="material-icons" color={grey50}>lock</FontIcon> Billing Information</span>}
-                    showMenuIconButton={false}
-                    style={{ marginBottom: '10px', zIndex: '0' }}
-                />
+                <span style={{ marginBottom: '1.0rem', fontSize: '24px' }}><i className="fa fa-lock" aria-hidden="true"></i> Billing Information</span>
                 <div className="row">
                     <div className="col s12">
                         <div className="col s12">
@@ -61,7 +57,7 @@ class CardForm extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col m4 s9">
+                    <div className="col m4 s10">
                         <ConnectedButton
                             icon={<i className="fa fa-floppy-o" aria-hidden="true"></i>}
                             buttonText="Update Card"

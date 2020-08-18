@@ -51,7 +51,7 @@ class Footer extends React.Component {
                 </div>
                 <div className="footer-copyright">
                     <div className="container">
-                        © 2017 CommonSwap
+                        © 2018 CommonSwap
                     </div>
                 </div>
             </footer>

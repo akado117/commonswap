@@ -4,7 +4,8 @@ import { get } from 'lodash';
 import { compose, withProps, lifecycle } from 'recompose';
 import { withScriptjs } from 'react-google-maps';
 import { StandaloneSearchBox } from 'react-google-maps/lib/components/places/StandaloneSearchBox';
-import {buildBoundsRange, buildMarkerObj} from "../../../imports/helpers/DataHelpers";
+import { buildBoundsRange, buildMarkerObj } from "../../../imports/helpers/DataHelpers";
+import SelectBuilder from './forms/SelectBuilder';
 
 const PlacesWithStandaloneSearchBox = compose(
     withProps({
@@ -18,6 +19,13 @@ const PlacesWithStandaloneSearchBox = compose(
             const refs = {};
             const { lat, lng } = this.props.coords || (this.props.place && this.props.place.coords) || { lat: 41.9, lng: -87.624 };
             const boundPoints = buildBoundsRange({ lat, lng }, window.google.maps.LatLng, 3.5);
+            const availablePlacesFields = {
+                defaultField: <span><i className="fa fa-map-marker fa-1x" aria-hidden="true"></i> Cities </span>,
+                fields: {
+                    displayNames: ['TEST'], // This should the places.address.city and place.address.state
+                    values: [], // This should be the place.coords
+                },
+            }
 
             this.setState({
                 places: [],
@@ -79,6 +87,18 @@ const PlacesWithStandaloneSearchBox = compose(
                     <label htmlFor="location-search">
                         {labelIcon}{' '}{labelText || 'Search Location'}
                     </label>
+                    {/* <div className="row">
+                        <div className="col s12">
+                            <SelectBuilder
+                                label={<span><i className="fa fa-map-marker fa-1x" aria-hidden="true"></i> Available Cities</span>}
+                                onChange={}
+                                selectArrObj={}
+                                defaultSelection={}
+                                defaultValue={}
+                                extraProps={{ floatingLabelFixed: true }}
+                            />
+                        </div>
+                    </div> */}
                 </div>
             </StandaloneSearchBox>
         </div>);
@@ -89,7 +109,7 @@ PlacesWithStandaloneSearchBox.propTypes = {
     longitude: PropTypes.string,
     onSearchComplete: PropTypes.func,
     className: PropTypes.string,
-    labelText: PropTypes.string,
+    labelText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     icon: PropTypes.element,
 };
 

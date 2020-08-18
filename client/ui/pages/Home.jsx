@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { defaultImageUrls } from '../../../imports/lib/Constants';
 import LoggedInContent from '../components/homeComps/LoggedInContent';
 import HomeDefaultContent from '../components/homeComps/HomeDefaultContent';
-import SignupModalButton from '../components/SignupModalButton';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const styles = {
     customWidth: {
@@ -40,30 +40,32 @@ class Home extends Component {
     // }
 
     render() {
-        const signUp = this.props.user.userId ? '' : <div className="row center-content signup-button">
-            <SignupModalButton
-                className="col s6 m4 l3"
-            />
-        </div>;
         return (
             <div className="home-container">
                 <header className="head-mobile video-parent">
-                    <button className="play-button" onClick={this.togglePlaying}>
-                        <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />
-                    </button>
-                    {/*<button className="mute-button" onClick={this.toggleMuted}>*/}
-                        {/*<i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />*/}
-                    {/*</button>*/}
-                    <div className="home-video-container">
-                        <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
-                            <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
-                        </video>
+                    <div className="video-parent video-text-container">
+                        <div className="mask"></div>
+                        <ReactCSSTransitionGroup
+                            transitionName="example"
+                            transitionAppear={true}
+                            transitionAppearTimeout={1250}
+                            transitionEnter={false}
+                            transitionLeave={false}
+                        >
+                            <h3 className="center-align header-desc">We connect travelers from different cities to exchange living accommodations</h3>
+                        </ReactCSSTransitionGroup>
                     </div>
+                    {/* <button className="play-button" onClick={this.togglePlaying}>
+                        <i className={`fa fa-${this.state.playing ? 'pause' : 'play'} fa-1x`} aria-hidden="true" />
+                    </button> */}
+                    {/*<button className="mute-button" onClick={this.toggleMuted}>*/}
+                    {/*<i className={`fa fa-volume-${this.state.muted ? 'up' : 'off'} fa-1x`} aria-hidden="true" />*/}
+                    {/*</button>*/}
+                    <video playsInline autoPlay loop muted={this.state.muted} poster={defaultImageUrls.videos.homeVideoPoster} preload="auto" width="100%" height="auto" id="home-video" >
+                        <source src={defaultImageUrls.videos.homeVideo} type="video/mp4" />
+                    </video>
                 </header>
-                {/*{this.props.user.userId ? <LoggedInContent /> : <HomeDefaultContent />}*/}
-                {signUp}
                 <HomeDefaultContent user={this.props.user.userId} />
-                <Footer />
             </div>
         );
     }

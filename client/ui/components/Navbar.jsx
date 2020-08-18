@@ -13,6 +13,7 @@ const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px' };
 
 class Navbar extends React.Component {
     invisHeaderRoutes = /^(\/|\/home|\/community)$/;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +21,14 @@ class Navbar extends React.Component {
         };
     }
 
+    getSideNav(isNative) {
+        const elem = document.querySelector('.sidenav');
+        if (isNative) return elem;
+        return M.Sidenav.getInstance(elem);
+    }
+
     componentDidMount = () => {
-        $('.button-collapse').sideNav();
+        M.Sidenav.init(this.getSideNav('isNative'), {});
         if (this.isInvisRoute(this.props)) document.addEventListener('scroll', this.scrollFunc);
     }
 
@@ -33,7 +40,7 @@ class Navbar extends React.Component {
             document.addEventListener('scroll', this.scrollFunc);
         }
         this.setState({ isTop: this.isInvisRoute(this.props) });
-        $('.button-collapse').sideNav('hide');
+        if (this.getSideNav()) this.getSideNav().close();
     }
 
     isInvisRoute = props => !!props.location.pathname.match(this.invisHeaderRoutes);
@@ -73,7 +80,7 @@ class Navbar extends React.Component {
                 <nav className="nav-wrapper">
                     <div>
                         <div onClick={this.travelHome} className="brand-logo"><img src={defaultImageUrls.assets.mainLogo} alt="" style={{ maxHeight: '64px', paddingLeft: '15px', paddingBottom: '5px' }} /></div>
-                        <a href="#" data-activates="mobile-demo" className="button-collapse"><FontIcon className="material-icons">menu</FontIcon></a>
+                        <a href="#" data-target="mobile-demo" className="button-collapse sidenav-trigger"><FontIcon className="material-icons">menu</FontIcon></a>
                         <Login className="nav-login border-nav" />
                         <ul className="right hide-on-med-and-down">
                             <li className="border-nav"><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
@@ -82,16 +89,17 @@ class Navbar extends React.Component {
                             <li className="border-nav explore-container" ><div style={this.ifCurrentPathReturnStyle('/explore', router)} ><span className="explore"><Link to="/explore" >Explore</Link></span></div></li>
                             <li className="border-nav"><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                         </ul>
-                        <ul className="side-nav" id="mobile-demo">
-                            <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
-                            <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
-                            <li><Link to="/explore" activeStyle={ACTIVE}>Browse</Link></li>
-                            <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
-                            <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
-                        </ul>
                     </div>
                     {this.props.children}
                 </nav>
+                <ul className="sidenav" id="mobile-demo">
+                    <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
+                    <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
+                    <li><Link to="/explore" activeStyle={ACTIVE}>Explore</Link></li>
+                    <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
+                    <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
+                </ul>
+
             </div>
         );
     }

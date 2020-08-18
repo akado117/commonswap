@@ -72,7 +72,6 @@ class Profile extends React.Component {
     addValueOnChange = (section, key, value) => {
         const realSection = this.valueMap[section];
         if (realSection) realSection.set(key, value);
-        console.log(realSection);
     }
 
     addValueOnChangePlace = (section, key, value) => {

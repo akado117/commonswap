@@ -127,7 +127,7 @@ const MapSearchBox = compose(
             }
         },
         componentDidUpdate(prevProps) {
-            const { place } = prevProps;
+            const { place, coords } = prevProps;
             if (!this.state.markers.length && place && !place.coords && this.props.place.coords) {
                 const places = [{
                     geometry: {
@@ -136,7 +136,8 @@ const MapSearchBox = compose(
                 }];
                 this.state.setNewCenter(places);
             }
-            if (prevProps.coords && prevProps.coords.lat !== this.props.coords.lat && prevProps.coords.lng !== this.props.coords.lng) {
+            if ((coords && coords.lat !== this.props.coords.lat && coords.lng !== this.props.coords.lng)//if coords change
+                || (!coords && this.props.coords)) { //if coords now exist
                 const places = [{
                     geometry: {
                         location: this.props.coords,

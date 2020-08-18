@@ -12,12 +12,18 @@
   .mobile-guest-beds, .mobile-guest-baths, .mobile-sleeps, .mobile-rooms {
     display: none;
   }
+  .alert-text {
+    color: $error-red;
+  }
   .address-disclaimer {
     color: $label-grey;
     margin: 0;
     &:hover {
       color: $link-hover;
     }
+  }
+  .map-wrapper {
+    height: 350px;
   }
   .image-section-container {
     .img-header {

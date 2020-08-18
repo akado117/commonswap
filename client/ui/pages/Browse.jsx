@@ -12,14 +12,11 @@ import FileActions from '../actions/FileActions';
 import ModalActions from '../actions/ModalActions';
 import Footer from '../components/Footer';
 import MapWithASearchBox from '../components/MapWithASearchBox';
-import PlacesWithStandaloneSearchBox from '../components/StandaloneSearchBox';
 import PlaceForBrowse from '../components/placeComponents/PlaceForBrowse';
 import ConnectedButton from '../components/forms/ConnectedButton';
 import { onChangeHelper, getCoordsFromPlaces } from '../../../imports/helpers/DataHelpers';
-import { Today } from '../../../imports/helpers/DateHelpers';
 import { actionTypes, SEARCHED } from '../helpers/ConstantsRedux';
 import { stateFields } from '../../../imports/lib/Constants';
-import SelectBuilder from '../components/forms/SelectBuilder';
 import SignupModalButton from '../components/SignupModalButton';
 import BrowseControls from '../components/BrowseControls';
 
@@ -28,6 +25,8 @@ const dropObj = {
     values,
     displayNames: values,
 };
+
+let searchButtonActive = false;
 
 const items = [
     <MenuItem key={1} value={1} primaryText="1" />,
@@ -51,8 +50,8 @@ class Browse extends Component {
     }
 
     componentDidMount = () => {
-        if (Materialize.updateTextFields) {
-            Materialize.updateTextFields();
+        if (M.updateTextFields) {
+            M.updateTextFields();
         }
     }
 
@@ -90,6 +89,7 @@ class Browse extends Component {
     }
 
     onSearchChange = (places) => {
+        this.searchButtonActive = true;
         const coordsObject = getCoordsFromPlaces(places)[0];
         this.setLocation(coordsObject);
     }
@@ -133,13 +133,15 @@ class Browse extends Component {
             defArrDate = { defaultDate: this.state.arrival };
             defDepDate = { defaultDate: this.state.departure };
         }
-        const searchButton = this.props.user.userId
-            ? (<ConnectedButton
+        const searchButton = (
+            <ConnectedButton
                 icon={<i className="fa fa-search fa-1x" aria-hidden="true" style={{ float: 'left' }} />}
                 actionType={actionTypes.GET_PLACE_BY_AVAILABILITY}
                 buttonText="Search"
                 onClick={this.searchForPlaces}
-            />) : <SignupModalButton />;
+                className={this.searchButtonActive ? null : 'grey lighten-1'}
+            />
+        );
         return (
             <div className="browse-container">
                 <div className="row">

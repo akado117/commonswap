@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Navbar from './components/Navbar';
 import Dialog from './components/dialog/WrappedDialog';
 import { addFacebookShare } from './helpers/externalServiceScriptInjection';
 
 const test = gql;
-
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
 
 class Layout extends React.Component {
     componentDidMount() {

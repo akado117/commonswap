@@ -161,6 +161,9 @@ export default [
     generalNotes: String
     placeImages: [Image]
     availableAnytime: Boolean
+    averageRating: Float
+    numberOfReviews: Int
+    totalRating: Int
   }
   
   type Image {
@@ -199,10 +202,12 @@ export default [
     address: Address
     dates: TravelDate
     guests: Int
-    rating: Int
-    ratingMessage: String
+    requesterRating: Int
+    requesterReviewMessage: String
+    requesteeRating: Int
+    requesteeReviewMessage: String
     place: Place
-    swapperMessage: String
+    requesterMessage: String
     status: String
     requesterUserId: String
     requesteeUserId: String
@@ -214,6 +219,7 @@ export default [
     requesteeEmail: String
     requesterProfileImg: Image
     requesteeProfileImg: Image
+    
   }
 
   type RootMutation {

@@ -31,6 +31,8 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 browserHistory.listen(sendPageView);
 
 import "./main.html"
+import "materialize-css"
+
 
 const client = new ApolloClient(meteorClientConfig());
 

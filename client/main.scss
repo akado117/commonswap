@@ -5,7 +5,7 @@
 // $primary-color: color("blue", "lighten-2");
 
 // import main scss file
-@import "{poetic:materialize-scss}/sass/materialize.scss";
+@import "{}/imports/materialize-css/sass/materialize.scss";
 
 @import "{}/client/sass/_helpers.scss";
 @import "{}/client/sass/_FuseTest.scss";
@@ -28,7 +28,7 @@
 @import "{}/client/sass/components/_PlaceComponent.scss";
 @import "{}/client/sass/components/_Uploader.scss";
 @import "{}/client/sass/components/_ImageCarousel.scss";
-@import "{}/client/sass/components/CreditCard.scss";
+@import "{}/client/sass/components/_CreditCard.scss";
 @import "{}/client/sass/components/_Login.scss";
 @import "{}/client/sass/components/_Founders.scss";
 @import "{}/client/sass/components/_FAQ.scss";

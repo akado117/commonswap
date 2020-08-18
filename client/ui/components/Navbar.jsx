@@ -13,6 +13,7 @@ const ACTIVE = { borderBottom: 'rgb(0, 188, 212) solid 5px' };
 
 class Navbar extends React.Component {
     invisHeaderRoutes = /^(\/|\/home|\/community)$/;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +21,12 @@ class Navbar extends React.Component {
         };
     }
 
+    getSideNav() {
+        return M.Sidenav.getInstance(document.querySelector('.button-collapse'))
+    }
+
     componentDidMount = () => {
-        $('.button-collapse').sideNav();
+        M.Sidenav.init(this.getSideNav());
         if (this.isInvisRoute(this.props)) document.addEventListener('scroll', this.scrollFunc);
     }
 
@@ -33,7 +38,7 @@ class Navbar extends React.Component {
             document.addEventListener('scroll', this.scrollFunc);
         }
         this.setState({ isTop: this.isInvisRoute(this.props) });
-        $('.button-collapse').sideNav('hide');
+        if (this.getSideNav()) this.getSideNav().close();
     }
 
     isInvisRoute = props => !!props.location.pathname.match(this.invisHeaderRoutes);
@@ -82,16 +87,16 @@ class Navbar extends React.Component {
                             <li className="border-nav explore-container" ><div style={this.ifCurrentPathReturnStyle('/explore', router)} ><span className="explore"><Link to="/explore" >Explore</Link></span></div></li>
                             <li className="border-nav"><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
                         </ul>
-                        <ul className="side-nav" id="mobile-demo">
-                            <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
-                            <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
-                            <li><Link to="/explore" activeStyle={ACTIVE}>Explore</Link></li>
-                            <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
-                            <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
-                        </ul>
                     </div>
                     {this.props.children}
                 </nav>
+                <ul className="side-nav" id="mobile-demo">
+                    <li><Link to="/home" activeStyle={ACTIVE}>How It Works</Link></li>
+                    <li><Link to="/faq" activeStyle={ACTIVE}>FAQ</Link></li>
+                    <li><Link to="/explore" activeStyle={ACTIVE}>Explore</Link></li>
+                    <li><Link to="/planner" activeStyle={ACTIVE}>Planner</Link></li>
+                    <li><Link to="/profile" activeStyle={ACTIVE}>Profile</Link></li>
+                </ul>
             </div>
         );
     }

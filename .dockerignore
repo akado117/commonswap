@@ -1,0 +1,13 @@
+# Meta stuff
+.git
+.DS_Store
+.github
+.vscode
+
+.meteor/local
+/node_modules
+
+prod.settings.json
+dev.settings.json
+startup.sh
+/test

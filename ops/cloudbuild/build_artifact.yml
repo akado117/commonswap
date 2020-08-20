@@ -1,0 +1,62 @@
+steps:
+  # Tarball things that we need, Will also create a build folder for us
+  - id: 'BALL'
+    name: 'ubuntu'
+    waitFor: ['-']
+    args: [
+        './ops/scripts/tarball_all.sh', 'core', 'js-config' ]
+  # Used to pull bases docker images steps use at the very beginning
+  - id: 'pull-base-beginning'
+    name: 'gcr.io/cloud-builders/docker'
+    waitFor: ['-']
+    entrypoint: 'bash'
+    args:
+      - ./ops/scripts/main.sh
+      - pull_docker_images
+      - gcr.io/$PROJECT_ID/cs_base:latest
+
+  - id: 'get-env'
+    name: 'gcr.io/cloud-builders/gcloud'
+    waitFor: ['-']
+    entrypoint: 'bash'
+    args: [ '-c', "gcloud secrets versions access latest --secret=cs-prod --format='get(payload.data)' | tr '_-' '/+' | base64 -d > meteor_settings.txt" ]
+
+  - id: 'pull-later-images'
+    name: 'gcr.io/cloud-builders/docker'
+    waitFor: ['-']
+    entrypoint: 'bash'
+    args:
+      - ./ops/scripts/main.sh
+      - pull_docker_images
+      - node:14.8.0-alpine3.10
+
+    # Build base image and get deps
+  - id: 'build-base-cs-image'
+    name: 'gcr.io/cloud-builders/docker'
+    waitFor: ['BALL', 'pull-base-beginning']
+    args: ['build',
+        '-f', 'ops/dockerfiles/base.dockerfile',
+        '--cache-from', 'gcr.io/$PROJECT_ID/cs_base:latest',
+        '-t', 'gcr.io/$PROJECT_ID/cs_base:latest',
+        '.' ]
+
+  # Build production artifact
+  - id: 'build-prod-cs-image'
+    name: 'gcr.io/cloud-builders/docker'
+    waitFor: ['build-base-cs-image', 'get-env']
+    args: ['build',
+        '--build-arg', 'PROJECT_ID=$PROJECT_ID',
+        '-f', 'ops/dockerfiles/build_prod.dockerfile',
+        '-t', 'gcr.io/$PROJECT_ID/cs_prod:latest',
+        '.' ]
+
+
+images: 
+  - gcr.io/$PROJECT_ID/cs_base:latest
+  - gcr.io/$PROJECT_ID/cs_prod:latest
+
+options:
+  # machineType: 'N1_HIGHCPU_32'
+  # diskSizeGb: 15
+  
+timeout: 900s

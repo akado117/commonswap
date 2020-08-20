@@ -1,9 +1,11 @@
 #!/bin/bash
 
-(
-  cd $UROOT_PATH/imports
+function safe_create_symlink() {
+  SYMLINK_PATH=$1
+  rm -rf $UROOT_PATH/imports/$(basename $SYMLINK_PATH)
+  ln -s $SYMLINK_PATH $UROOT_PATH/imports
+}
 
-  ln -s ../node_modules/materialize-css .
-)
+safe_create_symlink ../node_modules/materialize-css
 
 echo -e "$GREEN====>Completed linking node_modules to imports $END_COLOR"

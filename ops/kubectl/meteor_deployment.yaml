@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: meteor-prod
-        image: gcr.io/%PROJECT_ID%/cs_prod:latest
-        command: ["node", "main.js"]
+        image: gcr.io/%PROJECT_ID%/cs-prod:latest
+        command: ["METEOR_SETTINGS=$(cat ./meteor_settings.txt)", "node", "main.js"]
         env:
         - name: MONGO_URL
           valueFrom:

@@ -13,7 +13,7 @@ steps:
     args:
       - ./ops/scripts/main.sh
       - pull_docker_images
-      - gcr.io/$PROJECT_ID/cs_base:latest
+      - gcr.io/$PROJECT_ID/cs-base:latest
 
   - id: 'get-env'
     name: 'gcr.io/cloud-builders/gcloud'
@@ -36,8 +36,8 @@ steps:
     waitFor: ['BALL', 'pull-base-beginning']
     args: ['build',
         '-f', 'ops/dockerfiles/base.dockerfile',
-        '--cache-from', 'gcr.io/$PROJECT_ID/cs_base:latest',
-        '-t', 'gcr.io/$PROJECT_ID/cs_base:latest',
+        '--cache-from', 'gcr.io/$PROJECT_ID/cs-base:latest',
+        '-t', 'gcr.io/$PROJECT_ID/cs-base:latest',
         '.' ]
 
   # Build production artifact
@@ -47,13 +47,13 @@ steps:
     args: ['build',
         '--build-arg', 'PROJECT_ID=$PROJECT_ID',
         '-f', 'ops/dockerfiles/build_prod.dockerfile',
-        '-t', 'gcr.io/$PROJECT_ID/cs_prod:latest',
+        '-t', 'gcr.io/$PROJECT_ID/cs-prod:latest',
         '.' ]
 
 
 images: 
-  - gcr.io/$PROJECT_ID/cs_base:latest
-  - gcr.io/$PROJECT_ID/cs_prod:latest
+  - gcr.io/$PROJECT_ID/cs-base:latest
+  - gcr.io/$PROJECT_ID/cs-prod:latest
 
 options:
   # machineType: 'N1_HIGHCPU_32'

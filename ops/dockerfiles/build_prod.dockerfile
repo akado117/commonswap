@@ -1,15 +1,16 @@
 ARG PROJECT_ID 
-FROM gcr.io/${PROJECT_ID}/cs_base:latest AS base
+FROM gcr.io/${PROJECT_ID}/cs-base:latest AS base
 
 COPY ./meteor_settings.txt .
-RUN METEOR_SETTINGS=$(cat ./meteor_settings.txt) meteor build /artifact --allow-superuser && \
-    tar -xzf /artifact/app.tar.gz && \
-    (cd /artifact/bundle/programs/server && npm install)
+RUN meteor build /artifact --allow-superuser && \
+    tar -xf /artifact/app.tar.gz -C /artifact && \
+    (cd /artifact/bundle/programs/server && npm install) && \
+    cp ./meteor_settings.txt /artifact/bundle
 
 
 FROM node:12.18.3-alpine3.12
 
-WORKDIR /opt/app/bundle
+WORKDIR /opt/app
 
 COPY --from=base /artifact/bundle /opt/app/
 

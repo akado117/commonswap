@@ -1,35 +1,40 @@
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
-  name: meteor-prod
+  name: meteor-%ENV%
 spec:
   selector:
     matchLabels:
-      app: commonswap-prod
+      app: commonswap-%ENV%
       tier: frontend
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
-        app: commonswap-prod
+        app: commonswap-%ENV%
         tier: frontend
     spec:
       containers:
-      - name: meteor-prod
+      - name: meteor-%ENV%
         image: gcr.io/%PROJECT_ID%/cs-prod:latest
         command: ["sh", "-c", 
-                  'MONGO_URL="$MONGO_URL" ROOT_URL="$ROOT_URL" METEOR_SETTINGS="$(cat ./meteor_settings.txt)" node main.js']
+                  'MONGO_URL="$MONGO_URL" ROOT_URL="$ROOT_URL" METEOR_SETTINGS="$METEOR_SETTINGS" node main.js']
         env:
         - name: MONGO_URL
           valueFrom:
             secretKeyRef:
-              name: cs-prod-sec
+              name: cs-%ENV%-sec
               key: db_url
         - name: ROOT_URL
           valueFrom:
             secretKeyRef:
-              name: cs-prod-sec
+              name: cs-%ENV%-sec
               key: root_url
+        - name: METEOR_SETTINGS
+          valueFrom:
+            secretKeyRef:
+              name: cs-%ENV%-sec
+              key: meteor_settings
         resources:
           requests:
             cpu: 300m

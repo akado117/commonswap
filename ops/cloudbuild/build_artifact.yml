@@ -23,7 +23,7 @@ steps:
 
   - id: 'pull-later-images'
     name: 'gcr.io/cloud-builders/docker'
-    waitFor: ['-']
+    waitFor: ['pull-base-beginning']
     entrypoint: 'bash'
     args:
       - ./ops/scripts/main.sh

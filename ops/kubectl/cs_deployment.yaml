@@ -17,8 +17,9 @@ spec:
       containers:
       - name: meteor-%ENV%
         image: gcr.io/%PROJECT_ID%/cs-prod:latest
+        # Will start the server on port 8080
         command: ["sh", "-c", 
-                  'MONGO_URL="$MONGO_URL" ROOT_URL="$ROOT_URL" METEOR_SETTINGS="$METEOR_SETTINGS" node main.js']
+                  'PORT=8080 MONGO_URL="$MONGO_URL" ROOT_URL="$ROOT_URL" METEOR_SETTINGS="$METEOR_SETTINGS" node main.js']
         env:
         - name: MONGO_URL
           valueFrom:

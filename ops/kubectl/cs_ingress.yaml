@@ -4,13 +4,14 @@ metadata:
   name: cs-ingress
   annotations:
     # nginx.ingress.kubernetes.io/rewrite-target: /
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: true
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.global-static-ip-name: commonswap-com
+    networking.gke.io/managed-certificates: commonswap-cert
 spec:
   rules:
     - host: staging.commonswap.com
       http:
         paths:
-        - path: /
-          backend:
-            serviceName: cs-frontend-staging
-            servicePort: 8080
+          - backend:
+              serviceName: cs-frontend-staging
+              servicePort: 8080

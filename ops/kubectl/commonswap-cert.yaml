@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1beta2
+kind: ManagedCertificate
+metadata:
+  name: commonswap-cert
+spec:
+  domains:
+    - commonswap.com
+    - commonswap.net

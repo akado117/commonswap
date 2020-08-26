@@ -5,4 +5,5 @@ metadata:
 spec:
   domains:
     - commonswap.com
-    - commonswap.net
+    - www.commonswap.com
+    - staging.commonswap.com
